@@ -4,6 +4,9 @@ import gtk, time
 
 class Gui(object):
     def __init__(self):
+
+
+
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_title("Perroquet")
         self.window.set_default_size(800, 600)
@@ -35,6 +38,10 @@ class Gui(object):
         fd.set_size_request(500, 160)
 
         vbox.pack_start(fd, False)
+
+
+
+
 
     def SetCore(self, core):
         self.core = core

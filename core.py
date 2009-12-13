@@ -105,6 +105,8 @@ class Core(object):
         self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
 
     def WriteCharacter(self, character):
+        if character == "apostrophe":
+            character = "'"
         if re.match('^[0-9\'a-zA-Z]$',character):
             self.sequence.WriteCharacter(character)
             self.gui.SetSequence(self.sequence)
