@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import gtk
+import gtk, time
 
 class Gui(object):
     def __init__(self):
@@ -84,12 +84,26 @@ class Gui(object):
         print keyname
         if keyname == "Return":
             self.core.RepeatSequence()
-        elif keyname == "Space":
+        elif keyname == "space":
             self.core.NextWord()
+        elif keyname == "BackSpace":
+            self.core.DeletePreviousChar()
+        elif keyname == "Delete":
+            self.core.DeleteNextChar()
         elif keyname == "Page_Down":
             self.core.PreviousSequence()
         elif keyname == "Page_Up":
             self.core.NextSequence()
+        elif keyname == "Right":
+            self.core.NextChar()
+        elif keyname == "Left":
+            self.core.PreviousChar()
+        else:
+            self.core.WriteCharacter(keyname.lower())
+
+
+        return True;
+
 
 
     def load(self,w):
@@ -102,21 +116,39 @@ class Gui(object):
         print "SetSequence"
         self.ClearBuffer()
         i = 0
+        pos = 1
+        cursor_pos = 0
         text = ""
+        buffer = self.typeLabel.get_buffer()
+        self.AddSymbol(" ")
+
         for symbol in sequence.GetSymbolList():
             #print "symbol"
             """text += symbol"""
+            pos += len(symbol)
             self.AddSymbol(symbol)
             #print "len"
             if i < len(sequence.GetWordList()):
+                if sequence.GetActiveWordIndex() == i:
+                    cursor_pos = pos
                 #print "AddWordFound"
                 if len(sequence.GetWorkList()[i]) == 0:
                     self.AddWordToFound(" ")
-                elif sequence.GetWordList()[i] == sequence.GetWorkList()[i]:
+                    pos += 1
+                elif sequence.GetWordList()[i].lower() == sequence.GetWorkList()[i].lower():
                     self.AddWordFound(sequence.GetWordList()[i])
+                    pos += len(sequence.GetWordList()[i])
                 else:
                     self.AddWordToFound(sequence.GetWorkList()[i])
+                    pos += len(sequence.GetWorkList()[i])
                 i += 1
+
+        self.window.set_focus(self.typeLabel)
+        newCurPos = cursor_pos + sequence.GetActiveWordPos()
+        iter = buffer.get_iter_at_offset(newCurPos)
+        buffer.place_cursor(iter)
+
+        print "active : " + str(sequence.GetActiveWordIndex()) + " "  + str(sequence.GetActiveWordPos()) + " " + str(cursor_pos) + " " +str(newCurPos)
         """"gtk.gdk.threads_enter()
         buffer = self.typeLabel.get_buffer()
         buffer.set_text(text)
@@ -127,24 +159,23 @@ class Gui(object):
 
 
     def ClearBuffer(self):
-        print "ClearBuffer"
+        #print "ClearBuffer"
         #gtk.gdk.threads_enter()
-        print "plop1"
         buffer = self.typeLabel.get_buffer()
-        print "plop2"
         iter1 = buffer.get_start_iter()
-        print "plop3"
         iter2 = buffer.get_end_iter()
-        print "plop4"
         buffer.delete(iter1, iter2)
-        print "plop5"
         #gtk.gdk.threads_leave()
-        print "ClearBuffer end"
+        #print "ClearBuffer end"
 
 
     def AddSymbol(self, symbol):
-        #print "AddSymbol"
+        print "AddSymbol #" + symbol + "#"
         #gtk.gdk.threads_enter()
+        symbol
+        if len(symbol) == 0:
+            return
+
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
         size = buffer.get_char_count()

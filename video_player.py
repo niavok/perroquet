@@ -49,13 +49,15 @@ class VideoPlayer(object):
         self.play_thread_id = thread.start_new_thread(self.play_thread, ())
 
     def Play(self):
+        print "Play"
         self.player.set_state(gst.STATE_PLAYING)
 
     def Pause(self):
+        print "Pause"
         self.player.set_state(gst.STATE_PAUSED)
 
     def Seek(self, time):
-        print "pause"
+        print "Seek"
         #self.player.set_state(gst.STATE_PAUSED)
         #00:17:55,760
         value = int(time * 1000000 )

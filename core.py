@@ -39,7 +39,7 @@ class Core(object):
 
     def TimeCallback(self):
         if self.state == Core.WAIT_BEGIN:
-            self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
+            self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd() + 500)
             """print "load"
             self.sequence = Sequence()
 
@@ -67,8 +67,8 @@ class Core(object):
         self.RepeatSequence()
 
     def PreviousSequence(self):
-        print "NextSequence"
-        if self.currentSubId >= 0:
+        print "PreviousSequence"
+        if self.currentSubId > 0:
             self.currentSubId -= 1
         self.ActivateSequence()
         self.RepeatSequence()
@@ -84,8 +84,34 @@ class Core(object):
 
     def GotoSequenceBegin(self):
         self.state = Core.WAIT_END
-        self.player.Seek(self.subList[self.currentSubId].GetTimeBegin())
+        self.player.Seek(self.subList[self.currentSubId].GetTimeBegin() - 1000)
         self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
+
+    def WriteCharacter(self, character):
+        if re.match('^[0-9\'a-zA-Z]$',character):
+            self.sequence.WriteCharacter(character)
+            self.gui.SetSequence(self.sequence)
+
+    def NextWord(self):
+        print "NextWord"
+        self.sequence.NextWord()
+        self.gui.SetSequence(self.sequence)
+
+    def DeletePreviousChar(self):
+        self.sequence.DeletePreviousCharacter()
+        self.gui.SetSequence(self.sequence)
+
+    def DeleteNextChar(self):
+        self.sequence.DeleteNextCharacter()
+        self.gui.SetSequence(self.sequence)
+
+    def PreviousChar(self):
+        self.sequence.PreviousCharacter()
+        self.gui.SetSequence(self.sequence)
+
+    def NextChar(self):
+        self.sequence.NextCharacter()
+        self.gui.SetSequence(self.sequence)
 
 
 
@@ -97,6 +123,8 @@ class Sequence(object):
         self.wordList = []
         self.workList = []
         textToParse = text
+        self.activeWordIndex = 0
+        self.activeWordPos = 0
         print textToParse
         while len(textToParse) > 0:
             if re.match('^([0-9\'a-zA-Z]+)[^0-9\'a-zA-Z]', textToParse):
@@ -106,9 +134,9 @@ class Sequence(object):
                 sizeToCut =  len(word)
                 textToParse = textToParse[sizeToCut:]
                 if len(self.wordList) == len(self.symbolList) :
-                    symbolList.append("")
+                    self.symbolList.append('')
                 self.wordList.append(word)
-                self.workList.append("")
+                self.workList.append('')
             elif re.match('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse):
                 #print "not match"
                 m = re.search('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse)
@@ -136,3 +164,103 @@ class Sequence(object):
 
     def GetWorkList(self):
         return self.workList
+
+    def GetActiveWordIndex(self):
+        return self.activeWordIndex
+
+    def SetActiveWordIndex(self, index):
+        self.activeWordIndex = index
+
+    def GetActiveWordPos(self):
+        return self.activeWordPos
+
+    def SetActiveWordPos(self, index):
+        self.activeWordPos = index
+
+    def WriteCharacter(self, character):
+        if self.IsValidWord():
+            if self.NextWord():
+                self.WriteCharacter()
+        else:
+            self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos:]
+            self.activeWordPos += 1
+
+
+    def DeletePreviousCharacter(self):
+        if self.IsValidWord():
+            if self.PreviousWord():
+                self.DeletePreviousCharacter()
+        elif len(self.workList[self.activeWordIndex]) == 0:
+            if self.PreviousWord():
+                self.DeletePreviousCharacter()
+        elif self.activeWordPos == 0:
+            if self.PreviousWord():
+                self.DeletePreviousCharacter()
+        else:
+            self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos-1]  + self.workList[self.activeWordIndex][self.activeWordPos:]
+            self.activeWordPos -= 1
+
+    def DeleteNextCharacter(self):
+        if self.IsValidWord():
+            if self.NextWord(False):
+                self.DeleteNextCharacter()
+        elif len(self.workList[self.activeWordIndex]) == 0:
+            if self.NextWord(False):
+                self.DeleteNextCharacter()
+        elif self.activeWordPos == len(self.workList[self.activeWordIndex]) :
+            if self.NextWord(False):
+                self.DeleteNextCharacter()
+        else:
+            self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos]  + self.workList[self.activeWordIndex][self.activeWordPos+1:]
+
+    def NextWord(self, end = True):
+        if self.activeWordIndex < len(self.workList) - 1:
+            self.activeWordIndex +=1
+            if end:
+                self.activeWordPos = len(self.workList[self.activeWordIndex])
+            else:
+                self.activeWordPos = 0
+            if self.IsValidWord():
+                return self.NextWord(end)
+            else:
+                return True
+        else:
+            if end:
+                self.activeWordPos = len(self.workList[self.activeWordIndex])
+            else:
+                self.activeWordPos = 0
+            return False
+
+
+    def PreviousWord(self):
+        if self.activeWordIndex > 0:
+            self.activeWordIndex -=1
+            self.activeWordPos = len(self.workList[self.activeWordIndex])
+            if self.IsValidWord():
+                return self.PreviousWord()
+            else:
+                return True
+        else:
+            self.activeWordPos = len(self.workList[self.activeWordIndex])
+            return False
+
+
+    def NextCharacter(self):
+        if self.activeWordPos >= len(self.workList[self.activeWordIndex]):
+            self.NextWord(False)
+        else:
+            self.activeWordPos += 1
+
+    def PreviousCharacter(self):
+        if self.activeWordPos == 0:
+            self.PreviousWord()
+        else:
+            self.activeWordPos -= 1
+
+    def IsValidWord(self):
+        if self.workList[self.activeWordIndex].lower() == self.wordList[self.activeWordIndex].lower():
+            return True
+        else:
+            return False
+
+

@@ -41,7 +41,10 @@ class SubtitlesLoader(object):
                     state = SubtitlesLoader.LOOK_FOR_TEXT
             elif state == SubtitlesLoader.LOOK_FOR_TEXT:
                 if len(line) > 0:
-                    current.SetText(current.GetText() + " " + line)
+                    if len(current.GetText()) == 0:
+                        current.SetText(line)
+                    else:
+                        current.SetText(current.GetText() + " " + line)
                 else:
                     state = SubtitlesLoader.LOOK_FOR_ID
                     outputList.append(current)
