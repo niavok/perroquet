@@ -79,9 +79,9 @@ class Gui(object):
 
 
     def keyPressCallback(self,widget, event):
-        print "key"
+        #print "key"
         keyname = gtk.gdk.keyval_name(event.keyval)
-        print keyname
+        #print keyname
         if keyname == "Return":
             self.core.RepeatSequence()
         elif keyname == "space":
@@ -98,6 +98,14 @@ class Gui(object):
             self.core.NextChar()
         elif keyname == "Left":
             self.core.PreviousChar()
+        elif keyname == "Home":
+            self.core.FirstWord()
+        elif keyname == "End":
+            self.core.LastWord()
+        elif keyname == "F1":
+            self.core.CompleteWord()
+        elif keyname == "Pause":
+            self.core.TooglePause()
         else:
             self.core.WriteCharacter(keyname.lower())
 
@@ -113,7 +121,7 @@ class Gui(object):
         return self.movie_window.window.xid
 
     def SetSequence(self, sequence):
-        print "SetSequence"
+        #print "SetSequence"
         self.ClearBuffer()
         i = 0
         pos = 1
@@ -148,7 +156,7 @@ class Gui(object):
         iter = buffer.get_iter_at_offset(newCurPos)
         buffer.place_cursor(iter)
 
-        print "active : " + str(sequence.GetActiveWordIndex()) + " "  + str(sequence.GetActiveWordPos()) + " " + str(cursor_pos) + " " +str(newCurPos)
+        #print "active : " + str(sequence.GetActiveWordIndex()) + " "  + str(sequence.GetActiveWordPos()) + " " + str(cursor_pos) + " " +str(newCurPos)
         """"gtk.gdk.threads_enter()
         buffer = self.typeLabel.get_buffer()
         buffer.set_text(text)
@@ -170,15 +178,14 @@ class Gui(object):
 
 
     def AddSymbol(self, symbol):
-        print "AddSymbol #" + symbol + "#"
+        #print "AddSymbol #" + symbol + "#"
         #gtk.gdk.threads_enter()
-        symbol
         if len(symbol) == 0:
+            #print "AddSymbol abord"
             return
-
         buffer = self.typeLabel.get_buffer()
-        iter1 = buffer.get_end_iter()
         size = buffer.get_char_count()
+        iter1 = buffer.get_end_iter()
         buffer.insert(iter1,symbol)
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
@@ -187,6 +194,7 @@ class Gui(object):
         #print "AddSymbol end"
 
     def AddWordToFound(self, word):
+        #print "AddWordFound"
         #gtk.gdk.threads_enter()
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
@@ -196,9 +204,10 @@ class Gui(object):
         iter2 = buffer.get_end_iter()
         buffer.apply_tag_by_name("word_to_found", iter1, iter2)
         #gtk.gdk.threads_leave()
+        #print "AddWordFound end"
 
     def AddWordFound(self, word):
-        print "AddWordFound"
+        #print "AddWordFound"
         #gtk.gdk.threads_enter()
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()

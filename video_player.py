@@ -47,14 +47,19 @@ class VideoPlayer(object):
     def Open(self,path):
         self.player.set_property("uri", "file://" + path)
         self.play_thread_id = thread.start_new_thread(self.play_thread, ())
-
+        self.playing = False
     def Play(self):
         print "Play"
         self.player.set_state(gst.STATE_PLAYING)
+        self.playing = True
 
     def Pause(self):
         print "Pause"
         self.player.set_state(gst.STATE_PAUSED)
+        self.playing = False
+
+    def IsPaused(self):
+        return not self.playing
 
     def Seek(self, time):
         print "Seek"

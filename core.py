@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import re
+import re, gtk
 from video_player import VideoPlayer
 from subtitles_loader import SubtitlesLoader
 
@@ -24,11 +24,13 @@ class Core(object):
         self.player.Open(path)
         self.InitExercice()
         self.player.Play()
+        self.paused = False
 
     def InitExercice(self):
         print "InitExercice"
         self.player.SetCallback(self.TimeCallback)
         self.sequenceList = []
+        self.paused = False
         for sub in self.subList:
             self.sequence = Sequence()
             self.sequence.Load(sub.GetText())
@@ -52,19 +54,26 @@ class Core(object):
             self.state = Core.WAIT_BEGIN
             #self.currentSubId += 1
             #self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeBegin())
-            self.player.Pause()
+            if self.validSequence:
+                gtk.gdk.threads_enter()
+                self.NextSequence(False)
+                gtk.gdk.threads_leave()
+            else:
+                self.player.Pause()
 
     def RepeatSequence(self):
         print "RepeatSequence"
         self.GotoSequenceBegin()
         self.player.Play()
+        self.paused = False
 
-    def NextSequence(self):
+    def NextSequence(self, load = True):
         print "NextSequence"
         if self.currentSubId < len(self.sequenceList)-1:
             self.currentSubId += 1
         self.ActivateSequence()
-        self.RepeatSequence()
+        if load:
+            self.RepeatSequence()
 
     def PreviousSequence(self):
         print "PreviousSequence"
@@ -78,9 +87,17 @@ class Core(object):
         self.state = Core.WAIT_BEGIN
         self.player.SetNextCallbackTime(self.subList[ self.currentSubId].GetTimeBegin())
         self.sequence = self.sequenceList[self.currentSubId]
+
+        self.validSequence = self.sequence.IsValid()
+
         print "ActivateSequence: loaded"
         self.gui.SetSequence(self.sequence)
         print "ActivateSequence: end"
+
+    def ValidateSequence(self):
+        if self.sequence.IsValid():
+            self.validSequence = True
+            self.RepeatSequence()
 
     def GotoSequenceBegin(self):
         self.state = Core.WAIT_END
@@ -91,19 +108,35 @@ class Core(object):
         if re.match('^[0-9\'a-zA-Z]$',character):
             self.sequence.WriteCharacter(character)
             self.gui.SetSequence(self.sequence)
+            self.ValidateSequence()
+
 
     def NextWord(self):
         print "NextWord"
-        self.sequence.NextWord()
+        self.sequence.NextWord(False)
+        self.gui.SetSequence(self.sequence)
+
+    def FirstWord(self):
+        print "FirstWord"
+        while self.sequence.PreviousWord(False):
+            continue
+        self.gui.SetSequence(self.sequence)
+
+    def LastWord(self):
+        print "LastWord"
+        while self.sequence.NextWord():
+            continue
         self.gui.SetSequence(self.sequence)
 
     def DeletePreviousChar(self):
         self.sequence.DeletePreviousCharacter()
         self.gui.SetSequence(self.sequence)
+        self.ValidateSequence()
 
     def DeleteNextChar(self):
         self.sequence.DeleteNextCharacter()
         self.gui.SetSequence(self.sequence)
+        self.ValidateSequence()
 
     def PreviousChar(self):
         self.sequence.PreviousCharacter()
@@ -113,7 +146,19 @@ class Core(object):
         self.sequence.NextCharacter()
         self.gui.SetSequence(self.sequence)
 
+    def CompleteWord(self):
+        self.sequence.CompleteWord()
+        self.gui.SetSequence(self.sequence)
+        self.ValidateSequence()
 
+    def TooglePause(self):
+        print "TooglePause " + str(self.player.IsPaused()) + " " + str(self.paused)
+        if self.player.IsPaused() and self.paused:
+            self.player.Play()
+            self.paused = False
+        elif not self.player.IsPaused() and not self.paused:
+            self.player.Pause()
+            self.paused = True
 
 
 class Sequence(object):
@@ -125,6 +170,7 @@ class Sequence(object):
         textToParse = text
         self.activeWordIndex = 0
         self.activeWordPos = 0
+        self.helpChar = '~'
         print textToParse
         while len(textToParse) > 0:
             if re.match('^([0-9\'a-zA-Z]+)[^0-9\'a-zA-Z]', textToParse):
@@ -180,9 +226,12 @@ class Sequence(object):
     def WriteCharacter(self, character):
         if self.IsValidWord():
             if self.NextWord():
-                self.WriteCharacter()
+                self.WriteCharacter(character)
         else:
-            self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos:]
+            if self.activeWordPos < len(self.workList[self.activeWordIndex]) and self.workList[self.activeWordIndex][self.activeWordPos] == self.helpChar:
+                self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos+1:]
+            else:
+                self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos:]
             self.activeWordPos += 1
 
 
@@ -232,16 +281,22 @@ class Sequence(object):
             return False
 
 
-    def PreviousWord(self):
+    def PreviousWord(self, end = True):
         if self.activeWordIndex > 0:
             self.activeWordIndex -=1
-            self.activeWordPos = len(self.workList[self.activeWordIndex])
+            if end:
+                self.activeWordPos = len(self.workList[self.activeWordIndex])
+            else:
+                self.activeWordPos = 0
             if self.IsValidWord():
                 return self.PreviousWord()
             else:
                 return True
         else:
-            self.activeWordPos = len(self.workList[self.activeWordIndex])
+            if end:
+                self.activeWordPos = len(self.workList[self.activeWordIndex])
+            else:
+                self.activeWordPos = 0
             return False
 
 
@@ -263,4 +318,44 @@ class Sequence(object):
         else:
             return False
 
+    def IsValid(self):
+        valid = True
+        id = 0
+        for word in self.workList:
+            if word.lower() != self.wordList[id].lower():
+                valid = False
+                break
+            id += 1
+        print "valid : " + str(valid)
+        return valid
+
+
+    def CompleteWord(self):
+        if self.IsValidWord():
+            if self.NextWord(False):
+                self.CompleteWord()
+            return
+
+        currentWord = self.workList[self.activeWordIndex]
+        goodWord = self.wordList[self.activeWordIndex]
+
+        outWord = ""
+        first_error = -1
+        for i in range(0, len(goodWord)):
+            if i < len(currentWord) and currentWord[i].lower() == goodWord[i].lower():
+                outWord += goodWord[i]
+            else:
+                outWord += self.helpChar
+                if first_error == -1:
+                    first_error = i
+
+        if len(currentWord) == len(goodWord) and first_error != -1:
+            outWord = outWord[:first_error] + goodWord[first_error] + outWord[first_error+1:]
+            self.activeWordPos = first_error+1
+        elif first_error != -1:
+            self.activeWordPos = first_error
+        else:
+            self.activeWordPos = 0
+
+        self.workList[self.activeWordIndex] = outWord
 
