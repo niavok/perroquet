@@ -46,14 +46,20 @@ class VideoPlayer(object):
 
     def Open(self,path):
         self.player.set_property("uri", "file://" + path)
+        self.play_thread_id = thread.start_new_thread(self.play_thread, ())
 
     def Play(self):
         self.player.set_state(gst.STATE_PLAYING)
-        self.play_thread_id = thread.start_new_thread(self.play_thread, ())
 
     def Pause(self):
         self.player.set_state(gst.STATE_PAUSED)
-        self.play_thread_id = thread.start_new_thread(self.play_thread, ())
+
+    def Seek(self, time):
+        print "pause"
+        #self.player.set_state(gst.STATE_PAUSED)
+        #00:17:55,760
+        value = int(time * 1000000 )
+        self.player.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH,value)
 
     def SetCallback(self, callback):
         self.callback = callback

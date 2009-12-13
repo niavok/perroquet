@@ -26,27 +26,68 @@ class Core(object):
         self.player.Play()
 
     def InitExercice(self):
+        print "InitExercice"
         self.player.SetCallback(self.TimeCallback)
-        self.player.SetNextCallbackTime(self.subList[0].GetTimeBegin())
+        self.sequenceList = []
+        for sub in self.subList:
+            self.sequence = Sequence()
+            self.sequence.Load(sub.GetText())
+            self.sequenceList.append(self.sequence)
         self.currentSubId = 0
-        self.state = Core.WAIT_BEGIN
+        self.ActivateSequence()
+
 
     def TimeCallback(self):
         if self.state == Core.WAIT_BEGIN:
             self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
-            print "load"
+            """print "load"
             self.sequence = Sequence()
 
             self.sequence.Load(self.subList[self.currentSubId].GetText())
             print "load2"
             self.gui.SetSequence(self.sequence)
-            print self.subList[self.currentSubId].GetText()
+            print self.subList[self.currentSubId].GetText()"""
             self.state = Core.WAIT_END
         elif self.state == Core.WAIT_END:
             self.state = Core.WAIT_BEGIN
+            #self.currentSubId += 1
+            #self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeBegin())
+            self.player.Pause()
+
+    def RepeatSequence(self):
+        print "RepeatSequence"
+        self.GotoSequenceBegin()
+        self.player.Play()
+
+    def NextSequence(self):
+        print "NextSequence"
+        if self.currentSubId < len(self.sequenceList)-1:
             self.currentSubId += 1
-            self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeBegin())
-            #self.player.Pause()
+        self.ActivateSequence()
+        self.RepeatSequence()
+
+    def PreviousSequence(self):
+        print "NextSequence"
+        if self.currentSubId >= 0:
+            self.currentSubId -= 1
+        self.ActivateSequence()
+        self.RepeatSequence()
+
+    def ActivateSequence(self):
+        print "ActivateSequence"
+        self.state = Core.WAIT_BEGIN
+        self.player.SetNextCallbackTime(self.subList[ self.currentSubId].GetTimeBegin())
+        self.sequence = self.sequenceList[self.currentSubId]
+        print "ActivateSequence: loaded"
+        self.gui.SetSequence(self.sequence)
+        print "ActivateSequence: end"
+
+    def GotoSequenceBegin(self):
+        self.state = Core.WAIT_END
+        self.player.Seek(self.subList[self.currentSubId].GetTimeBegin())
+        self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
+
+
 
 
 class Sequence(object):
@@ -54,12 +95,12 @@ class Sequence(object):
     def Load(self, text):
         self.symbolList = []
         self.wordList = []
+        self.workList = []
         textToParse = text
-
+        print textToParse
         while len(textToParse) > 0:
-            print textToParse
             if re.match('^([0-9\'a-zA-Z]+)[^0-9\'a-zA-Z]', textToParse):
-                print "match"
+                #print "match"
                 m = re.search('^([0-9\'a-zA-Z]+)[^0-9\'a-zA-Z]', textToParse)
                 word = m.group(1)
                 sizeToCut =  len(word)
@@ -67,22 +108,24 @@ class Sequence(object):
                 if len(self.wordList) == len(self.symbolList) :
                     symbolList.append("")
                 self.wordList.append(word)
+                self.workList.append("")
             elif re.match('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse):
-                print "not match"
+                #print "not match"
                 m = re.search('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse)
                 symbol = m.group(1)
-                print symbol
+                #print symbol
                 sizeToCut = len(symbol)
                 textToParse = textToParse[sizeToCut:]
                 self.symbolList.append(symbol)
             else:
                 if re.match('^([0-9\'a-zA-Z]+)', textToParse):
                     self.wordList.append(textToParse)
+                    self.workList.append(textToParse)
                 else:
                     self.symbolList.append(textToParse)
                 break
-            print "while end"
-        print "laod end"
+            #print "while end"
+        #print "load end"
 
 
     def GetSymbolList(self):
@@ -90,3 +133,6 @@ class Sequence(object):
 
     def GetWordList(self):
         return self.wordList
+
+    def GetWorkList(self):
+        return self.workList
