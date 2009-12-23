@@ -11,7 +11,7 @@
     <accel-groups>
       <group name="accelgroup1"/>
     </accel-groups>
-    <signal name="delete_event" handler="delete"/>
+    <signal name="delete_event" handler="on_MainWindow_delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -174,11 +174,12 @@
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkToolButton" id="newExercice1">
+              <object class="GtkToolButton" id="newExerciceButton">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">New exercice</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-new</property>
+                <signal name="clicked" handler="on_newExerciceButton_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -343,6 +344,8 @@
                 <property name="can_focus">True</property>
                 <child>
                   <object class="GtkDrawingArea" id="videoArea">
+                    <property name="width_request">320</property>
+                    <property name="height_request">240</property>
                     <property name="visible">True</property>
                   </object>
                   <packing>
@@ -391,13 +394,14 @@
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">automatic</property>
                 <child>
-                  <object class="GtkTextView" id="textview1">
+                  <object class="GtkTextView" id="typeView">
                     <property name="height_request">500</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
                     <property name="wrap_mode">word</property>
                     <property name="justification">center</property>
+                    <signal name="key_press_event" handler="on_typeView_key_press_event"/>
                   </object>
                 </child>
               </object>
@@ -476,4 +480,147 @@
     </child>
   </object>
   <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkDialog" id="newExerciceDialog">
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Nouvel exercice</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">normal</property>
+    <property name="transient_for">MainWindow</property>
+    <property name="has_separator">False</property>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox1">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkHBox" id="hbox2">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkLabel" id="labelInputVideoFile">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Vid&#xE9;o : </property>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFileChooserButton" id="filechooserbuttonVideo">
+                <property name="visible">True</property>
+                <property name="create_folders">False</property>
+                <property name="title" translatable="yes">S&#xE9;lectionner un fichier vid&#xE9;o</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox3">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkLabel" id="labelInputExerciceFile">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Exercice : </property>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFileChooserButton" id="filechooserbuttonExercice">
+                <property name="visible">True</property>
+                <property name="create_folders">False</property>
+                <property name="title" translatable="yes">S&#xE9;lectionner un fichier de sous-titre</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox4">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkLabel" id="labelInputCorrectionFile">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Correction : </property>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFileChooserButton" id="filechooserbuttonCorrection">
+                <property name="visible">True</property>
+                <property name="create_folders">False</property>
+                <property name="title" translatable="yes">S&#xE9;lectionner un fichier de sous-titre</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area1">
+            <property name="visible">True</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="buttonNewExerciceOk">
+                <property name="label">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_buttonNewExerciceOk_clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonNewExerciceCancel">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">buttonNewExerciceOk</action-widget>
+      <action-widget response="0">buttonNewExerciceCancel</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkFileFilter" id="filefilter1"/>
 </interface>

@@ -11,17 +11,20 @@ class Core(object):
     def __init__(self):
         self.player = VideoPlayer()
         self.subtitles = SubtitlesLoader()
-        self.subList = self.subtitles.GetSubtitleList('/home/fred/Vidéos/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt')
-        self.subList = self.subtitles.CompactSubtitlesList(self.subList)
+        #self.subList = self.subtitles.GetSubtitleList('/home/fred/Vidéos/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt')
+        #self.subList = self.subtitles.CompactSubtitlesList(self.subList)
         #for sub in self.subList:
            # print str(sub.GetId()) + " " + sub.GetText()
 
     def SetGui(self, gui):
         self.gui = gui
 
-    def SetVideoPath(self, path):
+    def SetPaths(self, videoPath, exercicePath):
+        self.subList = self.subtitles.GetSubtitleList(exercicePath)
+        self.subList = self.subtitles.CompactSubtitlesList(self.subList)
+    
         self.player.SetWindowId(self.gui.GetVideoWindowId())
-        self.player.Open(path)
+        self.player.Open(videoPath)
         self.InitExercice()
         self.player.Play()
         self.paused = False

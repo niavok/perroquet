@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import gtk, time
-import gtk.glade
+#import gtk.glade
 
 
 class Gui2(object):
@@ -51,82 +51,82 @@ class Gui2(object):
         gtk.gdk.threads_init()
         gtk.main()
 
-    def initTypeLabel(self):
-        self.typeLabel = gtk.TextView()
-        self.typeLabel.set_editable(False)
-        self.typeLabel.set_cursor_visible(True)
-        #self.typeLabel.set_wrap_mode(gtk.WRAP_NONE)
-        #self.typeLabel.set_wrap_mode(gtk.WRAP_CHAR)
-        self.typeLabel.set_wrap_mode(gtk.WRAP_WORD)
-        self.typeLabel.set_justification(gtk.JUSTIFY_LEFT)
-        #self.typeLabel.set_justification(gtk.JUSTIFY_CENTER)
-        #self.typeLabel.set_justification(gtk.JUSTIFY_RIGHT)
-
-
-        buffer = self.typeLabel.get_buffer()
-
-        """buffer.create_tag("word_to_found",
-             foreground_gdk=color,
-             background='yellow',
-             size_points=24.0)"""
-
-        color_not_found = self.window.get_colormap().alloc_color(0*256, 0*256, 80*256)
-        bcolor_not_found = self.window.get_colormap().alloc_color(200*256, 230*256, 250*256)
-        color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
-        """buffer.create_tag("default",
-             rise= -4*1024,
-             foreground_gdk=color)"""
-        buffer.create_tag("default",
-             size_points=18.0)
-        buffer.create_tag("word_to_found",
-             background=bcolor_not_found, foreground=color_not_found, size_points=18.0)
-        buffer.create_tag("word_found",
-             foreground=color_found, size_points=18.0)
-
-
-
-    def keyPressCallback(self,widget, event):
-        #print "key"
-        keyname = gtk.gdk.keyval_name(event.keyval)
-        #print keyname
-        if keyname == "Return":
-            self.core.RepeatSequence()
-        elif keyname == "space":
-            self.core.NextWord()
-        elif keyname == "BackSpace":
-            self.core.DeletePreviousChar()
-        elif keyname == "Delete":
-            self.core.DeleteNextChar()
-        elif keyname == "Page_Down":
-            self.core.PreviousSequence()
-        elif keyname == "Page_Up":
-            self.core.NextSequence()
-        elif keyname == "Right":
-            self.core.NextChar()
-        elif keyname == "Left":
-            self.core.PreviousChar()
-        elif keyname == "Home":
-            self.core.FirstWord()
-        elif keyname == "End":
-            self.core.LastWord()
-        elif keyname == "F1":
-            self.core.CompleteWord()
-        elif keyname == "Pause":
-            self.core.TooglePause()
-        else:
-            self.core.WriteCharacter(keyname.lower())
-
-
-        return True;
-
 
 
     def load(self,w):
         self.core.SetVideoPath("/home/fred/Vidéos/The Big Bang Theory/01x01 - Pilot.avi")
 
-    def GetVideoWindowId(self):
-        return self.movie_window.window.xid
+    
 
+
+
+
+    
+
+
+
+    def AddWordFound(self, word):
+        #print "AddWordFound"
+        #gtk.gdk.threads_enter()
+        buffer = self.typeLabel.get_buffer()
+        iter1 = buffer.get_end_iter()
+        size = buffer.get_char_count()
+        buffer.insert(iter1,word)
+        iter1 = buffer.get_iter_at_offset(size)
+        iter2 = buffer.get_end_iter()
+        buffer.apply_tag_by_name("word_found", iter1, iter2)
+        #gtk.gdk.threads_leave()
+
+
+class Gui:
+    def __init__(self):
+        self.builder = gtk.Builder()
+        self.builder.add_from_file("gui.xml")
+        self.builder.connect_signals(self)
+        self.window = self.builder.get_object("MainWindow")
+        self.typeLabel = self.builder.get_object("typeView")
+        
+        self.initTypeLabel()
+
+   
+    def on_MainWindow_delete_event(self,widget,data=None):
+        gtk.main_quit()
+
+    def on_newExerciceButton_clicked(self,widget,data=None):
+        self.newExerciceDialog = self.builder.get_object("newExerciceDialog")
+        
+
+        videoChooser = self.builder.get_object("filechooserbuttonVideo")
+        exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
+        videoChooser.set_filename("/media/F14A-2988/The Big Bang Theory/01x01 - Pilot.avi")
+        exerciceChooser.set_filename("/media/F14A-2988/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt")
+        self.newExerciceDialog.show() 
+       
+    def on_buttonNewExerciceOk_clicked(self,widget,data=None):
+        videoChooser = self.builder.get_object("filechooserbuttonVideo")
+        videoPath = videoChooser.get_filename()
+        exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
+        exercicePath = exerciceChooser.get_filename()
+        if videoPath == "None":
+            videoPath = ""
+        if exercicePath == "None":
+            exercicePath = ""    
+        print videoPath
+        print exercicePath
+        self.core.SetPaths(videoPath,exercicePath)
+        self.newExerciceDialog.hide()
+
+    def monclic(self, source=None, event=None):
+        self.widgets.get_widget('label1').set_text('Vous avez cliqué !')
+        
+        return True
+
+    def SetCore(self, core):
+        self.core = core
+
+    def GetVideoWindowId(self):
+        return self.builder.get_object("videoArea").window.xid
+        
     def SetSequence(self, sequence):
         #print "SetSequence"
         self.ClearBuffer()
@@ -163,16 +163,6 @@ class Gui2(object):
         iter = buffer.get_iter_at_offset(newCurPos)
         buffer.place_cursor(iter)
 
-        #print "active : " + str(sequence.GetActiveWordIndex()) + " "  + str(sequence.GetActiveWordPos()) + " " + str(cursor_pos) + " " +str(newCurPos)
-        """"gtk.gdk.threads_enter()
-        buffer = self.typeLabel.get_buffer()
-        buffer.set_text(text)
-        iter1 = buffer.get_start_iter()
-        iter2 = buffer.get_end_iter()
-        buffer.apply_tag_by_name("default", iter1, iter2)
-        gtk.gdk.threads_leave()"""
-
-
     def ClearBuffer(self):
         #print "ClearBuffer"
         #gtk.gdk.threads_enter()
@@ -182,8 +172,7 @@ class Gui2(object):
         buffer.delete(iter1, iter2)
         #gtk.gdk.threads_leave()
         #print "ClearBuffer end"
-
-
+        
     def AddSymbol(self, symbol):
         #print "AddSymbol #" + symbol + "#"
         #gtk.gdk.threads_enter()
@@ -199,7 +188,7 @@ class Gui2(object):
         buffer.apply_tag_by_name("default", iter1, iter2)
         #gtk.gdk.threads_leave()
         #print "AddSymbol end"
-
+    
     def AddWordToFound(self, word):
         #print "AddWordFound"
         #gtk.gdk.threads_enter()
@@ -212,7 +201,7 @@ class Gui2(object):
         buffer.apply_tag_by_name("word_to_found", iter1, iter2)
         #gtk.gdk.threads_leave()
         #print "AddWordFound end"
-
+        
     def AddWordFound(self, word):
         #print "AddWordFound"
         #gtk.gdk.threads_enter()
@@ -226,25 +215,76 @@ class Gui2(object):
         #gtk.gdk.threads_leave()
 
 
-class Gui:
-    def __init__(self):
-        self.widgets = gtk.glade.XML('gui.glade',"MainWindow")
-        events = { 'on_button1_clicked': self.monclic,
-                   'delete': self.delete               }
-        self.widgets.signal_autoconnect(events)
+    def initTypeLabel(self):
+    #    self.typeLabel = gtk.TextView()
+     #   self.typeLabel.set_editable(False)
+     #   self.typeLabel.set_cursor_visible(True)
+        #self.typeLabel.set_wrap_mode(gtk.WRAP_NONE)
+        #self.typeLabel.set_wrap_mode(gtk.WRAP_CHAR)
+     #   self.typeLabel.set_wrap_mode(gtk.WRAP_WORD)
+     #   self.typeLabel.set_justification(gtk.JUSTIFY_LEFT)
+        #self.typeLabel.set_justification(gtk.JUSTIFY_CENTER)
+        #self.typeLabel.set_justification(gtk.JUSTIFY_RIGHT)
 
-    def delete(self, source=None, event=None):
-        print "delete"
-        gtk.main_quit()
 
-    def monclic(self, source=None, event=None):
-        self.widgets.get_widget('label1').set_text('Vous avez cliqué !')
-        return True
+        buffer = self.typeLabel.get_buffer()
 
-    def SetCore(self, core):
-        self.core = core
+        """buffer.create_tag("word_to_found",
+             foreground_gdk=color,
+             background='yellow',
+             size_points=24.0)"""
+
+        color_not_found = self.window.get_colormap().alloc_color(0*256, 0*256, 80*256)
+        bcolor_not_found = self.window.get_colormap().alloc_color(200*256, 230*256, 250*256)
+        color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
+        """buffer.create_tag("default",
+             rise= -4*1024,
+             foreground_gdk=color)"""
+        buffer.create_tag("default",
+             size_points=18.0)
+        buffer.create_tag("word_to_found",
+             background=bcolor_not_found, foreground=color_not_found, size_points=18.0)
+        buffer.create_tag("word_found",
+             foreground=color_found, size_points=18.0)
+
+
+    def on_typeView_key_press_event(self,widget, event):
+        #print "key"
+        keyname = gtk.gdk.keyval_name(event.keyval)
+        #print keyname
+        if keyname == "Return":
+            self.core.RepeatSequence()
+        elif keyname == "space":
+            self.core.NextWord()
+        elif keyname == "BackSpace":
+            self.core.DeletePreviousChar()
+        elif keyname == "Delete":
+            self.core.DeleteNextChar()
+        elif keyname == "Page_Down":
+            self.core.PreviousSequence()
+        elif keyname == "Page_Up":
+            self.core.NextSequence()
+        elif keyname == "Right":
+            self.core.NextChar()
+        elif keyname == "Left":
+            self.core.PreviousChar()
+        elif keyname == "Home":
+            self.core.FirstWord()
+        elif keyname == "End":
+            self.core.LastWord()
+        elif keyname == "F1":
+            self.core.CompleteWord()
+        elif keyname == "Pause":
+            self.core.TooglePause()
+        else:
+            self.core.WriteCharacter(keyname.lower())
+
+
+        return True;
+
+
 
     def Run(self):
-        #self.window.show_all()
-        #gtk.gdk.threads_init()
+        gtk.gdk.threads_init()
+        self.window.show()
         gtk.main()
