@@ -220,11 +220,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="previousSequence">
+              <object class="GtkToolButton" id="toolbuttonPreviousSequence">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Previous sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-back</property>
+                <signal name="clicked" handler="on_toolbuttonPreviousSequence_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -232,11 +233,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToggleToolButton" id="toolbutton1">
+              <object class="GtkToolButton" id="toolbuttonNextSequence">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Next Sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-forward</property>
+                <signal name="clicked" handler="on_toolbuttonNextSequence_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>

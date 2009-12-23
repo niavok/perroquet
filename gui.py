@@ -1,82 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import gtk, time
-#import gtk.glade
-
-
-class Gui2(object):
-    def __init__(self):
-
-
-
-        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.window.set_title("Perroquet")
-        self.window.set_default_size(800, 600)
-        self.window.connect("destroy", gtk.main_quit, "WM destroy")
-        vbox = gtk.VBox()
-        self.window.add(vbox)
-        hbox = gtk.HBox()
-        vbox.pack_start(hbox, False)
-        self.entry = gtk.Entry()
-        self.entry.set_text("/home/fred/Vidéos/The Big Bang Theory/01x01 - Pilot.avi")
-        hbox.add(self.entry)
-        self.buttonStart = gtk.Button("Start")
-        self.buttonLoad = gtk.Button("Load")
-        hbox.pack_start(self.buttonStart, False)
-        hbox.pack_start(self.buttonLoad, False)
-        #self.buttonStart.connect("clicked", self.start_stop)
-        self.buttonLoad.connect("clicked", self.load)
-        self.window.connect("key-press-event",self.keyPressCallback)
-        self.movie_window = gtk.DrawingArea()
-        vbox.pack_start(self.movie_window, True)
-
-        self.initTypeLabel()
-
-        fd = gtk.ScrolledWindow()
-        fd.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-        #fd.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
-
-        fd.add(self.typeLabel)
-        fd.set_size_request(500, 160)
-
-        vbox.pack_start(fd, False)
-
-
-
-    def SetCore(self, core):
-        self.core = core
-
-    def Run(self):
-        self.window.show_all()
-        gtk.gdk.threads_init()
-        gtk.main()
-
-
-
-    def load(self,w):
-        self.core.SetVideoPath("/home/fred/Vidéos/The Big Bang Theory/01x01 - Pilot.avi")
-
-    
-
-
-
-
-    
-
-
-
-    def AddWordFound(self, word):
-        #print "AddWordFound"
-        #gtk.gdk.threads_enter()
-        buffer = self.typeLabel.get_buffer()
-        iter1 = buffer.get_end_iter()
-        size = buffer.get_char_count()
-        buffer.insert(iter1,word)
-        iter1 = buffer.get_iter_at_offset(size)
-        iter2 = buffer.get_end_iter()
-        buffer.apply_tag_by_name("word_found", iter1, iter2)
-        #gtk.gdk.threads_leave()
-
 
 class Gui:
     def __init__(self):
@@ -282,6 +206,11 @@ class Gui:
 
         return True;
 
+    def on_toolbuttonNextSequence_clicked(self,widget,data=None):
+        self.core.NextSequence()
+
+    def on_toolbuttonPreviousSequence_clicked(self,widget,data=None):
+        self.core.PreviousSequence()
 
 
     def Run(self):
