@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import gtk, time
+import gtk.glade
 
-class Gui(object):
+
+class Gui2(object):
     def __init__(self):
 
 
@@ -38,8 +40,6 @@ class Gui(object):
         fd.set_size_request(500, 160)
 
         vbox.pack_start(fd, False)
-
-
 
 
 
@@ -224,3 +224,27 @@ class Gui(object):
         iter2 = buffer.get_end_iter()
         buffer.apply_tag_by_name("word_found", iter1, iter2)
         #gtk.gdk.threads_leave()
+
+
+class Gui:
+    def __init__(self):
+        self.widgets = gtk.glade.XML('gui.glade',"MainWindow")
+        events = { 'on_button1_clicked': self.monclic,
+                   'delete': self.delete               }
+        self.widgets.signal_autoconnect(events)
+
+    def delete(self, source=None, event=None):
+        print "delete"
+        gtk.main_quit()
+
+    def monclic(self, source=None, event=None):
+        self.widgets.get_widget('label1').set_text('Vous avez cliqué !')
+        return True
+
+    def SetCore(self, core):
+        self.core = core
+
+    def Run(self):
+        #self.window.show_all()
+        #gtk.gdk.threads_init()
+        gtk.main()

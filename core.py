@@ -13,8 +13,8 @@ class Core(object):
         self.subtitles = SubtitlesLoader()
         self.subList = self.subtitles.GetSubtitleList('/home/fred/Vidéos/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt')
         self.subList = self.subtitles.CompactSubtitlesList(self.subList)
-        for sub in self.subList:
-            print str(sub.GetId()) + " " + sub.GetText()
+        #for sub in self.subList:
+           # print str(sub.GetId()) + " " + sub.GetText()
 
     def SetGui(self, gui):
         self.gui = gui
