@@ -212,7 +212,8 @@ class Gui:
     def on_toolbuttonPreviousSequence_clicked(self,widget,data=None):
         self.core.PreviousSequence()
 
-
+    def on_toolbuttonReplaySequence_clicked(self,widget,data=None):
+        self.core.RepeatSequence()
     def Run(self):
         gtk.gdk.threads_init()
         self.window.show()

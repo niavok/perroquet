@@ -246,11 +246,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="replaySequence">
+              <object class="GtkToolButton" id="toolbuttonReplaySequence">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Replay sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-refresh</property>
+                <signal name="clicked" handler="on_toolbuttonReplaySequence_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -258,11 +259,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="pause">
+              <object class="GtkToolButton" id="toolbuttonPause">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Pause</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-pause</property>
+                <signal name="clicked" handler="on_toolbuttonPause_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -270,11 +272,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="play">
+              <object class="GtkToolButton" id="toolbuttonPlay">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">playButton</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
+                <signal name="clicked" handler="on_toolbuttonPlay_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -291,36 +294,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkMenuToolButton" id="helpMenu">
+              <object class="GtkToolButton" id="toolbuttonHint">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">helpMenu</property>
+                <property name="label" translatable="yes">Hint</property>
+                <property name="use_underline">True</property>
                 <property name="stock_id">gtk-dialog-question</property>
-                <child>
-                  <object class="GtkMenu" id="menu4">
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="GtkMenuItem" id="hintHelp1">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Hint on the current word</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="revealWord">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Reveal current word</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="revealSequence">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Reveal whole sequence</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <signal name="clicked" handler="on_toolbuttonHint_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
