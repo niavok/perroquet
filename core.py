@@ -45,6 +45,7 @@ class Core(object):
             self.sequence.Load(sub.GetText())
             self.sequenceList.append(self.sequence)
         self.currentSubId = 0
+        self.gui.Activate()
         self.ActivateSequence()
 
 

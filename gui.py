@@ -223,6 +223,9 @@ class Gui:
     def on_adjustmentSequenceNum_value_changed(self,widget,data=None):
 		self.core.SelectSequence(int(self.builder.get_object("adjustmentSequenceNum").get_value()) - 1)
         
+    def Activate(self):
+        self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
+    
     def Run(self):
         gtk.gdk.threads_init()
         self.window.show()

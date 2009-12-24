@@ -402,6 +402,7 @@
             <child>
               <object class="GtkHScale" id="hscale1">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustmentSequenceTime</property>
                 <property name="fill_level">200</property>
@@ -435,6 +436,7 @@
             <child>
               <object class="GtkHScale" id="hscaleSequenceNum">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustmentSequenceNum</property>
                 <property name="draw_value">False</property>
