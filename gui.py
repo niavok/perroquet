@@ -52,10 +52,22 @@ class Gui:
         return self.builder.get_object("videoArea").window.xid
         
     def SetSequenceNumber(self, sequenceNumber, sequenceCount):
-		ajustement = self.builder.get_object("adjustmentSequenceNum")
-		ajustement.configure (sequenceNumber, 0, sequenceCount, 1, 10, 10)
-		self.builder.get_object("labelSequenceNumber").set_text(str(sequenceNumber) + "/" + str(sequenceCount))
-                                                         
+        ajustement = self.builder.get_object("adjustmentSequenceNum")
+        sequenceNumber = sequenceNumber + 1
+        ajustement.configure (sequenceNumber, 1, sequenceCount, 1, 10, 0)
+        self.builder.get_object("labelSequenceNumber").set_text(str(sequenceNumber) + "/" + str(sequenceCount))
+                                                        
+    def SetSequenceTime(self, sequencePos, sequenceTime):
+        if sequencePos > sequenceTime:
+            sequencePos = sequenceTime
+        self.settedPos = sequencePos /100
+        ajustement = self.builder.get_object("adjustmentSequenceTime")
+        ajustement.configure (self.settedPos, 0, sequenceTime/100, 1, 10, 0)
+        textTime = round(float(sequencePos)/1000,1)
+        textDuration = round(float(sequenceTime)/1000,1)
+        self.builder.get_object("labelSequenceTime").set_text(str(textTime) + "/" + str(textDuration) + " s")
+      
+                                                        
     def SetSequence(self, sequence):
         #print "SetSequence"
         self.ClearBuffer()
@@ -221,10 +233,17 @@ class Gui:
         self.core.RepeatSequence()
     
     def on_adjustmentSequenceNum_value_changed(self,widget,data=None):
-		self.core.SelectSequence(int(self.builder.get_object("adjustmentSequenceNum").get_value()) - 1)
-        
+        print "on_adjustmentSequenceNum_value_changed " + str(int(self.builder.get_object("adjustmentSequenceNum").get_value()))
+        self.core.SelectSequence(int(self.builder.get_object("adjustmentSequenceNum").get_value()) - 1)
+    
+    def on_adjustmentSequenceTime_value_changed(self,widget,data=None):
+        value = int(self.builder.get_object("adjustmentSequenceTime").get_value())
+        if value != self.settedPos:
+            self.core.SeekSequence(value*100)
+    
     def Activate(self):
         self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
+        self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
     
     def Run(self):
         gtk.gdk.threads_init()

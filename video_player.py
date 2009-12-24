@@ -49,12 +49,10 @@ class VideoPlayer(object):
         self.play_thread_id = thread.start_new_thread(self.play_thread, ())
         self.playing = False
     def Play(self):
-        print "Play"
         self.player.set_state(gst.STATE_PLAYING)
         self.playing = True
 
     def Pause(self):
-        print "Pause"
         self.player.set_state(gst.STATE_PAUSED)
         self.playing = False
 
@@ -62,9 +60,6 @@ class VideoPlayer(object):
         return not self.playing
 
     def Seek(self, time):
-        print "Seek"
-        #self.player.set_state(gst.STATE_PAUSED)
-        #00:17:55,760
         value = int(time * 1000000 )
         self.player.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH,value)
 
@@ -76,6 +71,17 @@ class VideoPlayer(object):
 
     def SetWindowId(self, windowId):
         self.windowId = windowId
+
+    def GetCurrentTime(self):
+        pos_int = -1
+        try:
+            pos_int = self.player.query_position(self.time_format, None)[0]
+        except:
+            pass
+        if pos_int != -1:
+            return pos_int/1000000
+        else:
+            return None
 
     def play_thread(self):
         play_thread_id = self.play_thread_id

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import re, gtk
+import re, gtk, thread, time
 from video_player import VideoPlayer
 from subtitles_loader import SubtitlesLoader
 
@@ -47,18 +47,12 @@ class Core(object):
         self.currentSubId = 0
         self.gui.Activate()
         self.ActivateSequence()
+        self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
 
 
     def TimeCallback(self):
         if self.state == Core.WAIT_BEGIN:
             self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd() + 500)
-            """print "load"
-            self.sequence = Sequence()
-
-            self.sequence.Load(self.subList[self.currentSubId].GetText())
-            print "load2"
-            self.gui.SetSequence(self.sequence)
-            print self.subList[self.currentSubId].GetText()"""
             self.state = Core.WAIT_END
         elif self.state == Core.WAIT_END:
             self.state = Core.WAIT_BEGIN
@@ -70,6 +64,8 @@ class Core(object):
                 gtk.gdk.threads_leave()
             else:
                 self.player.Pause()
+                
+                
 
     def RepeatSequence(self):
         print "RepeatSequence"
@@ -78,7 +74,7 @@ class Core(object):
         self.paused = False
 
     def SelectSequence(self, num, load = True):
-        print "SelectSequence"
+        print "SelectSequence " + str(num) + " " + str(self.currentSubId)
         if self.currentSubId == num:
             return
         self.currentSubId = num
@@ -110,7 +106,7 @@ class Core(object):
         self.validSequence = self.sequence.IsValid()
 
         print "ActivateSequence: loaded"
-        self.gui.SetSequenceNumber(self.currentSubId +1, len(self.subList)) 
+        self.gui.SetSequenceNumber(self.currentSubId, len(self.subList)) 
         self.gui.SetSequence(self.sequence)
         print "ActivateSequence: end"
 
@@ -121,7 +117,10 @@ class Core(object):
 
     def GotoSequenceBegin(self):
         self.state = Core.WAIT_END
-        self.player.Seek(self.subList[self.currentSubId].GetTimeBegin() - 1000)
+        begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
+        if begin_time < 0:
+            begin_time = 0
+        self.player.Seek(begin_time)
         self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
 
     def WriteCharacter(self, character):
@@ -181,6 +180,35 @@ class Core(object):
         elif not self.player.IsPaused() and not self.paused:
             self.player.Pause()
             self.paused = True
+    def SeekSequence(self, time):
+        begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
+        if begin_time < 0:
+            begin_time = 0
+            
+        pos = begin_time + time
+        self.player.Seek(pos)
+        self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd() + 500)
+        self.state = Core.WAIT_END
+        self.player.Play()
+        self.paused = False
+
+    
+    def timeUpdateThread(self):
+        timeUpdateThreadId = self.timeUpdateThreadId
+        #gtk.gdk.threads_enter()
+        #self.time_label.set_text("00:00 / 00:00")
+        #gtk.gdk.threads_leave()
+        while timeUpdateThreadId == self.timeUpdateThreadId:
+            time.sleep(0.5)
+            pos_int = self.player.GetCurrentTime()
+            if pos_int != None:
+                end_time = self.subList[self.currentSubId].GetTimeEnd()
+                begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
+                if begin_time < 0:
+                    begin_time = 0
+                duration =  end_time - begin_time 
+                pos = pos_int -begin_time
+                self.gui.SetSequenceTime(pos, duration)
 
 
 class Sequence(object):
