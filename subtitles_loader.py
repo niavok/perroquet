@@ -14,7 +14,8 @@ class SubtitlesLoader(object):
         f = open(path, 'r')
         state = SubtitlesLoader.LOOK_FOR_ID
         for line in f:
-            line = line.rstrip();
+            line = line.rstrip()
+            
             if state == SubtitlesLoader.LOOK_FOR_ID:
                 if len(line) > 0:
                     current = Subtitle()
@@ -53,7 +54,7 @@ class SubtitlesLoader(object):
     def CompactSubtitlesList(self, list):
         outputList = []
         id = 0
-
+        
         for sub in list:
             if id == 0 or current.GetTimeEnd() != sub.GetTimeBegin():
                 if id > 0:
@@ -67,6 +68,7 @@ class SubtitlesLoader(object):
             else:
                 current.SetText(current.GetText() + " " + sub.GetText())
                 current.SetTimeEnd(sub.GetTimeEnd())
+        outputList.append(current)
         return outputList
 
 class Subtitle(object):
