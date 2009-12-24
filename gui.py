@@ -51,6 +51,11 @@ class Gui:
     def GetVideoWindowId(self):
         return self.builder.get_object("videoArea").window.xid
         
+    def SetSequenceNumber(self, sequenceNumber, sequenceCount):
+		ajustement = self.builder.get_object("adjustmentSequenceNum")
+		ajustement.configure (sequenceNumber, 0, sequenceCount, 1, 10, 10)
+		self.builder.get_object("labelSequenceNumber").set_text(str(sequenceNumber) + "/" + str(sequenceCount))
+                                                         
     def SetSequence(self, sequence):
         #print "SetSequence"
         self.ClearBuffer()
@@ -214,6 +219,10 @@ class Gui:
 
     def on_toolbuttonReplaySequence_clicked(self,widget,data=None):
         self.core.RepeatSequence()
+    
+    def on_adjustmentSequenceNum_value_changed(self,widget,data=None):
+		self.core.SelectSequence(int(self.builder.get_object("adjustmentSequenceNum").get_value()) - 1)
+        
     def Run(self):
         gtk.gdk.threads_init()
         self.window.show()

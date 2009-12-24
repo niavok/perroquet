@@ -11,17 +11,23 @@ class Core(object):
     def __init__(self):
         self.player = VideoPlayer()
         self.subtitles = SubtitlesLoader()
-        #self.subList = self.subtitles.GetSubtitleList('/home/fred/Vidéos/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt')
-        #self.subList = self.subtitles.CompactSubtitlesList(self.subList)
-        #for sub in self.subList:
-           # print str(sub.GetId()) + " " + sub.GetText()
-
+        
     def SetGui(self, gui):
         self.gui = gui
 
     def SetPaths(self, videoPath, exercicePath):
         self.subList = self.subtitles.GetSubtitleList(exercicePath)
+        for sub in self.subList:
+            print str(sub.GetId()) + " " + sub.GetText()
+
         self.subList = self.subtitles.CompactSubtitlesList(self.subList)
+        
+        for sub in self.subList:
+            print str(sub.GetId()) + " " + sub.GetText()
+
+        #for sub in self.subList:
+        #    print str(sub.GetId()) + " " + sub.GetText()
+
     
         self.player.SetWindowId(self.gui.GetVideoWindowId())
         self.player.Open(videoPath)
@@ -70,6 +76,15 @@ class Core(object):
         self.player.Play()
         self.paused = False
 
+    def SelectSequence(self, num, load = True):
+        print "SelectSequence"
+        if self.currentSubId == num:
+            return
+        self.currentSubId = num
+        self.ActivateSequence()
+        if load:
+            self.RepeatSequence()
+
     def NextSequence(self, load = True):
         print "NextSequence"
         if self.currentSubId < len(self.sequenceList)-1:
@@ -94,6 +109,7 @@ class Core(object):
         self.validSequence = self.sequence.IsValid()
 
         print "ActivateSequence: loaded"
+        self.gui.SetSequenceNumber(self.currentSubId +1, len(self.subList)) 
         self.gui.SetSequence(self.sequence)
         print "ActivateSequence: end"
 
@@ -176,7 +192,7 @@ class Sequence(object):
         self.activeWordIndex = 0
         self.activeWordPos = 0
         self.helpChar = '~'
-        print textToParse
+        #print textToParse
         while len(textToParse) > 0:
             if re.match('^([0-9\'a-zA-Z]+)[^0-9\'a-zA-Z]', textToParse):
                 #print "match"
