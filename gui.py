@@ -23,7 +23,8 @@ class Gui:
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
         videoChooser.set_filename("/media/F14A-2988/The Big Bang Theory/01x01 - Pilot.avi")
-        exerciceChooser.set_filename("/media/F14A-2988/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt")
+        #exerciceChooser.set_filename("/media/F14A-2988/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt")
+        exerciceChooser.set_filename("/media/F14A-2988/2012 (2009) DVDRip XviD-MAXSPEED/2012 (2009) DVDRip XviD-MAXSPEED.srt")
         self.newExerciceDialog.show() 
        
     def on_buttonNewExerciceOk_clicked(self,widget,data=None):
@@ -66,7 +67,9 @@ class Gui:
         textTime = round(float(sequencePos)/1000,1)
         textDuration = round(float(sequenceTime)/1000,1)
         self.builder.get_object("labelSequenceTime").set_text(str(textTime) + "/" + str(textDuration) + " s")
-      
+    def SetPlaying(self, state):
+        if state:
+            print plop
                                                         
     def SetSequence(self, sequence):
         #print "SetSequence"
@@ -92,6 +95,9 @@ class Gui:
                     self.AddWordToFound(" ")
                     pos += 1
                 elif sequence.GetWordList()[i].lower() == sequence.GetWorkList()[i].lower():
+                    print sequence.GetWordList()[i]
+                    print sequence.GetWorkList()[i]
+                    
                     self.AddWordFound(sequence.GetWordList()[i])
                     pos += len(sequence.GetWordList()[i])
                 else:
@@ -240,10 +246,21 @@ class Gui:
         value = int(self.builder.get_object("adjustmentSequenceTime").get_value())
         if value != self.settedPos:
             self.core.SeekSequence(value*100)
+    def on_toolbuttonHint_clicked(self,widget,data=None):
+        self.core.CompleteWord()
+    
+    def on_toolbuttonPlay_clicked(self,widget,data=None):
+        self.core.Play()
+    
+    def on_toolbuttonPause_clicked(self,widget,data=None):
+        self.core.Pause()
     
     def Activate(self):
         self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
         self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
+        self.builder.get_object("toolbuttonHint").set_sensitive(True)
+        self.builder.get_object("toolbuttonReplaySequence").set_sensitive(True)
+    
     
     def Run(self):
         gtk.gdk.threads_init()

@@ -17,14 +17,10 @@ class Core(object):
 
     def SetPaths(self, videoPath, exercicePath):
         self.subList = self.subtitles.GetSubtitleList(exercicePath)
-        for sub in self.subList:
-            print str(sub.GetId()) + " " + sub.GetText()
-
+       
         self.subList = self.subtitles.CompactSubtitlesList(self.subList)
         
-        for sub in self.subList:
-            print str(sub.GetId()) + " " + sub.GetText()
-
+    
         #for sub in self.subList:
         #    print str(sub.GetId()) + " " + sub.GetText()
 
@@ -232,7 +228,7 @@ class Sequence(object):
                 if len(self.wordList) == len(self.symbolList) :
                     self.symbolList.append('')
                 self.wordList.append(word)
-                self.workList.append('')
+                self.workList.append("")
             elif re.match('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse):
                 #print "not match"
                 m = re.search('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse)
@@ -244,7 +240,7 @@ class Sequence(object):
             else:
                 if re.match('^([0-9\'a-zA-Z]+)', textToParse):
                     self.wordList.append(textToParse)
-                    self.workList.append(textToParse)
+                    self.workList.append("")
                 else:
                     self.symbolList.append(textToParse)
                 break
@@ -278,6 +274,7 @@ class Sequence(object):
             if self.NextWord():
                 self.WriteCharacter(character)
         else:
+            print "Write character"
             if self.activeWordPos < len(self.workList[self.activeWordIndex]) and self.workList[self.activeWordIndex][self.activeWordPos] == self.helpChar:
                 self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos+1:]
             else:
@@ -296,6 +293,7 @@ class Sequence(object):
             if self.PreviousWord():
                 self.DeletePreviousCharacter()
         else:
+            print "delete character"
             self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos-1]  + self.workList[self.activeWordIndex][self.activeWordPos:]
             self.activeWordPos -= 1
 
@@ -310,6 +308,7 @@ class Sequence(object):
             if self.NextWord(False):
                 self.DeleteNextCharacter()
         else:
+            print "delete character"
             self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos]  + self.workList[self.activeWordIndex][self.activeWordPos+1:]
 
     def NextWord(self, end = True):
@@ -376,11 +375,11 @@ class Sequence(object):
                 valid = False
                 break
             id += 1
-        print "valid : " + str(valid)
         return valid
 
 
     def CompleteWord(self):
+        print "CompleteWOrd"
         if self.IsValidWord():
             if self.NextWord(False):
                 self.CompleteWord()

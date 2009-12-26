@@ -201,6 +201,7 @@
             <child>
               <object class="GtkToolButton" id="saveButton">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="label" translatable="yes">Save exercice</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save</property>
@@ -222,6 +223,7 @@
             <child>
               <object class="GtkToolButton" id="toolbuttonPreviousSequence">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="label" translatable="yes">Previous sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-back</property>
@@ -235,6 +237,7 @@
             <child>
               <object class="GtkToolButton" id="toolbuttonNextSequence">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="label" translatable="yes">Next Sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-forward</property>
@@ -248,6 +251,7 @@
             <child>
               <object class="GtkToolButton" id="toolbuttonReplaySequence">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="label" translatable="yes">Replay sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-refresh</property>
@@ -261,6 +265,7 @@
             <child>
               <object class="GtkToolButton" id="toolbuttonPause">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="label" translatable="yes">Pause</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-pause</property>
@@ -274,6 +279,7 @@
             <child>
               <object class="GtkToolButton" id="toolbuttonPlay">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="label" translatable="yes">playButton</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
@@ -296,6 +302,7 @@
             <child>
               <object class="GtkToolButton" id="toolbuttonHint">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="label" translatable="yes">Hint</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-dialog-question</property>
@@ -317,12 +324,12 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="orientation">vertical</property>
-            <property name="position">200</property>
-            <property name="position_set">True</property>
+            <property name="position">269</property>
             <child>
               <object class="GtkHPaned" id="hpaned1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="position">522</property>
                 <child>
                   <object class="GtkDrawingArea" id="videoArea">
                     <property name="width_request">320</property>
