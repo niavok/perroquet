@@ -3,6 +3,8 @@
 import re, gtk, thread, time
 from video_player import VideoPlayer
 from subtitles_loader import SubtitlesLoader
+from exercice_manager import ExerciceSaver
+from exercice_manager import ExerciceLoader
 
 class Core(object):
     WAIT_BEGIN = 0
@@ -16,6 +18,8 @@ class Core(object):
         self.gui = gui
 
     def SetPaths(self, videoPath, exercicePath):
+        self.videoPath = videoPath
+        self.exercicePath = exercicePath
         self.subList = self.subtitles.GetSubtitleList(exercicePath)
        
         self.subList = self.subtitles.CompactSubtitlesList(self.subList)
@@ -28,6 +32,7 @@ class Core(object):
         self.player.SetWindowId(self.gui.GetVideoWindowId())
         self.player.Open(videoPath)
         self.InitExercice()
+        self.gui.SetCanSave(True)
         self.player.Play()
         self.paused = False
 
@@ -205,6 +210,19 @@ class Core(object):
                 duration =  end_time - begin_time 
                 pos = pos_int -begin_time
                 self.gui.SetSequenceTime(pos, duration)
+                
+    def Save(self):
+        saver = ExerciceSaver()
+        saver.SetPath("save.perroquet")
+        saver.SetVideoPath(self.videoPath)
+        saver.SetExercicePath(self.exercicePath)
+        saver.SetCorrectionPath("")
+        saver.SetCurrentSequence(self.currentSubId)
+        saver.SetSequenceList(self.sequenceList)
+        saver.Save()
+        
+        self.gui.SetCanSave(False)
+    
 
 
 class Sequence(object):
@@ -376,7 +394,14 @@ class Sequence(object):
                 break
             id += 1
         return valid
-
+        
+    def IsEmpty(self):
+        empty = True
+        for word in self.workList:
+            if word != "":
+                empty = False
+                break
+        return empty 
 
     def CompleteWord(self):
         print "CompleteWOrd"

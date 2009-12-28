@@ -67,9 +67,13 @@ class Gui:
         textTime = round(float(sequencePos)/1000,1)
         textDuration = round(float(sequenceTime)/1000,1)
         self.builder.get_object("labelSequenceTime").set_text(str(textTime) + "/" + str(textDuration) + " s")
+    
     def SetPlaying(self, state):
-        if state:
-            print plop
+        self.builder.get_object("toolbuttonPlay").set_sensitive(state)
+        self.builder.get_object("toolbuttonPause").set_sensitive(not state)
+            
+    def SetCanSave(self, state):
+        self.builder.get_object("saveButton").set_sensitive(state)
                                                         
     def SetSequence(self, sequence):
         #print "SetSequence"
@@ -254,6 +258,9 @@ class Gui:
     
     def on_toolbuttonPause_clicked(self,widget,data=None):
         self.core.Pause()
+        
+    def on_saveButton_clicked(self, widget, data=None):
+        self.core.Save()
     
     def Activate(self):
         self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
