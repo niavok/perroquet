@@ -13,7 +13,8 @@ class Core(object):
     def __init__(self):
         self.player = VideoPlayer()
         self.subtitles = SubtitlesLoader()
-        
+        self.outputSavePath = ""
+
     def SetGui(self, gui):
         self.gui = gui
 
@@ -21,14 +22,14 @@ class Core(object):
         self.videoPath = videoPath
         self.exercicePath = exercicePath
         self.subList = self.subtitles.GetSubtitleList(exercicePath)
-       
+
         self.subList = self.subtitles.CompactSubtitlesList(self.subList)
-        
-    
+
+
         #for sub in self.subList:
         #    print str(sub.GetId()) + " " + sub.GetText()
 
-    
+
         self.player.SetWindowId(self.gui.GetVideoWindowId())
         self.player.Open(videoPath)
         self.InitExercice()
@@ -65,8 +66,8 @@ class Core(object):
                 gtk.gdk.threads_leave()
             else:
                 self.player.Pause()
-                
-                
+
+
 
     def RepeatSequence(self):
         print "RepeatSequence"
@@ -82,6 +83,7 @@ class Core(object):
         self.ActivateSequence()
         if load:
             self.RepeatSequence()
+        self.gui.SetCanSave(True)
 
     def NextSequence(self, load = True):
         print "NextSequence"
@@ -90,6 +92,7 @@ class Core(object):
         self.ActivateSequence()
         if load:
             self.RepeatSequence()
+        self.gui.SetCanSave(True)
 
     def PreviousSequence(self):
         print "PreviousSequence"
@@ -97,6 +100,7 @@ class Core(object):
             self.currentSubId -= 1
         self.ActivateSequence()
         self.RepeatSequence()
+        self.gui.SetCanSave(True)
 
     def ActivateSequence(self):
         print "ActivateSequence"
@@ -107,7 +111,7 @@ class Core(object):
         self.validSequence = self.sequence.IsValid()
 
         print "ActivateSequence: loaded"
-        self.gui.SetSequenceNumber(self.currentSubId, len(self.subList)) 
+        self.gui.SetSequenceNumber(self.currentSubId, len(self.subList))
         self.gui.SetSequence(self.sequence)
         print "ActivateSequence: end"
 
@@ -123,6 +127,7 @@ class Core(object):
             begin_time = 0
         self.player.Seek(begin_time)
         self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
+        self.gui.SetCanSave(True)
 
     def WriteCharacter(self, character):
         if character == "apostrophe":
@@ -131,47 +136,56 @@ class Core(object):
             self.sequence.WriteCharacter(character)
             self.gui.SetSequence(self.sequence)
             self.ValidateSequence()
+        self.gui.SetCanSave(True)
 
 
     def NextWord(self):
         print "NextWord"
         self.sequence.NextWord(False)
         self.gui.SetSequence(self.sequence)
+        self.gui.SetCanSave(True)
 
     def FirstWord(self):
         print "FirstWord"
         while self.sequence.PreviousWord(False):
             continue
         self.gui.SetSequence(self.sequence)
+        self.gui.SetCanSave(True)
 
     def LastWord(self):
         print "LastWord"
         while self.sequence.NextWord():
             continue
         self.gui.SetSequence(self.sequence)
+        self.gui.SetCanSave(True)
 
     def DeletePreviousChar(self):
         self.sequence.DeletePreviousCharacter()
         self.gui.SetSequence(self.sequence)
         self.ValidateSequence()
+        self.gui.SetCanSave(True)
 
     def DeleteNextChar(self):
         self.sequence.DeleteNextCharacter()
         self.gui.SetSequence(self.sequence)
         self.ValidateSequence()
+        self.gui.SetCanSave(True)
 
     def PreviousChar(self):
         self.sequence.PreviousCharacter()
         self.gui.SetSequence(self.sequence)
+        self.gui.SetCanSave(True)
 
     def NextChar(self):
         self.sequence.NextCharacter()
         self.gui.SetSequence(self.sequence)
+        self.gui.SetCanSave(True)
 
     def CompleteWord(self):
         self.sequence.CompleteWord()
         self.gui.SetSequence(self.sequence)
         self.ValidateSequence()
+        self.gui.SetCanSave(True)
 
     def TooglePause(self):
         print "TooglePause " + str(self.player.IsPaused()) + " " + str(self.paused)
@@ -181,11 +195,12 @@ class Core(object):
         elif not self.player.IsPaused() and not self.paused:
             self.player.Pause()
             self.paused = True
+
     def SeekSequence(self, time):
         begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
         if begin_time < 0:
             begin_time = 0
-            
+
         pos = begin_time + time
         self.player.Seek(pos)
         self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd() + 500)
@@ -193,7 +208,7 @@ class Core(object):
         self.player.Play()
         self.paused = False
 
-    
+
     def timeUpdateThread(self):
         timeUpdateThreadId = self.timeUpdateThreadId
         #gtk.gdk.threads_enter()
@@ -207,22 +222,29 @@ class Core(object):
                 begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
                 if begin_time < 0:
                     begin_time = 0
-                duration =  end_time - begin_time 
+                duration =  end_time - begin_time
                 pos = pos_int -begin_time
                 self.gui.SetSequenceTime(pos, duration)
-                
+
     def Save(self):
+
+        if self.outputSavePath == "":
+            self.outputSavePath = self.gui.AskSavePath()
+
+        if self.outputSavePath == "":
+            return
+
         saver = ExerciceSaver()
-        saver.SetPath("save.perroquet")
+        saver.SetPath(self.outputSavePath)
         saver.SetVideoPath(self.videoPath)
         saver.SetExercicePath(self.exercicePath)
         saver.SetCorrectionPath("")
         saver.SetCurrentSequence(self.currentSubId)
         saver.SetSequenceList(self.sequenceList)
         saver.Save()
-        
+
         self.gui.SetCanSave(False)
-    
+
 
 
 class Sequence(object):
@@ -394,14 +416,14 @@ class Sequence(object):
                 break
             id += 1
         return valid
-        
+
     def IsEmpty(self):
         empty = True
         for word in self.workList:
             if word != "":
                 empty = False
                 break
-        return empty 
+        return empty
 
     def CompleteWord(self):
         print "CompleteWOrd"

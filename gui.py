@@ -9,24 +9,24 @@ class Gui:
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("MainWindow")
         self.typeLabel = self.builder.get_object("typeView")
-        
+
         self.initTypeLabel()
 
-   
+
     def on_MainWindow_delete_event(self,widget,data=None):
         gtk.main_quit()
 
     def on_newExerciceButton_clicked(self,widget,data=None):
         self.newExerciceDialog = self.builder.get_object("newExerciceDialog")
-        
+
 
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
         videoChooser.set_filename("/media/F14A-2988/The Big Bang Theory/01x01 - Pilot.avi")
         #exerciceChooser.set_filename("/media/F14A-2988/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt")
         exerciceChooser.set_filename("/media/F14A-2988/2012 (2009) DVDRip XviD-MAXSPEED/2012 (2009) DVDRip XviD-MAXSPEED.srt")
-        self.newExerciceDialog.show() 
-       
+        self.newExerciceDialog.show()
+
     def on_buttonNewExerciceOk_clicked(self,widget,data=None):
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         videoPath = videoChooser.get_filename()
@@ -35,7 +35,7 @@ class Gui:
         if videoPath == "None":
             videoPath = ""
         if exercicePath == "None":
-            exercicePath = ""    
+            exercicePath = ""
         print videoPath
         print exercicePath
         self.core.SetPaths(videoPath,exercicePath)
@@ -43,7 +43,7 @@ class Gui:
 
     def monclic(self, source=None, event=None):
         self.widgets.get_widget('label1').set_text('Vous avez cliqué !')
-        
+
         return True
 
     def SetCore(self, core):
@@ -51,13 +51,13 @@ class Gui:
 
     def GetVideoWindowId(self):
         return self.builder.get_object("videoArea").window.xid
-        
+
     def SetSequenceNumber(self, sequenceNumber, sequenceCount):
         ajustement = self.builder.get_object("adjustmentSequenceNum")
         sequenceNumber = sequenceNumber + 1
         ajustement.configure (sequenceNumber, 1, sequenceCount, 1, 10, 0)
         self.builder.get_object("labelSequenceNumber").set_text(str(sequenceNumber) + "/" + str(sequenceCount))
-                                                        
+
     def SetSequenceTime(self, sequencePos, sequenceTime):
         if sequencePos > sequenceTime:
             sequencePos = sequenceTime
@@ -67,14 +67,14 @@ class Gui:
         textTime = round(float(sequencePos)/1000,1)
         textDuration = round(float(sequenceTime)/1000,1)
         self.builder.get_object("labelSequenceTime").set_text(str(textTime) + "/" + str(textDuration) + " s")
-    
+
     def SetPlaying(self, state):
         self.builder.get_object("toolbuttonPlay").set_sensitive(state)
         self.builder.get_object("toolbuttonPause").set_sensitive(not state)
-            
+
     def SetCanSave(self, state):
         self.builder.get_object("saveButton").set_sensitive(state)
-                                                        
+
     def SetSequence(self, sequence):
         #print "SetSequence"
         self.ClearBuffer()
@@ -101,7 +101,7 @@ class Gui:
                 elif sequence.GetWordList()[i].lower() == sequence.GetWorkList()[i].lower():
                     print sequence.GetWordList()[i]
                     print sequence.GetWorkList()[i]
-                    
+
                     self.AddWordFound(sequence.GetWordList()[i])
                     pos += len(sequence.GetWordList()[i])
                 else:
@@ -123,7 +123,7 @@ class Gui:
         buffer.delete(iter1, iter2)
         #gtk.gdk.threads_leave()
         #print "ClearBuffer end"
-        
+
     def AddSymbol(self, symbol):
         #print "AddSymbol #" + symbol + "#"
         #gtk.gdk.threads_enter()
@@ -139,7 +139,7 @@ class Gui:
         buffer.apply_tag_by_name("default", iter1, iter2)
         #gtk.gdk.threads_leave()
         #print "AddSymbol end"
-    
+
     def AddWordToFound(self, word):
         #print "AddWordFound"
         #gtk.gdk.threads_enter()
@@ -152,7 +152,7 @@ class Gui:
         buffer.apply_tag_by_name("word_to_found", iter1, iter2)
         #gtk.gdk.threads_leave()
         #print "AddWordFound end"
-        
+
     def AddWordFound(self, word):
         #print "AddWordFound"
         #gtk.gdk.threads_enter()
@@ -241,34 +241,51 @@ class Gui:
 
     def on_toolbuttonReplaySequence_clicked(self,widget,data=None):
         self.core.RepeatSequence()
-    
+
     def on_adjustmentSequenceNum_value_changed(self,widget,data=None):
         print "on_adjustmentSequenceNum_value_changed " + str(int(self.builder.get_object("adjustmentSequenceNum").get_value()))
         self.core.SelectSequence(int(self.builder.get_object("adjustmentSequenceNum").get_value()) - 1)
-    
+
     def on_adjustmentSequenceTime_value_changed(self,widget,data=None):
         value = int(self.builder.get_object("adjustmentSequenceTime").get_value())
         if value != self.settedPos:
             self.core.SeekSequence(value*100)
     def on_toolbuttonHint_clicked(self,widget,data=None):
         self.core.CompleteWord()
-    
+
     def on_toolbuttonPlay_clicked(self,widget,data=None):
         self.core.Play()
-    
+
     def on_toolbuttonPause_clicked(self,widget,data=None):
         self.core.Pause()
-        
+
     def on_saveButton_clicked(self, widget, data=None):
         self.core.Save()
-    
+
+
+    def AskSavePath(self):
+        saveChooser = self.builder.get_object("filechooserdialogSave")
+        saveChooser.run()
+
+        path = saveChooser.get_filename()
+
+        if path == "None" or path == None :
+            path = ""
+        elif not path.endswith(".perroquet"):
+            path = path +".perroquet"
+        return path
+
+    def on_buttonSaveExerciceOk_clicked(self, widget, data=None):
+        saveChooser = self.builder.get_object("filechooserdialogSave")
+        saveChooser.hide()
+
     def Activate(self):
         self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
         self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
         self.builder.get_object("toolbuttonHint").set_sensitive(True)
         self.builder.get_object("toolbuttonReplaySequence").set_sensitive(True)
-    
-    
+
+
     def Run(self):
         gtk.gdk.threads_init()
         self.window.show()
