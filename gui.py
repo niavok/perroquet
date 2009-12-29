@@ -22,9 +22,9 @@ class Gui:
 
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
-        videoChooser.set_filename("/media/F14A-2988/The Big Bang Theory/01x01 - Pilot.avi")
+        videoChooser.set_filename("/home/fred/Vidéos/elephantsdream-1024-mpeg4-su-ac3.avi")
         #exerciceChooser.set_filename("/media/F14A-2988/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt")
-        exerciceChooser.set_filename("/media/F14A-2988/2012 (2009) DVDRip XviD-MAXSPEED/2012 (2009) DVDRip XviD-MAXSPEED.srt")
+        exerciceChooser.set_filename("/home/fred/Vidéos/english_hh.srt")
         self.newExerciceDialog.show()
 
     def on_buttonNewExerciceOk_clicked(self,widget,data=None):
@@ -74,6 +74,23 @@ class Gui:
 
     def SetCanSave(self, state):
         self.builder.get_object("saveButton").set_sensitive(state)
+
+    def SetWordList(self, wordList):
+        buffer = self.builder.get_object("textviewWordList").get_buffer()
+
+        iter1 = buffer.get_start_iter()
+        iter2 = buffer.get_end_iter()
+        buffer.delete(iter1, iter2)
+
+
+        formattedWordList = ""
+
+        for word in wordList:
+            formattedWordList = formattedWordList + word + "\n"
+
+        iter = buffer.get_end_iter()
+        buffer.insert(iter,formattedWordList)
+
 
     def SetSequence(self, sequence):
         #print "SetSequence"

@@ -46,9 +46,11 @@ class Core(object):
             self.sequence = Sequence()
             self.sequence.Load(sub.GetText())
             self.sequenceList.append(self.sequence)
+
         self.currentSubId = 0
         self.gui.Activate()
         self.ActivateSequence()
+        self.ExtractWordList()
         self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
 
 
@@ -245,7 +247,18 @@ class Core(object):
 
         self.gui.SetCanSave(False)
 
+    def ExtractWordList(self):
+        wordList = []
 
+        for sequence in self.sequenceList:
+            sequenceWordList = sequence.GetWordList()
+            for word in sequenceWordList:
+                wordList.append(word.lower())
+
+        wordList = list(set(wordList))
+        wordList.sort()
+
+        self.gui.SetWordList(wordList)
 
 class Sequence(object):
 
