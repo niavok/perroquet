@@ -85,6 +85,13 @@ class Sequence(object):
     def SetActiveWordPos(self, index):
         self.activeWordPos = index
 
+    def SelectSequenceWord(self, wordIndex,wordIndexPos):
+        self.activeWordPos = wordIndexPos
+        self.activeWordIndex = wordIndex
+
+        if self.IsValidWord():
+            self.NextWord()
+
     def WriteCharacter(self, character):
         if self.IsValidWord():
             if self.NextWord():

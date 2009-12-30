@@ -168,9 +168,11 @@ class Gui:
         i = 0
         pos = 1
         cursor_pos = 0
+
         text = ""
         buffer = self.typeLabel.get_buffer()
         self.AddSymbol(" ")
+
 
         for symbol in sequence.GetSymbolList():
             pos += len(symbol)
@@ -201,6 +203,12 @@ class Gui:
         iter2 = buffer.get_end_iter()
         buffer.delete(iter1, iter2)
 
+        self.currentIndex = 0
+        self.currentWordIndex = -1
+        self.currentPosIndex = 0
+        self.wordIndexMap = []
+        self.wordPosMap = []
+
     def AddSymbol(self, symbol):
         if len(symbol) == 0:
             return
@@ -212,6 +220,11 @@ class Gui:
         iter2 = buffer.get_end_iter()
         buffer.apply_tag_by_name("default", iter1, iter2)
 
+        for i in range(self.currentIndex, self.currentIndex + len(symbol)):
+            self.wordIndexMap.append(self.currentWordIndex)
+            self.wordPosMap.append(self.currentPosIndex)
+        self.currentIndex += len(symbol)
+
     def AddWordToFound(self, word):
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
@@ -220,6 +233,15 @@ class Gui:
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
         buffer.apply_tag_by_name("word_to_found", iter1, iter2)
+
+        self.currentWordIndex += 1
+        self.currentPosIndex = 0
+
+        for i in range(self.currentIndex, self.currentIndex + len(word)):
+            self.wordIndexMap.append(self.currentWordIndex)
+            self.wordPosMap.append(self.currentPosIndex)
+            self.currentPosIndex += 1
+        self.currentIndex += len(word)
 
     def AddWordFound(self, word):
         buffer = self.typeLabel.get_buffer()
@@ -230,6 +252,14 @@ class Gui:
         iter2 = buffer.get_end_iter()
         buffer.apply_tag_by_name("word_found", iter1, iter2)
 
+        self.currentWordIndex += 1
+        self.currentPosIndex = 0
+
+        for i in range(self.currentIndex, self.currentIndex + len(word)):
+            self.wordIndexMap.append(self.currentWordIndex)
+            self.wordPosMap.append(self.currentPosIndex)
+            self.currentPosIndex += 1
+        self.currentIndex += len(word)
 
     def initTypeLabel(self):
 
@@ -353,6 +383,17 @@ class Gui:
             scrolledwindowTranslation.show()
         else:
             scrolledwindowTranslation.hide()
+
+    def on_typeView_button_release_event(self, widget, data=None):
+        index = self.typeLabel.get_buffer().props.cursor_position
+
+        wordIndex = self.wordIndexMap[index]
+        wordIndexPos = self.wordPosMap[index]
+        if wordIndex == -1:
+            wordIndex = 0
+        self.core.SelectSequenceWord(wordIndex,wordIndexPos)
+        print "ok2 " + str(wordIndex) + " " + str(wordIndexPos)
+
 
     def Activate(self):
         self.builder.get_object("hscaleSequenceNum").set_sensitive(True)

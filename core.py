@@ -156,6 +156,7 @@ class Core(object):
 
 
 
+
     def ActivateTranslation(self):
         print "ActivateTranslation"
         if not self.translationList:
@@ -222,20 +223,22 @@ class Core(object):
 
 
     def NextWord(self):
-        print "NextWord"
         self.sequence.NextWord(False)
         self.gui.SetSequence(self.sequence)
         self.SetCanSave(True)
 
+    def SelectSequenceWord(self, wordIndex,wordIndexPos):
+        self.sequence.SelectSequenceWord(wordIndex,wordIndexPos)
+        self.gui.SetSequence(self.sequence)
+        self.SetCanSave(True)
+
     def FirstWord(self):
-        print "FirstWord"
         self.sequence.FirstWord()
 
         self.gui.SetSequence(self.sequence)
         self.SetCanSave(True)
 
     def LastWord(self):
-        print "LastWord"
         self.sequence.LastWord()
         self.gui.SetSequence(self.sequence)
         self.SetCanSave(True)
