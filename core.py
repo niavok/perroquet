@@ -211,15 +211,14 @@ class Core(object):
 
     def FirstWord(self):
         print "FirstWord"
-        while self.sequence.PreviousWord(False):
-            continue
+        self.sequence.FirstWord()
+
         self.gui.SetSequence(self.sequence)
         self.SetCanSave(True)
 
     def LastWord(self):
         print "LastWord"
-        while self.sequence.NextWord():
-            continue
+        self.sequence.LastWord()
         self.gui.SetSequence(self.sequence)
         self.SetCanSave(True)
 

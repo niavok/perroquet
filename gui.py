@@ -143,7 +143,6 @@ class Gui:
         if title != "":
             newTitle += " - " + title
 
-
         self.window.set_title(newTitle)
 
     def SetSequence(self, sequence):

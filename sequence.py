@@ -126,7 +126,6 @@ class Sequence(object):
                 self.activeWordPos = 0
             return False
 
-
     def PreviousWord(self, end = True):
         if self.activeWordIndex > 0:
             self.activeWordIndex -=1
@@ -145,6 +144,21 @@ class Sequence(object):
                 self.activeWordPos = 0
             return False
 
+
+    def FirstWord(self):
+        self.activeWordIndex = 0
+        self.activeWordPos = 0
+        while self.IsValidWord():
+            if not self.NextWord(False):
+                break
+
+
+    def LastWord(self):
+        self.activeWordIndex = len(self.workList) -1
+        self.activeWordPos = len(self.workList[self.activeWordIndex])
+        while self.IsValidWord():
+            if not self.PreviousWord(True):
+                break
 
     def NextCharacter(self):
         if self.activeWordPos >= len(self.workList[self.activeWordIndex]):
@@ -179,7 +193,7 @@ class Sequence(object):
         id = 0
         for word in self.workList:
             if word.lower() == self.wordList[id].lower():
-                valid += 1
+                found += 1
             id += 1
         return found
 
