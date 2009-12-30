@@ -18,7 +18,7 @@
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import thread, time, re, gtk
+import thread, time, re, gtk, os
 from video_player import VideoPlayer
 from subtitles_loader import SubtitlesLoader
 from exercice_manager import ExerciceSaver
@@ -336,6 +336,15 @@ class Core(object):
         if not loader.Load(path):
             return
 
+        if not self.VerifyPath(loader.GetVideoPath(), loader.GetExercicePath(), loader.GetTranslationPath()):
+            self.outputSavePath = path
+            self.gui.SetTitle(self.outputSavePath, False)
+            self.videoPath = loader.GetVideoPath()
+            self.exercicePath = loader.GetExercicePath()
+            self.translationPath = loader.GetTranslationPath()
+            self.gui.AskProperties()
+            return
+
         self.SetPaths( loader.GetVideoPath(), loader.GetExercicePath(), loader.GetTranslationPath(), False)
         self.outputSavePath = path
         self.gui.SetTitle(self.outputSavePath, False)
@@ -344,6 +353,49 @@ class Core(object):
         self.repeatCount = loader.GetRepeatCount()
         self.sequenceList[self.currentSubId].SetActiveWordIndex(loader.GetCurrentWord())
         self.ActivateSequence()
+
+    def VerifyPath(self, videoPath, exercicePath, translationPath):
+        error = False
+        if not os.path.exists(videoPath):
+            error = True;
+            self.gui.SignalExerciceBadPath(videoPath)
+
+        if not os.path.exists(exercicePath):
+            error = True;
+            self.gui.SignalExerciceBadPath(exercicePath)
+
+        if translationPath != "" and not os.path.exists(translationPath):
+            error = True;
+            self.gui.SignalExerciceBadPath(translationPath)
+
+        return not error
+
+    def UpdatePaths(self, videoPath, exercicePath, translationPath):
+
+        if not self.VerifyPath(videoPath, exercicePath, translationPath):
+            self.gui.SetTitle(self.outputSavePath, False)
+            self.videoPath = videoPath
+            self.exercicePath = exercicePath
+            self.translationPath = translationPath
+            return
+
+        loader = ExerciceLoader()
+        if not loader.Load(self.outputSavePath):
+            return
+
+        path = self.outputSavePath
+        self.SetPaths( videoPath, exercicePath, translationPath, False)
+        self.outputSavePath = path
+        self.gui.SetTitle(self.outputSavePath, True)
+        self.SetCanSave(True)
+        loader.UpdateSequenceList(self.sequenceList)
+        self.currentSubId = loader.GetCurrentSequence()
+        self.repeatCount = loader.GetRepeatCount()
+        self.sequenceList[self.currentSubId].SetActiveWordIndex(loader.GetCurrentWord())
+        self.ActivateSequence()
+
+    def GetPaths(self):
+        return (self.videoPath, self.exercicePath, self.translationPath)
 
     def ExtractWordList(self):
         wordList = []

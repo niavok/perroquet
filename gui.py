@@ -53,6 +53,14 @@ class Gui:
             return True # returning True avoids it to signal "destroy-event"
 
 
+    def SignalExerciceBadPath(self, path):
+        dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
+                                   gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
+                                   "The file '"+path+"' doesn't exist. Please modify exercice paths")
+        dialog.set_title("Load error")
+
+        response = dialog.run()
+        dialog.destroy()
 
 
 
@@ -211,6 +219,9 @@ class Gui:
                     self.AddWordToFound(sequence.GetWorkList()[i])
                     pos += len(sequence.GetWorkList()[i])
                 i += 1
+
+        self.wordIndexMap.append(self.currentWordIndex)
+        self.wordPosMap.append(self.currentPosIndex)
 
         self.window.set_focus(self.typeLabel)
         newCurPos = cursor_pos + sequence.GetActiveWordPos()
@@ -407,6 +418,7 @@ class Gui:
     def on_typeView_button_release_event(self, widget, data=None):
         index = self.typeLabel.get_buffer().props.cursor_position
 
+
         wordIndex = self.wordIndexMap[index]
         wordIndexPos = self.wordPosMap[index]
         if wordIndex == -1:
@@ -414,6 +426,58 @@ class Gui:
         self.core.SelectSequenceWord(wordIndex,wordIndexPos)
         print "ok2 " + str(wordIndex) + " " + str(wordIndexPos)
 
+    def on_toolbuttonProperties_clicked(self, widget, data=None):
+        self.AskProperties()
+
+    def AskProperties(self):
+        dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
+
+        (videoPath,exercicePath,translationPath)  = self.core.GetPaths()
+
+        if videoPath == "":
+            videoPath = "None"
+
+        if exercicePath == "":
+            exercicePath = "None"
+
+        if translationPath == "":
+            translationPath = "None"
+
+
+
+        print  videoPath
+        print exercicePath
+        print  translationPath
+        videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
+        exerciceChooser = self.builder.get_object("filechooserbuttonExerciceProp")
+        translationChooser = self.builder.get_object("filechooserbuttonTranslationProp")
+        videoChooser.set_filename(videoPath)
+        exerciceChooser.set_filename(exercicePath)
+        translationChooser.set_filename(translationPath)
+        dialogExerciceProperties.show()
+
+    def on_buttonExercicePropOk_clicked(self,widget,data=None):
+        dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
+
+        videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
+        videoPath = videoChooser.get_filename()
+        exerciceChooser = self.builder.get_object("filechooserbuttonExerciceProp")
+        exercicePath = exerciceChooser.get_filename()
+        translationChooser = self.builder.get_object("filechooserbuttonTranslationProp")
+        translationPath = translationChooser.get_filename()
+        if videoPath == "None" or videoPath == None:
+            videoPath = ""
+        if exercicePath == "None" or exercicePath == None:
+            exercicePath = ""
+        if translationPath == "None" or translationPath == None:
+            translationPath = ""
+
+        self.core.UpdatePaths(videoPath,exercicePath, translationPath)
+        dialogExerciceProperties.hide()
+
+    def on_buttonExercicePropCancel_clicked(self,widget,data=None):
+        dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
+        dialogExerciceProperties.hide()
 
     def Activate(self):
         self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
