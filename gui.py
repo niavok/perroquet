@@ -133,6 +133,19 @@ class Gui:
         text = text + "- Repeat ratio: "+str(round(repeatRate,1))+" per words"
         labelProgress.set_label(text)
 
+    def SetTitle(self, title, save):
+
+        newTitle = "Perroquet"
+
+        if save:
+            newTitle += " *"
+
+        if title != "":
+            newTitle += " - " + title
+
+
+        self.window.set_title(newTitle)
+
     def SetSequence(self, sequence):
         self.ClearBuffer()
         i = 0

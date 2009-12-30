@@ -15,6 +15,7 @@ class Core(object):
         self.subtitles = SubtitlesLoader()
         self.outputSavePath = ""
         self.player = None
+        self.last_save = False
 
     def SetGui(self, gui):
         self.gui = gui
@@ -43,11 +44,11 @@ class Core(object):
         self.player.Open(videoPath)
         self.InitExercice()
         if load:
-            self.gui.SetCanSave(True)
+            self.SetCanSave(True)
             self.player.Play()
             self.paused = False
         else:
-            self.gui.SetCanSave(False)
+            self.SetCanSave(False)
             self.player.Pause()
             self.paused = True
 
@@ -101,7 +102,7 @@ class Core(object):
         self.ActivateSequence()
         if load:
             self.RepeatSequence()
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def NextSequence(self, load = True):
         print "NextSequence"
@@ -110,7 +111,7 @@ class Core(object):
         self.ActivateSequence()
         if load:
             self.RepeatSequence()
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def PreviousSequence(self):
         print "PreviousSequence"
@@ -118,7 +119,7 @@ class Core(object):
             self.currentSubId -= 1
         self.ActivateSequence()
         self.RepeatSequence()
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def ActivateSequence(self):
         print "ActivateSequence"
@@ -190,7 +191,7 @@ class Core(object):
             begin_time = 0
         self.player.Seek(begin_time)
         self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def WriteCharacter(self, character):
         if character == "apostrophe":
@@ -199,56 +200,56 @@ class Core(object):
             self.sequence.WriteCharacter(character)
             self.gui.SetSequence(self.sequence)
             self.ValidateSequence()
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
 
     def NextWord(self):
         print "NextWord"
         self.sequence.NextWord(False)
         self.gui.SetSequence(self.sequence)
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def FirstWord(self):
         print "FirstWord"
         while self.sequence.PreviousWord(False):
             continue
         self.gui.SetSequence(self.sequence)
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def LastWord(self):
         print "LastWord"
         while self.sequence.NextWord():
             continue
         self.gui.SetSequence(self.sequence)
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def DeletePreviousChar(self):
         self.sequence.DeletePreviousCharacter()
         self.gui.SetSequence(self.sequence)
         self.ValidateSequence()
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def DeleteNextChar(self):
         self.sequence.DeleteNextCharacter()
         self.gui.SetSequence(self.sequence)
         self.ValidateSequence()
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def PreviousChar(self):
         self.sequence.PreviousCharacter()
         self.gui.SetSequence(self.sequence)
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def NextChar(self):
         self.sequence.NextCharacter()
         self.gui.SetSequence(self.sequence)
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def CompleteWord(self):
         self.sequence.CompleteWord()
         self.gui.SetSequence(self.sequence)
         self.ValidateSequence()
-        self.gui.SetCanSave(True)
+        self.SetCanSave(True)
 
     def TooglePause(self):
         print "TooglePause " + str(self.player.IsPaused()) + " " + str(self.paused)
@@ -297,6 +298,7 @@ class Core(object):
         if self.outputSavePath == "":
             return
 
+        self.gui.SetTitle(self.outputSavePath, False)
         saver = ExerciceSaver()
         saver.SetPath(self.outputSavePath)
         saver.SetVideoPath(self.videoPath)
@@ -307,7 +309,7 @@ class Core(object):
         saver.SetSequenceList(self.sequenceList)
         saver.Save()
 
-        self.gui.SetCanSave(False)
+        self.SetCanSave(False)
 
     def LoadExercice(self, path):
         loader = ExerciceLoader()
@@ -316,6 +318,7 @@ class Core(object):
 
         self.SetPaths( loader.GetVideoPath(), loader.GetExercicePath(), loader.GetTranslationPath(), False)
         self.outputSavePath = path
+        self.gui.SetTitle(self.outputSavePath, False)
         loader.UpdateSequenceList(self.sequenceList)
         self.currentSubId = loader.GetCurrentSequence()
         self.repeatCount = loader.GetRepeatCount()
@@ -337,3 +340,10 @@ class Core(object):
     def UserRepeat(self):
         self.repeatCount +=1
 
+
+    def SetCanSave(self, save):
+
+        self.gui.SetCanSave(save)
+        if self.last_save != save:
+            self.last_save = save
+            self.gui.SetTitle(self.outputSavePath, save)
