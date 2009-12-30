@@ -365,8 +365,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxEntry" id="comboboxentry1">
+                      <object class="GtkEntry" id="entryFilter">
                         <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="invisible_char">&#x2022;</property>
+                        <signal name="changed" handler="on_entryFilter_changed"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -525,7 +528,7 @@
             <child>
               <object class="GtkLabel" id="labelInputVideoFile">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Vid&#xE9;o : </property>
+                <property name="label" translatable="yes">M&#xE9;dia : </property>
               </object>
               <packing>
                 <property name="position">0</property>

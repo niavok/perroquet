@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import gtk, time, urllib
+import gtk, time, urllib, re
 
 class Gui:
     def __init__(self):
@@ -21,13 +21,13 @@ class Gui:
     def on_newExerciceButton_clicked(self,widget,data=None):
         self.newExerciceDialog = self.builder.get_object("newExerciceDialog")
 
-
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
-        videoChooser.set_filename("/home/fred/Vidéos/elephantsdream-1024-mpeg4-su-ac3.avi")
-        #exerciceChooser.set_filename("/media/F14A-2988/The Big Bang Theory/The.Big.Bang.Theory.S01E01.HDTV.XviD-XOR.eng.srt")
-        exerciceChooser.set_filename("/home/fred/Vidéos/english_hh.srt")
+        videoChooser.set_filename("")
+        exerciceChooser.set_filename("")
         self.newExerciceDialog.show()
+
+
 
     def on_buttonNewExerciceOk_clicked(self,widget,data=None):
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
@@ -41,6 +41,9 @@ class Gui:
         print videoPath
         print exercicePath
         self.core.SetPaths(videoPath,exercicePath)
+        self.newExerciceDialog.hide()
+
+    def on_buttonNewExerciceCancel_clicked(self,widget,data=None):
         self.newExerciceDialog.hide()
 
     def monclic(self, source=None, event=None):
@@ -81,7 +84,13 @@ class Gui:
         self.builder.get_object("saveButton").set_sensitive(state)
 
     def SetWordList(self, wordList):
+        self.wordList = wordList
+        self.UpdateWordList()
+
+
+    def UpdateWordList(self):
         buffer = self.builder.get_object("textviewWordList").get_buffer()
+        entry = self.builder.get_object("entryFilter")
 
         iter1 = buffer.get_start_iter()
         iter2 = buffer.get_end_iter()
@@ -90,8 +99,17 @@ class Gui:
 
         formattedWordList = ""
 
-        for word in wordList:
-            formattedWordList = formattedWordList + word + "\n"
+        regexp = entry.get_text()
+
+        try:
+            re.search(regexp,"")
+        except re.error:
+            regexp = ""
+            pass
+
+        for word in self.wordList:
+            if re.search(regexp,word):
+                formattedWordList = formattedWordList + word + "\n"
 
         iter = buffer.get_end_iter()
         buffer.insert(iter,formattedWordList)
@@ -325,6 +343,9 @@ class Gui:
     def on_buttonSaveExerciceOk_clicked(self, widget, data=None):
         saveChooser = self.builder.get_object("filechooserdialogSave")
         saveChooser.hide()
+
+    def on_entryFilter_changed(self, widget, data=None):
+        self.UpdateWordList()
 
     def Activate(self):
         self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
