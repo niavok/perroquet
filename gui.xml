@@ -9,7 +9,7 @@
     <property name="has_focus">True</property>
     <property name="title" translatable="yes">Perroquet</property>
     <accel-groups>
-      <group name="accelgroup1"/>
+      <group name="accelgroupDialog"/>
     </accel-groups>
     <signal name="delete_event" handler="on_MainWindow_delete_event"/>
     <child>
@@ -33,7 +33,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                     <child>
@@ -42,7 +42,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                     <child>
@@ -51,7 +51,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                     <child>
@@ -60,7 +60,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                     <child>
@@ -74,7 +74,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                   </object>
@@ -95,7 +95,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                     <child>
@@ -104,7 +104,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                     <child>
@@ -113,7 +113,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                     <child>
@@ -122,7 +122,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                   </object>
@@ -157,7 +157,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
+                        <property name="accel_group">accelgroupDialog</property>
                       </object>
                     </child>
                   </object>
@@ -187,11 +187,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="openSaved">
+              <object class="GtkToolButton" id="loadButton">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Open saved exercice</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
+                <signal name="clicked" handler="on_loadButton_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -347,12 +348,29 @@
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
                     <child>
+                      <object class="GtkViewport" id="viewport1">
+                        <property name="visible">True</property>
+                        <property name="resize_mode">queue</property>
+                        <child>
+                          <object class="GtkLabel" id="label1">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Progress</property>
+                            <property name="selectable">True</property>
+                            <property name="ellipsize">middle</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkComboBoxEntry" id="comboboxentry1">
                         <property name="visible">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -365,25 +383,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
-                            <property name="left_margin">5</property>
+                            <property name="left_margin">10</property>
                             <property name="cursor_visible">False</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkViewport" id="viewport1">
-                        <property name="visible">True</property>
-                        <property name="resize_mode">queue</property>
-                        <child>
-                          <object class="GtkLabel" id="label1">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Progress</property>
-                            <property name="selectable">True</property>
-                            <property name="ellipsize">middle</property>
                           </object>
                         </child>
                       </object>
@@ -418,6 +419,7 @@
                     <property name="wrap_mode">word</property>
                     <property name="justification">center</property>
                     <signal name="key_press_event" handler="on_typeView_key_press_event"/>
+                    <signal name="move_cursor" handler="on_typeView_move_cursor"/>
                   </object>
                 </child>
               </object>
@@ -500,14 +502,16 @@
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkAccelGroup" id="accelgroupDialog"/>
   <object class="GtkDialog" id="newExerciceDialog">
+    <property name="width_request">400</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Nouvel exercice</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">normal</property>
+    <property name="skip_taskbar_hint">True</property>
     <property name="transient_for">MainWindow</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
@@ -601,13 +605,13 @@
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="buttonNewExerciceOk">
-                <property name="label">gtk-ok</property>
+              <object class="GtkButton" id="buttonNewExerciceCancel">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_buttonNewExerciceOk_clicked"/>
+                <signal name="clicked" handler="on_buttonNewExerciceCancel_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -616,12 +620,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="buttonNewExerciceCancel">
-                <property name="label">gtk-cancel</property>
+              <object class="GtkButton" id="buttonNewExerciceOk">
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_buttonNewExerciceOk_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -639,8 +644,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">buttonNewExerciceOk</action-widget>
       <action-widget response="0">buttonNewExerciceCancel</action-widget>
+      <action-widget response="0">buttonNewExerciceOk</action-widget>
     </action-widgets>
   </object>
   <object class="GtkFileFilter" id="filefilter1"/>
@@ -657,75 +662,6 @@
     <property name="page_increment">10</property>
     <property name="page_size">10</property>
     <signal name="value_changed" handler="on_adjustmentSequenceNum_value_changed"/>
-  </object>
-  <object class="GtkFileChooserDialog" id="filechooserdialogSave">
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Save as</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">normal</property>
-    <property name="transient_for">MainWindow</property>
-    <property name="opacity">0.98999999999999999</property>
-    <property name="local_only">False</property>
-    <property name="do_overwrite_confirmation">True</property>
-    <property name="filter">filefilterSave</property>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox2">
-        <property name="visible">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child>
-          <placeholder/>
-        </child>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area2">
-            <property name="visible">True</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="buttonSaveExerciceOk">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
-                <property name="is_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_buttonSaveExerciceOk_clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="buttonSaveExerciceCancel">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_buttonSaveExerciceCancel_clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">buttonSaveExerciceOk</action-widget>
-      <action-widget response="0">buttonSaveExerciceCancel</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkFileFilter" id="filefilterSave"/>
 </interface>

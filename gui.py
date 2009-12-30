@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import gtk, time
+import gtk, time, urllib
 
 class Gui:
     def __init__(self):
@@ -12,6 +12,8 @@ class Gui:
 
         self.initTypeLabel()
 
+        filefilterSave =self.builder.get_object("filefilterSave")
+        filefilterSave.add_pattern("*.perroquet")
 
     def on_MainWindow_delete_event(self,widget,data=None):
         gtk.main_quit()
@@ -55,12 +57,15 @@ class Gui:
     def SetSequenceNumber(self, sequenceNumber, sequenceCount):
         ajustement = self.builder.get_object("adjustmentSequenceNum")
         sequenceNumber = sequenceNumber + 1
+        self.settedSeq = sequenceNumber
         ajustement.configure (sequenceNumber, 1, sequenceCount, 1, 10, 0)
         self.builder.get_object("labelSequenceNumber").set_text(str(sequenceNumber) + "/" + str(sequenceCount))
 
     def SetSequenceTime(self, sequencePos, sequenceTime):
         if sequencePos > sequenceTime:
             sequencePos = sequenceTime
+        if sequencePos < 0:
+            sequencePos = 0
         self.settedPos = sequencePos /100
         ajustement = self.builder.get_object("adjustmentSequenceTime")
         ajustement.configure (self.settedPos, 0, sequenceTime/100, 1, 10, 0)
@@ -260,8 +265,11 @@ class Gui:
         self.core.RepeatSequence()
 
     def on_adjustmentSequenceNum_value_changed(self,widget,data=None):
-        print "on_adjustmentSequenceNum_value_changed " + str(int(self.builder.get_object("adjustmentSequenceNum").get_value()))
-        self.core.SelectSequence(int(self.builder.get_object("adjustmentSequenceNum").get_value()) - 1)
+
+        value = int(self.builder.get_object("adjustmentSequenceNum").get_value())
+
+        if value != self.settedSeq:
+            self.core.SelectSequence(value - 1)
 
     def on_adjustmentSequenceTime_value_changed(self,widget,data=None):
         value = int(self.builder.get_object("adjustmentSequenceTime").get_value())
@@ -279,12 +287,34 @@ class Gui:
     def on_saveButton_clicked(self, widget, data=None):
         self.core.Save()
 
+    def on_loadButton_clicked(self, widget, data=None):
+
+        loader = OpenFileSelector(self.window)
+        result =loader.run()
+        if result == None:
+            return
+
+        self.core.LoadExercice(result)
+
+    def on_filechooserdialogLoad_confirm_overwrite(self, widget, data=None):
+        print "on_filechooserdialogLoad_confirm_overwrite"
+        loadChooser = self.builder.get_object("filechooserdialogLoad")
+        #loadChooser.emit(gtk.RESPONSE_ACCEPT)
+        return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
+
+    def on_filechooserdialogLoad_file_activated(self, widget, data=None):
+        print "on_filechooserdialogLoad_file_activated"
+        loadChooser = self.builder.get_object("filechooserdialogLoad")
+        #loadChooser.emit(gtk.RESPONSE_ACCEPT)
 
     def AskSavePath(self):
-        saveChooser = self.builder.get_object("filechooserdialogSave")
-        saveChooser.run()
 
-        path = saveChooser.get_filename()
+        saver = SaveFileSelector(self.window)
+        result =saver.run()
+        if result == None:
+            return
+
+        path = result
 
         if path == "None" or path == None :
             path = ""
@@ -307,3 +337,130 @@ class Gui:
         gtk.gdk.threads_init()
         self.window.show()
         gtk.main()
+
+
+EVENT_FILTER            = None
+
+
+class FileSelector(gtk.FileChooserDialog):
+        "A normal file selector"
+
+        def __init__(self, parent, title = None, action = gtk.FILE_CHOOSER_ACTION_OPEN, stockbutton = None):
+
+                if stockbutton is None:
+                        if action == gtk.FILE_CHOOSER_ACTION_OPEN:
+                                stockbutton = gtk.STOCK_OPEN
+
+                        elif action == gtk.FILE_CHOOSER_ACTION_SAVE:
+                                stockbutton = gtk.STOCK_SAVE
+
+                gtk.FileChooserDialog.__init__(
+                        self, title, parent, action,
+                        ( gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, stockbutton, gtk.RESPONSE_OK )
+                )
+
+                self.set_local_only(False)
+                self.set_default_response(gtk.RESPONSE_OK)
+
+                self.inputsection = None
+
+
+        def add_widget(self, title, widget):
+                "Adds a widget to the file selection"
+
+                if self.inputsection == None:
+                        self.inputsection = ui.InputSection()
+                        self.set_extra_widget(self.inputsection)
+
+                self.inputsection.append_widget(title, widget)
+
+
+        """def get_filename(self):
+                "Returns the file URI"
+
+                uri = self.get_filename()
+
+                if uri == None:
+                        return None
+
+                else:
+                        return urllib.unquote(uri)"""
+
+
+        def run(self):
+                "Displays and runs the file selector, returns the filename"
+
+                self.show_all()
+
+                if EVENT_FILTER != None:
+                        self.window.add_filter(EVENT_FILTER)
+
+                response = gtk.FileChooserDialog.run(self)
+                filename = self.get_filename()
+                self.destroy()
+
+                if response == gtk.RESPONSE_OK:
+                        return filename
+
+                else:
+                        return None
+
+
+class OpenFileSelector(FileSelector):
+        "A file selector for opening files"
+
+        def __init__(self, parent):
+                FileSelector.__init__(
+                        self, parent, ('Select File to Open'),
+                        gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
+                )
+
+                filter = gtk.FileFilter()
+                filter.set_name(('Perroquet files'))
+                filter.add_pattern("*.perroquet")
+                self.add_filter(filter)
+
+                filter = gtk.FileFilter()
+                filter.set_name(('All files'))
+                filter.add_pattern("*")
+                self.add_filter(filter)
+
+
+
+class SaveFileSelector(FileSelector):
+        "A file selector for saving files"
+
+        def __init__(self, parent):
+                FileSelector.__init__(
+                        self, parent, ('Select File to Save to'),
+                        gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
+                )
+
+                filter = gtk.FileFilter()
+                filter.set_name(('Perroquet files'))
+                filter.add_pattern("*.perroquet")
+                self.add_filter(filter)
+
+                filter = gtk.FileFilter()
+                filter.set_name(('All files'))
+                filter.add_pattern("*")
+                self.add_filter(filter)
+
+                self.set_do_overwrite_confirmation(True)
+                self.connect("confirm-overwrite", self.__cb_confirm_overwrite)
+
+
+        def __cb_confirm_overwrite(self, widget, data = None):
+                "Handles confirm-overwrite signals"
+
+                try:
+                        FileReplace(self, io.file_normpath(self.get_uri())).run()
+
+                except CancelError:
+                        return gtk.FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN
+
+                else:
+                        return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
+
+
+

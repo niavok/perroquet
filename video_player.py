@@ -23,19 +23,15 @@ class VideoPlayer(object):
         t = message.type
         if t == gst.MESSAGE_EOS:
             self.player.set_state(gst.STATE_NULL)
-            #self.buttonStart.set_label("Start")
         elif t == gst.MESSAGE_ERROR:
             self.player.set_state(gst.STATE_NULL)
             err, debug = message.parse_error()
             print "Error: %s" % err, debug
-            #self.buttonStart.set_label("Start")
 
     def on_sync_message(self, bus, message):
-        print "plip"
         if message.structure is None:
             return
         message_name = message.structure.get_name()
-        print message_name
         if message_name == "prepare-xwindow-id":
             gtk.gdk.threads_enter()
             gtk.gdk.display_get_default().sync()
@@ -47,6 +43,7 @@ class VideoPlayer(object):
     def Open(self,path):
         self.player.set_property("uri", "file://" + path)
         self.play_thread_id = thread.start_new_thread(self.play_thread, ())
+        self.player.set_state(gst.STATE_PAUSED)
         self.playing = False
     def Play(self):
         self.player.set_state(gst.STATE_PLAYING)
@@ -85,9 +82,7 @@ class VideoPlayer(object):
 
     def play_thread(self):
         play_thread_id = self.play_thread_id
-        #gtk.gdk.threads_enter()
-        #self.time_label.set_text("00:00 / 00:00")
-        #gtk.gdk.threads_leave()
+
         while play_thread_id == self.play_thread_id:
             time.sleep(0.1)
             pos_int = -1
@@ -99,6 +94,7 @@ class VideoPlayer(object):
                 self.nextCallbackTime = -1
                 self.callback()
 
-
+    def Close(self):
+        self.player.set_state(gst.STATE_NULL)
 
 
