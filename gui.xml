@@ -378,15 +378,17 @@
                         <property name="visible">True</property>
                         <property name="resize_mode">queue</property>
                         <child>
-                          <object class="GtkLabel" id="label1">
+                          <object class="GtkLabel" id="labelProgress">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Progress</property>
+                            <property name="label" translatable="yes">- Sequences: --/--
+- Words: --/--
+- Repeat ratio: -- per words</property>
                             <property name="selectable">True</property>
-                            <property name="ellipsize">middle</property>
                           </object>
                         </child>
                       </object>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -472,6 +474,7 @@
                 <property name="can_focus">True</property>
                 <property name="border_width">1</property>
                 <property name="editable">False</property>
+                <property name="wrap_mode">word</property>
                 <property name="justification">center</property>
                 <property name="cursor_visible">False</property>
               </object>
@@ -627,7 +630,7 @@
             <child>
               <object class="GtkLabel" id="labelInputTranslationFile">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Correction : </property>
+                <property name="label" translatable="yes">Translation : </property>
               </object>
               <packing>
                 <property name="position">0</property>

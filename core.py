@@ -24,6 +24,7 @@ class Core(object):
         self.videoPath = videoPath
         self.exercicePath = exercicePath
         self.translationPath = translationPath
+        self.repeatCount = 0
         self.subList = self.subtitles.GetSubtitleList(exercicePath)
 
         self.subList = self.subtitles.CompactSubtitlesList(self.subList)
@@ -131,7 +132,9 @@ class Core(object):
         self.gui.SetSequenceNumber(self.currentSubId, len(self.subList))
         self.gui.SetSequence(self.sequence)
         self.ActivateTranslation()
+        self.UpdateStats()
         print "ActivateSequence: end"
+
 
 
     def ActivateTranslation(self):
@@ -152,6 +155,27 @@ class Core(object):
                     translation +=  sub.GetText() + " "
 
             self.gui.SetTranslation(translation)
+
+    def UpdateStats(self):
+        print "UpdateStats"
+        sequenceCount = len(self.sequenceList)
+        sequenceFound = 0
+        wordCount = 0
+        wordFound = 0
+        for sequence in self.sequenceList:
+            wordCount = wordCount + sequence.GetWordCount()
+            if sequence.IsValid():
+                sequenceFound += 1
+                wordFound += sequence.GetWordCount()
+            else :
+                wordFound += sequence.GetWordFound()
+        if wordFound == 0:
+            repeatRate = float(0)
+        else:
+            repeatRate = float(self.repeatCount) / float(wordFound)
+        self.gui.SetStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
+
+
 
     def ValidateSequence(self):
         if self.sequence.IsValid():
@@ -279,6 +303,7 @@ class Core(object):
         saver.SetExercicePath(self.exercicePath)
         saver.SetTranslationPath(self.translationPath)
         saver.SetCurrentSequence(self.currentSubId)
+        saver.SetRepeatCount(self.repeatCount)
         saver.SetSequenceList(self.sequenceList)
         saver.Save()
 
@@ -293,6 +318,7 @@ class Core(object):
         self.outputSavePath = path
         loader.UpdateSequenceList(self.sequenceList)
         self.currentSubId = loader.GetCurrentSequence()
+        self.repeatCount = loader.GetRepeatCount()
         self.sequenceList[self.currentSubId].SetActiveWordIndex(loader.GetCurrentWord())
         self.ActivateSequence()
 
@@ -307,4 +333,7 @@ class Core(object):
         wordList = list(set(wordList))
         wordList.sort()
         self.gui.SetWordList(wordList)
+
+    def UserRepeat(self):
+        self.repeatCount +=1
 

@@ -19,11 +19,8 @@ class ExerciceLoader(object):
         self.videoPath = self.getText(xml_paths.getElementsByTagName("video")[0].childNodes)
         self.exercicePath = self.getText(xml_paths.getElementsByTagName("exercice")[0].childNodes)
 
-        self.translationPath = ""
-        try :
-            self.translationPath = self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes)
-        except:
-                pass
+        self.translationPath = self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes)
+
         print  self.videoPath
         print  self.exercicePath
 
@@ -46,6 +43,11 @@ class ExerciceLoader(object):
                     words.append(self.getText(xml_world.childNodes))
 
             self.progress.append((id, state, words))
+
+
+        # Stats
+        xml_stats = dom.getElementsByTagName("stats")[0]
+        self.repeatCount = int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes))
 
         dom.unlink()
 
@@ -79,6 +81,9 @@ class ExerciceLoader(object):
     def GetTranslationPath(self):
         return self.translationPath
 
+    def GetRepeatCount(self):
+        return self.repeatCount
+
 class ExerciceSaver(object):
 
     def Save(self):
@@ -103,10 +108,9 @@ class ExerciceSaver(object):
         xml_exercice_paths.appendChild(newdoc.createTextNode(self.exercicePath))
         xml_paths.appendChild(xml_exercice_paths)
 
-        if self.translationPath != "":
-            xml_translation_paths = newdoc.createElement("translation")
-            xml_translation_paths.appendChild(newdoc.createTextNode(self.translationPath))
-            xml_paths.appendChild(xml_translation_paths)
+        xml_translation_paths = newdoc.createElement("translation")
+        xml_translation_paths.appendChild(newdoc.createTextNode(self.translationPath))
+        xml_paths.appendChild(xml_translation_paths)
 
         root_element.appendChild(xml_paths)
 
@@ -159,6 +163,15 @@ class ExerciceSaver(object):
 
         root_element.appendChild(xml_progress)
 
+        #Stats
+        xml_stats = newdoc.createElement("stats")
+
+        xml_repeatCount = newdoc.createElement("repeat_count")
+        xml_repeatCount.appendChild(newdoc.createTextNode(str(self.repeatCount)))
+        xml_stats.appendChild(xml_repeatCount)
+
+        root_element.appendChild(xml_stats)
+
 
         xml_string = newdoc.toprettyxml()
 
@@ -183,3 +196,6 @@ class ExerciceSaver(object):
 
     def SetSequenceList(self, sequenceList):
         self.sequenceList = sequenceList
+
+    def SetRepeatCount(self, repeatCount):
+        self.repeatCount = repeatCount

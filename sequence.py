@@ -51,6 +51,9 @@ class Sequence(object):
     def GetWorkList(self):
         return self.workList
 
+    def GetWordCount(self):
+        return len(self.wordList)
+
     def GetActiveWordIndex(self):
         return self.activeWordIndex
 
@@ -170,6 +173,15 @@ class Sequence(object):
                 break
             id += 1
         return valid
+
+    def GetWordFound(self):
+        found = 0
+        id = 0
+        for word in self.workList:
+            if word.lower() == self.wordList[id].lower():
+                valid += 1
+            id += 1
+        return found
 
     def IsEmpty(self):
         empty = True

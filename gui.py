@@ -38,12 +38,14 @@ class Gui:
         exercicePath = exerciceChooser.get_filename()
         translationChooser = self.builder.get_object("filechooserbuttonTranslation")
         translationPath = translationChooser.get_filename()
-        if videoPath == "None":
+        if videoPath == "None" or videoPath == None:
             videoPath = ""
-        if exercicePath == "None":
+        if exercicePath == "None" or exercicePath == None:
             exercicePath = ""
-        if translationPath == "None":
+        if translationPath == "None" or translationPath == None:
             translationPath = ""
+
+        print translationPath
 
         self.core.SetPaths(videoPath,exercicePath, translationPath)
         self.newExerciceDialog.hide()
@@ -123,6 +125,14 @@ class Gui:
         textviewTranslation = self.builder.get_object("textviewTranslation").get_buffer()
         textviewTranslation.set_text(translation)
 
+    def SetStats(self, sequenceCount,sequenceFound, wordCount, wordFound, repeatRate):
+        labelProgress = self.builder.get_object("labelProgress")
+        text = ""
+        text = text + "- Sequences: "+str(sequenceFound)+"/"+str(sequenceCount)+" ("+str(round(100*sequenceFound/sequenceCount,1))+" %)\n"
+        text = text + "- Words: "+str(wordFound)+"/"+str(wordCount)+" ("+str(round(100*wordFound/wordCount,1))+" %)\n"
+        text = text + "- Repeat ratio: "+str(round(repeatRate,1))+" per words"
+        labelProgress.set_label(text)
+
     def SetSequence(self, sequence):
         self.ClearBuffer()
         i = 0
@@ -142,8 +152,6 @@ class Gui:
                     self.AddWordToFound(" ")
                     pos += 1
                 elif sequence.GetWordList()[i].lower() == sequence.GetWorkList()[i].lower():
-                    print sequence.GetWordList()[i]
-                    print sequence.GetWorkList()[i]
 
                     self.AddWordFound(sequence.GetWordList()[i])
                     pos += len(sequence.GetWordList()[i])
@@ -212,6 +220,7 @@ class Gui:
     def on_typeView_key_press_event(self,widget, event):
         keyname = gtk.gdk.keyval_name(event.keyval)
         if keyname == "Return":
+            self.core.UserRepeat()
             self.core.RepeatSequence()
         elif keyname == "space":
             self.core.NextWord()
@@ -233,6 +242,9 @@ class Gui:
             self.core.LastWord()
         elif keyname == "F1":
             self.core.CompleteWord()
+        elif keyname == "F2":
+            toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
+            toggletoolbuttonShowTranslation.set_active(not toggletoolbuttonShowTranslation.get_active())
         elif keyname == "Pause":
             self.core.TooglePause()
         else:
@@ -248,6 +260,7 @@ class Gui:
         self.core.PreviousSequence()
 
     def on_toolbuttonReplaySequence_clicked(self,widget,data=None):
+        self.core.UserRepeat()
         self.core.RepeatSequence()
 
     def on_adjustmentSequenceNum_value_changed(self,widget,data=None):
@@ -438,7 +451,7 @@ class SaveFileSelector(FileSelector):
                 try:
                         FileReplace(self, io.file_normpath(self.get_uri())).run()
 
-                except CancelError:
+                except:
                         return gtk.FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN
 
                 else:
