@@ -367,3 +367,6 @@ class Core(object):
         if self.last_save != save:
             self.last_save = save
             self.gui.SetTitle(self.outputSavePath, save)
+
+    def IsAllowQuit(self):
+        return not self.last_save

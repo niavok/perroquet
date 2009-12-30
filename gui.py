@@ -34,7 +34,27 @@ class Gui:
         filefilterSave.add_pattern("*.perroquet")
 
     def on_MainWindow_delete_event(self,widget,data=None):
-        gtk.main_quit()
+        if self.core.IsAllowQuit():
+            gtk.main_quit()
+            return False
+
+        dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
+                                   gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
+                                   "Do you really quit without save ?")
+        dialog.set_title("Confirm quit")
+
+        response = dialog.run()
+        dialog.destroy()
+        if response == gtk.RESPONSE_YES:
+            gtk.main_quit()
+            return False # returning False makes "destroy-event" be signalled
+                         # for the window.
+        else:
+            return True # returning True avoids it to signal "destroy-event"
+
+
+
+
 
     def on_newExerciceButton_clicked(self,widget,data=None):
         self.newExerciceDialog = self.builder.get_object("newExerciceDialog")
