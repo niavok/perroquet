@@ -1,0 +1,44 @@
+                     Perroquet
+                     =========
+
+These are the release notes for Perroquet
+
+1/ What is Perroquet ?
+======================
+
+Perroquet force you to repeat what you hear.
+
+This programs give the possibility to make oral comprehension exercices
+using audio or video files and subtitles. With the help of subtitles
+time-codes, Perroquet cut the video you have to type the words you hear.
+
+2/ How to use ?
+================
+
+- Click on "New exercice" button.
+- Select a video or audio file, the subtitle file (srt format) in same
+  language and optionnaly, another subtitles file in an other language.
+- The media is loaded and the first segment is played.
+- In the typing area, small rectangles represents each word you have to
+  find. Try to type. If a word become green, you found the right word.
+- You can replay the current sequence with the "Replay" button or
+  pressing "Return".
+- When the whole sequence is valid, Perroquet will repeat a last time the sequence and continue to the next sequence.
+
+
+3/ Controls
+=============
+
+* Key 'return' : Replay sequence.
+* Key 'F1' : Complete current word.
+* Key 'F2' : Show/hide translation
+
+4/ Additional help
+====================
+
+You may found aditionnal help here:
+
+Official web site: http://perroquet.b219.org
+Project management page : https://launchpad.net/perroquet
+My personnal email : fred.bertolus@gmail.com
+
