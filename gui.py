@@ -23,8 +23,10 @@ class Gui:
 
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
-        videoChooser.set_filename("")
-        exerciceChooser.set_filename("")
+        translationChooser = self.builder.get_object("filechooserbuttonTranslation")
+        videoChooser.set_filename("None")
+        exerciceChooser.set_filename("None")
+        translationChooser.set_filename("None")
         self.newExerciceDialog.show()
 
 
@@ -34,13 +36,16 @@ class Gui:
         videoPath = videoChooser.get_filename()
         exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
         exercicePath = exerciceChooser.get_filename()
+        translationChooser = self.builder.get_object("filechooserbuttonTranslation")
+        translationPath = translationChooser.get_filename()
         if videoPath == "None":
             videoPath = ""
         if exercicePath == "None":
             exercicePath = ""
-        print videoPath
-        print exercicePath
-        self.core.SetPaths(videoPath,exercicePath)
+        if translationPath == "None":
+            translationPath = ""
+
+        self.core.SetPaths(videoPath,exercicePath, translationPath)
         self.newExerciceDialog.hide()
 
     def on_buttonNewExerciceCancel_clicked(self,widget,data=None):
@@ -114,9 +119,11 @@ class Gui:
         iter = buffer.get_end_iter()
         buffer.insert(iter,formattedWordList)
 
+    def SetTranslation(self, translation):
+        textviewTranslation = self.builder.get_object("textviewTranslation").get_buffer()
+        textviewTranslation.set_text(translation)
 
     def SetSequence(self, sequence):
-        #print "SetSequence"
         self.ClearBuffer()
         i = 0
         pos = 1
@@ -126,15 +133,11 @@ class Gui:
         self.AddSymbol(" ")
 
         for symbol in sequence.GetSymbolList():
-            #print "symbol"
-            """text += symbol"""
             pos += len(symbol)
             self.AddSymbol(symbol)
-            #print "len"
             if i < len(sequence.GetWordList()):
                 if sequence.GetActiveWordIndex() == i:
                     cursor_pos = pos
-                #print "AddWordFound"
                 if len(sequence.GetWorkList()[i]) == 0:
                     self.AddWordToFound(" ")
                     pos += 1
@@ -155,20 +158,13 @@ class Gui:
         buffer.place_cursor(iter)
 
     def ClearBuffer(self):
-        #print "ClearBuffer"
-        #gtk.gdk.threads_enter()
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_start_iter()
         iter2 = buffer.get_end_iter()
         buffer.delete(iter1, iter2)
-        #gtk.gdk.threads_leave()
-        #print "ClearBuffer end"
 
     def AddSymbol(self, symbol):
-        #print "AddSymbol #" + symbol + "#"
-        #gtk.gdk.threads_enter()
         if len(symbol) == 0:
-            #print "AddSymbol abord"
             return
         buffer = self.typeLabel.get_buffer()
         size = buffer.get_char_count()
@@ -177,12 +173,8 @@ class Gui:
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
         buffer.apply_tag_by_name("default", iter1, iter2)
-        #gtk.gdk.threads_leave()
-        #print "AddSymbol end"
 
     def AddWordToFound(self, word):
-        #print "AddWordFound"
-        #gtk.gdk.threads_enter()
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
         size = buffer.get_char_count()
@@ -190,12 +182,8 @@ class Gui:
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
         buffer.apply_tag_by_name("word_to_found", iter1, iter2)
-        #gtk.gdk.threads_leave()
-        #print "AddWordFound end"
 
     def AddWordFound(self, word):
-        #print "AddWordFound"
-        #gtk.gdk.threads_enter()
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
         size = buffer.get_char_count()
@@ -203,34 +191,16 @@ class Gui:
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
         buffer.apply_tag_by_name("word_found", iter1, iter2)
-        #gtk.gdk.threads_leave()
 
 
     def initTypeLabel(self):
-    #    self.typeLabel = gtk.TextView()
-     #   self.typeLabel.set_editable(False)
-     #   self.typeLabel.set_cursor_visible(True)
-        #self.typeLabel.set_wrap_mode(gtk.WRAP_NONE)
-        #self.typeLabel.set_wrap_mode(gtk.WRAP_CHAR)
-     #   self.typeLabel.set_wrap_mode(gtk.WRAP_WORD)
-     #   self.typeLabel.set_justification(gtk.JUSTIFY_LEFT)
-        #self.typeLabel.set_justification(gtk.JUSTIFY_CENTER)
-        #self.typeLabel.set_justification(gtk.JUSTIFY_RIGHT)
-
 
         buffer = self.typeLabel.get_buffer()
-
-        """buffer.create_tag("word_to_found",
-             foreground_gdk=color,
-             background='yellow',
-             size_points=24.0)"""
 
         color_not_found = self.window.get_colormap().alloc_color(0*256, 0*256, 80*256)
         bcolor_not_found = self.window.get_colormap().alloc_color(200*256, 230*256, 250*256)
         color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
-        """buffer.create_tag("default",
-             rise= -4*1024,
-             foreground_gdk=color)"""
+
         buffer.create_tag("default",
              size_points=18.0)
         buffer.create_tag("word_to_found",
@@ -240,9 +210,7 @@ class Gui:
 
 
     def on_typeView_key_press_event(self,widget, event):
-        #print "key"
         keyname = gtk.gdk.keyval_name(event.keyval)
-        #print keyname
         if keyname == "Return":
             self.core.RepeatSequence()
         elif keyname == "space":
@@ -314,17 +282,6 @@ class Gui:
 
         self.core.LoadExercice(result)
 
-    def on_filechooserdialogLoad_confirm_overwrite(self, widget, data=None):
-        print "on_filechooserdialogLoad_confirm_overwrite"
-        loadChooser = self.builder.get_object("filechooserdialogLoad")
-        #loadChooser.emit(gtk.RESPONSE_ACCEPT)
-        return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
-
-    def on_filechooserdialogLoad_file_activated(self, widget, data=None):
-        print "on_filechooserdialogLoad_file_activated"
-        loadChooser = self.builder.get_object("filechooserdialogLoad")
-        #loadChooser.emit(gtk.RESPONSE_ACCEPT)
-
     def AskSavePath(self):
 
         saver = SaveFileSelector(self.window)
@@ -347,21 +304,25 @@ class Gui:
     def on_entryFilter_changed(self, widget, data=None):
         self.UpdateWordList()
 
+    def on_toggletoolbuttonShowTranslation_toggled(self, widget, data=None):
+        scrolledwindowTranslation = self.builder.get_object("scrolledwindowTranslation")
+        if not scrolledwindowTranslation.props.visible:
+            scrolledwindowTranslation.show()
+        else:
+            scrolledwindowTranslation.hide()
+
     def Activate(self):
         self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
         self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
         self.builder.get_object("toolbuttonHint").set_sensitive(True)
         self.builder.get_object("toolbuttonReplaySequence").set_sensitive(True)
 
-
     def Run(self):
         gtk.gdk.threads_init()
         self.window.show()
         gtk.main()
 
-
-EVENT_FILTER            = None
-
+EVENT_FILTER = None
 
 class FileSelector(gtk.FileChooserDialog):
         "A normal file selector"

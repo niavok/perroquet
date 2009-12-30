@@ -19,6 +19,11 @@ class ExerciceLoader(object):
         self.videoPath = self.getText(xml_paths.getElementsByTagName("video")[0].childNodes)
         self.exercicePath = self.getText(xml_paths.getElementsByTagName("exercice")[0].childNodes)
 
+        self.translationPath = ""
+        try :
+            self.translationPath = self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes)
+        except:
+                pass
         print  self.videoPath
         print  self.exercicePath
 
@@ -71,6 +76,9 @@ class ExerciceLoader(object):
     def GetExercicePath(self):
         return self.exercicePath
 
+    def GetTranslationPath(self):
+        return self.translationPath
+
 class ExerciceSaver(object):
 
     def Save(self):
@@ -95,11 +103,10 @@ class ExerciceSaver(object):
         xml_exercice_paths.appendChild(newdoc.createTextNode(self.exercicePath))
         xml_paths.appendChild(xml_exercice_paths)
 
-
-        if self.correctionPath != "":
-            xml_correction_paths = newdoc.createElement("correction")
-            xml_correction_paths.appendChild(newdoc.createTextNode(self.correctionPath))
-            xml_paths.appendChild(xml_correction_paths)
+        if self.translationPath != "":
+            xml_translation_paths = newdoc.createElement("translation")
+            xml_translation_paths.appendChild(newdoc.createTextNode(self.translationPath))
+            xml_paths.appendChild(xml_translation_paths)
 
         root_element.appendChild(xml_paths)
 
@@ -168,8 +175,8 @@ class ExerciceSaver(object):
     def SetExercicePath(self, path):
         self.exercicePath = path
 
-    def SetCorrectionPath(self, path):
-        self.correctionPath = path
+    def SetTranslationPath(self, path):
+        self.translationPath = path
 
     def SetCurrentSequence(self, id):
         self.sequenceId = id

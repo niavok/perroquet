@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import re
+import os
+import sys
+import codecs
 
 class SubtitlesLoader(object):
     LOOK_FOR_ID = 0
@@ -9,13 +12,40 @@ class SubtitlesLoader(object):
 
     #def __init__(self):
 
+
+
+    sourceFormats = ['ascii', 'iso-8859-1']
+    targetFormat = 'utf-8'
+    outputDir = 'converted'
+
+    def convertFile(self,fileName):
+        print("Converting '" + fileName + "'...")
+        for format in self.sourceFormats:
+            try:
+                with codecs.open(fileName, 'rU', format) as sourceFile:
+
+                    print('Found : ' + format)
+
+                    convertedFile = []
+                    for line in sourceFile:
+                        convertedFile.append(line.encode( "utf-8" ))
+
+                    return convertedFile
+            except UnicodeDecodeError:
+                pass
+
+        print("Error: failed to convert '" + fileName + "'.")
+
+
     def GetSubtitleList(self, path):
         outputList = []
-        f = open(path, 'r')
+        f = self.convertFile(path)
+        #f = open(path, 'r')
         state = SubtitlesLoader.LOOK_FOR_ID
         for line in f:
             line = line.rstrip()
-            
+            line = line.decode("utf8")
+
             if state == SubtitlesLoader.LOOK_FOR_ID:
                 if len(line) > 0:
                     current = Subtitle()
@@ -54,7 +84,7 @@ class SubtitlesLoader(object):
     def CompactSubtitlesList(self, list):
         outputList = []
         id = 0
-        
+
         for sub in list:
             if id == 0 or current.GetTimeEnd() != sub.GetTimeBegin():
                 if id > 0:

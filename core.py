@@ -19,14 +19,18 @@ class Core(object):
     def SetGui(self, gui):
         self.gui = gui
 
-    def SetPaths(self, videoPath, exercicePath, load = True):
+    def SetPaths(self, videoPath, exercicePath, translationPath, load = True):
         self.outputSavePath = ""
         self.videoPath = videoPath
         self.exercicePath = exercicePath
+        self.translationPath = translationPath
         self.subList = self.subtitles.GetSubtitleList(exercicePath)
 
         self.subList = self.subtitles.CompactSubtitlesList(self.subList)
 
+        self.translationList = None
+        if translationPath != "":
+            self.translationList = self.subtitles.GetSubtitleList(translationPath)
 
         #for sub in self.subList:
         #    print str(sub.GetId()) + " " + sub.GetText()
@@ -126,7 +130,28 @@ class Core(object):
         print "ActivateSequence: loaded"
         self.gui.SetSequenceNumber(self.currentSubId, len(self.subList))
         self.gui.SetSequence(self.sequence)
+        self.ActivateTranslation()
         print "ActivateSequence: end"
+
+
+    def ActivateTranslation(self):
+        print "ActivateTranslation"
+        if not self.translationList:
+            print "absent"
+            self.gui.SetTranslation("")
+        else:
+            print "present"
+            translation = ""
+            currentBegin = self.subList[ self.currentSubId].GetTimeBegin()
+            currentEnd = self.subList[ self.currentSubId].GetTimeEnd()
+            for sub in self.translationList:
+                begin = sub.GetTimeBegin()
+                end = sub.GetTimeEnd()
+                if (begin >= currentBegin and begin <= currentEnd) or (end >= currentBegin and end <= currentEnd) or (begin <= currentBegin and end >= currentEnd):
+                    print "concat"
+                    translation +=  sub.GetText() + " "
+
+            self.gui.SetTranslation(translation)
 
     def ValidateSequence(self):
         if self.sequence.IsValid():
@@ -252,7 +277,7 @@ class Core(object):
         saver.SetPath(self.outputSavePath)
         saver.SetVideoPath(self.videoPath)
         saver.SetExercicePath(self.exercicePath)
-        saver.SetCorrectionPath("")
+        saver.SetTranslationPath(self.translationPath)
         saver.SetCurrentSequence(self.currentSubId)
         saver.SetSequenceList(self.sequenceList)
         saver.Save()
@@ -264,7 +289,7 @@ class Core(object):
         if not loader.Load(path):
             return
 
-        self.SetPaths( loader.GetVideoPath(), loader.GetExercicePath(), False)
+        self.SetPaths( loader.GetVideoPath(), loader.GetExercicePath(), loader.GetTranslationPath(), False)
         self.outputSavePath = path
         loader.UpdateSequenceList(self.sequenceList)
         self.currentSubId = loader.GetCurrentSequence()

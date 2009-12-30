@@ -315,6 +315,32 @@
                 <property name="homogeneous">True</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toggletoolbuttonShowTranslation">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">toggletoolbutton1</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-spell-check</property>
+                <signal name="toggled" handler="on_toggletoolbuttonShowTranslation_toggled"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="toolbuttonProperties">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">toolbutton1</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-properties</property>
+                <signal name="clicked" handler="on_toolbuttonProperties_clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -409,7 +435,7 @@
             </child>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow1">
-                <property name="height_request">500</property>
+                <property name="height_request">300</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">automatic</property>
@@ -434,6 +460,25 @@
           </object>
           <packing>
             <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindowTranslation">
+            <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <child>
+              <object class="GtkTextView" id="textviewTranslation">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="border_width">1</property>
+                <property name="editable">False</property>
+                <property name="justification">center</property>
+                <property name="cursor_visible">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -499,7 +544,7 @@
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="position">3</property>
+            <property name="position">5</property>
           </packing>
         </child>
       </object>
@@ -580,7 +625,7 @@
           <object class="GtkHBox" id="hbox4">
             <property name="visible">True</property>
             <child>
-              <object class="GtkLabel" id="labelInputCorrectionFile">
+              <object class="GtkLabel" id="labelInputTranslationFile">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Correction : </property>
               </object>
@@ -589,7 +634,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFileChooserButton" id="filechooserbuttonCorrection">
+              <object class="GtkFileChooserButton" id="filechooserbuttonTranslation">
                 <property name="visible">True</property>
                 <property name="create_folders">False</property>
                 <property name="title" translatable="yes">S&#xE9;lectionner un fichier de sous-titre</property>
