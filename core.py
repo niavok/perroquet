@@ -63,13 +63,21 @@ class Core(object):
         self.InitExercice()
         if load:
             self.SetCanSave(True)
-            self.player.Play()
-            self.paused = False
+            self.Play()
         else:
             self.SetCanSave(False)
-            self.player.Pause()
-            self.paused = True
+            self.Pause()
 
+
+    def Play(self):
+        self.gui.SetPlaying(True)
+        self.player.Play()
+        self.paused = False
+
+    def Pause(self):
+        self.gui.SetPlaying(False)
+        self.player.Pause()
+        self.paused = True
 
 
     def InitExercice(self):
@@ -102,15 +110,14 @@ class Core(object):
                 self.NextSequence(False)
                 gtk.gdk.threads_leave()
             else:
-                self.player.Pause()
+                self.Pause()
 
 
 
     def RepeatSequence(self):
         print "RepeatSequence"
         self.GotoSequenceBegin()
-        self.player.Play()
-        self.paused = False
+        self.Play()
 
     def SelectSequence(self, num, load = True):
         print "SelectSequence " + str(num) + " " + str(self.currentSubId)
@@ -202,15 +209,19 @@ class Core(object):
             self.validSequence = True
             self.RepeatSequence()
 
-    def GotoSequenceBegin(self):
+    def GotoSequenceBegin(self, asSoonAsReady = False):
         print "GotoSequenceBegin"
         self.state = Core.WAIT_END
         begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
         if begin_time < 0:
             begin_time = 0
-        self.player.Seek(begin_time)
+        if asSoonAsReady:
+            self.player.SeekAsSoonAsReady(begin_time)
+        else:
+            self.player.Seek(begin_time)
         self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
         self.SetCanSave(True)
+
 
     def WriteCharacter(self, character):
         if character == "apostrophe":
@@ -274,11 +285,9 @@ class Core(object):
     def TooglePause(self):
         print "TooglePause " + str(self.player.IsPaused()) + " " + str(self.paused)
         if self.player.IsPaused() and self.paused:
-            self.player.Play()
-            self.paused = False
+            self.Play()
         elif not self.player.IsPaused() and not self.paused:
-            self.player.Pause()
-            self.paused = True
+            self.Pause()
 
     def SeekSequence(self, time):
         begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
@@ -289,8 +298,7 @@ class Core(object):
         self.player.Seek(pos)
         self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd() + 500)
         self.state = Core.WAIT_END
-        self.player.Play()
-        self.paused = False
+        self.Play()
 
 
     def timeUpdateThread(self):
@@ -359,6 +367,8 @@ class Core(object):
         self.repeatCount = loader.GetRepeatCount()
         self.sequenceList[self.currentSubId].SetActiveWordIndex(loader.GetCurrentWord())
         self.ActivateSequence()
+        self.GotoSequenceBegin(True)
+        self.Play()
 
     def VerifyPath(self, videoPath, exercicePath, translationPath):
         error = False

@@ -34,7 +34,7 @@ class VideoPlayer(object):
         bus.connect("sync-message::element", self.on_sync_message)
 
         self.time_format = gst.Format(gst.FORMAT_TIME)
-
+        self.timeToSeek = -1
 
     def on_message(self, bus, message):
         t = message.type
@@ -77,6 +77,9 @@ class VideoPlayer(object):
         value = int(time * 1000000 )
         self.player.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH,value)
 
+    def SeekAsSoonAsReady(self, time):
+        self.timeToSeek = time
+
     def SetCallback(self, callback):
         self.callback = callback
 
@@ -107,9 +110,15 @@ class VideoPlayer(object):
                 pos_int = self.player.query_position(self.time_format, None)[0]
             except:
                 pass
+
             if pos_int != -1 and self.nextCallbackTime != -1 and pos_int > self.nextCallbackTime *1000000:
                 self.nextCallbackTime = -1
                 self.callback()
+
+            if pos_int != -1 and self.timeToSeek != -1:
+                print "deleyed seek !"
+                self.Seek(self.timeToSeek)
+                self.timeToSeek = -1
 
     def Close(self):
         self.player.set_state(gst.STATE_NULL)

@@ -132,8 +132,8 @@ class Gui:
         self.builder.get_object("labelSequenceTime").set_text(str(textTime) + "/" + str(textDuration) + " s")
 
     def SetPlaying(self, state):
-        self.builder.get_object("toolbuttonPlay").set_sensitive(state)
-        self.builder.get_object("toolbuttonPause").set_sensitive(not state)
+        self.builder.get_object("toolbuttonPlay").set_sensitive(not state)
+        self.builder.get_object("toolbuttonPause").set_sensitive(state)
 
     def SetCanSave(self, state):
         self.builder.get_object("saveButton").set_sensitive(state)
