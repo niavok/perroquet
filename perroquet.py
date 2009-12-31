@@ -18,13 +18,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
+import gettext
 
 from core import Core
 from gui import Gui
 
-
 class Perroquet(object):
+
+    application = "perroquet"
+
     def __init__(self):
+
+        gettext.install(Perroquet.application)
+
         self.core = Core()
         self.gui = Gui()
 

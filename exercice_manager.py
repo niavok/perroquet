@@ -43,9 +43,6 @@ class ExerciceLoader(object):
 
         self.translationPath = self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes)
 
-        print  self.videoPath
-        print  self.exercicePath
-
         xml_progress = dom.getElementsByTagName("progress")[0]
         self.currentSequence = int(self.getText(xml_progress.getElementsByTagName("current_sequence")[0].childNodes))
         self.currentWord = int(self.getText(xml_progress.getElementsByTagName("current_word")[0].childNodes))

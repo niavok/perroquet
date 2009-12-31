@@ -9,9 +9,6 @@
     <property name="has_focus">True</property>
     <property name="title" translatable="yes">Perroquet</property>
     <property name="icon">logo.png</property>
-    <accel-groups>
-      <group name="accelgroupDialog"/>
-    </accel-groups>
     <signal name="delete_event" handler="on_MainWindow_delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -34,7 +31,6 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroupDialog</property>
                         <signal name="activate" handler="on_imagemenuitemNew_activate"/>
                       </object>
                     </child>
@@ -44,7 +40,6 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroupDialog</property>
                         <signal name="activate" handler="on_imagemenuitemOpen_activate"/>
                       </object>
                     </child>
@@ -55,7 +50,6 @@
                         <property name="sensitive">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroupDialog</property>
                         <signal name="activate" handler="on_imagemenuitemSave_activate"/>
                       </object>
                     </child>
@@ -66,7 +60,6 @@
                         <property name="sensitive">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroupDialog</property>
                         <signal name="activate" handler="on_imagemenuitemSaveAs_activate"/>
                       </object>
                     </child>
@@ -81,7 +74,6 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroupDialog</property>
                         <signal name="activate" handler="on_imagemenuitemQuit_activate"/>
                       </object>
                     </child>
@@ -148,7 +140,6 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroupDialog</property>
                         <signal name="activate" handler="on_imagemenuitemAbout_activate"/>
                       </object>
                     </child>
@@ -547,7 +538,6 @@
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="accelgroupDialog"/>
   <object class="GtkDialog" id="newExerciceDialog">
     <property name="width_request">400</property>
     <property name="border_width">5</property>
@@ -693,7 +683,6 @@
       <action-widget response="0">buttonNewExerciceOk</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkFileFilter" id="filefilter1"/>
   <object class="GtkAdjustment" id="adjustmentSequenceTime">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
@@ -708,7 +697,6 @@
     <property name="page_size">10</property>
     <signal name="value_changed" handler="on_adjustmentSequenceNum_value_changed"/>
   </object>
-  <object class="GtkFileFilter" id="filefilterSave"/>
   <object class="GtkDialog" id="dialogExerciceProperties">
     <property name="width_request">400</property>
     <property name="border_width">5</property>

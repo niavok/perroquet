@@ -30,10 +30,8 @@ class Sequence(object):
         self.activeWordIndex = 0
         self.activeWordPos = 0
         self.helpChar = '~'
-        #print textToParse
         while len(textToParse) > 0:
             if re.match('^([0-9\'a-zA-Z]+)[^0-9\'a-zA-Z]', textToParse):
-                #print "match"
                 m = re.search('^([0-9\'a-zA-Z]+)[^0-9\'a-zA-Z]', textToParse)
                 word = m.group(1)
                 sizeToCut =  len(word)
@@ -43,10 +41,8 @@ class Sequence(object):
                 self.wordList.append(word)
                 self.workList.append("")
             elif re.match('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse):
-                #print "not match"
                 m = re.search('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse)
                 symbol = m.group(1)
-                #print symbol
                 sizeToCut = len(symbol)
                 textToParse = textToParse[sizeToCut:]
                 self.symbolList.append(symbol)
@@ -57,8 +53,6 @@ class Sequence(object):
                 else:
                     self.symbolList.append(textToParse)
                 break
-            #print "while end"
-        #print "load end"
 
 
     def GetSymbolList(self):
@@ -97,7 +91,6 @@ class Sequence(object):
             if self.NextWord():
                 self.WriteCharacter(character)
         else:
-            print "Write character"
             if self.activeWordPos < len(self.workList[self.activeWordIndex]) and self.workList[self.activeWordIndex][self.activeWordPos] == self.helpChar:
                 self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos+1:]
             else:
@@ -116,7 +109,6 @@ class Sequence(object):
             if self.PreviousWord():
                 self.DeletePreviousCharacter()
         else:
-            print "delete character"
             self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos-1]  + self.workList[self.activeWordIndex][self.activeWordPos:]
             self.activeWordPos -= 1
 
@@ -131,7 +123,6 @@ class Sequence(object):
             if self.NextWord(False):
                 self.DeleteNextCharacter()
         else:
-            print "delete character"
             self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos]  + self.workList[self.activeWordIndex][self.activeWordPos+1:]
 
     def NextWord(self, end = True):
@@ -232,7 +223,6 @@ class Sequence(object):
         return empty
 
     def CompleteWord(self):
-        print "CompleteWOrd"
         if self.IsValidWord():
             if self.NextWord(False):
                 self.CompleteWord()

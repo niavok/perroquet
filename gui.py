@@ -23,15 +23,13 @@ import gtk, time, urllib, re
 class Gui:
     def __init__(self):
         self.builder = gtk.Builder()
+        self.builder.set_translation_domain("perroquet")
         self.builder.add_from_file("gui.xml")
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("MainWindow")
         self.typeLabel = self.builder.get_object("typeView")
 
         self.initTypeLabel()
-
-        filefilterSave =self.builder.get_object("filefilterSave")
-        filefilterSave.add_pattern("*.perroquet")
 
         self.translationVisible = False
 
@@ -42,8 +40,8 @@ class Gui:
 
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
                                    gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
-                                   "Do you really quit without save ?")
-        dialog.set_title("Confirm quit")
+                                   _("Do you really quit without save ?"))
+        dialog.set_title(_("Confirm quit"))
 
         response = dialog.run()
         dialog.destroy()
@@ -58,8 +56,8 @@ class Gui:
     def SignalExerciceBadPath(self, path):
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
                                    gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
-                                   "The file '"+path+"' doesn't exist. Please modify exercice paths")
-        dialog.set_title("Load error")
+                                   _("The file '%s' doesn't exist. Please modify exercice paths") % path)
+        dialog.set_title(_("Load error"))
 
         response = dialog.run()
         dialog.destroy()
@@ -93,18 +91,11 @@ class Gui:
         if translationPath == "None" or translationPath == None:
             translationPath = ""
 
-        print translationPath
-
         self.core.SetPaths(videoPath,exercicePath, translationPath)
         self.newExerciceDialog.hide()
 
     def on_buttonNewExerciceCancel_clicked(self,widget,data=None):
         self.newExerciceDialog.hide()
-
-    def monclic(self, source=None, event=None):
-        self.widgets.get_widget('label1').set_text('Vous avez cliqué !')
-
-        return True
 
     def SetCore(self, core):
         self.core = core
@@ -188,14 +179,14 @@ class Gui:
     def SetStats(self, sequenceCount,sequenceFound, wordCount, wordFound, repeatRate):
         labelProgress = self.builder.get_object("labelProgress")
         text = ""
-        text = text + "- Sequences: "+str(sequenceFound)+"/"+str(sequenceCount)+" ("+str(round(100*sequenceFound/sequenceCount,1))+" %)\n"
-        text = text + "- Words: "+str(wordFound)+"/"+str(wordCount)+" ("+str(round(100*wordFound/wordCount,1))+" %)\n"
-        text = text + "- Repeat ratio: "+str(round(repeatRate,1))+" per words"
+        text = text + _("- Sequences: %(found)s/%(count)s (%(percent)s %%)\n") %  { 'found' : str(sequenceFound), 'count' : str(sequenceCount), 'percent' : str(round(100*sequenceFound/sequenceCount,1)) }
+        text = text + _("- Words: %(found)s/%(count)s (%(percent)s %%)\n") % {  'found' : str(wordFound), 'count' : str(wordCount),  'percent' : str(round(100*wordFound/wordCount,1))}
+        text = text + _("- Repeat ratio: %s per words") % str(round(repeatRate,1))
         labelProgress.set_label(text)
 
     def SetTitle(self, title, save):
 
-        newTitle = "Perroquet"
+        newTitle = _("Perroquet")
 
         if save:
             newTitle += " *"
@@ -456,9 +447,6 @@ class Gui:
 
 
 
-        print  videoPath
-        print exercicePath
-        print  translationPath
         videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
         exerciceChooser = self.builder.get_object("filechooserbuttonExerciceProp")
         translationChooser = self.builder.get_object("filechooserbuttonTranslationProp")
@@ -655,17 +643,17 @@ class OpenFileSelector(FileSelector):
 
         def __init__(self, parent):
                 FileSelector.__init__(
-                        self, parent, ('Select File to Open'),
+                        self, parent, _('Select File to Open'),
                         gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
                 )
 
                 filter = gtk.FileFilter()
-                filter.set_name(('Perroquet files'))
+                filter.set_name(_('Perroquet files'))
                 filter.add_pattern("*.perroquet")
                 self.add_filter(filter)
 
                 filter = gtk.FileFilter()
-                filter.set_name(('All files'))
+                filter.set_name(_('All files'))
                 filter.add_pattern("*")
                 self.add_filter(filter)
 
@@ -676,17 +664,17 @@ class SaveFileSelector(FileSelector):
 
         def __init__(self, parent):
                 FileSelector.__init__(
-                        self, parent, ('Select File to Save to'),
+                        self, parent, _('Select File to Save to'),
                         gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
                 )
 
                 filter = gtk.FileFilter()
-                filter.set_name(('Perroquet files'))
+                filter.set_name(_('Perroquet files'))
                 filter.add_pattern("*.perroquet")
                 self.add_filter(filter)
 
                 filter = gtk.FileFilter()
-                filter.set_name(('All files'))
+                filter.set_name(_('All files'))
                 filter.add_pattern("*")
                 self.add_filter(filter)
 

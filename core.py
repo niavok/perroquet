@@ -52,8 +52,6 @@ class Core(object):
         if translationPath != "":
             self.translationList = self.subtitles.GetSubtitleList(translationPath)
 
-        #for sub in self.subList:
-        #    print str(sub.GetId()) + " " + sub.GetText()
         if self.player != None:
             self.player.Close()
 
@@ -81,7 +79,6 @@ class Core(object):
 
 
     def InitExercice(self):
-        print "InitExercice"
         self.player.SetCallback(self.TimeCallback)
         self.sequenceList = []
         self.paused = False
@@ -115,12 +112,10 @@ class Core(object):
 
 
     def RepeatSequence(self):
-        print "RepeatSequence"
         self.GotoSequenceBegin()
         self.Play()
 
     def SelectSequence(self, num, load = True):
-        print "SelectSequence " + str(num) + " " + str(self.currentSubId)
         if self.currentSubId == num:
             return
         self.currentSubId = num
@@ -130,7 +125,6 @@ class Core(object):
         self.SetCanSave(True)
 
     def NextSequence(self, load = True):
-        print "NextSequence"
         if self.currentSubId < len(self.sequenceList)-1:
             self.currentSubId += 1
         self.ActivateSequence()
@@ -139,7 +133,6 @@ class Core(object):
         self.SetCanSave(True)
 
     def PreviousSequence(self):
-        print "PreviousSequence"
         if self.currentSubId > 0:
             self.currentSubId -= 1
         self.ActivateSequence()
@@ -147,30 +140,24 @@ class Core(object):
         self.SetCanSave(True)
 
     def ActivateSequence(self):
-        print "ActivateSequence"
         self.state = Core.WAIT_BEGIN
         self.player.SetNextCallbackTime(self.subList[ self.currentSubId].GetTimeBegin())
         self.sequence = self.sequenceList[self.currentSubId]
 
         self.validSequence = self.sequence.IsValid()
 
-        print "ActivateSequence: loaded"
         self.gui.SetSequenceNumber(self.currentSubId, len(self.subList))
         self.gui.SetSequence(self.sequence)
         self.ActivateTranslation()
         self.UpdateStats()
-        print "ActivateSequence: end"
 
 
 
 
     def ActivateTranslation(self):
-        print "ActivateTranslation"
         if not self.translationList:
-            print "absent"
             self.gui.SetTranslation("")
         else:
-            print "present"
             translation = ""
             currentBegin = self.subList[ self.currentSubId].GetTimeBegin()
             currentEnd = self.subList[ self.currentSubId].GetTimeEnd()
@@ -178,13 +165,11 @@ class Core(object):
                 begin = sub.GetTimeBegin()
                 end = sub.GetTimeEnd()
                 if (begin >= currentBegin and begin <= currentEnd) or (end >= currentBegin and end <= currentEnd) or (begin <= currentBegin and end >= currentEnd):
-                    print "concat"
                     translation +=  sub.GetText() + " "
 
             self.gui.SetTranslation(translation)
 
     def UpdateStats(self):
-        print "UpdateStats"
         sequenceCount = len(self.sequenceList)
         sequenceFound = 0
         wordCount = 0
@@ -210,7 +195,6 @@ class Core(object):
             self.RepeatSequence()
 
     def GotoSequenceBegin(self, asSoonAsReady = False):
-        print "GotoSequenceBegin"
         self.state = Core.WAIT_END
         begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
         if begin_time < 0:
@@ -283,7 +267,6 @@ class Core(object):
         self.SetCanSave(True)
 
     def TooglePause(self):
-        print "TooglePause " + str(self.player.IsPaused()) + " " + str(self.paused)
         if self.player.IsPaused() and self.paused:
             self.Play()
         elif not self.player.IsPaused() and not self.paused:
@@ -303,9 +286,6 @@ class Core(object):
 
     def timeUpdateThread(self):
         timeUpdateThreadId = self.timeUpdateThreadId
-        #gtk.gdk.threads_enter()
-        #self.time_label.set_text("00:00 / 00:00")
-        #gtk.gdk.threads_leave()
         while timeUpdateThreadId == self.timeUpdateThreadId:
             time.sleep(0.5)
             pos_int = self.player.GetCurrentTime()

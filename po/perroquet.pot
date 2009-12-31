@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-31 20:11+0100\n"
+"POT-Creation-Date: 2009-12-31 22:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,118 +16,118 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../gui.xml:10
+#: ../gui.xml:10 ../gui.py:189
 msgid "Perroquet"
 msgstr ""
 
-#: ../gui.xml:26
+#: ../gui.xml:23
 msgid "_File"
 msgstr ""
 
-#: ../gui.xml:95
+#: ../gui.xml:87
 msgid "E_dit"
 msgstr ""
 
-#: ../gui.xml:116
+#: ../gui.xml:108
 msgid "H_elp"
 msgstr ""
 
-#: ../gui.xml:125
+#: ../gui.xml:117
 msgid "Translation"
 msgstr ""
 
-#: ../gui.xml:132 ../gui.xml:300
+#: ../gui.xml:124 ../gui.xml:291
 msgid "Hint"
 msgstr ""
 
-#: ../gui.xml:171 ../gui.xml:554
+#: ../gui.xml:162 ../gui.xml:544
 msgid "New exercice"
 msgstr ""
 
-#: ../gui.xml:184
+#: ../gui.xml:175
 msgid "Open saved exercice"
 msgstr ""
 
-#: ../gui.xml:198
+#: ../gui.xml:189
 msgid "Save exercice"
 msgstr ""
 
-#: ../gui.xml:221
+#: ../gui.xml:212
 msgid "Previous sequence"
 msgstr ""
 
-#: ../gui.xml:235
+#: ../gui.xml:226
 msgid "Next Sequence"
 msgstr ""
 
-#: ../gui.xml:249
+#: ../gui.xml:240
 msgid "Replay sequence"
 msgstr ""
 
-#: ../gui.xml:263
+#: ../gui.xml:254
 msgid "Pause"
 msgstr ""
 
-#: ../gui.xml:277
+#: ../gui.xml:268
 msgid "Play"
 msgstr ""
 
-#: ../gui.xml:314
+#: ../gui.xml:305
 msgid "Display translation"
 msgstr ""
 
-#: ../gui.xml:328
+#: ../gui.xml:319
 msgid "Properties"
 msgstr ""
 
-#: ../gui.xml:377
+#: ../gui.xml:368
 msgid ""
 "- Sequences: --/--\n"
 "- Words: --/--\n"
 "- Repeat ratio: -- per words"
 msgstr ""
 
-#: ../gui.xml:500
+#: ../gui.xml:491
 msgid "-- s"
 msgstr ""
 
-#: ../gui.xml:533
+#: ../gui.xml:524
 msgid "--/--"
 msgstr ""
 
-#: ../gui.xml:573 ../gui.xml:734
+#: ../gui.xml:563 ../gui.xml:722
 msgid "Media: "
 msgstr ""
 
-#: ../gui.xml:583 ../gui.xml:744
+#: ../gui.xml:573 ../gui.xml:732
 msgid "Select a video file"
 msgstr ""
 
-#: ../gui.xml:600 ../gui.xml:761
+#: ../gui.xml:590 ../gui.xml:749
 msgid "Exercice: "
 msgstr ""
 
-#: ../gui.xml:610 ../gui.xml:637 ../gui.xml:771 ../gui.xml:798
+#: ../gui.xml:600 ../gui.xml:627 ../gui.xml:759 ../gui.xml:786
 msgid "Select a subtitle file"
 msgstr ""
 
-#: ../gui.xml:627 ../gui.xml:788
+#: ../gui.xml:617 ../gui.xml:776
 msgid "Translation: "
 msgstr ""
 
-#: ../gui.xml:715
+#: ../gui.xml:703
 msgid "Exercice properties"
 msgstr ""
 
-#: ../gui.xml:871
+#: ../gui.xml:859
 msgid "Copyright © 2009-2010 Frédéric Bertolus"
 msgstr ""
 
-#: ../gui.xml:872
+#: ../gui.xml:860
 msgid "A oral comprehension teacher"
 msgstr ""
 
-#: ../gui.xml:874
+#: ../gui.xml:862
 msgid ""
 "This program is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -141,4 +141,52 @@ msgid ""
 "\n"
 "You should have received a copy of the GNU General Public License along with "
 "this program.  If not, see <http://www.gnu.org/licenses/>."
+msgstr ""
+
+#: ../gui.py:43
+msgid "Do you really quit without save ?"
+msgstr ""
+
+#: ../gui.py:44
+msgid "Confirm quit"
+msgstr ""
+
+#: ../gui.py:59
+#, python-format
+msgid "The file '%s' doesn't exist. Please modify exercice paths"
+msgstr ""
+
+#: ../gui.py:60
+msgid "Load error"
+msgstr ""
+
+#: ../gui.py:182
+#, python-format
+msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
+msgstr ""
+
+#: ../gui.py:183
+#, python-format
+msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
+msgstr ""
+
+#: ../gui.py:184
+#, python-format
+msgid "- Repeat ratio: %s per words"
+msgstr ""
+
+#: ../gui.py:646
+msgid "Select File to Open"
+msgstr ""
+
+#: ../gui.py:651 ../gui.py:672
+msgid "Perroquet files"
+msgstr ""
+
+#: ../gui.py:656 ../gui.py:677
+msgid "All files"
+msgstr ""
+
+#: ../gui.py:667
+msgid "Select File to Save to"
 msgstr ""

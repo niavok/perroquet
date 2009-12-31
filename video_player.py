@@ -116,7 +116,6 @@ class VideoPlayer(object):
                 self.callback()
 
             if pos_int != -1 and self.timeToSeek != -1:
-                print "deleyed seek !"
                 self.Seek(self.timeToSeek)
                 self.timeToSeek = -1
 
