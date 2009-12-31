@@ -119,6 +119,18 @@ class Gui:
         ajustement.configure (sequenceNumber, 1, sequenceCount, 1, 10, 0)
         self.builder.get_object("labelSequenceNumber").set_text(str(sequenceNumber) + "/" + str(sequenceCount))
 
+        toolbuttonNextSequence =  self.builder.get_object("toolbuttonNextSequence")
+        toolbuttonPreviousSequence =  self.builder.get_object("toolbuttonPreviousSequence")
+        if sequenceNumber == 1:
+            toolbuttonPreviousSequence.set_sensitive(False)
+        else:
+            toolbuttonPreviousSequence.set_sensitive(True)
+
+        if sequenceNumber == sequenceCount :
+            toolbuttonNextSequence.set_sensitive(False)
+        else:
+            toolbuttonNextSequence.set_sensitive(True)
+
     def SetSequenceTime(self, sequencePos, sequenceTime):
         if sequencePos > sequenceTime:
             sequencePos = sequenceTime
