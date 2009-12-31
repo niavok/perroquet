@@ -1,0 +1,148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-12-31 16:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../gui.xml:10
+msgid "Perroquet"
+msgstr ""
+
+#: ../gui.xml:26
+msgid "_Fichier"
+msgstr ""
+
+#: ../gui.xml:95
+msgid "É_dition"
+msgstr ""
+
+#: ../gui.xml:116
+msgid "Aid_e"
+msgstr ""
+
+#: ../gui.xml:125
+msgid "Translation"
+msgstr ""
+
+#: ../gui.xml:132 ../gui.xml:300
+msgid "Hint"
+msgstr ""
+
+#: ../gui.xml:171
+msgid "New exercice"
+msgstr ""
+
+#: ../gui.xml:184
+msgid "Open saved exercice"
+msgstr ""
+
+#: ../gui.xml:198
+msgid "Save exercice"
+msgstr ""
+
+#: ../gui.xml:221
+msgid "Previous sequence"
+msgstr ""
+
+#: ../gui.xml:235
+msgid "Next Sequence"
+msgstr ""
+
+#: ../gui.xml:249
+msgid "Replay sequence"
+msgstr ""
+
+#: ../gui.xml:263
+msgid "Pause"
+msgstr ""
+
+#: ../gui.xml:277
+msgid "playButton"
+msgstr ""
+
+#: ../gui.xml:314
+msgid "toggletoolbutton1"
+msgstr ""
+
+#: ../gui.xml:328
+msgid "toolbutton1"
+msgstr ""
+
+#: ../gui.xml:377
+msgid ""
+"- Sequences: --/--\n"
+"- Words: --/--\n"
+"- Repeat ratio: -- per words"
+msgstr ""
+
+#: ../gui.xml:500
+msgid "-- s"
+msgstr ""
+
+#: ../gui.xml:533
+msgid "--/--"
+msgstr ""
+
+#: ../gui.xml:554
+msgid "Nouvel exercice"
+msgstr ""
+
+#: ../gui.xml:573 ../gui.xml:734
+msgid "Média : "
+msgstr ""
+
+#: ../gui.xml:583 ../gui.xml:744
+msgid "Sélectionner un fichier vidéo"
+msgstr ""
+
+#: ../gui.xml:600 ../gui.xml:761
+msgid "Exercice : "
+msgstr ""
+
+#: ../gui.xml:610 ../gui.xml:637 ../gui.xml:771 ../gui.xml:798
+msgid "Sélectionner un fichier de sous-titre"
+msgstr ""
+
+#: ../gui.xml:627 ../gui.xml:788
+msgid "Translation : "
+msgstr ""
+
+#: ../gui.xml:715
+msgid "Exercice properties"
+msgstr ""
+
+#: ../gui.xml:871
+msgid "Copyright © 2009-2010 Frédéric Bertolus"
+msgstr ""
+
+#: ../gui.xml:872
+msgid "A oral comprehension teacher"
+msgstr ""
+
+#: ../gui.xml:874
+msgid ""
+"This program is free software: you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation, either version 3 of the License, or (at your option) "
+"any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"this program.  If not, see <http://www.gnu.org/licenses/>."
+msgstr ""
