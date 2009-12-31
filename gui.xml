@@ -551,7 +551,7 @@
   <object class="GtkDialog" id="newExerciceDialog">
     <property name="width_request">400</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Nouvel exercice</property>
+    <property name="title" translatable="yes">New exercice</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
