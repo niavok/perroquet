@@ -274,7 +274,7 @@
               <object class="GtkToolButton" id="toolbuttonPlay">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="label" translatable="yes">playButton</property>
+                <property name="label" translatable="yes">Play</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
                 <signal name="clicked" handler="on_toolbuttonPlay_clicked"/>
@@ -311,7 +311,7 @@
               <object class="GtkToggleToolButton" id="toggletoolbuttonShowTranslation">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="label" translatable="yes">toggletoolbutton1</property>
+                <property name="label" translatable="yes">Display translation</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-spell-check</property>
                 <signal name="toggled" handler="on_toggletoolbuttonShowTranslation_toggled"/>
@@ -325,7 +325,7 @@
               <object class="GtkToolButton" id="toolbuttonProperties">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="label" translatable="yes">toolbutton1</property>
+                <property name="label" translatable="yes">Properties</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-properties</property>
                 <signal name="clicked" handler="on_toolbuttonProperties_clicked"/>

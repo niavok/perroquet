@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-31 17:02+0100\n"
+"POT-Creation-Date: 2009-12-31 20:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Hint"
 msgstr ""
 
-#: ../gui.xml:171
+#: ../gui.xml:171 ../gui.xml:554
 msgid "New exercice"
 msgstr ""
 
@@ -69,15 +69,15 @@ msgid "Pause"
 msgstr ""
 
 #: ../gui.xml:277
-msgid "playButton"
+msgid "Play"
 msgstr ""
 
 #: ../gui.xml:314
-msgid "toggletoolbutton1"
+msgid "Display translation"
 msgstr ""
 
 #: ../gui.xml:328
-msgid "toolbutton1"
+msgid "Properties"
 msgstr ""
 
 #: ../gui.xml:377
@@ -95,28 +95,24 @@ msgstr ""
 msgid "--/--"
 msgstr ""
 
-#: ../gui.xml:554
-msgid "Nouvel exercice"
-msgstr ""
-
 #: ../gui.xml:573 ../gui.xml:734
-msgid "Media : "
+msgid "Media: "
 msgstr ""
 
 #: ../gui.xml:583 ../gui.xml:744
-msgid "Sélectionner un fichier vidéo"
+msgid "Select a video file"
 msgstr ""
 
 #: ../gui.xml:600 ../gui.xml:761
-msgid "Exercice : "
+msgid "Exercice: "
 msgstr ""
 
 #: ../gui.xml:610 ../gui.xml:637 ../gui.xml:771 ../gui.xml:798
-msgid "Sélectionner un fichier de sous-titre"
+msgid "Select a subtitle file"
 msgstr ""
 
 #: ../gui.xml:627 ../gui.xml:788
-msgid "Translation : "
+msgid "Translation: "
 msgstr ""
 
 #: ../gui.xml:715
