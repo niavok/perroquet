@@ -570,7 +570,7 @@
             <child>
               <object class="GtkLabel" id="labelInputVideoFile">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">M&#xE9;dia : </property>
+                <property name="label" translatable="yes">Media: </property>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -597,7 +597,7 @@
             <child>
               <object class="GtkLabel" id="labelInputExerciceFile">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Exercice : </property>
+                <property name="label" translatable="yes">Exercice: </property>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -624,7 +624,7 @@
             <child>
               <object class="GtkLabel" id="labelInputTranslationFile">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Translation : </property>
+                <property name="label" translatable="yes">Translation: </property>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -731,7 +731,7 @@
             <child>
               <object class="GtkLabel" id="labelInputVideoFile1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">M&#xE9;dia : </property>
+                <property name="label" translatable="yes">Media: </property>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -758,7 +758,7 @@
             <child>
               <object class="GtkLabel" id="labelInputExerciceFile1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Exercice : </property>
+                <property name="label" translatable="yes">Exercice: </property>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -785,7 +785,7 @@
             <child>
               <object class="GtkLabel" id="labelInputTranslationFile1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Translation : </property>
+                <property name="label" translatable="yes">Translation: </property>
               </object>
               <packing>
                 <property name="position">0</property>
