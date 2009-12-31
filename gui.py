@@ -33,6 +33,8 @@ class Gui:
         filefilterSave =self.builder.get_object("filefilterSave")
         filefilterSave.add_pattern("*.perroquet")
 
+        self.translationVisible = False
+
     def on_MainWindow_delete_event(self,widget,data=None):
         if self.core.IsAllowQuit():
             gtk.main_quit()
@@ -409,11 +411,9 @@ class Gui:
         self.UpdateWordList()
 
     def on_toggletoolbuttonShowTranslation_toggled(self, widget, data=None):
-        scrolledwindowTranslation = self.builder.get_object("scrolledwindowTranslation")
-        if not scrolledwindowTranslation.props.visible:
-            scrolledwindowTranslation.show()
-        else:
-            scrolledwindowTranslation.hide()
+        toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
+        if toggletoolbuttonShowTranslation.props.active != self.translationVisible:
+            self.ToogleTranslation()
 
     def on_typeView_button_release_event(self, widget, data=None):
         index = self.typeLabel.get_buffer().props.cursor_position
@@ -424,7 +424,6 @@ class Gui:
         if wordIndex == -1:
             wordIndex = 0
         self.core.SelectSequenceWord(wordIndex,wordIndexPos)
-        print "ok2 " + str(wordIndex) + " " + str(wordIndexPos)
 
     def on_toolbuttonProperties_clicked(self, widget, data=None):
         self.AskProperties()
@@ -479,11 +478,94 @@ class Gui:
         dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
         dialogExerciceProperties.hide()
 
-    def Activate(self):
-        self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
-        self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
-        self.builder.get_object("toolbuttonHint").set_sensitive(True)
-        self.builder.get_object("toolbuttonReplaySequence").set_sensitive(True)
+    def on_imagemenuitemAbout_activate(self,widget,data=None):
+        self.builder.get_object("aboutdialog").show()
+
+    def on_imagemenuitemHint_activate(self,widget,data=None):
+        return self.on_toolbuttonHint_clicked(widget, data)
+
+    def on_checkmenuitemTranslation_toggled(self,widget,data=None):
+        checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
+        if checkmenuitemTranslation.props.active != self.translationVisible:
+            self.ToogleTranslation()
+
+
+    def ToogleTranslation(self):
+        scrolledwindowTranslation = self.builder.get_object("scrolledwindowTranslation")
+        toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
+        checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
+        if not self.translationVisible:
+            scrolledwindowTranslation.show()
+            toggletoolbuttonShowTranslation.set_active(True)
+            checkmenuitemTranslation.set_active(True)
+            self.translationVisible = True
+        else:
+            scrolledwindowTranslation.hide()
+            toggletoolbuttonShowTranslation.set_active(False)
+            checkmenuitemTranslation.set_active(False)
+            self.translationVisible = False
+
+
+    def on_imagemenuitemProperties_activate(self,widget,data=None):
+        return self.on_toolbuttonProperties_clicked(widget, data)
+
+    def on_imagemenuitemQuit_activate(self,widget,data=None):
+        return self.on_MainWindow_delete_event(widget, data)
+
+    def on_imagemenuitemSaveAs_activate(self,widget,data=None):
+        self.core.Save(True)
+
+    def on_imagemenuitemSave_activate(self,widget,data=None):
+        return self.on_saveButton_clicked(widget, data)
+
+    def on_imagemenuitemOpen_activate(self,widget,data=None):
+        return self.on_loadButton_clicked(widget, data)
+
+    def on_imagemenuitemNew_activate(self,widget,data=None):
+        return self.on_newExerciceButton_clicked(widget, data)
+
+    def Activate(self, mode):
+
+        if mode == "loaded":
+            self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
+            self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
+            self.builder.get_object("toolbuttonHint").set_sensitive(True)
+            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(True)
+            self.builder.get_object("toolbuttonProperties").set_sensitive(True)
+            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(True)
+            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(True)
+            self.builder.get_object("checkmenuitemTranslation").set_sensitive(True)
+            self.builder.get_object("imagemenuitemHint").set_sensitive(True)
+
+        if mode == "load_failed":
+            self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
+            self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
+            self.builder.get_object("toolbuttonHint").set_sensitive(False)
+            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(False)
+            self.builder.get_object("toolbuttonProperties").set_sensitive(True)
+            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
+            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
+            self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
+            self.builder.get_object("imagemenuitemHint").set_sensitive(False)
+
+        if mode == "closed":
+            self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
+            self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
+            self.builder.get_object("toolbuttonHint").set_sensitive(False)
+            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(False)
+            self.builder.get_object("toolbuttonProperties").set_sensitive(False)
+            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
+            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
+            self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
+            self.builder.get_object("imagemenuitemHint").set_sensitive(False)
+
+    def on_aboutdialog_delete_event(self,widget,data=None):
+        self.builder.get_object("aboutdialog").hide()
+        return True
+
+    def on_aboutdialog_response(self,widget,data=None):
+        self.builder.get_object("aboutdialog").hide()
+        return True
 
     def Run(self):
         gtk.gdk.threads_init()

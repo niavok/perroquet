@@ -83,7 +83,7 @@ class Core(object):
             self.sequenceList.append(self.sequence)
 
         self.currentSubId = 0
-        self.gui.Activate()
+        self.gui.Activate("loaded")
         self.ActivateSequence()
         self.ExtractWordList()
         self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
@@ -310,13 +310,17 @@ class Core(object):
                 pos = pos_int -begin_time
                 self.gui.SetSequenceTime(pos, duration)
 
-    def Save(self):
+    def Save(self, saveAs = False):
 
         if self.outputSavePath == "":
             self.outputSavePath = self.gui.AskSavePath()
-
-        if self.outputSavePath == "":
-            return
+            if self.outputSavePath == "":
+                return
+        elif saveAs:
+            tempPath = self.gui.AskSavePath()
+            if tempPath == "":
+                return
+            self.outputSavePath = tempPath
 
         self.gui.SetTitle(self.outputSavePath, False)
         saver = ExerciceSaver()
@@ -332,6 +336,7 @@ class Core(object):
         self.SetCanSave(False)
 
     def LoadExercice(self, path):
+        self.gui.Activate("closed")
         loader = ExerciceLoader()
         if not loader.Load(path):
             return
@@ -342,6 +347,7 @@ class Core(object):
             self.videoPath = loader.GetVideoPath()
             self.exercicePath = loader.GetExercicePath()
             self.translationPath = loader.GetTranslationPath()
+            self.gui.Activate("load_failed")
             self.gui.AskProperties()
             return
 
@@ -373,6 +379,7 @@ class Core(object):
     def UpdatePaths(self, videoPath, exercicePath, translationPath):
 
         if not self.VerifyPath(videoPath, exercicePath, translationPath):
+            self.gui.Activate("load_failed")
             self.gui.SetTitle(self.outputSavePath, False)
             self.videoPath = videoPath
             self.exercicePath = exercicePath
