@@ -580,7 +580,7 @@
               <object class="GtkFileChooserButton" id="filechooserbuttonVideo">
                 <property name="visible">True</property>
                 <property name="create_folders">False</property>
-                <property name="title" translatable="yes">S&#xE9;lectionner un fichier vid&#xE9;o</property>
+                <property name="title" translatable="yes">Select a video file</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -607,7 +607,7 @@
               <object class="GtkFileChooserButton" id="filechooserbuttonExercice">
                 <property name="visible">True</property>
                 <property name="create_folders">False</property>
-                <property name="title" translatable="yes">S&#xE9;lectionner un fichier de sous-titre</property>
+                <property name="title" translatable="yes">Select a subtitle file</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -634,7 +634,7 @@
               <object class="GtkFileChooserButton" id="filechooserbuttonTranslation">
                 <property name="visible">True</property>
                 <property name="create_folders">False</property>
-                <property name="title" translatable="yes">S&#xE9;lectionner un fichier de sous-titre</property>
+                <property name="title" translatable="yes">Select a subtitle file</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -741,7 +741,7 @@
               <object class="GtkFileChooserButton" id="filechooserbuttonVideoProp">
                 <property name="visible">True</property>
                 <property name="create_folders">False</property>
-                <property name="title" translatable="yes">S&#xE9;lectionner un fichier vid&#xE9;o</property>
+                <property name="title" translatable="yes">Select a video file</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -768,7 +768,7 @@
               <object class="GtkFileChooserButton" id="filechooserbuttonExerciceProp">
                 <property name="visible">True</property>
                 <property name="create_folders">False</property>
-                <property name="title" translatable="yes">S&#xE9;lectionner un fichier de sous-titre</property>
+                <property name="title" translatable="yes">Select a subtitle file</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -795,7 +795,7 @@
               <object class="GtkFileChooserButton" id="filechooserbuttonTranslationProp">
                 <property name="visible">True</property>
                 <property name="create_folders">False</property>
-                <property name="title" translatable="yes">S&#xE9;lectionner un fichier de sous-titre</property>
+                <property name="title" translatable="yes">Select a subtitle file</property>
               </object>
               <packing>
                 <property name="position">1</property>
