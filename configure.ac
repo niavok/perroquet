@@ -73,6 +73,7 @@ AC_CONFIG_FILES([
         Perroquet/Makefile
         data/perroquet.desktop.in
 	data/Makefile
+	data/icons/Makefile
         ])
 
 AC_OUTPUT
