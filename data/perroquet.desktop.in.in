@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Perroquet
+Name[fr]=Perroquet
+Comment=Oral comprehention teacher
+Comment[fr]=Assistant à la comprehension orale
+Exec=perroquet
+Icon=perroquet
+Terminal=false
+Type=Application
+Categories=Application;Education; 
+

@@ -23,13 +23,19 @@ import gettext
 from core import Core
 from gui import Gui
 
+
 class Perroquet(object):
 
-    application = "perroquet"
+    def __init__(self, datadir, version, argv):
 
-    def __init__(self):
+        self.file_path = datadir
+        self.version = version
 
-        gettext.install(Perroquet.application)
+        from Perroquet import config
+
+
+        gettext.bindtextdomain(config.GETTEXT_PACKAGE,config.localedir)
+        gettext.textdomain(config.GETTEXT_PACKAGE)
 
         self.core = Core()
         self.gui = Gui()
@@ -37,12 +43,8 @@ class Perroquet(object):
         self.core.SetGui(self.gui)
         self.gui.SetCore(self.core)
 
+
+    def run(self):
         self.gui.Run()
-
-def main():
-    perroquet = Perroquet()
-
-if __name__ == "__main__":
-    main()
 
 

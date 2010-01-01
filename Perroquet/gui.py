@@ -18,15 +18,28 @@
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import gtk, time, urllib, re
+import gtk, time, urllib, re, os, gettext
+import locale
+_ = gettext.gettext
 
 class Gui:
     def __init__(self):
+        from Perroquet import config
+
+        locale.bindtextdomain(config.GETTEXT_PACKAGE,config.localedir)
+
+
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
-        self.builder.add_from_file("gui.xml")
+        self.builder.add_from_file(os.path.join(config.pkgdatadir, "perroquet.ui"))
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("MainWindow")
+        self.window.set_icon_from_file(os.path.join(config.pkgdatadir, "perroquet.png"))
+
+        self.aboutDialog = self.builder.get_object("aboutdialog")
+        icon = gtk.gdk.pixbuf_new_from_file(os.path.join(config.pkgdatadir, "perroquet.png"))
+        self.aboutDialog.set_logo(icon)
+
         self.typeLabel = self.builder.get_object("typeView")
 
         self.initTypeLabel()
