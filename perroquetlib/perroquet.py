@@ -1,5 +1,6 @@
-#! @PYTHON@ @PYOPTIONS@
+#! /usr/bin/python
 # -*- coding: utf-8 -*-
+
 # Copyright (C) 2009-2010 Frédéric Bertolus.
 #
 # This file is part of Perroquet.
@@ -17,20 +18,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-from Perroquet.perroquet import Perroquet
+from core import Core
+from gui import Gui
+from perroquetlib.config import Config
 
-def main():
-    try:
-        from Perroquet import config
-        datadir = config.pkgdatadir
-        version = config.VERSION
-    except:
-        datadir = '.'
-        version = '0.9'
-    app = Perroquet(datadir, version, sys.argv)
-    app.run()
+class Perroquet(object):
 
-if __name__ == '__main__':
-    main()
+    def __init__(self):
+
+        config = Config()
+
+
+        self.core = Core()
+        self.gui = Gui()
+
+        self.core.SetGui(self.gui)
+        self.gui.SetCore(self.core)
+
+
+    def run(self):
+        self.gui.Run()
+
 

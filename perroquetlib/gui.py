@@ -20,24 +20,25 @@
 
 import gtk, time, urllib, re, os, gettext
 import locale
+from perroquetlib.config import Config
 _ = gettext.gettext
 
 class Gui:
     def __init__(self):
-        from Perroquet import config
+        config = Config()
 
-        locale.bindtextdomain(config.GETTEXT_PACKAGE,config.localedir)
+        locale.bindtextdomain(config.Get("gettext_package"),config.Get("localedir"))
 
 
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
-        self.builder.add_from_file(os.path.join(config.pkgdatadir, "perroquet.ui"))
+        self.builder.add_from_file(config.Get("ui_path"))
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("MainWindow")
-        self.window.set_icon_from_file(os.path.join(config.pkgdatadir, "perroquet.png"))
+        self.window.set_icon_from_file(config.Get("logo_path"))
 
         self.aboutDialog = self.builder.get_object("aboutdialog")
-        icon = gtk.gdk.pixbuf_new_from_file(os.path.join(config.pkgdatadir, "perroquet.png"))
+        icon = gtk.gdk.pixbuf_new_from_file(config.Get("logo_path"))
         self.aboutDialog.set_logo(icon)
 
         self.typeLabel = self.builder.get_object("typeView")

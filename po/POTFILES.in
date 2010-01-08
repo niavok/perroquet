@@ -1,5 +1,5 @@
 [encoding: UTF-8]
-Perroquet/perroquet.py
-Perroquet/gui.py
-data/perroquet.desktop.in.in
+perroquetlib/perroquet.py
+perroquetlib/gui.py
+data/perroquet.desktop.in
 [type: gettext/glade]data/perroquet.ui

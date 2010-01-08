@@ -1,0 +1,197 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-08 22:08+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../perroquetlib/gui.py:57
+msgid "Do you really quit without save ?"
+msgstr ""
+
+#: ../perroquetlib/gui.py:58
+msgid "Confirm quit"
+msgstr ""
+
+#: ../perroquetlib/gui.py:73
+#, python-format
+msgid "The file '%s' doesn't exist. Please modify exercice paths"
+msgstr ""
+
+#: ../perroquetlib/gui.py:74
+msgid "Load error"
+msgstr ""
+
+#: ../perroquetlib/gui.py:196
+#, python-format
+msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
+msgstr ""
+
+#: ../perroquetlib/gui.py:197
+#, python-format
+msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
+msgstr ""
+
+#: ../perroquetlib/gui.py:198
+#, python-format
+msgid "- Repeat ratio: %s per words"
+msgstr ""
+
+#: ../perroquetlib/gui.py:203 ../data/perroquet.desktop.in.h:2
+#: ../data/perroquet.ui.h:19
+msgid "Perroquet"
+msgstr ""
+
+#: ../perroquetlib/gui.py:660
+msgid "Select File to Open"
+msgstr ""
+
+#: ../perroquetlib/gui.py:665 ../perroquetlib/gui.py:686
+msgid "Perroquet files"
+msgstr ""
+
+#: ../perroquetlib/gui.py:670 ../perroquetlib/gui.py:691
+msgid "All files"
+msgstr ""
+
+#: ../perroquetlib/gui.py:681
+msgid "Select File to Save to"
+msgstr ""
+
+#: ../data/perroquet.desktop.in.h:1
+msgid "Oral comprehention teacher"
+msgstr ""
+
+#: ../data/perroquet.ui.h:1
+msgid ""
+"- Sequences: --/--\n"
+"- Words: --/--\n"
+"- Repeat ratio: -- per words"
+msgstr ""
+
+#: ../data/perroquet.ui.h:4
+msgid "-- s"
+msgstr ""
+
+#: ../data/perroquet.ui.h:5
+msgid "--/--"
+msgstr ""
+
+#: ../data/perroquet.ui.h:6
+msgid "A oral comprehension teacher"
+msgstr ""
+
+#: ../data/perroquet.ui.h:7
+msgid "Copyright &#xA9; 2009-2010 Fr&#xE9;d&#xE9;ric Bertolus"
+msgstr ""
+
+#: ../data/perroquet.ui.h:8
+msgid "Display translation"
+msgstr ""
+
+#: ../data/perroquet.ui.h:9
+msgid "E_dit"
+msgstr ""
+
+#: ../data/perroquet.ui.h:10
+msgid "Exercice properties"
+msgstr ""
+
+#: ../data/perroquet.ui.h:11
+msgid "Exercice: "
+msgstr ""
+
+#: ../data/perroquet.ui.h:12
+msgid "H_elp"
+msgstr ""
+
+#: ../data/perroquet.ui.h:13
+msgid "Hint"
+msgstr ""
+
+#: ../data/perroquet.ui.h:14
+msgid "Media: "
+msgstr ""
+
+#: ../data/perroquet.ui.h:15
+msgid "New exercice"
+msgstr ""
+
+#: ../data/perroquet.ui.h:16
+msgid "Next Sequence"
+msgstr ""
+
+#: ../data/perroquet.ui.h:17
+msgid "Open saved exercice"
+msgstr ""
+
+#: ../data/perroquet.ui.h:18
+msgid "Pause"
+msgstr ""
+
+#: ../data/perroquet.ui.h:20
+msgid "Play"
+msgstr ""
+
+#: ../data/perroquet.ui.h:21
+msgid "Previous sequence"
+msgstr ""
+
+#: ../data/perroquet.ui.h:22
+msgid "Properties"
+msgstr ""
+
+#: ../data/perroquet.ui.h:23
+msgid "Replay sequence"
+msgstr ""
+
+#: ../data/perroquet.ui.h:24
+msgid "Save exercice"
+msgstr ""
+
+#: ../data/perroquet.ui.h:25
+msgid "Select a subtitle file"
+msgstr ""
+
+#: ../data/perroquet.ui.h:26
+msgid "Select a video file"
+msgstr ""
+
+#: ../data/perroquet.ui.h:27
+msgid ""
+"This program is free software: you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation, either version 3 of the License, or (at your option) "
+"any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"this program.  If not, see <http://www.gnu.org/licenses/>."
+msgstr ""
+
+#: ../data/perroquet.ui.h:32
+msgid "Translation"
+msgstr ""
+
+#: ../data/perroquet.ui.h:33
+msgid "Translation: "
+msgstr ""
+
+#: ../data/perroquet.ui.h:34
+msgid "_File"
+msgstr ""
