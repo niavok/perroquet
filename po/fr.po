@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-01-08 22:08+0100\n"
-"PO-Revision-Date: 2010-01-08 15:59+0000\n"
+"PO-Revision-Date: 2010-01-09 12:52+0000\n"
 "Last-Translator: Fred Bertolus <fred.bertolus@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-09 07:59+0000\n"
+"X-Launchpad-Export-Date: 2010-01-10 07:22+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../perroquetlib/gui.py:57
@@ -73,7 +73,7 @@ msgstr "Selectionnez le chemin de sortie"
 
 #: ../data/perroquet.desktop.in.h:1
 msgid "Oral comprehention teacher"
-msgstr ""
+msgstr "Un programme éducatif pour la compréhension orale"
 
 #: ../data/perroquet.ui.h:1
 msgid ""
@@ -99,7 +99,7 @@ msgstr "Un programme éducatif pour la compréhension orale"
 
 #: ../data/perroquet.ui.h:7
 msgid "Copyright &#xA9; 2009-2010 Fr&#xE9;d&#xE9;ric Bertolus"
-msgstr ""
+msgstr "Copyright &#xA9; 2009-2010 Fr&#xE9;d&#xE9;ric Bertolus"
 
 #: ../data/perroquet.ui.h:8
 msgid "Display translation"
