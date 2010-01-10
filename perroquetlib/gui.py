@@ -575,6 +575,22 @@ class Gui:
     def on_imagemenuitemNew_activate(self,widget,data=None):
         return self.on_newExerciceButton_clicked(widget, data)
 
+    def on_filechooserbuttonVideo_file_set(self,widget,data=None):
+
+        videoChooser = self.builder.get_object("filechooserbuttonVideo")
+        exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
+        translationChooser = self.builder.get_object("filechooserbuttonTranslation")
+
+        fileName = videoChooser.get_filename()
+        if fileName and os.path.isfile(fileName):
+            filePath = os.path.dirname(fileName)
+            if not exerciceChooser.get_filename() or not os.path.isfile(exerciceChooser.get_filename()):
+                exerciceChooser.set_current_folder(filePath)
+            if not translationChooser.get_filename() or not os.path.isfile(translationChooser.get_filename()):
+                translationChooser.set_current_folder(filePath)
+
+
+
     def Activate(self, mode):
 
         if mode == "loaded":

@@ -590,7 +590,8 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
             <child>
               <object class="GtkLabel" id="labelInputVideoFile">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Media: </property>
+                <property name="tooltip_text" translatable="yes">The audio track should be in the exercice language</property>
+                <property name="label" translatable="yes">Exercice video or audio: </property>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -599,8 +600,10 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
             <child>
               <object class="GtkFileChooserButton" id="filechooserbuttonVideo">
                 <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">The audio track should be in the exercice language</property>
                 <property name="create_folders">False</property>
                 <property name="title" translatable="yes">Select a video file</property>
+                <signal name="file_set" handler="on_filechooserbuttonVideo_file_set"/>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -617,7 +620,9 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
             <child>
               <object class="GtkLabel" id="labelInputExerciceFile">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Exercice: </property>
+                <property name="tooltip_text" translatable="yes">These subtitles should be in the exercice language.
+Supported format: srt</property>
+                <property name="label" translatable="yes">Exercice subtitle: </property>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -626,6 +631,8 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
             <child>
               <object class="GtkFileChooserButton" id="filechooserbuttonExercice">
                 <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">These subtitles should be in the exercice language.
+Supported format: srt</property>
                 <property name="create_folders">False</property>
                 <property name="title" translatable="yes">Select a subtitle file</property>
               </object>
@@ -644,7 +651,9 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
             <child>
               <object class="GtkLabel" id="labelInputTranslationFile">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Translation: </property>
+                <property name="tooltip_text" translatable="yes">These subtitles should be in your mother language.
+Supported format: srt</property>
+                <property name="label" translatable="yes">Translation subtitles (optional): </property>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -653,6 +662,8 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
             <child>
               <object class="GtkFileChooserButton" id="filechooserbuttonTranslation">
                 <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">These subtitles should be in your mother language.
+Supported format: srt</property>
                 <property name="create_folders">False</property>
                 <property name="title" translatable="yes">Select a subtitle file</property>
               </object>
