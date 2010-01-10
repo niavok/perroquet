@@ -158,6 +158,7 @@
             <child>
               <object class="GtkToolButton" id="newExerciceButton">
                 <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">New exercise</property>
                 <property name="label" translatable="yes">New exercice</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-new</property>
@@ -171,6 +172,7 @@
             <child>
               <object class="GtkToolButton" id="loadButton">
                 <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Open exercise</property>
                 <property name="label" translatable="yes">Open saved exercice</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
@@ -185,6 +187,7 @@
               <object class="GtkToolButton" id="saveButton">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="tooltip_text" translatable="yes">Save exercise</property>
                 <property name="label" translatable="yes">Save exercice</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save</property>
@@ -208,6 +211,7 @@
               <object class="GtkToolButton" id="toolbuttonPreviousSequence">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="tooltip_text" translatable="yes">Previous sequence</property>
                 <property name="label" translatable="yes">Previous sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-back</property>
@@ -222,6 +226,7 @@
               <object class="GtkToolButton" id="toolbuttonNextSequence">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="tooltip_text" translatable="yes">Next sequence</property>
                 <property name="label" translatable="yes">Next Sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-forward</property>
@@ -236,6 +241,7 @@
               <object class="GtkToolButton" id="toolbuttonReplaySequence">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="tooltip_text" translatable="yes">Replay sequence</property>
                 <property name="label" translatable="yes">Replay sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-refresh</property>
@@ -250,6 +256,7 @@
               <object class="GtkToolButton" id="toolbuttonPause">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="tooltip_text" translatable="yes">Pause</property>
                 <property name="label" translatable="yes">Pause</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-pause</property>
@@ -264,6 +271,7 @@
               <object class="GtkToolButton" id="toolbuttonPlay">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="tooltip_text" translatable="yes">Play</property>
                 <property name="label" translatable="yes">Play</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
@@ -287,6 +295,7 @@
               <object class="GtkToolButton" id="toolbuttonHint">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="tooltip_text" translatable="yes">Hint</property>
                 <property name="label" translatable="yes">Hint</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-dialog-question</property>
@@ -301,6 +310,7 @@
               <object class="GtkToggleToolButton" id="toggletoolbuttonShowTranslation">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="tooltip_text" translatable="yes">Show/Hide translation</property>
                 <property name="label" translatable="yes">Display translation</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-spell-check</property>
@@ -315,6 +325,7 @@
               <object class="GtkToolButton" id="toolbuttonProperties">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="tooltip_text" translatable="yes">Exercice properties</property>
                 <property name="label" translatable="yes">Properties</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-properties</property>
@@ -364,6 +375,7 @@
                         <child>
                           <object class="GtkLabel" id="labelProgress">
                             <property name="visible">True</property>
+                            <property name="tooltip_text" translatable="yes">Progress statistics</property>
                             <property name="label" translatable="yes">- Sequences: --/--
 - Words: --/--
 - Repeat ratio: -- per words</property>
@@ -380,6 +392,18 @@
                       <object class="GtkEntry" id="entryFilter">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Word filter
+This filter use  regexp. Examples:
+abc = all words containing 'abc'
+^abc = all words starting with 'abc'
+abc$ = all words ending with 'abc'
+
+The character . can replace any character:
+^abc.. = all words of at least 5 letters starting with 'abc'
+^...$ = all 4-letter word
+^ab.c$ = all 4-letter word beginning with 'ab' and ending with 'c'
+
+For more information on regular expressions: http://en.wikipedia.org/wiki/Regular_expression</property>
                         <property name="invisible_char">&#x2022;</property>
                         <signal name="changed" handler="on_entryFilter_changed"/>
                       </object>
@@ -397,6 +421,7 @@
                           <object class="GtkTextView" id="textviewWordList">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">List all words to find in the exercise</property>
                             <property name="editable">False</property>
                             <property name="left_margin">10</property>
                             <property name="cursor_visible">False</property>
@@ -457,6 +482,7 @@
               <object class="GtkTextView" id="textviewTranslation">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">Translation</property>
                 <property name="border_width">1</property>
                 <property name="editable">False</property>
                 <property name="wrap_mode">word</property>
@@ -477,6 +503,7 @@
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">Position in current sequence</property>
                 <property name="adjustment">adjustmentSequenceTime</property>
                 <property name="fill_level">200</property>
                 <property name="draw_value">False</property>
@@ -488,6 +515,7 @@
             <child>
               <object class="GtkLabel" id="labelSequenceTime">
                 <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Position in current sequence</property>
                 <property name="label" translatable="yes">-- s</property>
               </object>
               <packing>
@@ -511,6 +539,7 @@
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">Position in exercise</property>
                 <property name="adjustment">adjustmentSequenceNum</property>
                 <property name="draw_value">False</property>
               </object>
@@ -521,6 +550,7 @@
             <child>
               <object class="GtkLabel" id="labelSequenceNumber">
                 <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Position in exercise</property>
                 <property name="label" translatable="yes">--/--</property>
               </object>
               <packing>
