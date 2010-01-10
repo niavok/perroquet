@@ -42,8 +42,6 @@ class Config(ConfigSingleton):
         self.properties["gettext_package"] = "perroquet"
         self.properties["executable"] = os.path.dirname(sys.executable)
         self.properties["script"] = sys.path[0]
-        print os.path.join(self.properties["script"], 'data/perroquet.ui')
-        print os.path.join(self.properties["script"], '../share/perroquet/perroquet.ui')
         if os.path.isfile(os.path.join(self.properties["script"], 'data/perroquet.ui')):
             self.properties["ui_path"] = os.path.join(self.properties["script"], 'data/perroquet.ui')
         elif  os.path.isfile(os.path.join(self.properties["script"], '../share/perroquet/perroquet.ui')):
@@ -54,11 +52,8 @@ class Config(ConfigSingleton):
 
         # locale
         if os.path.exists(os.path.join(self.properties["script"], 'build/mo')):
-            print "plop"
             self.properties["localedir"] =  os.path.join(self.properties["script"], 'build/mo')
-            print self.properties["localedir"]
         else:
-            print "plip"
             self.properties["localedir"] =  os.path.join(self.properties["script"], '../share/locale')
 
         if os.path.isfile(os.path.join(self.properties["script"], 'data/perroquet.png')):
@@ -69,9 +64,6 @@ class Config(ConfigSingleton):
 
 
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
-        #gettext.bindtextdomain(self.Get("gettext_package"),self.Get("localedir"))
-        #gettext.textdomain(self.Get("gettext_package"))
-
 
 
     def Get(self, key):
