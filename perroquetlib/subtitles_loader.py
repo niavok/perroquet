@@ -68,22 +68,32 @@ class SubtitlesLoader(object):
             elif state == SubtitlesLoader.LOOK_FOR_TIME:
                  if len(line) > 0:
                     #00:00:06,290 --> 00:00:07,550
-                    m = re.search('([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]{3}) --> ([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]{3})', line)
+                    regexp = '([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]+) --> ([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]+)'
+                    if re.search(regexp,line):
+                        m = re.search(regexp, line)
 
-                    beginTime = int(m.group(1))*1000*3600
-                    beginTime += int(m.group(2))*1000*60
-                    beginTime += int(m.group(3))*1000
-                    beginTime += int(m.group(4))
+                        beginMili = m.group(4)
+                        while len(beginMili) < 3:
+                            beginMili += "0"
 
-                    endTime = int(m.group(5))*1000*3600
-                    endTime += int(m.group(6))*1000*60
-                    endTime += int(m.group(7))*1000
-                    endTime += int(m.group(8))
+                        endMili = m.group(8)
+                        while len(endMili) < 3:
+                            endMili += "0"
 
-                    current.SetTimeBegin(beginTime)
-                    current.SetTimeEnd(endTime)
-                    current.SetText('')
-                    state = SubtitlesLoader.LOOK_FOR_TEXT
+                        beginTime = int(m.group(1))*1000*3600
+                        beginTime += int(m.group(2))*1000*60
+                        beginTime += int(m.group(3))*1000
+                        beginTime += int(beginMili)
+
+                        endTime = int(m.group(5))*1000*3600
+                        endTime += int(m.group(6))*1000*60
+                        endTime += int(m.group(7))*1000
+                        endTime += int(endMili)
+
+                        current.SetTimeBegin(beginTime)
+                        current.SetTimeEnd(endTime)
+                        current.SetText('')
+                        state = SubtitlesLoader.LOOK_FOR_TEXT
             elif state == SubtitlesLoader.LOOK_FOR_TEXT:
                 if len(line) > 0:
                     if len(current.GetText()) == 0:
