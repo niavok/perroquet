@@ -421,7 +421,7 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
                           <object class="GtkTextView" id="textviewWordList">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">List all words to find in the exercise</property>
+                            <property name="tooltip_text" translatable="yes">List of all words to find in the exercise</property>
                             <property name="editable">False</property>
                             <property name="left_margin">10</property>
                             <property name="cursor_visible">False</property>

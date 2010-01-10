@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-10 20:11+0100\n"
+"POT-Creation-Date: 2010-01-11 00:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,19 +53,19 @@ msgstr ""
 msgid "Perroquet"
 msgstr ""
 
-#: ../perroquetlib/gui.py:713
+#: ../perroquetlib/gui.py:717
 msgid "Select File to Open"
 msgstr ""
 
-#: ../perroquetlib/gui.py:718 ../perroquetlib/gui.py:739
+#: ../perroquetlib/gui.py:722 ../perroquetlib/gui.py:743
 msgid "Perroquet files"
 msgstr ""
 
-#: ../perroquetlib/gui.py:723 ../perroquetlib/gui.py:744
+#: ../perroquetlib/gui.py:727 ../perroquetlib/gui.py:748
 msgid "All files"
 msgstr ""
 
-#: ../perroquetlib/gui.py:734
+#: ../perroquetlib/gui.py:738
 msgid "Select File to Save to"
 msgstr ""
 
@@ -129,7 +129,7 @@ msgid "Hint"
 msgstr ""
 
 #: ../data/perroquet.ui.h:16
-msgid "List all words to find in the exercise"
+msgid "List of all words to find in the exercise"
 msgstr ""
 
 #: ../data/perroquet.ui.h:17
