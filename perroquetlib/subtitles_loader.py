@@ -39,12 +39,12 @@ class SubtitlesLoader(object):
     def convertFile(self,fileName):
         for format in self.sourceFormats:
             try:
-                with codecs.open(fileName, 'rU', format) as sourceFile:
-                    convertedFile = []
-                    for line in sourceFile:
-                        convertedFile.append(line.encode( "utf-8" ))
+                sourceFile = codecs.open(fileName, 'rU', format)
+                convertedFile = []
+                for line in sourceFile:
+                    convertedFile.append(line.encode( "utf-8" ))
 
-                    return convertedFile
+                return convertedFile
             except UnicodeDecodeError:
                 pass
 
