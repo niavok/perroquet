@@ -46,6 +46,7 @@ class Gui:
         self.initTypeLabel()
 
         self.translationVisible = False
+        self.disableChangedTextEvent = False
 
     def on_MainWindow_delete_event(self,widget,data=None):
         if self.core.IsAllowQuit():
@@ -211,6 +212,7 @@ class Gui:
         self.window.set_title(newTitle)
 
     def SetSequence(self, sequence):
+        self.disableChangedTextEvent = True
         self.ClearBuffer()
         i = 0
         pos = 1
@@ -246,6 +248,8 @@ class Gui:
         newCurPos = cursor_pos + sequence.GetActiveWordPos()
         iter = buffer.get_iter_at_offset(newCurPos)
         buffer.place_cursor(iter)
+        self.disableChangedTextEvent = False
+        self.sequenceText = buffer.get_text(buffer.get_start_iter(),buffer.get_end_iter())
 
     def ClearBuffer(self):
         buffer = self.typeLabel.get_buffer()
@@ -326,14 +330,35 @@ class Gui:
         buffer.create_tag("word_found",
              foreground=color_found, size_points=18.0)
 
+    def on_textbufferView_changed(self,widget):
+        if self.disableChangedTextEvent:
+           return False;
+
+        buffer = self.typeLabel.get_buffer()
+        oldText = self.sequenceText
+        newText = buffer.get_text(buffer.get_start_iter(),buffer.get_end_iter())
+        index = self.typeLabel.get_buffer().props.cursor_position
+
+        newText= newText.decode("utf-8")
+        oldText= oldText.decode("utf-8")
+
+        newLength = len(newText) - len(oldText)
+        newString = newText[index-newLength:index]
+
+        for char in newString:
+            if char == " ":
+                 self.core.NextWord()
+            else:
+                self.core.WriteCharacter(char.lower())
+
+        return True
 
     def on_typeView_key_press_event(self,widget, event):
+
         keyname = gtk.gdk.keyval_name(event.keyval)
         if keyname == "Return":
             self.core.UserRepeat()
             self.core.RepeatSequence()
-        elif keyname == "space":
-            self.core.NextWord()
         elif keyname == "BackSpace":
             self.core.DeletePreviousChar()
         elif keyname == "Delete":
@@ -342,14 +367,6 @@ class Gui:
             self.core.PreviousSequence()
         elif keyname == "Page_Up":
             self.core.NextSequence()
-        elif keyname == "Right":
-            self.core.NextChar()
-        elif keyname == "Left":
-            self.core.PreviousChar()
-        elif keyname == "Home":
-            self.core.FirstWord()
-        elif keyname == "End":
-            self.core.LastWord()
         elif keyname == "F1":
             self.core.CompleteWord()
         elif keyname == "F2":
@@ -358,8 +375,7 @@ class Gui:
         elif keyname == "Pause":
             self.core.TooglePause()
         else:
-            self.core.WriteCharacter(keyname.lower())
-
+            return False
 
         return True;
 
@@ -431,6 +447,27 @@ class Gui:
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
         if toggletoolbuttonShowTranslation.props.active != self.translationVisible:
             self.ToogleTranslation()
+
+    def on_typeView_move_cursor(self, textview, step_size, count, extend_selection):
+
+
+        if step_size == gtk.MOVEMENT_VISUAL_POSITIONS:
+            if count == -1:
+                self.core.PreviousChar()
+            elif count == 1:
+                self.core.NextChar()
+        elif step_size == gtk.MOVEMENT_DISPLAY_LINE_ENDS:
+            if count == -1:
+                self.core.FirstWord()
+            elif count == 1:
+                self.core.LastWord()
+        elif step_size == gtk.MOVEMENT_WORDS:
+            if count == -1:
+                self.core.PreviousWord()
+            elif count == 1:
+                self.core.NextWord()
+
+        return True
 
     def on_typeView_button_release_event(self, widget, data=None):
         index = self.typeLabel.get_buffer().props.cursor_position

@@ -208,17 +208,23 @@ class Core(object):
 
 
     def WriteCharacter(self, character):
-        if character == "apostrophe":
-            character = "'"
+
         if re.match('^[0-9\'a-zA-Z]$',character):
             self.sequence.WriteCharacter(character)
             self.gui.SetSequence(self.sequence)
             self.ValidateSequence()
-        self.SetCanSave(True)
+            self.SetCanSave(True)
+        else:
+            self.gui.SetSequence(self.sequence)
 
 
     def NextWord(self):
         self.sequence.NextWord(False)
+        self.gui.SetSequence(self.sequence)
+        self.SetCanSave(True)
+
+    def PreviousWord(self):
+        self.sequence.PreviousWord(False)
         self.gui.SetSequence(self.sequence)
         self.SetCanSave(True)
 

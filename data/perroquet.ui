@@ -430,10 +430,11 @@
                     <property name="height_request">500</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="editable">False</property>
                     <property name="wrap_mode">word</property>
                     <property name="justification">center</property>
+                    <property name="buffer">textbufferView</property>
                     <signal name="key_press_event" handler="on_typeView_key_press_event"/>
+                    <signal name="move_cursor" handler="on_typeView_move_cursor" after="yes"/>
                     <signal name="button_release_event" handler="on_typeView_button_release_event"/>
                   </object>
                 </child>
@@ -888,5 +889,8 @@ You should have received a copy of the GNU General Public License along with thi
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkTextBuffer" id="textbufferView">
+    <signal name="changed" handler="on_textbufferView_changed"/>
   </object>
 </interface>
