@@ -96,6 +96,7 @@ class SubtitlesLoader(object):
                         state = SubtitlesLoader.LOOK_FOR_TEXT
             elif state == SubtitlesLoader.LOOK_FOR_TEXT:
                 if len(line) > 0:
+                    line = line.replace("|","\n")
                     if len(current.GetText()) == 0:
                         current.SetText(line)
                     else:
