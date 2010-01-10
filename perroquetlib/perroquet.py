@@ -21,6 +21,7 @@
 from core import Core
 from gui import Gui
 from perroquetlib.config import Config
+import sys
 
 class Perroquet(object):
 
@@ -37,6 +38,9 @@ class Perroquet(object):
 
 
     def run(self):
+        if len(sys.argv) > 1:
+            self.core.LoadExercice(sys.argv[1])
+
         self.gui.Run()
 
 

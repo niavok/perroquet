@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+    <mime-type type="application/x-perroquet">
+        <sub-class-of type="application/xml"/>
+        <comment>Perroquet exercise file</comment>
+        <comment xml:lang="fr">Fichier d'exercice Perroquet</comment>
+        <glob pattern="*.perroquet"/>
+        <magic priority="20">
+            <match value="&lt;perroquet" type="string" offset="0"/>
+        </magic>
+    </mime-type>
+</mime-info>

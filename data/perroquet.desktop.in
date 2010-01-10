@@ -4,6 +4,7 @@ _Name=Perroquet
 _Comment=Oral comprehention teacher
 Exec=perroquet
 Icon=perroquet
+MimeType=application/x-perroquet;
 Terminal=false
 Type=Application
 Categories=Application;Education;

@@ -124,6 +124,8 @@ class InstallData(install_data):
     install_data.run (self)
     if not self.distribution.without_icon_cache:
       self._update_icon_cache ()
+    self._update_mime_database()
+    self._update_desktop_database()
 
   # We should do this on uninstall too
   def _update_icon_cache(self):
@@ -132,6 +134,20 @@ class InstallData(install_data):
       subprocess.call(["gtk-update-icon-cache", "-q", "-f", "-t", os.path.join(self.install_dir, "share/icons/hicolor")])
     except Exception, e:
       warn("updating the GTK icon cache failed: %s" % str(e))
+
+  def _update_mime_database(self):
+    info("running update-mime-database")
+    try:
+      subprocess.call(["update-mime-database",  os.path.join(self.install_dir, "share/mime")])
+    except Exception, e:
+      warn("updating mime database failed: %s" % str(e))
+
+  def _update_desktop_database(self):
+    info("running update-desktop-database")
+    try:
+      subprocess.call(["update-desktop-database",])
+    except Exception, e:
+      warn("updating desktop database failed: %s" % str(e))
 
   def _find_mo_files (self):
     data_files = []
@@ -160,16 +176,18 @@ setup(name='Perroquet',
       scripts=['perroquet'],
       data_files=[
                   ('share/applications', ['data/perroquet.desktop']),
-                  ('share/pixmaps/', ['data/icons/48x48/apps/perroquet.png']),
-		  ('share/icons/hicolor/scalable/apps', glob.glob('data/icons/scalable/apps/*.svg')),
+                  ('share/mime/packages', ['data/perroquet.xml']),
+                  ('share/pixmaps', ['data/icons/48x48/apps/perroquet.png']),
+                  ('share/icons/hicolor/scalable/apps', glob.glob('data/icons/scalable/apps/*.svg')),
                   ('share/icons/hicolor/16x16/apps', glob.glob('data/icons/16x16/apps/*.png')),
                   ('share/icons/hicolor/22x22/apps', glob.glob('data/icons/22x22/apps/*.png')),
                   ('share/icons/hicolor/24x24/apps', glob.glob('data/icons/24x24/apps/*.png')),
                   ('share/icons/hicolor/32x32/apps', glob.glob('data/icons/32x32/apps/*.png')),
                   ('share/icons/hicolor/48x48/apps', glob.glob('data/icons/48x48/apps/*.png')),
                   ('share/icons/hicolor/256x256/apps', glob.glob('data/icons/256x256/apps/*.png')),
-		  ('share/perroquet/', ['data/perroquet.ui']),
-		  ('share/perroquet/', ['data/perroquet.png']),
+                  ('share/icons/hicolor/scalable/mimetypes', glob.glob('data/icons/scalable/mimetypes/*.svg')),
+          ('share/perroquet/', ['data/perroquet.ui']),
+          ('share/perroquet/', ['data/perroquet.png']),
                  ],
       packages=['perroquetlib'],
       cmdclass={'build': BuildData, 'install_data': InstallData, 'uninstall': Uninstall},
