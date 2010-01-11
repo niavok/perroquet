@@ -96,7 +96,6 @@ class SubtitlesLoader(object):
                         state = SubtitlesLoader.LOOK_FOR_TEXT
             elif state == SubtitlesLoader.LOOK_FOR_TEXT:
                 if len(line) > 0:
-                    line = line.replace("|","\n")
                     if len(current.GetText()) == 0:
                         current.SetText(line)
                     else:
@@ -140,7 +139,15 @@ class Subtitle(object):
         return self.id
 
     def SetText(self,text):
+        # | mean new line in some srt files
+        text = text.replace("|","\n")
+        #Some subs have <i>...</i> or {]@^\`}. We need to delete them.
+        text = re.sub("(<" "[^>]*" ">)"
+                      "|"
+                      "(\{" "[^\}]*" "\})"
+                      , "", text)
         self.text = text
+
 
     def SetTimeBegin(self,timeBegin):
         self.timeBegin = timeBegin
