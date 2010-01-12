@@ -1,3 +1,15 @@
+> 2010/01/13 - 1.0.1 release
+  - Improve window resize
+  - Add new shortcuts
+  - Remove html tags in srt files
+  - replace | by new line in srt
+  - Handle perroquet file, add mime type and icons on perroquet exercise
+  - Improve exercice creation dialog
+  - Add tooltips
+  - Reimplement input system to support specials characters
+  - Fix various bugs
+  - Translation updates
+
 > 2010/01/01 - 1.0.0 release
   - Initial realease
 
