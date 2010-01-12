@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-01-11 00:20+0100\n"
-"PO-Revision-Date: 2010-01-10 23:34+0000\n"
-"Last-Translator: Zarmakuizz <Unknown>\n"
+"PO-Revision-Date: 2010-01-11 07:02+0000\n"
+"Last-Translator: Fred Bertolus <fred.bertolus@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-11 05:01+0000\n"
+"X-Launchpad-Export-Date: 2010-01-12 04:53+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../perroquetlib/gui.py:58
@@ -136,7 +136,7 @@ msgstr "Indice"
 
 #: ../data/perroquet.ui.h:16
 msgid "List of all words to find in the exercise"
-msgstr ""
+msgstr "Liste de tous les mots à trouver dans l'exercice"
 
 #: ../data/perroquet.ui.h:17
 msgid "Media: "
