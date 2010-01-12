@@ -14,6 +14,10 @@ To build and install Perroquet, you need these dependancies:
 * Intltool 0.40.0+
     Debian/Ubuntu: intltool (>= 0.40.0)
     Archlinux: intltool (>= 0.40.0)
+    Fedora: intltool
+
+* In Fedora, you also need to install:
+    python-setuptools-devel
 
 To build for local usage, run:
 
