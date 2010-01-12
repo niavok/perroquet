@@ -367,6 +367,10 @@ class Gui:
             self.core.PreviousSequence()
         elif keyname == "Page_Up":
             self.core.NextSequence()
+        elif keyname == "Down":
+           self.core.PreviousSequence()
+        elif keyname == "Up":
+           self.core.NextSequence()
         elif keyname == "Tab":
             self.core.NextWord()
         elif keyname == "ISO_Left_Tab":
