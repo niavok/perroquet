@@ -40,6 +40,7 @@ class Gui:
         self.aboutDialog = self.builder.get_object("aboutdialog")
         icon = gtk.gdk.pixbuf_new_from_file(config.Get("logo_path"))
         self.aboutDialog.set_logo(icon)
+        self.aboutDialog.set_version(config.Get("version"))
 
         self.typeLabel = self.builder.get_object("typeView")
 

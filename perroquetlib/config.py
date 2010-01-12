@@ -21,7 +21,7 @@ import os, sys
 import gettext
 
 APP_NAME = 'perroquet'
-APP_VERSION = 'dev'
+APP_VERSION = '1.0.1'
 
 class ConfigSingleton(object):
     _instance = None

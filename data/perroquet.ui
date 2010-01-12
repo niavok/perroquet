@@ -905,7 +905,10 @@ Supported format: srt</property>
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</property>
-    <property name="authors">Fr&#xE9;d&#xE9;ric Bertolus &lt;fred.bertolus@gmail.com&gt;</property>
+    <property name="authors">Fr&#xE9;d&#xE9;ric Bertolus &lt;fred.bertolus@gmail.com&gt;
+Matthieu Bizien&lt;matthieu.bizien@m4x.org&gt;</property>
+    <property name="translator_credits">zeugma
+Zarmakuizz</property>
     <property name="wrap_license">True</property>
     <signal name="response" handler="on_aboutdialog_response"/>
     <signal name="delete_event" handler="on_aboutdialog_delete_event"/>
