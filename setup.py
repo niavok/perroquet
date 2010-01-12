@@ -166,7 +166,7 @@ if platform.system() == 'FreeBSD':
 else:
   man_dir = 'share/man'
 
-setup(name='Perroquet',
+setup(name='perroquet',
       version=APP_VERSION,
       description='Perroquet, listening comprehension tutor ',
       author='Frédéric Bertolus',
