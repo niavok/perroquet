@@ -154,7 +154,7 @@ class InstallData(install_data):
 
     if not self.distribution.without_gettext:
       for mo in glob.glob (os.path.join (MO_DIR, '*', 'LC_MESSAGES/perroquet.mo')):
-       lang = os.path.basename(os.path.dirname(mo))
+       lang = os.path.basename(os.path.dirname(os.path.dirname(mo)))
        dest = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
        data_files.append((dest, [mo]))
 
