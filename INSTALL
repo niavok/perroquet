@@ -32,6 +32,11 @@ To install properly, run:
 See --help for an overview of the available options; e.g. --prefix to
 install to a custom base directory, and --without-gettext to avoid
 installing natural language support files.
+Others options are usefull for packagers :
+
+ --without-icon-cache
+ --without-mime-database
+ --without-desktop-database
 
 setup.py supports basic uninstallation provided --record was used for
 installation as above:

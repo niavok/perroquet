@@ -21,11 +21,15 @@ MO_DIR = os.path.join('build', 'mo')
 class PerroquetDist(Distribution):
   global_options = Distribution.global_options + [
     ("without-gettext", None, "Don't build/install gettext .mo files"),
-    ("without-icon-cache", None, "Don't attempt to run gtk-update-icon-cache")]
+    ("without-icon-cache", None, "Don't attempt to run gtk-update-icon-cache"),
+    ("without-mime-database", None, "Don't attempt to run update-mime-database"),
+    ("without-desktop-database", None, "Don't attempt to run update-desktop-database")]
 
   def __init__ (self, *args):
     self.without_gettext = False
     self.without_icon_cache = False
+    self.without_mime_database = False
+    self.without_desktop_database = False
     Distribution.__init__(self, *args)
 
 
@@ -124,8 +128,10 @@ class InstallData(install_data):
     install_data.run (self)
     if not self.distribution.without_icon_cache:
       self._update_icon_cache ()
-    self._update_mime_database()
-    self._update_desktop_database()
+    if not self.distribution.without_mime_database:
+      self._update_mime_database()
+    if not self.distribution.without_desktop_database:
+      self._update_desktop_database()
 
   # We should do this on uninstall too
   def _update_icon_cache(self):
@@ -186,8 +192,8 @@ setup(name='perroquet',
                   ('share/icons/hicolor/48x48/apps', glob.glob('data/icons/48x48/apps/*.png')),
                   ('share/icons/hicolor/256x256/apps', glob.glob('data/icons/256x256/apps/*.png')),
                   ('share/icons/hicolor/scalable/mimetypes', glob.glob('data/icons/scalable/mimetypes/*.svg')),
-          ('share/perroquet/', ['data/perroquet.ui']),
-          ('share/perroquet/', ['data/perroquet.png']),
+                  ('share/perroquet/', ['data/perroquet.ui']),
+                  ('share/perroquet/', ['data/perroquet.png']),
                  ],
       packages=['perroquetlib'],
       cmdclass={'build': BuildData, 'install_data': InstallData, 'uninstall': Uninstall},
