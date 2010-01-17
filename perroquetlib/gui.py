@@ -331,7 +331,7 @@ class Gui:
 
         color_not_found = self.window.get_colormap().alloc_color(0*256, 0*256, 80*256)
         bcolor_not_found_bad = self.window.get_colormap().alloc_color(250*256, 218*256, 200*256)
-        bcolor_not_found = self.window.get_colormap().alloc_color(200*256, 230*256, 250*256)
+        bcolor_not_found = self.window.get_colormap().alloc_color(150*256, 210*256, 250*256)
         color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
 
         buffer.create_tag("default",
