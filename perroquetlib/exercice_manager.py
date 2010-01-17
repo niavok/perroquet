@@ -83,6 +83,7 @@ class ExerciceLoader(object):
                 i = 0
                 for word in words:
                     sequence.GetWorkList()[i] = word
+                    sequence.ComputeValidity(i)
                     i = i+1
 
     def GetCurrentSequence(self):

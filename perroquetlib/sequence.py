@@ -26,6 +26,7 @@ class Sequence(object):
         self.symbolList = []
         self.wordList = []
         self.workList = []
+        self.workValidityList = []
         textToParse = text
         self.activeWordIndex = 0
         self.activeWordPos = 0
@@ -40,6 +41,7 @@ class Sequence(object):
                     self.symbolList.append('')
                 self.wordList.append(word)
                 self.workList.append("")
+                self.workValidityList.append(0)
             elif re.match('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse):
                 m = re.search('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse)
                 symbol = m.group(1)
@@ -50,6 +52,7 @@ class Sequence(object):
                 if re.match('^([0-9\'a-zA-Z]+)', textToParse):
                     self.wordList.append(textToParse)
                     self.workList.append("")
+                    self.workValidityList.append(0)
                 else:
                     self.symbolList.append(textToParse)
                 break
@@ -96,6 +99,7 @@ class Sequence(object):
             else:
                 self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos:]
             self.activeWordPos += 1
+            self.WorkChange()
 
 
     def DeletePreviousCharacter(self):
@@ -111,6 +115,7 @@ class Sequence(object):
         else:
             self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos-1]  + self.workList[self.activeWordIndex][self.activeWordPos:]
             self.activeWordPos -= 1
+            self.WorkChange()
 
     def DeleteNextCharacter(self):
         if self.IsValidWord():
@@ -124,6 +129,7 @@ class Sequence(object):
                 self.DeleteNextCharacter()
         else:
             self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos]  + self.workList[self.activeWordIndex][self.activeWordPos+1:]
+            self.WorkChange()
 
     def NextWord(self, end = True):
         if self.activeWordIndex < len(self.workList) - 1:
@@ -190,10 +196,14 @@ class Sequence(object):
             self.activeWordPos -= 1
 
     def IsValidWord(self):
-        if self.workList[self.activeWordIndex].lower() == self.wordList[self.activeWordIndex].lower():
+
+        if self.workValidityList[self.activeWordIndex] == 1:
             return True
         else:
             return False
+
+    def GetValidity(self, index):
+        return self.workValidityList[index]
 
     def IsValid(self):
         valid = True
@@ -250,6 +260,7 @@ class Sequence(object):
             self.activeWordPos = 0
 
         self.workList[self.activeWordIndex] = outWord
+        self.WorkChange()
 
     def CompleteAll(self):
         id = 0
@@ -257,3 +268,63 @@ class Sequence(object):
             self.workList[id] = word
             id += 1
 
+    def WorkChange(self):
+        self.ComputeValidity(self.activeWordIndex)
+        if self.workValidityList[self.activeWordIndex] < 0:
+            location = self.CheckLocation(self.activeWordIndex)
+            if location != -1:
+                self.workList[location] = self.workList[self.activeWordIndex]
+                self.workList[self.activeWordIndex] = ""
+                self.ComputeValidity(self.activeWordIndex)
+                self.ComputeValidity(location)
+                self.activeWordPos = 0
+
+    def ComputeValidity(self, index):
+
+        validity = 0
+        #Global check
+        if self.workList[index].lower() == self.wordList[index].lower():
+            validity = float(1)
+        else:
+            currentLength = len(self.workList[index])
+            targetLength = len(self.wordList[index])
+
+
+            #Length validity
+            lengthWeight = 0.2
+            lengthValidity = lengthWeight * (1 - abs(1-float(currentLength)/float(targetLength)))
+
+            if lengthValidity > lengthWeight:
+                lengthValidity = lengthWeight
+
+            #Character validity
+            charWeight = 0.8
+            weightPerChar = float(charWeight) / float(targetLength)
+            current = self.workList[index].lower()
+            target = self.wordList[index].lower()
+
+            charValidity = 0
+
+            for i in range(0, currentLength):
+                if i >= targetLength:
+                    charValidity -= weightPerChar
+                elif current[i] == target[i]:
+                    charValidity += weightPerChar
+                else:
+                    charValidity -= weightPerChar
+
+            if charValidity > charWeight:
+                charValidity = charWeight
+
+            validity = lengthValidity + charValidity
+
+        self.workValidityList[index] = validity
+
+    def CheckLocation(self, index):
+        for i in range(1,4):
+            if index+i < len(self.wordList) and self.GetValidity(index+i) != 1 and self.workList[index].lower() == self.wordList[index+i].lower():
+                return index + i
+            if index-i >= 0 and self.GetValidity(index-i) != 1 and self.workList[index].lower() == self.wordList[index-i].lower():
+                return index - i
+
+        return -1

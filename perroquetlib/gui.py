@@ -48,6 +48,7 @@ class Gui:
 
         self.translationVisible = False
         self.disableChangedTextEvent = False
+        self.mode = "closed"
 
     def on_MainWindow_delete_event(self,widget,data=None):
         if self.core.IsAllowQuit():
@@ -231,14 +232,13 @@ class Gui:
                 if sequence.GetActiveWordIndex() == i:
                     cursor_pos = pos
                 if len(sequence.GetWorkList()[i]) == 0:
-                    self.AddWordToFound(" ")
+                    self.AddWordToFound(" ", 0)
                     pos += 1
-                elif sequence.GetWordList()[i].lower() == sequence.GetWorkList()[i].lower():
-
+                elif sequence.GetValidity(i) == 1:
                     self.AddWordFound(sequence.GetWordList()[i])
                     pos += len(sequence.GetWordList()[i])
                 else:
-                    self.AddWordToFound(sequence.GetWorkList()[i])
+                    self.AddWordToFound(sequence.GetWorkList()[i], sequence.GetValidity(i))
                     pos += len(sequence.GetWorkList()[i])
                 i += 1
 
@@ -280,15 +280,24 @@ class Gui:
             self.wordPosMap.append(self.currentPosIndex)
         self.currentIndex += len(symbol)
 
-    def AddWordToFound(self, word):
+    def AddWordToFound(self, word, validity):
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
         size = buffer.get_char_count()
         buffer.insert(iter1,word)
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
-        buffer.apply_tag_by_name("word_to_found", iter1, iter2)
 
+        if validity == abs(0):
+            tagName = "word_to_found"
+        elif validity > 0:
+            tagName = "word_to_found_good_" + str(abs(round(abs(validity)-0.05,1)))
+        elif validity <= -1:
+            tagName = "word_to_found_bad"
+        else:
+            tagName = "word_to_found_bad_" + str(abs(round(abs(validity)-0.05,1)))
+
+        buffer.apply_tag_by_name(tagName, iter1, iter2)
         self.currentWordIndex += 1
         self.currentPosIndex = 0
 
@@ -321,6 +330,7 @@ class Gui:
         buffer = self.typeLabel.get_buffer()
 
         color_not_found = self.window.get_colormap().alloc_color(0*256, 0*256, 80*256)
+        bcolor_not_found_bad = self.window.get_colormap().alloc_color(250*256, 218*256, 200*256)
         bcolor_not_found = self.window.get_colormap().alloc_color(200*256, 230*256, 250*256)
         color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
 
@@ -328,10 +338,32 @@ class Gui:
              size_points=18.0)
         buffer.create_tag("word_to_found",
              background=bcolor_not_found, foreground=color_not_found, size_points=18.0)
+        buffer.create_tag("word_to_found_bad",
+             background=bcolor_not_found_bad, foreground=color_not_found, size_points=18.0)
         buffer.create_tag("word_found",
              foreground=color_found, size_points=18.0)
 
+        for i in range(0, 10):
+            coefB = float(i)/10
+            coefA = 1-float(i)/10
+            color = self.window.get_colormap().alloc_color(int((coefA*200+coefB*200)*256), int((coefA*230+coefB*250)*256), int((coefA*250+coefB*200)*256))
+            buffer.create_tag("word_to_found_good_"+str(coefB),
+            background=color, foreground=color_not_found, size_points=18.0)
+
+        for i in range(0, 10):
+            coefB = float(i)/10
+            coefA = 1-float(i)/10
+            color = self.window.get_colormap().alloc_color(int((coefA*200+coefB*250)*256), int((coefA*230+coefB*218)*256), int((coefA*250+coefB*200)*256))
+            buffer.create_tag("word_to_found_bad_"+str(coefB),
+            background=color, foreground=color_not_found, size_points=18.0)
+
+
+
     def on_textbufferView_changed(self,widget):
+        if self.mode != "loaded":
+            self.ClearBuffer();
+            return False;
+
         if self.disableChangedTextEvent:
            return False;
 
@@ -479,6 +511,9 @@ class Gui:
         return True
 
     def on_typeView_button_release_event(self, widget, data=None):
+
+        if self.mode != "loaded":
+            return True
         index = self.typeLabel.get_buffer().props.cursor_position
 
 
@@ -601,7 +636,7 @@ class Gui:
 
 
     def Activate(self, mode):
-
+        self.mode = mode
         if mode == "loaded":
             self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
             self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
