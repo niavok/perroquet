@@ -306,15 +306,11 @@ class Core(object):
 
     def Save(self, saveAs = False):
 
-        if self.outputSavePath == "":
-            self.outputSavePath = self.gui.AskSavePath()
-            if self.outputSavePath == "":
+        if saveAs or self.outputSavePath == "":
+            outputSavePath = self.gui.AskSavePath()
+            if outputSavePath == None:
                 return
-        elif saveAs:
-            tempPath = self.gui.AskSavePath()
-            if tempPath == "":
-                return
-            self.outputSavePath = tempPath
+            self.outputSavePath = outputSavePath
 
         self.gui.SetTitle(self.outputSavePath, False)
         saver = ExerciceSaver()
