@@ -26,7 +26,33 @@ import thread, time, traceback, sys
 class VideoPlayer(object):
 
     def __init__(self):
-        self.player = gst.element_factory_make("playbin2", "player")
+
+
+        self.player =  gst.Pipeline()
+        self.playbin =  gst.element_factory_make("playbin2", "player")
+        self.player.add(self.playbin)
+
+        #Audio
+        audiobin = gst.Bin("audio-speed-bin")
+        try:
+            self.audiospeedchanger = gst.element_factory_make("pitch")
+        except gst.ElementNotFoundError:
+            mygtk.show_error(_(u"You need to install the gstreamer soundtouch elements for "
+                    "play it slowly to. They are part of gstreamer-plugins-bad. Consult the "
+                    "README if you need more information.")).run()
+            raise SystemExit()
+        audiobin.add(self.audiospeedchanger)
+
+        self.audiosink = gst.element_factory_make("autoaudiosink")
+
+        audiobin.add(self.audiosink)
+        convert = gst.element_factory_make("audioconvert")
+        audiobin.add(convert)
+        gst.element_link_many(self.audiospeedchanger, convert, self.audiosink)
+        sink_pad = gst.GhostPad("sink", self.audiospeedchanger.get_pad("sink"))
+        audiobin.add_pad(sink_pad)
+        self.playbin.set_property("audio-sink", audiobin)
+
         bus = self.player.get_bus()
         bus.add_signal_watch()
         bus.enable_sync_message_emission()
@@ -35,6 +61,7 @@ class VideoPlayer(object):
 
         self.time_format = gst.Format(gst.FORMAT_TIME)
         self.timeToSeek = -1
+        self.speed = 1.0
 
     def on_message(self, bus, message):
         t = message.type
@@ -58,13 +85,17 @@ class VideoPlayer(object):
             gtk.gdk.threads_leave()
 
     def Open(self,path):
-        self.player.set_property("uri", "file://" + path)
+        self.playbin.set_property("uri", "file://" + path)
         self.play_thread_id = thread.start_new_thread(self.play_thread, ())
         self.player.set_state(gst.STATE_PAUSED)
         self.playing = False
     def Play(self):
         self.player.set_state(gst.STATE_PLAYING)
         self.playing = True
+
+    def SetSpeed(self,speed):
+        self.audiospeedchanger.set_property("tempo", speed)
+        self.speed = speed
 
     def Pause(self):
         self.player.set_state(gst.STATE_PAUSED)
@@ -75,7 +106,7 @@ class VideoPlayer(object):
 
     def Seek(self, time):
         value = int(time * 1000000 )
-        self.player.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH,value)
+        self.playbin.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH,value)
 
     def SeekAsSoonAsReady(self, time):
         self.timeToSeek = time
@@ -92,11 +123,11 @@ class VideoPlayer(object):
     def GetCurrentTime(self):
         pos_int = -1
         try:
-            pos_int = self.player.query_position(self.time_format, None)[0]
+            pos_int = self.playbin.query_position(self.time_format, None)[0]
         except:
             pass
         if pos_int != -1:
-            return pos_int/1000000
+            return int(self.speed*pos_int/1000000)
         else:
             return None
 
@@ -111,13 +142,15 @@ class VideoPlayer(object):
             except:
                 pass
 
-            if pos_int != -1 and self.nextCallbackTime != -1 and pos_int > self.nextCallbackTime *1000000:
+            if pos_int != -1 and self.nextCallbackTime != -1 and self.speed*pos_int > self.nextCallbackTime *1000000:
                 self.nextCallbackTime = -1
+
                 self.callback()
 
             if pos_int != -1 and self.timeToSeek != -1:
                 self.Seek(self.timeToSeek)
                 self.timeToSeek = -1
+
 
     def Close(self):
         self.player.set_state(gst.STATE_NULL)
