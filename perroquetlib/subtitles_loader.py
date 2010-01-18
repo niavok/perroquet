@@ -60,6 +60,10 @@ class SubtitlesLoader(object):
             line = line.rstrip()
             line = line.decode("utf8")
 
+            #Remove BOM of utf-8 : EFBBBF
+            if len(line) >=3 and ord(line[0]) == 0xEF and ord(line[1]) == 0xBB and ord(line[2]) == 0xBF:
+                line = line[3:]
+
             if state == SubtitlesLoader.LOOK_FOR_ID:
                 if len(line) > 0:
                     current = Subtitle()
