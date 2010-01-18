@@ -19,6 +19,7 @@
 
 import os, sys
 import gettext
+import ConfigParser.ConfigParser
 
 APP_NAME = 'perroquet'
 APP_VERSION = '1.0.1'
@@ -33,7 +34,9 @@ class ConfigSingleton(object):
         return cls._instance
 
 class Config(ConfigSingleton):
-
+    defaultConf = {
+        "lastOpenFile" = None
+        }
 
     def init(self):
         self.properties = {}
@@ -42,6 +45,10 @@ class Config(ConfigSingleton):
         self.properties["gettext_package"] = "perroquet"
         self.properties["executable"] = os.path.dirname(sys.executable)
         self.properties["script"] = sys.path[0]
+        self.properties["config_dir"] = os.path.join(
+            os.path.expanduser("~"), 
+            "perroquet_config")
+        
         if os.path.isfile(os.path.join(self.properties["script"], 'data/perroquet.ui')):
             self.properties["ui_path"] = os.path.join(self.properties["script"], 'data/perroquet.ui')
         elif  os.path.isfile(os.path.join(self.properties["script"], '../share/perroquet/perroquet.ui')):
@@ -65,6 +72,15 @@ class Config(ConfigSingleton):
 
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
 
+    def _load_Files(self):
+        href = os.path.join( self.Get("config_dir", "config")
+        
+        self.configParser = ConfigParser.ConfigParser()
+        if len( self.configParser.read(href)) == 0:
+            print "No conf file find"
+        for (key, values) in defaultConf.items("):
+            if not key in self.configParser.options():
+                self.configParser.set("default", key, value)
 
     def Get(self, key):
 
