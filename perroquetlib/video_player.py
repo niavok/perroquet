@@ -62,6 +62,7 @@ class VideoPlayer(object):
         self.time_format = gst.Format(gst.FORMAT_TIME)
         self.timeToSeek = -1
         self.speed = 1.0
+        self.nextCallbackTime = -1
 
     def on_message(self, bus, message):
         t = message.type
@@ -94,8 +95,12 @@ class VideoPlayer(object):
         self.playing = True
 
     def SetSpeed(self,speed):
+
         self.audiospeedchanger.set_property("tempo", speed)
+        if self.nextCallbackTime != -1:
+            self.nextCallbackTime = self.nextCallbackTime * speed/self.speed
         self.speed = speed
+
 
     def Pause(self):
         self.player.set_state(gst.STATE_PAUSED)

@@ -77,6 +77,9 @@ class Core(object):
         self.player.Pause()
         self.paused = True
 
+    def SetSpeed(self, speed):
+        self.gui.SetSpeed(speed)
+        self.player.SetSpeed(speed)
 
     def InitExercice(self):
         self.player.SetCallback(self.TimeCallback)
@@ -141,6 +144,7 @@ class Core(object):
 
     def ActivateSequence(self):
         self.state = Core.WAIT_BEGIN
+        self.SetSpeed(1)
         self.player.SetNextCallbackTime(self.subList[ self.currentSubId].GetTimeBegin())
         self.sequence = self.sequenceList[self.currentSubId]
 
@@ -311,7 +315,7 @@ class Core(object):
             if outputSavePath == None:
                 return
             self.outputSavePath = outputSavePath
-        
+
         self.gui.SetTitle(self.outputSavePath, False)
         saver = ExerciceSaver()
         saver.SetPath(self.outputSavePath)
@@ -322,7 +326,7 @@ class Core(object):
         saver.SetRepeatCount(self.repeatCount)
         saver.SetSequenceList(self.sequenceList)
         saver.Save()
-        
+
         self.gui.config.Set("lastopenfile", self.outputSavePath)
 
         self.SetCanSave(False)

@@ -75,7 +75,7 @@ class Gui:
             gtk.main_quit()
             self.config.Save()
             return True
-                
+
     def SignalExerciceBadPath(self, path):
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
                                    gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
@@ -125,6 +125,11 @@ class Gui:
 
     def GetVideoWindowId(self):
         return self.builder.get_object("videoArea").window.xid
+
+    def SetSpeed(self, speed):
+        self.settedSpeed = int(speed*100)
+        ajustement = self.builder.get_object("adjustmentSpeed")
+        ajustement.configure (self.settedSpeed, 75, 100, 1, 10, 0)
 
     def SetSequenceNumber(self, sequenceNumber, sequenceCount):
         ajustement = self.builder.get_object("adjustmentSequenceNum")
@@ -421,6 +426,16 @@ class Gui:
             toggletoolbuttonShowTranslation.set_active(not toggletoolbuttonShowTranslation.get_active())
         elif keyname == "Pause":
             self.core.TooglePause()
+        elif keyname == "KP_Add":
+            if self.settedSpeed > 90:
+                self.core.SetSpeed(1.0)
+            else:
+                self.core.SetSpeed(float(self.settedSpeed+10)/100)
+        elif keyname == "KP_Subtract":
+            if self.settedSpeed < 85:
+                self.core.SetSpeed(0.75)
+            else:
+                self.core.SetSpeed(float(self.settedSpeed-10)/100)
         else:
             return False
 
@@ -447,6 +462,12 @@ class Gui:
         value = int(self.builder.get_object("adjustmentSequenceTime").get_value())
         if value != self.settedPos:
             self.core.SeekSequence(value*100)
+
+    def on_adjustmentSpeed_value_changed(self,widget,data=None):
+        value = int(self.builder.get_object("adjustmentSpeed").get_value())
+        if value != self.settedSpeed:
+            self.core.SetSpeed(float(value)/100)
+
     def on_toolbuttonHint_clicked(self,widget,data=None):
         self.core.CompleteWord()
 
@@ -653,6 +674,8 @@ class Gui:
             self.builder.get_object("imagemenuitemSaveAs").set_sensitive(True)
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(True)
             self.builder.get_object("imagemenuitemHint").set_sensitive(True)
+            self.builder.get_object("hscaleSpeed").set_sensitive(True)
+
 
         if mode == "load_failed":
             self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
@@ -664,6 +687,7 @@ class Gui:
             self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
             self.builder.get_object("imagemenuitemHint").set_sensitive(False)
+            self.builder.get_object("hscaleSpeed").set_sensitive(False)
 
         if mode == "closed":
             self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
@@ -675,6 +699,7 @@ class Gui:
             self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
             self.builder.get_object("imagemenuitemHint").set_sensitive(False)
+            self.builder.get_object("hscaleSpeed").set_sensitive(False)
 
     def on_aboutdialog_delete_event(self,widget,data=None):
         self.builder.get_object("aboutdialog").hide()

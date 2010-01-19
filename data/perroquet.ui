@@ -325,12 +325,14 @@
               <object class="GtkToolItem" id="toolitem1">
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkHScale" id="hscale1">
+                  <object class="GtkHScale" id="hscaleSpeed">
                     <property name="width_request">50</property>
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes">Play speed</property>
                     <property name="adjustment">adjustmentSpeed</property>
+                    <property name="fill_level">200</property>
                     <property name="draw_value">False</property>
                   </object>
                 </child>
@@ -962,10 +964,11 @@ Zarmakuizz</property>
     <signal name="changed" handler="on_textbufferView_changed"/>
   </object>
   <object class="GtkAdjustment" id="adjustmentSpeed">
-    <property name="value">1</property>
-    <property name="lower">0.75</property>
-    <property name="upper">1</property>
-    <property name="step_increment">0.050000000000000003</property>
-    <property name="page_increment">0.050000000000000003</property>
+    <property name="value">100</property>
+    <property name="lower">75</property>
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">1</property>
+    <signal name="value_changed" handler="on_adjustmentSpeed_value_changed"/>
   </object>
 </interface>
