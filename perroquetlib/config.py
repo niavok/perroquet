@@ -76,10 +76,10 @@ class Config(ConfigSingleton):
 
     def _load_Files(self, section):
         "Load the config file and add it to configParser"
-        href = os.path.join( self.Get("config_dir"), "config")
+        self._href = os.path.join( self.Get("config_dir"), "config")
         
         configParser = ConfigParser.ConfigParser()
-        if len( configParser.read(href)) == 0:
+        if len( configParser.read(self._href)) == 0:
             print "No conf file find"
         if not configParser.has_section(section):
             configParser.add_section(section)
@@ -96,3 +96,5 @@ class Config(ConfigSingleton):
         if key in self.__class__.defaultConf.keys():
             self.configParser.set("config", key, value)
     
+    def Save(self):
+        self.configParser.write( open(self._href, "w"))
