@@ -36,7 +36,12 @@ class ConfigSingleton(object):
 class Config(ConfigSingleton):
     #WARNING: no value must be None
     defaultConf = {
-        "lastOpenFile" : ""
+        "string" : {
+            "lastOpenFile" : "",
+            },
+        "int" : {
+            "autosave" : "0",
+            }
         }
 
     def init(self):
@@ -71,21 +76,26 @@ class Config(ConfigSingleton):
 
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
         
-        self.configParser = self._load_Files("config")
-        self.properties.update( dict(self.configParser.items("config")) )
-
-    def _load_Files(self, section):
+        self.configParser = self._load_Files()
+        self.properties.update( dict(self.configParser.items("string")) )
+        self.properties.update( dict(
+            ((s, int(i)) for (s,i) in self.configParser.items("int")) ))
+        
+    def _load_Files(self):
         "Load the config file and add it to configParser"
         self._href = os.path.join( self.Get("config_dir"), "config")
         
         configParser = ConfigParser.ConfigParser()
         if len( configParser.read(self._href)) == 0:
             print "No conf file find"
-        if not configParser.has_section(section):
-            configParser.add_section(section)
-        for (key, value) in self.__class__.defaultConf.items():
-            if not key in configParser.options(section):
-                configParser.set(section, key, value)
+        
+        for (section, options) in self.__class__.defaultConf.items():
+            if not configParser.has_section(section):
+                configParser.add_section(section)
+            for (key, value) in options.items():
+                if not key in configParser.options(section):
+                    configParser.set(section, key, value)
+        
         return configParser
 
     def Get(self, key):
@@ -93,8 +103,10 @@ class Config(ConfigSingleton):
     
     def Set(self, key, value):
         self.properties[key] = value
-        if key in self.__class__.defaultConf.keys():
-            self.configParser.set("config", key, value)
+
+        for (section, options) in self.__class__.defaultConf.items(): 
+            if key in options.keys():
+                self.configParser.set(section, key, value)
     
     def Save(self):
         #FIXME: need to create the whole path, not only the final dir

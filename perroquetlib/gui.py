@@ -51,24 +51,24 @@ class Gui:
         self.mode = "closed"
 
     def on_MainWindow_delete_event(self,widget,data=None):
-        if self.core.IsAllowQuit():
-            gtk.main_quit()
-            return False
+            if self.core.IsAllowQuit():
+                gtk.main_quit()
+                return False
 
-        dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
-                                   gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
-                                   _("Do you really quit without save ?"))
-        dialog.set_title(_("Confirm quit"))
+            dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
+                                       gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
+                                       _("Do you really quit without save ?"))
+            dialog.set_title(_("Confirm quit"))
 
-        response = dialog.run()
-        dialog.destroy()
-        if response == gtk.RESPONSE_YES:
-            gtk.main_quit()
-            self.config.Save()
-            return False # returning False makes "destroy-event" be signalled
-                         # for the window.
-        else:
-            return True # returning True avoids it to signal "destroy-event"
+            response = dialog.run()
+            dialog.destroy()
+            if response == gtk.RESPONSE_YES:
+                gtk.main_quit()
+                self.config.Save()
+                return False # returning False makes "destroy-event" be signalled
+                             # for the window.
+            else:
+                return True # returning True avoids it to signal "destroy-event"
 
 
     def SignalExerciceBadPath(self, path):
