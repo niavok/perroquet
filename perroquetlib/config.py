@@ -34,8 +34,9 @@ class ConfigSingleton(object):
         return cls._instance
 
 class Config(ConfigSingleton):
+    #WARNING: no value must be None
     defaultConf = {
-        "lastOpenFile" : None
+        "lastOpenFile" : ""
         }
 
     def init(self):
@@ -71,7 +72,7 @@ class Config(ConfigSingleton):
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
 
         self.configParser = self._load_Files("files")
-        #self.properties.update( dict(self.configParser.items("files")) ) #FIXME
+        self.properties.update( dict(self.configParser.items("files")) ) #FIXME
 
     def _load_Files(self, section):
         "Load the config file and add it to configParser"
