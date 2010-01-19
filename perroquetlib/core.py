@@ -311,7 +311,7 @@ class Core(object):
             if outputSavePath == None:
                 return
             self.outputSavePath = outputSavePath
-
+        
         self.gui.SetTitle(self.outputSavePath, False)
         saver = ExerciceSaver()
         saver.SetPath(self.outputSavePath)
@@ -322,6 +322,8 @@ class Core(object):
         saver.SetRepeatCount(self.repeatCount)
         saver.SetSequenceList(self.sequenceList)
         saver.Save()
+        
+        self.gui.config.Set("lastopenfile", self.outputSavePath)
 
         self.SetCanSave(False)
 

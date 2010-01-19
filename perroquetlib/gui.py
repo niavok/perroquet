@@ -74,6 +74,7 @@ class Gui:
             self.core.Save()
             gtk.main_quit()
             self.config.Save()
+            return True
                 
     def SignalExerciceBadPath(self, path):
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,

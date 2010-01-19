@@ -37,7 +37,7 @@ class Config(ConfigSingleton):
     #WARNING: no value must be None
     defaultConf = {
         "string" : {
-            "lastOpenFile" : "",
+            "lastopenfile" : "",
             },
         "int" : {
             "autosave" : "0",

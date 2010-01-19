@@ -21,14 +21,11 @@
 from core import Core
 from gui import Gui
 from perroquetlib.config import Config
-import sys
+import sys, os
 
 class Perroquet(object):
 
     def __init__(self):
-
-        config = Config()
-
 
         self.core = Core()
         self.gui = Gui()
@@ -39,7 +36,13 @@ class Perroquet(object):
 
     def run(self):
         if len(sys.argv) > 1:
-            self.core.LoadExercice(sys.argv[1])
+            path = os.path.abspath(sys.argv[1])
+            self.core.LoadExercice( path )
+        else:
+            print self.gui.config.Get("lastopenfile")
+            
+            
+            self.core.LoadExercice(self.gui.config.Get("lastopenfile"))
 
         self.gui.Run()
 
