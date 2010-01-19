@@ -1,0 +1,298 @@
+# Swedish translation for perroquet
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the perroquet package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: perroquet\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-01-11 00:20+0100\n"
+"PO-Revision-Date: 2010-01-16 05:46+0000\n"
+"Last-Translator: Fred Bertolus <fred.bertolus@gmail.com>\n"
+"Language-Team: Swedish <sv@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-01-19 04:51+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: ../perroquetlib/gui.py:58
+msgid "Do you really quit without save ?"
+msgstr "Vill du verkligen avsluta utan att spara?"
+
+#: ../perroquetlib/gui.py:59
+msgid "Confirm quit"
+msgstr "Konfirmera avsluta"
+
+#: ../perroquetlib/gui.py:74
+#, python-format
+msgid "The file '%s' doesn't exist. Please modify exercice paths"
+msgstr "Filen '% s' finns inte. Byta övningar vägar"
+
+#: ../perroquetlib/gui.py:75
+msgid "Load error"
+msgstr "Fel-laddat"
+
+#: ../perroquetlib/gui.py:197
+#, python-format
+msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
+msgstr "- Sekvenser: %(found)s/%(count)s (%(percent)s %%)\n"
+
+#: ../perroquetlib/gui.py:198
+#, python-format
+msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
+msgstr "- Ord: %(found)s/%(count)s (%(percent)s %%)\n"
+
+#: ../perroquetlib/gui.py:199
+#, python-format
+msgid "- Repeat ratio: %s per words"
+msgstr "- Upprep förhållande: %s per words"
+
+#: ../perroquetlib/gui.py:204 ../data/perroquet.desktop.in.h:2
+#: ../data/perroquet.ui.h:25
+msgid "Perroquet"
+msgstr "Perroquet"
+
+#: ../perroquetlib/gui.py:717
+msgid "Select File to Open"
+msgstr "Välj fil att öppna"
+
+#: ../perroquetlib/gui.py:722 ../perroquetlib/gui.py:743
+msgid "Perroquet files"
+msgstr "Perroquet filar"
+
+#: ../perroquetlib/gui.py:727 ../perroquetlib/gui.py:748
+msgid "All files"
+msgstr "Alla filer"
+
+#: ../perroquetlib/gui.py:738
+msgid "Select File to Save to"
+msgstr "Välj fil att spara till"
+
+#: ../data/perroquet.desktop.in.h:1
+msgid "Oral comprehention teacher"
+msgstr "Muntligs förståelse lärare"
+
+#: ../data/perroquet.ui.h:1
+msgid ""
+"- Sequences: --/--\n"
+"- Words: --/--\n"
+"- Repeat ratio: -- per words"
+msgstr ""
+"- Sekvenser: --/--\n"
+"- Ord: --/--\n"
+"- Upprepa förhållande: -- per words"
+
+#: ../data/perroquet.ui.h:4
+msgid "-- s"
+msgstr "-- s"
+
+#: ../data/perroquet.ui.h:5
+msgid "--/--"
+msgstr "--/--"
+
+#: ../data/perroquet.ui.h:6
+msgid "A oral comprehension teacher"
+msgstr "En muntlig föståelse lärare"
+
+#: ../data/perroquet.ui.h:7
+msgid "Copyright &#xA9; 2009-2010 Fr&#xE9;d&#xE9;ric Bertolus"
+msgstr "Copyright &#xA9; 2009-2010 Fr&#xE9;d&#xE9;ric Bertolus"
+
+#: ../data/perroquet.ui.h:8
+msgid "Display translation"
+msgstr "Visa översättning"
+
+#: ../data/perroquet.ui.h:9
+msgid "E_dit"
+msgstr "Re_digera"
+
+#: ../data/perroquet.ui.h:10
+msgid "Exercice properties"
+msgstr "Övning egenskaper"
+
+#: ../data/perroquet.ui.h:11
+msgid "Exercice subtitle: "
+msgstr "Övning undertexter "
+
+#: ../data/perroquet.ui.h:12
+msgid "Exercice video or audio: "
+msgstr "Ljud eller video övningar "
+
+#: ../data/perroquet.ui.h:13
+msgid "Exercice: "
+msgstr "Övning: "
+
+#: ../data/perroquet.ui.h:14
+msgid "H_elp"
+msgstr "H_jälp"
+
+#: ../data/perroquet.ui.h:15
+msgid "Hint"
+msgstr "Ledtråd"
+
+#: ../data/perroquet.ui.h:16
+msgid "List of all words to find in the exercise"
+msgstr "Ordlista som hittas i övningen"
+
+#: ../data/perroquet.ui.h:17
+msgid "Media: "
+msgstr "Media: "
+
+#: ../data/perroquet.ui.h:18
+msgid "New exercice"
+msgstr "Ny övning"
+
+#: ../data/perroquet.ui.h:19
+msgid "New exercise"
+msgstr "Ny övning"
+
+#: ../data/perroquet.ui.h:20
+msgid "Next Sequence"
+msgstr "Nästa sekvens"
+
+#: ../data/perroquet.ui.h:21
+msgid "Next sequence"
+msgstr "Nästa sekvens"
+
+#: ../data/perroquet.ui.h:22
+msgid "Open exercise"
+msgstr "Öpna övning"
+
+#: ../data/perroquet.ui.h:23
+msgid "Open saved exercice"
+msgstr "Öpna besparad övning"
+
+#: ../data/perroquet.ui.h:24
+msgid "Pause"
+msgstr "Pausa"
+
+#: ../data/perroquet.ui.h:26
+msgid "Play"
+msgstr "Spela upp"
+
+#: ../data/perroquet.ui.h:27
+msgid "Position in current sequence"
+msgstr "Lokalisering i löpande ordning"
+
+#: ../data/perroquet.ui.h:28
+msgid "Position in exercise"
+msgstr "Lokalisering i övningen"
+
+#: ../data/perroquet.ui.h:29
+msgid "Previous sequence"
+msgstr "Föregående sekvens"
+
+#: ../data/perroquet.ui.h:30
+msgid "Progress statistics"
+msgstr "Utveckling statistik"
+
+#: ../data/perroquet.ui.h:31
+msgid "Properties"
+msgstr "Egenskaper"
+
+#: ../data/perroquet.ui.h:32
+msgid "Replay sequence"
+msgstr "Spela om sekvens"
+
+#: ../data/perroquet.ui.h:33
+msgid "Save exercice"
+msgstr "Spara övning"
+
+#: ../data/perroquet.ui.h:34
+msgid "Save exercise"
+msgstr "Spara övning"
+
+#: ../data/perroquet.ui.h:35
+msgid "Select a subtitle file"
+msgstr "Välj en fil med undertexter"
+
+#: ../data/perroquet.ui.h:36
+msgid "Select a video file"
+msgstr "Välj en video fil"
+
+#: ../data/perroquet.ui.h:37
+msgid "Show/Hide translation"
+msgstr "Visa/Dölja översättning"
+
+#: ../data/perroquet.ui.h:38
+msgid "The audio track should be in the exercice language"
+msgstr "Ljudspåret skulle vara i språkövningen"
+
+#: ../data/perroquet.ui.h:39
+msgid ""
+"These subtitles should be in the exercice language.\n"
+"Supported format: srt"
+msgstr ""
+"Dessa undertexter skulle vara i språkövningen.\n"
+"Stött format: SRT"
+
+#: ../data/perroquet.ui.h:41
+msgid ""
+"These subtitles should be in your mother language.\n"
+"Supported format: srt"
+msgstr ""
+"Dessa subtitler skuller vara i ditt modersmål.\n"
+"Stött format: srt"
+
+#: ../data/perroquet.ui.h:43
+msgid ""
+"This program is free software: you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation, either version 3 of the License, or (at your option) "
+"any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"this program.  If not, see <http://www.gnu.org/licenses/>."
+msgstr ""
+"This program is free software: you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation, either version 3 of the License, or (at your option) "
+"any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"this program.  If not, see <http://www.gnu.org/licenses/>."
+
+#: ../data/perroquet.ui.h:48
+msgid "Translation"
+msgstr "Översättning"
+
+#: ../data/perroquet.ui.h:49
+msgid "Translation subtitles (optional): "
+msgstr "Översättning undertexter (fakultativ): "
+
+#: ../data/perroquet.ui.h:50
+msgid "Translation: "
+msgstr "Översättning: "
+
+#: ../data/perroquet.ui.h:51
+msgid ""
+"Word filter\n"
+"This filter use  regexp. Examples:\n"
+"abc = all words containing 'abc'\n"
+"^abc = all words starting with 'abc'\n"
+"abc$ = all words ending with 'abc'\n"
+"\n"
+"The character . can replace any character:\n"
+"^abc.. = all words of at least 5 letters starting with 'abc'\n"
+"^...$ = all 4-letter word\n"
+"^ab.c$ = all 4-letter word beginning with 'ab' and ending with 'c'\n"
+"\n"
+"For more information on regular expressions: "
+"http://en.wikipedia.org/wiki/Regular_expression"
+msgstr ""
+
+#: ../data/perroquet.ui.h:63
+msgid "_File"
+msgstr "_Fil"
