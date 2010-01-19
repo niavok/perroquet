@@ -97,4 +97,7 @@ class Config(ConfigSingleton):
             self.configParser.set("config", key, value)
     
     def Save(self):
+        #FIXME: need to create the whole path, not only the final dir
+        if not os.path.exists(self.Get("config_dir")):
+           os.mkdir( self.Get("config_dir") )
         self.configParser.write( open(self._href, "w"))

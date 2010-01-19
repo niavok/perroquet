@@ -25,22 +25,22 @@ _ = gettext.gettext
 
 class Gui:
     def __init__(self):
-        config = Config()
+        self.config = Config()
 
-        locale.bindtextdomain(config.Get("gettext_package"),config.Get("localedir"))
+        locale.bindtextdomain(self.config.Get("gettext_package"),self.config.Get("localedir"))
 
 
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
-        self.builder.add_from_file(config.Get("ui_path"))
+        self.builder.add_from_file(self.config.Get("ui_path"))
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("MainWindow")
-        self.window.set_icon_from_file(config.Get("logo_path"))
+        self.window.set_icon_from_file(self.config.Get("logo_path"))
 
         self.aboutDialog = self.builder.get_object("aboutdialog")
-        icon = gtk.gdk.pixbuf_new_from_file(config.Get("logo_path"))
+        icon = gtk.gdk.pixbuf_new_from_file(self.config.Get("logo_path"))
         self.aboutDialog.set_logo(icon)
-        self.aboutDialog.set_version(config.Get("version"))
+        self.aboutDialog.set_version(self.config.Get("version"))
 
         self.typeLabel = self.builder.get_object("typeView")
 
@@ -64,6 +64,7 @@ class Gui:
         dialog.destroy()
         if response == gtk.RESPONSE_YES:
             gtk.main_quit()
+            self.config.Save()
             return False # returning False makes "destroy-event" be signalled
                          # for the window.
         else:
