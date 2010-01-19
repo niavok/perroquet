@@ -41,38 +41,38 @@ class Config(ConfigSingleton):
 
     def init(self):
         self.properties = {}
-        self.properties["version"] = APP_VERSION
-        self.properties["app_name"] = APP_NAME
-        self.properties["gettext_package"] = "perroquet"
-        self.properties["executable"] = os.path.dirname(sys.executable)
-        self.properties["script"] = sys.path[0]
-        self.properties["config_dir"] = os.path.join(
+        self.Set("version", APP_VERSION)
+        self.Set("app_name", APP_NAME)
+        self.Set("gettext_package", "perroquet")
+        self.Set("executable", os.path.dirname(sys.executable))
+        self.Set("script", sys.path[0])
+        self.Set("config_dir", os.path.join(
             os.path.expanduser("~"), 
-            "perroquet_config")
+            "perroquet_config"))
         
-        if os.path.isfile(os.path.join(self.properties["script"], 'data/perroquet.ui')):
-            self.properties["ui_path"] = os.path.join(self.properties["script"], 'data/perroquet.ui')
-        elif  os.path.isfile(os.path.join(self.properties["script"], '../share/perroquet/perroquet.ui')):
-            self.properties["ui_path"] = os.path.join(self.properties["script"], '../share/perroquet/perroquet.ui')
+        if os.path.isfile(os.path.join(self.Get("script"), 'data/perroquet.ui')):
+            self.Set("ui_path", os.path.join(self.Get("script"), 'data/perroquet.ui'))
+        elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/perroquet.ui')):
+            self.Set("ui_path", os.path.join(self.Get("script"), '../share/perroquet/perroquet.ui'))
         else:
             print "Error : gui file 'perroquet.ui' not found"
             sys.exit(1)
 
         # locale
-        if os.path.exists(os.path.join(self.properties["script"], 'build/mo')):
-            self.properties["localedir"] =  os.path.join(self.properties["script"], 'build/mo')
+        if os.path.exists(os.path.join(self.Get("script"), 'build/mo')):
+            self.Set("localedir",  os.path.join(self.Get("script"), 'build/mo'))
         else:
-            self.properties["localedir"] =  os.path.join(self.properties["script"], '../share/locale')
+            self.Set("localedir",  os.path.join(self.Get("script"), '../share/locale'))
 
-        if os.path.isfile(os.path.join(self.properties["script"], 'data/perroquet.png')):
-            self.properties["logo_path"] = os.path.join(self.properties["script"], 'data/perroquet.png')
+        if os.path.isfile(os.path.join(self.Get("script"), 'data/perroquet.png')):
+            self.Set("logo_path", os.path.join(self.Get("script"), 'data/perroquet.png'))
         else:
-            self.properties["logo_path"] = os.path.join(self.properties["script"], '../share/perroquet/perroquet.png')
+            self.Set("logo_path", os.path.join(self.Get("script"), '../share/perroquet/perroquet.png'))
 
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
-
-        self.configParser = self._load_Files("files")
-        self.properties.update( dict(self.configParser.items("files")) ) #FIXME
+        
+        self.configParser = self._load_Files("config")
+        self.properties.update( dict(self.configParser.items("config")) )
 
     def _load_Files(self, section):
         "Load the config file and add it to configParser"
@@ -91,4 +91,8 @@ class Config(ConfigSingleton):
     def Get(self, key):
         return self.properties[key]
     
+    def Set(self, key, value):
+        self.properties[key] = value
+        if key in self.__class__.defaultConf.keys():
+            self.configParser.set("config", key, value)
     
