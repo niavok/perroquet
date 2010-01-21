@@ -53,7 +53,7 @@ class Config(ConfigSingleton):
         self.Set("script", sys.path[0])
         self.Set("config_dir", os.path.join(
             os.path.expanduser("~"), 
-            "perroquet_config"))
+            ".config/perroquet"))
         
         if os.path.isfile(os.path.join(self.Get("script"), 'data/perroquet.ui')):
             self.Set("ui_path", os.path.join(self.Get("script"), 'data/perroquet.ui'))
@@ -76,27 +76,26 @@ class Config(ConfigSingleton):
 
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
         
-        self.configParser = self._load_Files()
+        self._load_Files()
         self.properties.update( dict(self.configParser.items("string")) )
         self.properties.update( dict(
             ((s, int(i)) for (s,i) in self.configParser.items("int")) ))
         
     def _load_Files(self):
         "Load the config file and add it to configParser"
-        self._href = os.path.join( self.Get("config_dir"), "config")
+        self._localConfFilHref = os.path.join( self.Get("config_dir"), "config")
         
-        configParser = ConfigParser.ConfigParser()
-        if len( configParser.read(self._href)) == 0:
-            print "No conf file find"
+        self.configParser = ConfigParser.ConfigParser()
+        if len( self.configParser.read(self._localConfFilHref)) == 0:
+            print "No local conf file find"
         
         for (section, options) in self.__class__.defaultConf.items():
-            if not configParser.has_section(section):
-                configParser.add_section(section)
+            if not self.configParser.has_section(section):
+                self.configParser.add_section(section)
             for (key, value) in options.items():
-                if not key in configParser.options(section):
-                    configParser.set(section, key, value)
+                if not key in self.configParser.options(section):
+                    self.configParser.set(section, key, value)
         
-        return configParser
 
     def Get(self, key):
         return self.properties[key]
@@ -112,4 +111,4 @@ class Config(ConfigSingleton):
         #FIXME: need to create the whole path, not only the final dir
         if not os.path.exists(self.Get("config_dir")):
            os.mkdir( self.Get("config_dir") )
-        self.configParser.write( open(self._href, "w"))
+        self.configParser.write( open(self._localConfFilHref, "w"))
