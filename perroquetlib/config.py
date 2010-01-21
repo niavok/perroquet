@@ -96,10 +96,10 @@ class Config(ConfigSingleton):
         configParser = ConfigParser.ConfigParser()
         if os.path.isfile(self._globalConfFilHref):
             configParser.read(self._globalConfFilHref)
-        elif  os.path.isfile(os.path.join(self.Get("script"), '/data/config')):
-            configParser.read("../data/config")
+        elif  os.path.isfile(os.path.join(self.Get("script"), 'data/config')):
+            configParser.read(os.path.join(self.Get("script"), 'data/config'))
         else:
-            print "Error : global conf file 'config' not found"
+            print "Error : global conf file 'config' not found at "+ os.path.join(self.Get("script"), 'data/config')
             sys.exit(1)
 
         self._writableOptions = dict([(option, section)
