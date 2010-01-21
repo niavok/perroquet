@@ -3,3 +3,4 @@ perroquetlib/perroquet.py
 perroquetlib/gui.py
 data/perroquet.desktop.in
 [type: gettext/glade]data/perroquet.ui
+[type: gettext/glade]data/properties.ui

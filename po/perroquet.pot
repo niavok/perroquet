@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 00:20+0100\n"
+"POT-Creation-Date: 2010-01-21 23:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,56 +16,56 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../perroquetlib/gui.py:58
+#: ../perroquetlib/gui.py:63
 msgid "Do you really quit without save ?"
 msgstr ""
 
-#: ../perroquetlib/gui.py:59
+#: ../perroquetlib/gui.py:64
 msgid "Confirm quit"
 msgstr ""
 
-#: ../perroquetlib/gui.py:74
+#: ../perroquetlib/gui.py:84
 #, python-format
 msgid "The file '%s' doesn't exist. Please modify exercice paths"
 msgstr ""
 
-#: ../perroquetlib/gui.py:75
+#: ../perroquetlib/gui.py:85
 msgid "Load error"
 msgstr ""
 
-#: ../perroquetlib/gui.py:197
+#: ../perroquetlib/gui.py:212
 #, python-format
 msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
 msgstr ""
 
-#: ../perroquetlib/gui.py:198
+#: ../perroquetlib/gui.py:213
 #, python-format
 msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
 msgstr ""
 
-#: ../perroquetlib/gui.py:199
+#: ../perroquetlib/gui.py:214
 #, python-format
 msgid "- Repeat ratio: %s per words"
 msgstr ""
 
-#: ../perroquetlib/gui.py:204 ../data/perroquet.desktop.in.h:2
+#: ../perroquetlib/gui.py:219 ../data/perroquet.desktop.in.h:2
 #: ../data/perroquet.ui.h:25
 msgid "Perroquet"
 msgstr ""
 
-#: ../perroquetlib/gui.py:717
+#: ../perroquetlib/gui.py:793
 msgid "Select File to Open"
 msgstr ""
 
-#: ../perroquetlib/gui.py:722 ../perroquetlib/gui.py:743
+#: ../perroquetlib/gui.py:798 ../perroquetlib/gui.py:819
 msgid "Perroquet files"
 msgstr ""
 
-#: ../perroquetlib/gui.py:727 ../perroquetlib/gui.py:748
+#: ../perroquetlib/gui.py:803 ../perroquetlib/gui.py:824
 msgid "All files"
 msgstr ""
 
-#: ../perroquetlib/gui.py:738
+#: ../perroquetlib/gui.py:814
 msgid "Select File to Save to"
 msgstr ""
 
@@ -104,7 +104,7 @@ msgstr ""
 msgid "E_dit"
 msgstr ""
 
-#: ../data/perroquet.ui.h:10
+#: ../data/perroquet.ui.h:10 ../data/properties.ui.h:1
 msgid "Exercice properties"
 msgstr ""
 
@@ -116,7 +116,7 @@ msgstr ""
 msgid "Exercice video or audio: "
 msgstr ""
 
-#: ../data/perroquet.ui.h:13
+#: ../data/perroquet.ui.h:13 ../data/properties.ui.h:2
 msgid "Exercice: "
 msgstr ""
 
@@ -132,7 +132,7 @@ msgstr ""
 msgid "List of all words to find in the exercise"
 msgstr ""
 
-#: ../data/perroquet.ui.h:17
+#: ../data/perroquet.ui.h:17 ../data/properties.ui.h:4
 msgid "Media: "
 msgstr ""
 
@@ -169,66 +169,70 @@ msgid "Play"
 msgstr ""
 
 #: ../data/perroquet.ui.h:27
-msgid "Position in current sequence"
+msgid "Play speed"
 msgstr ""
 
 #: ../data/perroquet.ui.h:28
-msgid "Position in exercise"
+msgid "Position in current sequence"
 msgstr ""
 
 #: ../data/perroquet.ui.h:29
-msgid "Previous sequence"
+msgid "Position in exercise"
 msgstr ""
 
 #: ../data/perroquet.ui.h:30
-msgid "Progress statistics"
+msgid "Previous sequence"
 msgstr ""
 
 #: ../data/perroquet.ui.h:31
-msgid "Properties"
+msgid "Progress statistics"
 msgstr ""
 
 #: ../data/perroquet.ui.h:32
-msgid "Replay sequence"
+msgid "Properties"
 msgstr ""
 
 #: ../data/perroquet.ui.h:33
-msgid "Save exercice"
+msgid "Replay sequence"
 msgstr ""
 
 #: ../data/perroquet.ui.h:34
-msgid "Save exercise"
+msgid "Save exercice"
 msgstr ""
 
 #: ../data/perroquet.ui.h:35
+msgid "Save exercise"
+msgstr ""
+
+#: ../data/perroquet.ui.h:36 ../data/properties.ui.h:7
 msgid "Select a subtitle file"
 msgstr ""
 
-#: ../data/perroquet.ui.h:36
+#: ../data/perroquet.ui.h:37 ../data/properties.ui.h:8
 msgid "Select a video file"
 msgstr ""
 
-#: ../data/perroquet.ui.h:37
+#: ../data/perroquet.ui.h:38
 msgid "Show/Hide translation"
 msgstr ""
 
-#: ../data/perroquet.ui.h:38
+#: ../data/perroquet.ui.h:39
 msgid "The audio track should be in the exercice language"
 msgstr ""
 
-#: ../data/perroquet.ui.h:39
+#: ../data/perroquet.ui.h:40
 msgid ""
 "These subtitles should be in the exercice language.\n"
 "Supported format: srt"
 msgstr ""
 
-#: ../data/perroquet.ui.h:41
+#: ../data/perroquet.ui.h:42
 msgid ""
 "These subtitles should be in your mother language.\n"
 "Supported format: srt"
 msgstr ""
 
-#: ../data/perroquet.ui.h:43
+#: ../data/perroquet.ui.h:44
 msgid ""
 "This program is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -244,19 +248,19 @@ msgid ""
 "this program.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 
-#: ../data/perroquet.ui.h:48
+#: ../data/perroquet.ui.h:49
 msgid "Translation"
 msgstr ""
 
-#: ../data/perroquet.ui.h:49
+#: ../data/perroquet.ui.h:50
 msgid "Translation subtitles (optional): "
 msgstr ""
 
-#: ../data/perroquet.ui.h:50
+#: ../data/perroquet.ui.h:51 ../data/properties.ui.h:11
 msgid "Translation: "
 msgstr ""
 
-#: ../data/perroquet.ui.h:51
+#: ../data/perroquet.ui.h:52
 msgid ""
 "Word filter\n"
 "This filter use  regexp. Examples:\n"
@@ -273,6 +277,26 @@ msgid ""
 "Regular_expression"
 msgstr ""
 
-#: ../data/perroquet.ui.h:63
+#: ../data/perroquet.ui.h:64
 msgid "_File"
+msgstr ""
+
+#: ../data/properties.ui.h:3
+msgid "Maximum sequence time (s): "
+msgstr ""
+
+#: ../data/properties.ui.h:5
+msgid "Paths"
+msgstr ""
+
+#: ../data/properties.ui.h:6
+msgid "Repeat sequences after completed it"
+msgstr ""
+
+#: ../data/properties.ui.h:9
+msgid "Sequences"
+msgstr ""
+
+#: ../data/properties.ui.h:10
+msgid "Time between sequences (s):"
 msgstr ""
