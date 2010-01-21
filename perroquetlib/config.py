@@ -52,15 +52,23 @@ class Config(ConfigSingleton):
         self.Set("executable", os.path.dirname(sys.executable))
         self.Set("script", sys.path[0])
         self.Set("config_dir", os.path.join(
-            os.path.expanduser("~"), 
+            os.path.expanduser("~"),
             "perroquet_config"))
-        
+
         if os.path.isfile(os.path.join(self.Get("script"), 'data/perroquet.ui')):
             self.Set("ui_path", os.path.join(self.Get("script"), 'data/perroquet.ui'))
         elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/perroquet.ui')):
             self.Set("ui_path", os.path.join(self.Get("script"), '../share/perroquet/perroquet.ui'))
         else:
             print "Error : gui file 'perroquet.ui' not found"
+            sys.exit(1)
+
+        if os.path.isfile(os.path.join(self.Get("script"), 'data/properties.ui')):
+            self.Set("ui_sequence_properties_path", os.path.join(self.Get("script"), 'data/properties.ui'))
+        elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/properties.ui')):
+            self.Set("ui_sequence_properties_path", os.path.join(self.Get("script"), '../share/perroquet/properties.ui'))
+        else:
+            print "Error : gui file 'properties.ui' not found"
             sys.exit(1)
 
         # locale
@@ -75,39 +83,39 @@ class Config(ConfigSingleton):
             self.Set("logo_path", os.path.join(self.Get("script"), '../share/perroquet/perroquet.png'))
 
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
-        
+
         self.configParser = self._load_Files()
         self.properties.update( dict(self.configParser.items("string")) )
         self.properties.update( dict(
             ((s, int(i)) for (s,i) in self.configParser.items("int")) ))
-        
+
     def _load_Files(self):
         "Load the config file and add it to configParser"
         self._href = os.path.join( self.Get("config_dir"), "config")
-        
+
         configParser = ConfigParser.ConfigParser()
         if len( configParser.read(self._href)) == 0:
             print "No conf file find"
-        
+
         for (section, options) in self.__class__.defaultConf.items():
             if not configParser.has_section(section):
                 configParser.add_section(section)
             for (key, value) in options.items():
                 if not key in configParser.options(section):
                     configParser.set(section, key, value)
-        
+
         return configParser
 
     def Get(self, key):
         return self.properties[key]
-    
+
     def Set(self, key, value):
         self.properties[key] = value
 
-        for (section, options) in self.__class__.defaultConf.items(): 
+        for (section, options) in self.__class__.defaultConf.items():
             if key in options.keys():
                 self.configParser.set(section, key, value)
-    
+
     def Save(self):
         #FIXME: need to create the whole path, not only the final dir
         if not os.path.exists(self.Get("config_dir")):

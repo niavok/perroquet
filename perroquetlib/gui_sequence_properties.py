@@ -1,4 +1,3 @@
-#! /usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2009-2010 Frédéric Bertolus.
@@ -18,32 +17,30 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from core import Core
-from gui import Gui
+
+import gtk, time, urllib, re, os, gettext
+import locale
 from perroquetlib.config import Config
-import sys, os
+_ = gettext.gettext
 
-class Perroquet(object):
+class GuiSequenceProperties:
+    def __init__(self, config, core, parent):
 
-    def __init__(self):
-
-        self.core = Core()
-        self.gui = Gui()
-
-        self.core.SetGui(self.gui)
-        self.gui.SetCore(self.core)
+        self.core = core
+        self.config = config
+        self.parent = parent
 
 
-    def run(self):
-        if len(sys.argv) > 1:
-            path = os.path.abspath(sys.argv[1])
-            self.core.LoadExercice( path )
-        else:
-            print self.gui.config.Get("lastopenfile")
+        self.builder = gtk.Builder()
+        self.builder.set_translation_domain("perroquet")
+        self.builder.add_from_file(self.config.Get("ui_sequence_properties_path"))
+        self.builder.connect_signals(self)
+        self.dialog = self.builder.get_object("dialogExerciceProperties")
+
+        self.pagePaths = self.builder.get_object("pagePaths")
+        self.pageSequences = self.builder.get_object("pageSequences")
 
 
-            #self.core.LoadExercice(self.gui.config.Get("lastopenfile"))
 
-        self.gui.Run()
-
-
+    def Run(self):
+        self.dialog.run()
