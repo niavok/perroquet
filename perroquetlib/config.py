@@ -54,6 +54,7 @@ class Config(ConfigSingleton):
         self.Set("localConfigDir", os.path.join(
             os.path.expanduser("~"), 
             ".config/perroquet"))
+        self.Set("globalConfigDir", "/etc/perroquet") #FIXME ugly
         
         if os.path.isfile(os.path.join(self.Get("script"), 'data/perroquet.ui')):
             self.Set("ui_path", os.path.join(self.Get("script"), 'data/perroquet.ui'))
@@ -77,24 +78,25 @@ class Config(ConfigSingleton):
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
         
         self._loadConfigFiles()
-        self._properties.update( dict(self.configParser.items("string")) )
+        self._properties.update( dict(self._localConfigParser.items("string")) )
         self._properties.update( dict(
-            ((s, int(i)) for (s,i) in self.configParser.items("int")) ))
+            ((s, int(i)) for (s,i) in self._localConfigParser.items("int")) ))
         
     def _loadConfigFiles(self):
         "Load the config file and add it to configParser"
         self._localConfFilHref = os.path.join( self.Get("localConfigDir"), "config")
+        self._globalConfFilHref = os.path.join( self.Get("globalConfigDir"), "config")
         
-        self.configParser = ConfigParser.ConfigParser()
-        if len( self.configParser.read(self._localConfFilHref)) == 0:
+        self._localConfigParser = ConfigParser.ConfigParser()
+        if len( self._localConfigParser.read(self._localConfFilHref)) == 0:
             print "No local conf file find"
         
         for (section, options) in self.__class__.defaultConf.items():
-            if not self.configParser.has_section(section):
-                self.configParser.add_section(section)
+            if not self._localConfigParser.has_section(section):
+                self._localConfigParser.add_section(section)
             for (key, value) in options.items():
-                if not key in self.configParser.options(section):
-                    self.configParser.set(section, key, value)
+                if not key in self._localConfigParser.options(section):
+                    self._localConfigParser.set(section, key, value)
         
 
     def Get(self, key):
@@ -105,10 +107,10 @@ class Config(ConfigSingleton):
 
         for (section, options) in self.__class__.defaultConf.items(): 
             if key in options.keys():
-                self.configParser.set(section, key, value)
+                self._localConfigParser.set(section, key, value)
     
     def Save(self):
         #FIXME: need to create the whole path, not only the final dir
         if not os.path.exists(self.Get("localConfigDir")):
            os.mkdir( self.Get("localConfigDir") )
-        self.configParser.write( open(self._localConfFilHref, "w"))
+        self._localConfigParser.write( open(self._localConfFilHref, "w"))
