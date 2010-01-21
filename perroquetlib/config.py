@@ -37,23 +37,31 @@ class Config(ConfigSingleton):
     def init(self):
         self._properties = {}
         self._writableOptions = {}
-        
+
         self.Set("version", APP_VERSION)
         self.Set("app_name", APP_NAME)
         self.Set("gettext_package", "perroquet")
         self.Set("executable", os.path.dirname(sys.executable))
         self.Set("script", sys.path[0])
         self.Set("localConfigDir", os.path.join(
-            os.path.expanduser("~"), 
+            os.path.expanduser("~"),
             ".config/perroquet"))
         self.Set("globalConfigDir", "/etc/perroquet") #FIXME ugly
-        
+
         if os.path.isfile(os.path.join(self.Get("script"), 'data/perroquet.ui')):
             self.Set("ui_path", os.path.join(self.Get("script"), 'data/perroquet.ui'))
         elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/perroquet.ui')):
             self.Set("ui_path", os.path.join(self.Get("script"), '../share/perroquet/perroquet.ui'))
         else:
             print "Error : gui file 'perroquet.ui' not found"
+            sys.exit(1)
+
+        if os.path.isfile(os.path.join(self.Get("script"), 'data/properties.ui')):
+            self.Set("ui_sequence_properties_path", os.path.join(self.Get("script"), 'data/properties.ui'))
+        elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/properties.ui')):
+            self.Set("ui_sequence_properties_path", os.path.join(self.Get("script"), '../share/perroquet/properties.ui'))
+        else:
+            print "Error : gui file 'properties.ui' not found"
             sys.exit(1)
 
         # locale
@@ -68,39 +76,39 @@ class Config(ConfigSingleton):
             self.Set("logo_path", os.path.join(self.Get("script"), '../share/perroquet/perroquet.png'))
 
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
-        
+
         configParser = self._loadConfigFiles()
         self._properties.update( dict(configParser.items("string")) )
         self._properties.update( dict(
             ((s, int(i)) for (s,i) in configParser.items("int")) ))
-        
+
     def _loadConfigFiles(self):
         "Load the config file and add it to configParser"
         self._localConfFilHref = os.path.join( self.Get("localConfigDir"), "config")
         self._globalConfFilHref = os.path.join( self.Get("globalConfigDir"), "config")
-        
+
         self._localConfigParser = ConfigParser.ConfigParser()
         if len( self._localConfigParser.read(self._localConfFilHref)) == 0:
             print "No local conf file find"
-        
+
         configParser = ConfigParser.ConfigParser()
         if len( configParser.read(self._globalConfFilHref)) == 0:
             print "Error : gui file "+self._globalConfFilHref+" not found"
             sys.exit(1)
-        
+
         self._writableOptions = dict([(option, section)
                 for section in configParser.sections()
                 for option in configParser.options(section) ])
-        
+
         for section in self._localConfigParser.sections():
             for (key, value) in self._localConfigParser.items(section):
                 configParser.set(section, key, value)
-        
+
         return configParser
 
     def Get(self, key):
         return self._properties[key]
-    
+
     def Set(self, key, value):
         self._properties[key] = value
 
@@ -109,7 +117,7 @@ class Config(ConfigSingleton):
             if not self._localConfigParser.has_section(section):
                 self._localConfigParser.add_section(section)
             self._localConfigParser.set(section, key, value)
-    
+
     def Save(self):
         #FIXME: need to create the whole path, not only the final dir
         if not os.path.exists(self.Get("localConfigDir")):

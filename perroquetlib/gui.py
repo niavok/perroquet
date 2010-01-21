@@ -21,6 +21,7 @@
 import gtk, time, urllib, re, os, gettext
 import locale
 from perroquetlib.config import Config
+from gui_sequence_properties import GuiSequenceProperties
 _ = gettext.gettext
 
 class Gui:
@@ -49,6 +50,7 @@ class Gui:
         self.translationVisible = False
         self.disableChangedTextEvent = False
         self.mode = "closed"
+        self.dialogExerciceProperties = None
 
     def on_MainWindow_delete_event(self,widget,data=None):
         if not self.config.Get("autosave"):
@@ -551,7 +553,10 @@ class Gui:
         self.core.SelectSequenceWord(wordIndex,wordIndexPos)
 
     def on_toolbuttonProperties_clicked(self, widget, data=None):
-        self.AskProperties()
+        if self.dialogExerciceProperties == None:
+            self.dialogExerciceProperties = GuiSequenceProperties(self.config, self.core, self.window)
+
+        self.dialogExerciceProperties.Run()
 
     def AskProperties(self):
         dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
