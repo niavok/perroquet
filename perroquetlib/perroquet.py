@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2009-2010 Frédéric Bertolus.
+# Copyright (C) 2009-2010 Matthieu Bizien.
 #
 # This file is part of Perroquet.
 #
