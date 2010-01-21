@@ -17,7 +17,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
-
 from core import Core
 from gui import Gui
 from perroquetlib.config import Config
@@ -38,10 +37,8 @@ class Perroquet(object):
         if len(sys.argv) > 1:
             path = os.path.abspath(sys.argv[1])
             self.core.LoadExercice( path )
-        else:
-            print self.gui.config.Get("lastopenfile")
-            
-            
+        elif self.gui.config.Get("lastopenfile"):
+            print "last open file : " + self.gui.config.Get("lastopenfile")
             self.core.LoadExercice(self.gui.config.Get("lastopenfile"))
 
         self.gui.Run()
