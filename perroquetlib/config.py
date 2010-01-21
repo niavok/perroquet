@@ -34,18 +34,10 @@ class ConfigSingleton(object):
         return cls._instance
 
 class Config(ConfigSingleton):
-    #WARNING: no value must be None
-    defaultConf = {
-        "string" : {
-            "lastopenfile" : "",
-            },
-        "int" : {
-            "autosave" : "0",
-            }
-        }
-
     def init(self):
         self._properties = {}
+        self._writableOptions = {}
+        
         self.Set("version", APP_VERSION)
         self.Set("app_name", APP_NAME)
         self.Set("gettext_package", "perroquet")
@@ -77,10 +69,10 @@ class Config(ConfigSingleton):
 
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
         
-        self._loadConfigFiles()
-        self._properties.update( dict(self._localConfigParser.items("string")) )
+        configParser = self._loadConfigFiles()
+        self._properties.update( dict(configParser.items("string")) )
         self._properties.update( dict(
-            ((s, int(i)) for (s,i) in self._localConfigParser.items("int")) ))
+            ((s, int(i)) for (s,i) in configParser.items("int")) ))
         
     def _loadConfigFiles(self):
         "Load the config file and add it to configParser"
@@ -91,13 +83,20 @@ class Config(ConfigSingleton):
         if len( self._localConfigParser.read(self._localConfFilHref)) == 0:
             print "No local conf file find"
         
-        for (section, options) in self.__class__.defaultConf.items():
-            if not self._localConfigParser.has_section(section):
-                self._localConfigParser.add_section(section)
-            for (key, value) in options.items():
-                if not key in self._localConfigParser.options(section):
-                    self._localConfigParser.set(section, key, value)
+        configParser = ConfigParser.ConfigParser()
+        if len( configParser.read(self._globalConfFilHref)) == 0:
+            print "Error : gui file "+self._globalConfFilHref+" not found"
+            sys.exit(1)
         
+        self._writableOptions = dict([(option, section)
+                for section in configParser.sections()
+                for option in configParser.options(section) ])
+        
+        for section in self._localConfigParser.sections():
+            for (key, value) in self._localConfigParser.items(section):
+                configParser.set(section, key, value)
+        
+        return configParser
 
     def Get(self, key):
         return self._properties[key]
@@ -105,9 +104,11 @@ class Config(ConfigSingleton):
     def Set(self, key, value):
         self._properties[key] = value
 
-        for (section, options) in self.__class__.defaultConf.items(): 
-            if key in options.keys():
-                self._localConfigParser.set(section, key, value)
+        if key in self._writableOptions.keys():
+            section = self._writableOptions[key]
+            if not self._localConfigParser.has_section(section):
+                self._localConfigParser.add_section(section)
+            self._localConfigParser.set(section, key, value)
     
     def Save(self):
         #FIXME: need to create the whole path, not only the final dir
