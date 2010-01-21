@@ -53,7 +53,7 @@ class Config(ConfigSingleton):
         self.Set("script", sys.path[0])
         self.Set("config_dir", os.path.join(
             os.path.expanduser("~"), 
-            "perroquet_config"))
+            ".config/perroquet"))
         
         if os.path.isfile(os.path.join(self.Get("script"), 'data/perroquet.ui')):
             self.Set("ui_path", os.path.join(self.Get("script"), 'data/perroquet.ui'))
