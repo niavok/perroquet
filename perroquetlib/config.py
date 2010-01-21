@@ -83,7 +83,8 @@ class Config(ConfigSingleton):
             ((s, int(i)) for (s,i) in configParser.items("int")) ))
 
     def _loadConfigFiles(self):
-        "Load the config file and add it to configParser"
+        """Load the config files and add it to configParser
+        All modifiable options must be on data/config"""
         self._localConfFilHref = os.path.join( self.Get("localConfigDir"), "config")
         self._globalConfFilHref = os.path.join( self.Get("globalConfigDir"), "config")
 
@@ -92,8 +93,12 @@ class Config(ConfigSingleton):
             print "No local conf file find"
 
         configParser = ConfigParser.ConfigParser()
-        if len( configParser.read(self._globalConfFilHref)) == 0:
-            print "Error : gui file "+self._globalConfFilHref+" not found"
+        if os.path.isfile(self._globalConfFilHref):
+            configParser.read(self._globalConfFilHref)
+        elif  os.path.isfile(os.path.join(self.Get("script"), '/data/config')):
+            configParser.read("../data/config")
+        else:
+            print "Error : global conf file 'config' not found"
             sys.exit(1)
 
         self._writableOptions = dict([(option, section)
