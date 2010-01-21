@@ -42,7 +42,7 @@ class Perroquet(object):
             print self.gui.config.Get("lastopenfile")
 
 
-            #self.core.LoadExercice(self.gui.config.Get("lastopenfile"))
+            self.core.LoadExercice(self.gui.config.Get("lastopenfile"))
 
         self.gui.Run()
 
