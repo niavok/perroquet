@@ -11,7 +11,6 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">normal</property>
     <property name="skip_taskbar_hint">True</property>
-    <property name="transient_for">MainWindow</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox8">
@@ -25,7 +24,9 @@
             <child>
               <object class="GtkVBox" id="pagePaths">
                 <property name="visible">True</property>
+                <property name="border_width">5</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
                 <child>
                   <object class="GtkHBox" id="hbox5">
                     <property name="visible">True</property>
@@ -252,6 +253,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_buttonExercicePropCancel_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -267,6 +269,7 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="xalign">0.52999997138977051</property>
+                <signal name="clicked" handler="on_buttonExercicePropOk_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>

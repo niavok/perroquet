@@ -51,7 +51,6 @@ class Gui:
         self.translationVisible = False
         self.disableChangedTextEvent = False
         self.mode = "closed"
-        self.dialogExerciceProperties = None
 
     def on_MainWindow_delete_event(self,widget,data=None):
         if not self.config.Get("autosave"):
@@ -554,57 +553,11 @@ class Gui:
         self.core.SelectSequenceWord(wordIndex,wordIndexPos)
 
     def on_toolbuttonProperties_clicked(self, widget, data=None):
-        if self.dialogExerciceProperties == None:
-            self.dialogExerciceProperties = GuiSequenceProperties(self.config, self.core, self.window)
-
-        self.dialogExerciceProperties.Run()
+        self.AskProperties()
 
     def AskProperties(self):
-        dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
-
-        (videoPath,exercicePath,translationPath)  = self.core.GetPaths()
-
-        if videoPath == "":
-            videoPath = "None"
-
-        if exercicePath == "":
-            exercicePath = "None"
-
-        if translationPath == "":
-            translationPath = "None"
-
-
-
-        videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
-        exerciceChooser = self.builder.get_object("filechooserbuttonExerciceProp")
-        translationChooser = self.builder.get_object("filechooserbuttonTranslationProp")
-        videoChooser.set_filename(videoPath)
-        exerciceChooser.set_filename(exercicePath)
-        translationChooser.set_filename(translationPath)
-        dialogExerciceProperties.show()
-
-    def on_buttonExercicePropOk_clicked(self,widget,data=None):
-        dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
-
-        videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
-        videoPath = videoChooser.get_filename()
-        exerciceChooser = self.builder.get_object("filechooserbuttonExerciceProp")
-        exercicePath = exerciceChooser.get_filename()
-        translationChooser = self.builder.get_object("filechooserbuttonTranslationProp")
-        translationPath = translationChooser.get_filename()
-        if videoPath == "None" or videoPath == None:
-            videoPath = ""
-        if exercicePath == "None" or exercicePath == None:
-            exercicePath = ""
-        if translationPath == "None" or translationPath == None:
-            translationPath = ""
-
-        self.core.UpdatePaths(videoPath,exercicePath, translationPath)
-        dialogExerciceProperties.hide()
-
-    def on_buttonExercicePropCancel_clicked(self,widget,data=None):
-        dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
-        dialogExerciceProperties.hide()
+        dialogExerciceProperties = GuiSequenceProperties(self.config, self.core, self.window)
+        dialogExerciceProperties.Run()
 
     def on_imagemenuitemAbout_activate(self,widget,data=None):
         self.builder.get_object("aboutdialog").show()
