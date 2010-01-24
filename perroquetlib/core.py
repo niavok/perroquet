@@ -21,52 +21,58 @@
 
 import thread, time, re, gtk, os
 from video_player import VideoPlayer
-from subtitles_loader import SubtitlesLoader
-from exercice_manager import ExerciceSaver
-from exercice_manager import ExerciceLoader
-from sequence import Sequence
+from exercise_manager import ExerciseSaver
+from exercise_manager import ExerciseLoader
+from exercise import Exercise
 
 class Core(object):
     WAIT_BEGIN = 0
     WAIT_END = 1
 
     def __init__(self):
-        self.subtitles = SubtitlesLoader()
         self.outputSavePath = ""
         self.player = None
         self.last_save = False
+        self.exercise = None
+
 
     def SetGui(self, gui):
         self.gui = gui
 
-    def SetPaths(self, videoPath, exercicePath, translationPath, load = True):
+    def NewExercise(self, videoPath, exercisePath, translationPath, load = True):
+        self.exercise = Exercise()
         self.outputSavePath = ""
-        self.videoPath = videoPath
-        self.exercicePath = exercicePath
-        self.translationPath = translationPath
-        self.repeatCount = 0
-        self.subList = self.subtitles.GetSubtitleList(exercicePath)
+        self.SetPaths(videoPath, exercisePath, translationPath)
+        self.InitExercise()
+        self.Reload(load);
+        self.ActivateSequence()
+        self.gui.SetTitle("", True)
 
-        self.subList = self.subtitles.CompactSubtitlesList(self.subList)
+    def SetPaths(self, videoPath, exercisePath, translationPath):
+        self.exercise.SetVideoPath(videoPath)
+        self.exercise.SetExercisePath(exercisePath)
+        self.exercise.SetTranslationPath(translationPath)
+        self.exercise.LoadSubtitles()
 
-        self.translationList = None
-        if translationPath != "":
-            self.translationList = self.subtitles.GetSubtitleList(translationPath)
-
+    def Reload(self, load):
         if self.player != None:
             self.player.Close()
 
         self.player = VideoPlayer()
         self.player.SetWindowId(self.gui.GetVideoWindowId())
-        self.player.Open(videoPath)
-        self.InitExercice()
+        self.player.Open(self.exercise.GetVideoPath())
+        self.player.SetCallback(self.TimeCallback)
+        self.paused = False
+        self.gui.Activate("loaded")
+        self.UpdateWordList()
+        self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
+
         if load:
             self.SetCanSave(True)
             self.Play()
         else:
             self.SetCanSave(False)
             self.Pause()
-
 
     def Play(self):
         self.gui.SetPlaying(True)
@@ -82,91 +88,68 @@ class Core(object):
         self.gui.SetSpeed(speed)
         self.player.SetSpeed(speed)
 
-    def InitExercice(self):
-        self.player.SetCallback(self.TimeCallback)
-        self.sequenceList = []
-        self.paused = False
-        for sub in self.subList:
-            self.sequence = Sequence()
-            self.sequence.Load(sub.GetText())
-            self.sequenceList.append(self.sequence)
-
-        self.currentSubId = 0
-        self.gui.Activate("loaded")
-        self.ActivateSequence()
-        self.ExtractWordList()
-        self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
+    def InitExercise(self):
+        self.exercise.Initialize()
 
 
     def TimeCallback(self):
         if self.state == Core.WAIT_BEGIN:
-            self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd() + 500)
+            self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeEnd() + 500)
             self.state = Core.WAIT_END
         elif self.state == Core.WAIT_END:
             self.state = Core.WAIT_BEGIN
-            #self.currentSubId += 1
-            #self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeBegin())
-            if self.validSequence:
+            if self.exercise.GetCurrentSequence().IsValid():
                 gtk.gdk.threads_enter()
                 self.NextSequence(False)
                 gtk.gdk.threads_leave()
             else:
                 self.Pause()
 
-
-
     def RepeatSequence(self):
         self.GotoSequenceBegin()
         self.Play()
 
     def SelectSequence(self, num, load = True):
-        if self.currentSubId == num:
+        if self.exercise.GetCurrentSequenceId() == num:
             return
-        self.currentSubId = num
+        self.exercise.GotoSequence(num)
         self.ActivateSequence()
         if load:
             self.RepeatSequence()
         self.SetCanSave(True)
 
     def NextSequence(self, load = True):
-        if self.currentSubId < len(self.sequenceList)-1:
-            self.currentSubId += 1
+        if self.exercise.GotoNextSequence():
+            self.SetCanSave(True)
         self.ActivateSequence()
         if load:
             self.RepeatSequence()
-        self.SetCanSave(True)
 
-    def PreviousSequence(self):
-        if self.currentSubId > 0:
-            self.currentSubId -= 1
+    def PreviousSequence(self, load = True):
+        if self.exercise.GotoPreviousSequence():
+            self.SetCanSave(True)
         self.ActivateSequence()
-        self.RepeatSequence()
-        self.SetCanSave(True)
+        if load:
+            self.RepeatSequence()
 
     def ActivateSequence(self):
         self.state = Core.WAIT_BEGIN
         self.SetSpeed(1)
-        self.player.SetNextCallbackTime(self.subList[ self.currentSubId].GetTimeBegin())
-        self.sequence = self.sequenceList[self.currentSubId]
+        self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeBegin())
 
-        self.validSequence = self.sequence.IsValid()
-
-        self.gui.SetSequenceNumber(self.currentSubId, len(self.subList))
-        self.gui.SetSequence(self.sequence)
+        self.gui.SetSequenceNumber(self.exercise.GetCurrentSequenceId(), self.exercise.GetSequenceCount())
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ActivateTranslation()
         self.UpdateStats()
 
-
-
-
     def ActivateTranslation(self):
-        if not self.translationList:
+        if not self.exercise.GetTranslationList():
             self.gui.SetTranslation("")
         else:
             translation = ""
-            currentBegin = self.subList[ self.currentSubId].GetTimeBegin()
-            currentEnd = self.subList[ self.currentSubId].GetTimeEnd()
-            for sub in self.translationList:
+            currentBegin = self.exercise.GetCurrentSequence().GetTimeBegin()
+            currentEnd = self.exercise.GetCurrentSequence().GetTimeEnd()
+            for sub in self.exercise.GetTranslationList():
                 begin = sub.GetTimeBegin()
                 end = sub.GetTimeEnd()
                 if (begin >= currentBegin and begin <= currentEnd) or (end >= currentBegin and end <= currentEnd) or (begin <= currentBegin and end >= currentEnd):
@@ -175,11 +158,11 @@ class Core(object):
             self.gui.SetTranslation(translation)
 
     def UpdateStats(self):
-        sequenceCount = len(self.sequenceList)
+        sequenceCount = self.exercise.GetSequenceCount()
         sequenceFound = 0
         wordCount = 0
         wordFound = 0
-        for sequence in self.sequenceList:
+        for sequence in  self.exercise.GetSequenceList():
             wordCount = wordCount + sequence.GetWordCount()
             if sequence.IsValid():
                 sequenceFound += 1
@@ -189,91 +172,88 @@ class Core(object):
         if wordFound == 0:
             repeatRate = float(0)
         else:
-            repeatRate = float(self.repeatCount) / float(wordFound)
+            repeatRate = float(self.exercise.GetRepeatCount()) / float(wordFound)
         self.gui.SetStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
 
-
-
     def ValidateSequence(self):
-        if self.sequence.IsValid():
-            self.validSequence = True
+        if self.exercise.GetCurrentSequence().IsValid():
             self.RepeatSequence()
 
     def GotoSequenceBegin(self, asSoonAsReady = False):
         self.state = Core.WAIT_END
-        begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
+        begin_time = self.exercise.GetCurrentSequence().GetTimeBegin() - 1000
         if begin_time < 0:
             begin_time = 0
         if asSoonAsReady:
             self.player.SeekAsSoonAsReady(begin_time)
         else:
             self.player.Seek(begin_time)
-        self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd())
+        self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeEnd())
         self.SetCanSave(True)
 
 
     def WriteCharacter(self, character):
 
         if re.match('^[0-9\'a-zA-Z]$',character):
-            self.sequence.WriteCharacter(character)
-            self.gui.SetSequence(self.sequence)
+            self.exercise.GetCurrentSequence().WriteCharacter(character)
+            self.gui.SetSequence(self.exercise.GetCurrentSequence())
             self.ValidateSequence()
             self.SetCanSave(True)
         else:
-            self.gui.SetSequence(self.sequence)
+            self.gui.SetSequence(self.exercise.GetCurrentSequence())
 
 
     def NextWord(self):
-        self.sequence.NextWord(False)
-        self.gui.SetSequence(self.sequence)
+        self.exercise.GetCurrentSequence().NextWord(False)
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.SetCanSave(True)
 
     def PreviousWord(self):
-        self.sequence.PreviousWord(False)
-        self.gui.SetSequence(self.sequence)
+        self.exercise.GetCurrentSequence().PreviousWord(False)
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.SetCanSave(True)
 
     def SelectSequenceWord(self, wordIndex,wordIndexPos):
-        self.sequence.SelectSequenceWord(wordIndex,wordIndexPos)
-        self.gui.SetSequence(self.sequence)
+        self.exercise.GetCurrentSequence().SelectSequenceWord(wordIndex,wordIndexPos)
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.SetCanSave(True)
 
     def FirstWord(self):
-        self.sequence.FirstWord()
+        self.exercise.GetCurrentSequence().FirstWord()
 
-        self.gui.SetSequence(self.sequence)
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.SetCanSave(True)
 
     def LastWord(self):
-        self.sequence.LastWord()
-        self.gui.SetSequence(self.sequence)
+        self.exercise.GetCurrentSequence().LastWord()
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.SetCanSave(True)
 
     def DeletePreviousChar(self):
-        self.sequence.DeletePreviousCharacter()
-        self.gui.SetSequence(self.sequence)
+        self.exercise.GetCurrentSequence().DeletePreviousCharacter()
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ValidateSequence()
         self.SetCanSave(True)
 
     def DeleteNextChar(self):
-        self.sequence.DeleteNextCharacter()
-        self.gui.SetSequence(self.sequence)
+        self.exercise.GetCurrentSequence().DeleteNextCharacter()
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ValidateSequence()
         self.SetCanSave(True)
 
     def PreviousChar(self):
-        self.sequence.PreviousCharacter()
-        self.gui.SetSequence(self.sequence)
+        self.exercise.GetCurrentSequence().PreviousCharacter()
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.SetCanSave(True)
 
     def NextChar(self):
-        self.sequence.NextCharacter()
-        self.gui.SetSequence(self.sequence)
+        self.exercise.GetCurrentSequence().NextCharacter()
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.SetCanSave(True)
 
     def CompleteWord(self):
-        self.sequence.CompleteWord()
-        self.gui.SetSequence(self.sequence)
+        self.exercise.GetCurrentSequence().CompleteWord()
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ValidateSequence()
         self.SetCanSave(True)
 
@@ -284,13 +264,13 @@ class Core(object):
             self.Pause()
 
     def SeekSequence(self, time):
-        begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
+        begin_time = self.exercise.GetCurrentSequence().GetTimeBegin() - 1000
         if begin_time < 0:
             begin_time = 0
 
         pos = begin_time + time
         self.player.Seek(pos)
-        self.player.SetNextCallbackTime(self.subList[self.currentSubId].GetTimeEnd() + 500)
+        self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeEnd() + 500)
         self.state = Core.WAIT_END
         self.Play()
 
@@ -301,8 +281,8 @@ class Core(object):
             time.sleep(0.5)
             pos_int = self.player.GetCurrentTime()
             if pos_int != None:
-                end_time = self.subList[self.currentSubId].GetTimeEnd()
-                begin_time = self.subList[self.currentSubId].GetTimeBegin() - 1000
+                end_time = self.exercise.GetCurrentSequence().GetTimeEnd()
+                begin_time = self.exercise.GetCurrentSequence().GetTimeBegin() - 1000
                 if begin_time < 0:
                     begin_time = 0
                 duration =  end_time - begin_time
@@ -318,105 +298,67 @@ class Core(object):
             self.outputSavePath = outputSavePath
 
         self.gui.SetTitle(self.outputSavePath, False)
-        saver = ExerciceSaver()
-        saver.SetPath(self.outputSavePath)
-        saver.SetVideoPath(self.videoPath)
-        saver.SetExercicePath(self.exercicePath)
-        saver.SetTranslationPath(self.translationPath)
-        saver.SetCurrentSequence(self.currentSubId)
-        saver.SetRepeatCount(self.repeatCount)
-        saver.SetSequenceList(self.sequenceList)
-        saver.Save()
+        saver = ExerciseSaver()
+        saver.Save(self.exercise, self.outputSavePath)
 
         self.gui.config.Set("lastopenfile", self.outputSavePath)
 
         self.SetCanSave(False)
 
-    def LoadExercice(self, path):
+    def LoadExercise(self, path):
         self.gui.Activate("closed")
-        loader = ExerciceLoader()
-        if not loader.Load(path):
+        loader = ExerciseLoader()
+        self.exercise = loader.Load(path)
+        if not self.exercise:
             return
 
-        if not self.VerifyPath(loader.GetVideoPath(), loader.GetExercicePath(), loader.GetTranslationPath()):
+        validPaths, errorList = self.exercise.IsPathsValid()
+        if not validPaths:
+            for error in errorList:
+                self.gui.SignalExerciseBadPath(error)
+
             self.outputSavePath = path
             self.gui.SetTitle(self.outputSavePath, False)
-            self.videoPath = loader.GetVideoPath()
-            self.exercicePath = loader.GetExercicePath()
-            self.translationPath = loader.GetTranslationPath()
             self.gui.Activate("load_failed")
             self.gui.AskProperties()
             return
 
-        self.SetPaths( loader.GetVideoPath(), loader.GetExercicePath(), loader.GetTranslationPath(), False)
+        self.Reload(False)
         self.outputSavePath = path
         self.gui.SetTitle(self.outputSavePath, False)
-        loader.UpdateSequenceList(self.sequenceList)
-        self.currentSubId = loader.GetCurrentSequence()
-        self.repeatCount = loader.GetRepeatCount()
-        self.sequenceList[self.currentSubId].SetActiveWordIndex(loader.GetCurrentWord())
         self.ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
 
-    def VerifyPath(self, videoPath, exercicePath, translationPath):
-        error = False
-        if not os.path.exists(videoPath):
-            error = True;
-            self.gui.SignalExerciceBadPath(videoPath)
+    def UpdatePaths(self, videoPath, exercisePath, translationPath):
+        self.exercise.SetVideoPath(videoPath)
+        self.exercise.SetExercisePath(exercisePath)
+        self.exercise.SetTranslationPath(translationPath)
 
-        if not os.path.exists(exercicePath):
-            error = True;
-            self.gui.SignalExerciceBadPath(exercicePath)
-
-        if translationPath != "" and not os.path.exists(translationPath):
-            error = True;
-            self.gui.SignalExerciceBadPath(translationPath)
-
-        return not error
-
-    def UpdatePaths(self, videoPath, exercicePath, translationPath):
-
-        if not self.VerifyPath(videoPath, exercicePath, translationPath):
+        validPaths, errorList = self.exercise.IsPathsValid()
+        if not validPaths:
+            for error in errorList:
+                self.gui.SignalExerciseBadPath(error)
             self.gui.Activate("load_failed")
             self.gui.SetTitle(self.outputSavePath, False)
-            self.videoPath = videoPath
-            self.exercicePath = exercicePath
-            self.translationPath = translationPath
             return
 
-        loader = ExerciceLoader()
-        if not loader.Load(self.outputSavePath):
-            return
-
-        path = self.outputSavePath
-        self.SetPaths( videoPath, exercicePath, translationPath, False)
-        self.outputSavePath = path
+        self.SetPaths( videoPath, exercisePath, translationPath)
+        self.Reload(True)
         self.gui.SetTitle(self.outputSavePath, True)
         self.SetCanSave(True)
-        loader.UpdateSequenceList(self.sequenceList)
-        self.currentSubId = loader.GetCurrentSequence()
-        self.repeatCount = loader.GetRepeatCount()
-        self.sequenceList[self.currentSubId].SetActiveWordIndex(loader.GetCurrentWord())
         self.ActivateSequence()
+        self.GotoSequenceBegin(True)
+        self.Play()
 
     def GetPaths(self):
-        return (self.videoPath, self.exercicePath, self.translationPath)
+        return (self.exercise.GetVideoPath(), self.exercise.GetExercisePath(), self.exercise.GetTranslationPath())
 
-    def ExtractWordList(self):
-        wordList = []
-
-        for sequence in self.sequenceList:
-            sequenceWordList = sequence.GetWordList()
-            for word in sequenceWordList:
-                wordList.append(word.lower())
-
-        wordList = list(set(wordList))
-        wordList.sort()
-        self.gui.SetWordList(wordList)
+    def UpdateWordList(self):
+        self.gui.SetWordList(self.exercise.ExtractWordList())
 
     def UserRepeat(self):
-        self.repeatCount +=1
+        self.exercise.IncrementRepeatCount()
 
 
     def SetCanSave(self, save):

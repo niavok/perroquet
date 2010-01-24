@@ -79,10 +79,10 @@ class Gui:
             self.config.Save()
             return True
 
-    def SignalExerciceBadPath(self, path):
+    def SignalExerciseBadPath(self, path):
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
                                    gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
-                                   _("The file '%s' doesn't exist. Please modify exercice paths") % path)
+                                   _("The file '%s' doesn't exist. Please modify exercise paths") % path)
         dialog.set_title(_("Load error"))
 
         response = dialog.run()
@@ -90,38 +90,38 @@ class Gui:
 
 
 
-    def on_newExerciceButton_clicked(self,widget,data=None):
-        self.newExerciceDialog = self.builder.get_object("newExerciceDialog")
+    def on_newExerciseButton_clicked(self,widget,data=None):
+        self.newExerciseDialog = self.builder.get_object("newExerciseDialog")
 
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
-        exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
+        exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
         translationChooser = self.builder.get_object("filechooserbuttonTranslation")
         videoChooser.set_filename("None")
-        exerciceChooser.set_filename("None")
+        exerciseChooser.set_filename("None")
         translationChooser.set_filename("None")
-        self.newExerciceDialog.show()
+        self.newExerciseDialog.show()
 
 
 
-    def on_buttonNewExerciceOk_clicked(self,widget,data=None):
+    def on_buttonNewExerciseOk_clicked(self,widget,data=None):
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         videoPath = videoChooser.get_filename()
-        exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
-        exercicePath = exerciceChooser.get_filename()
+        exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
+        exercisePath = exerciseChooser.get_filename()
         translationChooser = self.builder.get_object("filechooserbuttonTranslation")
         translationPath = translationChooser.get_filename()
         if videoPath == "None" or videoPath == None:
             videoPath = ""
-        if exercicePath == "None" or exercicePath == None:
-            exercicePath = ""
+        if exercisePath == "None" or exercisePath == None:
+            exercisePath = ""
         if translationPath == "None" or translationPath == None:
             translationPath = ""
 
-        self.core.SetPaths(videoPath,exercicePath, translationPath)
-        self.newExerciceDialog.hide()
+        self.core.NewExercise(videoPath,exercisePath, translationPath)
+        self.newExerciseDialog.hide()
 
-    def on_buttonNewExerciceCancel_clicked(self,widget,data=None):
-        self.newExerciceDialog.hide()
+    def on_buttonNewExerciseCancel_clicked(self,widget,data=None):
+        self.newExerciseDialog.hide()
 
     def SetCore(self, core):
         self.core = core
@@ -490,7 +490,7 @@ class Gui:
         if result == None:
             return
 
-        self.core.LoadExercice(result)
+        self.core.LoadExercise(result)
 
     def AskSavePath(self):
 
@@ -507,7 +507,7 @@ class Gui:
             path = path +".perroquet"
         return path
 
-    def on_buttonSaveExerciceOk_clicked(self, widget, data=None):
+    def on_buttonSaveExerciseOk_clicked(self, widget, data=None):
         saveChooser = self.builder.get_object("filechooserdialogSave")
         saveChooser.hide()
 
@@ -557,8 +557,8 @@ class Gui:
         self.AskProperties()
 
     def AskProperties(self):
-        dialogExerciceProperties = GuiSequenceProperties(self.config, self.core, self.window)
-        dialogExerciceProperties.Run()
+        dialogExerciseProperties = GuiSequenceProperties(self.config, self.core, self.window)
+        dialogExerciseProperties.Run()
 
     def on_imagemenuitemAbout_activate(self,widget,data=None):
         self.builder.get_object("aboutdialog").show()
@@ -604,19 +604,19 @@ class Gui:
         return self.on_loadButton_clicked(widget, data)
 
     def on_imagemenuitemNew_activate(self,widget,data=None):
-        return self.on_newExerciceButton_clicked(widget, data)
+        return self.on_newExerciseButton_clicked(widget, data)
 
     def on_filechooserbuttonVideo_file_set(self,widget,data=None):
 
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
-        exerciceChooser = self.builder.get_object("filechooserbuttonExercice")
+        exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
         translationChooser = self.builder.get_object("filechooserbuttonTranslation")
 
         fileName = videoChooser.get_filename()
         if fileName and os.path.isfile(fileName):
             filePath = os.path.dirname(fileName)
-            if not exerciceChooser.get_filename() or not os.path.isfile(exerciceChooser.get_filename()):
-                exerciceChooser.set_current_folder(filePath)
+            if not exerciseChooser.get_filename() or not os.path.isfile(exerciseChooser.get_filename()):
+                exerciseChooser.set_current_folder(filePath)
             if not translationChooser.get_filename() or not os.path.isfile(translationChooser.get_filename()):
                 translationChooser.set_current_folder(filePath)
 

@@ -37,10 +37,10 @@ class Perroquet(object):
     def run(self):
         if len(sys.argv) > 1:
             path = os.path.abspath(sys.argv[1])
-            self.core.LoadExercice( path )
+            self.core.LoadExercise( path )
         elif self.gui.config.Get("lastopenfile"):
             print "last open file : " + self.gui.config.Get("lastopenfile")
-            self.core.LoadExercice(self.gui.config.Get("lastopenfile"))
+            self.core.LoadExercise(self.gui.config.Get("lastopenfile"))
 
         self.gui.Run()
 

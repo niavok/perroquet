@@ -156,13 +156,13 @@
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkToolButton" id="newExerciceButton">
+              <object class="GtkToolButton" id="newExerciseButton">
                 <property name="visible">True</property>
                 <property name="tooltip_text" translatable="yes">New exercise</property>
-                <property name="label" translatable="yes">New exercice</property>
+                <property name="label" translatable="yes">New exercise</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-new</property>
-                <signal name="clicked" handler="on_newExerciceButton_clicked"/>
+                <signal name="clicked" handler="on_newExerciseButton_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -173,7 +173,7 @@
               <object class="GtkToolButton" id="loadButton">
                 <property name="visible">True</property>
                 <property name="tooltip_text" translatable="yes">Open exercise</property>
-                <property name="label" translatable="yes">Open saved exercice</property>
+                <property name="label" translatable="yes">Open saved exercise</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
                 <signal name="clicked" handler="on_loadButton_clicked"/>
@@ -188,7 +188,7 @@
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="tooltip_text" translatable="yes">Save exercise</property>
-                <property name="label" translatable="yes">Save exercice</property>
+                <property name="label" translatable="yes">Save exercise</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save</property>
                 <signal name="clicked" handler="on_saveButton_clicked"/>
@@ -353,7 +353,7 @@
               <object class="GtkToolButton" id="toolbuttonProperties">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="tooltip_text" translatable="yes">Exercice properties</property>
+                <property name="tooltip_text" translatable="yes">Exercise properties</property>
                 <property name="label" translatable="yes">Properties</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-properties</property>
@@ -594,10 +594,10 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
       </object>
     </child>
   </object>
-  <object class="GtkDialog" id="newExerciceDialog">
+  <object class="GtkDialog" id="newExerciseDialog">
     <property name="width_request">400</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">New exercice</property>
+    <property name="title" translatable="yes">New exercise</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
@@ -616,8 +616,8 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
             <child>
               <object class="GtkLabel" id="labelInputVideoFile">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes">The audio track should be in the exercice language</property>
-                <property name="label" translatable="yes">Exercice video or audio: </property>
+                <property name="tooltip_text" translatable="yes">The audio track should be in the exercise language</property>
+                <property name="label" translatable="yes">Exercise video or audio: </property>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -626,7 +626,7 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
             <child>
               <object class="GtkFileChooserButton" id="filechooserbuttonVideo">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes">The audio track should be in the exercice language</property>
+                <property name="tooltip_text" translatable="yes">The audio track should be in the exercise language</property>
                 <property name="create_folders">False</property>
                 <property name="title" translatable="yes">Select a video file</property>
                 <signal name="file_set" handler="on_filechooserbuttonVideo_file_set"/>
@@ -644,20 +644,20 @@ For more information on regular expressions: http://en.wikipedia.org/wiki/Regula
           <object class="GtkHBox" id="hbox3">
             <property name="visible">True</property>
             <child>
-              <object class="GtkLabel" id="labelInputExerciceFile">
+              <object class="GtkLabel" id="labelInputExerciseFile">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes">These subtitles should be in the exercice language.
+                <property name="tooltip_text" translatable="yes">These subtitles should be in the exercise language.
 Supported format: srt</property>
-                <property name="label" translatable="yes">Exercice subtitle: </property>
+                <property name="label" translatable="yes">Exercise subtitle: </property>
               </object>
               <packing>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkFileChooserButton" id="filechooserbuttonExercice">
+              <object class="GtkFileChooserButton" id="filechooserbuttonExercise">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes">These subtitles should be in the exercice language.
+                <property name="tooltip_text" translatable="yes">These subtitles should be in the exercise language.
 Supported format: srt</property>
                 <property name="create_folders">False</property>
                 <property name="title" translatable="yes">Select a subtitle file</property>
@@ -707,13 +707,13 @@ Supported format: srt</property>
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="buttonNewExerciceCancel">
+              <object class="GtkButton" id="buttonNewExerciseCancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_buttonNewExerciceCancel_clicked"/>
+                <signal name="clicked" handler="on_buttonNewExerciseCancel_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -722,13 +722,13 @@ Supported format: srt</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="buttonNewExerciceOk">
+              <object class="GtkButton" id="buttonNewExerciseOk">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_buttonNewExerciceOk_clicked"/>
+                <signal name="clicked" handler="on_buttonNewExerciseOk_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -746,8 +746,8 @@ Supported format: srt</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">buttonNewExerciceCancel</action-widget>
-      <action-widget response="0">buttonNewExerciceOk</action-widget>
+      <action-widget response="0">buttonNewExerciseCancel</action-widget>
+      <action-widget response="0">buttonNewExerciseOk</action-widget>
     </action-widgets>
   </object>
   <object class="GtkAdjustment" id="adjustmentSequenceTime">

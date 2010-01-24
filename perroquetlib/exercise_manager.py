@@ -22,9 +22,9 @@
 
 
 from xml.dom.minidom import getDOMImplementation, parse
+from exercise import Exercise
 
-
-class ExerciceLoader(object):
+class ExerciseLoader(object):
 
     def getText(self, nodelist):
         rc = ""
@@ -36,16 +36,19 @@ class ExerciceLoader(object):
 
 
     def Load(self, path):
+
+        self.exercise = Exercise()
+
         dom = parse(path)
         xml_paths = dom.getElementsByTagName("paths")[0]
-        self.videoPath = self.getText(xml_paths.getElementsByTagName("video")[0].childNodes)
-        self.exercicePath = self.getText(xml_paths.getElementsByTagName("exercice")[0].childNodes)
+        self.exercise.SetVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
+        self.exercise.SetExercisePath(self.getText(xml_paths.getElementsByTagName("exercise")[0].childNodes))
 
-        self.translationPath = self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes)
+        self.exercise.SetTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
 
         xml_progress = dom.getElementsByTagName("progress")[0]
-        self.currentSequence = int(self.getText(xml_progress.getElementsByTagName("current_sequence")[0].childNodes))
-        self.currentWord = int(self.getText(xml_progress.getElementsByTagName("current_word")[0].childNodes))
+        self.exercise.SetCurrentSequence(int(self.getText(xml_progress.getElementsByTagName("current_sequence")[0].childNodes)))
+        currentWord = int(self.getText(xml_progress.getElementsByTagName("current_word")[0].childNodes))
 
         xml_sequences = xml_progress.getElementsByTagName("sequences")[0]
 
@@ -63,17 +66,23 @@ class ExerciceLoader(object):
 
             self.progress.append((id, state, words))
 
+        self.exercise.LoadSubtitles()
+        self.UpdateSequenceList()
+
+        self.exercise.GetCurrentSequence().SetActiveWordIndex(currentWord)
 
         # Stats
         xml_stats = dom.getElementsByTagName("stats")[0]
-        self.repeatCount = int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes))
+        self.exercise.SetRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
 
         dom.unlink()
 
-        return True
+        return self.exercise
 
 
-    def UpdateSequenceList(self, sequenceList):
+    def UpdateSequenceList(self ):
+
+        sequenceList = self.exercise.GetSequenceList()
 
         for (id, state, words) in self.progress:
             sequence = sequenceList[id]
@@ -86,27 +95,10 @@ class ExerciceLoader(object):
                     sequence.ComputeValidity(i)
                     i = i+1
 
-    def GetCurrentSequence(self):
-        return self.currentSequence
+class ExerciseSaver(object):
 
-    def GetCurrentWord(self):
-        return self.currentWord
-
-    def GetVideoPath(self):
-        return self.videoPath
-
-    def GetExercicePath(self):
-        return self.exercicePath
-
-    def GetTranslationPath(self):
-        return self.translationPath
-
-    def GetRepeatCount(self):
-        return self.repeatCount
-
-class ExerciceSaver(object):
-
-    def Save(self):
+    def Save(self,exercise, outputPath):
+        self.outputPath = outputPath
         impl = getDOMImplementation()
 
         newdoc = impl.createDocument(None, "perroquet", None)
@@ -114,22 +106,22 @@ class ExerciceSaver(object):
 
         # Version
         xml_version = newdoc.createElement("version")
-        xml_version.appendChild(newdoc.createTextNode("1.0.0"))
+        xml_version.appendChild(newdoc.createTextNode("1.1.0"))
         root_element.appendChild(xml_version)
 
         # Paths
         xml_paths = newdoc.createElement("paths")
 
         xml_video_paths = newdoc.createElement("video")
-        xml_video_paths.appendChild(newdoc.createTextNode(self.videoPath))
+        xml_video_paths.appendChild(newdoc.createTextNode(exercise.GetVideoPath()))
         xml_paths.appendChild(xml_video_paths)
 
-        xml_exercice_paths = newdoc.createElement("exercice")
-        xml_exercice_paths.appendChild(newdoc.createTextNode(self.exercicePath))
+        xml_exercice_paths = newdoc.createElement("exercise")
+        xml_exercice_paths.appendChild(newdoc.createTextNode(exercise.GetExercisePath()))
         xml_paths.appendChild(xml_exercice_paths)
 
         xml_translation_paths = newdoc.createElement("translation")
-        xml_translation_paths.appendChild(newdoc.createTextNode(self.translationPath))
+        xml_translation_paths.appendChild(newdoc.createTextNode(exercise.GetTranslationPath()))
         xml_paths.appendChild(xml_translation_paths)
 
         root_element.appendChild(xml_paths)
@@ -138,16 +130,16 @@ class ExerciceSaver(object):
         xml_progress = newdoc.createElement("progress")
 
         xml_current_sequence = newdoc.createElement("current_sequence")
-        xml_current_sequence.appendChild(newdoc.createTextNode(str(self.sequenceId)))
+        xml_current_sequence.appendChild(newdoc.createTextNode(str(exercise.GetCurrentSequenceId())))
         xml_progress.appendChild(xml_current_sequence)
 
         xml_current_word = newdoc.createElement("current_word")
-        xml_current_word.appendChild(newdoc.createTextNode(str(self.sequenceList[self.sequenceId].GetActiveWordIndex())))
+        xml_current_word.appendChild(newdoc.createTextNode(str(exercise.GetCurrentSequence().GetActiveWordIndex())))
         xml_progress.appendChild(xml_current_word)
 
         xml_sequences = newdoc.createElement("sequences")
         id = 0
-        for sequence in self.sequenceList:
+        for sequence in exercise.GetSequenceList():
             if sequence.IsValid():
                 xml_sequence = newdoc.createElement("sequence")
                 xml_sequence_id = newdoc.createElement("id")
@@ -187,7 +179,7 @@ class ExerciceSaver(object):
         xml_stats = newdoc.createElement("stats")
 
         xml_repeatCount = newdoc.createElement("repeat_count")
-        xml_repeatCount.appendChild(newdoc.createTextNode(str(self.repeatCount)))
+        xml_repeatCount.appendChild(newdoc.createTextNode(str(exercise.GetRepeatCount())))
         xml_stats.appendChild(xml_repeatCount)
 
         root_element.appendChild(xml_stats)
@@ -198,24 +190,3 @@ class ExerciceSaver(object):
         f = open(self.outputPath, 'w')
         f.write(xml_string)
         f.close()
-
-    def SetPath(self, path):
-        self.outputPath = path
-
-    def SetVideoPath(self, path):
-        self.videoPath = path
-
-    def SetExercicePath(self, path):
-        self.exercicePath = path
-
-    def SetTranslationPath(self, path):
-        self.translationPath = path
-
-    def SetCurrentSequence(self, id):
-        self.sequenceId = id
-
-    def SetSequenceList(self, sequenceList):
-        self.sequenceList = sequenceList
-
-    def SetRepeatCount(self, repeatCount):
-        self.repeatCount = repeatCount

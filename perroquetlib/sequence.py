@@ -267,6 +267,7 @@ class Sequence(object):
         id = 0
         for word in self.wordList:
             self.workList[id] = word
+            self.ComputeValidity(id)
             id += 1
 
     def WorkChange(self):
@@ -329,3 +330,15 @@ class Sequence(object):
                 return index - i
 
         return -1
+
+    def GetTimeBegin(self):
+        return self.beginTime
+
+    def GetTimeEnd(self):
+        return self.endTime
+
+    def SetTimeBegin(self, time):
+        self.beginTime = time
+
+    def SetTimeEnd(self, time):
+        self.endTime = time

@@ -36,7 +36,7 @@ class GuiSequenceProperties:
         self.builder.set_translation_domain("perroquet")
         self.builder.add_from_file(self.config.Get("ui_sequence_properties_path"))
         self.builder.connect_signals(self)
-        self.dialog = self.builder.get_object("dialogExerciceProperties")
+        self.dialog = self.builder.get_object("dialogExerciseProperties")
 
         self.pagePaths = self.builder.get_object("pagePaths")
         self.pageSequences = self.builder.get_object("pageSequences")
@@ -51,13 +51,13 @@ class GuiSequenceProperties:
         self.dialog.run()
         self.dialog.destroy()
     def Load(self):
-        (videoPath,exercicePath,translationPath)  = self.core.GetPaths()
+        (videoPath,exercisePath,translationPath)  = self.core.GetPaths()
 
         if videoPath == "":
             videoPath = "None"
 
-        if exercicePath == "":
-            exercicePath = "None"
+        if exercisePath == "":
+            exercisePath = "None"
 
         if translationPath == "":
             translationPath = "None"
@@ -65,35 +65,35 @@ class GuiSequenceProperties:
 
 
         videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
-        exerciceChooser = self.builder.get_object("filechooserbuttonExerciceProp")
+        exerciseChooser = self.builder.get_object("filechooserbuttonExerciseProp")
         translationChooser = self.builder.get_object("filechooserbuttonTranslationProp")
         videoChooser.set_filename(videoPath)
-        exerciceChooser.set_filename(exercicePath)
+        exerciseChooser.set_filename(exercisePath)
         translationChooser.set_filename(translationPath)
 
 
-    def on_buttonExercicePropOk_clicked(self,widget,data=None):
-        dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
+    def on_buttonExercisePropOk_clicked(self,widget,data=None):
+        dialogExerciseProperties = self.builder.get_object("dialogExerciseProperties")
 
         videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
         videoPath = videoChooser.get_filename()
-        exerciceChooser = self.builder.get_object("filechooserbuttonExerciceProp")
-        exercicePath = exerciceChooser.get_filename()
+        exerciseChooser = self.builder.get_object("filechooserbuttonExerciseProp")
+        exercisePath = exerciseChooser.get_filename()
         translationChooser = self.builder.get_object("filechooserbuttonTranslationProp")
         translationPath = translationChooser.get_filename()
         if videoPath == "None" or videoPath == None:
             videoPath = ""
-        if exercicePath == "None" or exercicePath == None:
-            exercicePath = ""
+        if exercisePath == "None" or exercisePath == None:
+            exercisePath = ""
         if translationPath == "None" or translationPath == None:
             translationPath = ""
 
-        self.core.UpdatePaths(videoPath,exercicePath, translationPath)
-        #dialogExerciceProperties.hide()
+        self.core.UpdatePaths(videoPath,exercisePath, translationPath)
+        #dialogExerciseProperties.hide()
         self.dialog.response(gtk.RESPONSE_OK)
 
-    def on_buttonExercicePropCancel_clicked(self,widget,data=None):
+    def on_buttonExercisePropCancel_clicked(self,widget,data=None):
         print "Cancel"
-        #dialogExerciceProperties = self.builder.get_object("dialogExerciceProperties")
-        #dialogExerciceProperties.hide()
+        #dialogExerciseProperties = self.builder.get_object("dialogExerciseProperties")
+        #dialogExerciseProperties.hide()
         self.dialog.response(gtk.RESPONSE_CANCEL)

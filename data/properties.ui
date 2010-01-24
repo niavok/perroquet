@@ -2,10 +2,10 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkDialog" id="dialogExerciceProperties">
+  <object class="GtkDialog" id="dialogExerciseProperties">
     <property name="width_request">400</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Exercice properties</property>
+    <property name="title" translatable="yes">Exercise properties</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
@@ -58,16 +58,16 @@
                   <object class="GtkHBox" id="hbox6">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkLabel" id="labelInputExerciceFile1">
+                      <object class="GtkLabel" id="labelInputExerciseFile1">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Exercice: </property>
+                        <property name="label" translatable="yes">Exercise: </property>
                       </object>
                       <packing>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFileChooserButton" id="filechooserbuttonExerciceProp">
+                      <object class="GtkFileChooserButton" id="filechooserbuttonExerciseProp">
                         <property name="visible">True</property>
                         <property name="create_folders">False</property>
                         <property name="title" translatable="yes">Select a subtitle file</property>
@@ -247,13 +247,13 @@
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="buttonExercicePropCancel">
+              <object class="GtkButton" id="buttonExercisePropCancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_buttonExercicePropCancel_clicked"/>
+                <signal name="clicked" handler="on_buttonExercisePropCancel_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -262,14 +262,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="buttonExercicePropOk">
+              <object class="GtkButton" id="buttonExercisePropOk">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="xalign">0.52999997138977051</property>
-                <signal name="clicked" handler="on_buttonExercicePropOk_clicked"/>
+                <signal name="clicked" handler="on_buttonExercisePropOk_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -287,8 +287,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">buttonExercicePropCancel</action-widget>
-      <action-widget response="0">buttonExercicePropOk</action-widget>
+      <action-widget response="0">buttonExercisePropCancel</action-widget>
+      <action-widget response="0">buttonExercisePropOk</action-widget>
     </action-widgets>
   </object>
 </interface>
