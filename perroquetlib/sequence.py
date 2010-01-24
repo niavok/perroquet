@@ -50,13 +50,14 @@ class Sequence(object):
                 self.symbolList.append(symbol)
             else:
                 if re.match('^([0-9\'a-zA-Z]+)', textToParse):
+                    if len(self.wordList) == len(self.symbolList) :
+                        self.symbolList.append('')
                     self.wordList.append(textToParse)
                     self.workList.append("")
                     self.workValidityList.append(0)
                 else:
                     self.symbolList.append(textToParse)
                 break
-
 
     def GetSymbolList(self):
         return self.symbolList
