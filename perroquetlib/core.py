@@ -426,5 +426,5 @@ class Core(object):
             self.last_save = save
             self.gui.SetTitle(self.outputSavePath, save)
 
-    def IsAllowQuit(self):
-        return not self.last_save
+    def GetCanSave(self):
+        return self.last_save

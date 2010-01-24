@@ -54,7 +54,7 @@ class Gui:
 
     def on_MainWindow_delete_event(self,widget,data=None):
         if not self.config.Get("autosave"):
-            if self.core.IsAllowQuit():
+            if not self.core.GetCanSave():
                 gtk.main_quit()
                 return False
 
@@ -73,7 +73,8 @@ class Gui:
             else:
                 return True # returning True avoids it to signal "destroy-event"
         else:
-            self.core.Save()
+            if self.core.GetCanSave():
+                self.core.Save()
             gtk.main_quit()
             self.config.Save()
             return True
