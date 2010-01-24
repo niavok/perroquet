@@ -25,6 +25,8 @@ from exercise_manager import ExerciseSaver
 from exercise_manager import ExerciseLoader
 from exercise import Exercise
 
+# The Core make the link between the GUI, the vidéo player, the current
+# open exercise and all others part of the application
 class Core(object):
     WAIT_BEGIN = 0
     WAIT_END = 1
@@ -35,25 +37,29 @@ class Core(object):
         self.last_save = False
         self.exercise = None
 
-
+    #Call by the main, give an handler to the main gui
     def SetGui(self, gui):
         self.gui = gui
 
+    #Create a new exercice based on paths. Load the new exercise and
+    #begin to play
     def NewExercise(self, videoPath, exercisePath, translationPath, load = True):
         self.exercise = Exercise()
         self.outputSavePath = ""
         self.SetPaths(videoPath, exercisePath, translationPath)
-        self.InitExercise()
+        self.exercise.Initialize()
         self.Reload(load);
         self.ActivateSequence()
         self.gui.SetTitle("", True)
 
+    #Configure the paths for the current exercice. Reload subtitles list.
     def SetPaths(self, videoPath, exercisePath, translationPath):
         self.exercise.SetVideoPath(videoPath)
         self.exercise.SetExercisePath(exercisePath)
         self.exercise.SetTranslationPath(translationPath)
         self.exercise.LoadSubtitles()
 
+    #Reload media player and begin to play (if the params is True)
     def Reload(self, load):
         if self.player != None:
             self.player.Close()
@@ -68,30 +74,29 @@ class Core(object):
         self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
 
         if load:
-            self.SetCanSave(True)
             self.Play()
         else:
-            self.SetCanSave(False)
             self.Pause()
 
+    #Play the media
     def Play(self):
         self.gui.SetPlaying(True)
         self.player.Play()
         self.paused = False
 
+    #Pause the media
     def Pause(self):
         self.gui.SetPlaying(False)
         self.player.Pause()
         self.paused = True
 
+    #Modify media speed
     def SetSpeed(self, speed):
         self.gui.SetSpeed(speed)
         self.player.SetSpeed(speed)
 
-    def InitExercise(self):
-        self.exercise.Initialize()
-
-
+    #Callback call by video player to notify change of media position.
+    #Stop the media at the end of uncompleted sequences
     def TimeCallback(self):
         if self.state == Core.WAIT_BEGIN:
             self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeEnd() + 500)
@@ -105,10 +110,12 @@ class Core(object):
             else:
                 self.Pause()
 
+    #Repeat the currence sequence
     def RepeatSequence(self):
         self.GotoSequenceBegin()
         self.Play()
 
+    #Change the active sequence
     def SelectSequence(self, num, load = True):
         if self.exercise.GetCurrentSequenceId() == num:
             return
@@ -118,6 +125,7 @@ class Core(object):
             self.RepeatSequence()
         self.SetCanSave(True)
 
+    #Goto next sequence
     def NextSequence(self, load = True):
         if self.exercise.GotoNextSequence():
             self.SetCanSave(True)
@@ -125,6 +133,7 @@ class Core(object):
         if load:
             self.RepeatSequence()
 
+    #Goto previous sequence
     def PreviousSequence(self, load = True):
         if self.exercise.GotoPreviousSequence():
             self.SetCanSave(True)
@@ -132,6 +141,7 @@ class Core(object):
         if load:
             self.RepeatSequence()
 
+    #Update interface with new sequence. Configure stop media callback
     def ActivateSequence(self):
         self.state = Core.WAIT_BEGIN
         self.SetSpeed(1)
@@ -142,6 +152,7 @@ class Core(object):
         self.ActivateTranslation()
         self.UpdateStats()
 
+    #Update displayed translation on new active sequence
     def ActivateTranslation(self):
         if not self.exercise.GetTranslationList():
             self.gui.SetTranslation("")
@@ -157,6 +168,7 @@ class Core(object):
 
             self.gui.SetTranslation(translation)
 
+    #Update displayed stats on new active sequence
     def UpdateStats(self):
         sequenceCount = self.exercise.GetSequenceCount()
         sequenceFound = 0
@@ -175,10 +187,13 @@ class Core(object):
             repeatRate = float(self.exercise.GetRepeatCount()) / float(wordFound)
         self.gui.SetStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
 
+    #Verify if the sequence is complete
     def ValidateSequence(self):
         if self.exercise.GetCurrentSequence().IsValid():
             self.RepeatSequence()
 
+    #Goto beginning of the current sequence. Can start to play as soon
+    #as the media player is ready
     def GotoSequenceBegin(self, asSoonAsReady = False):
         self.state = Core.WAIT_END
         begin_time = self.exercise.GetCurrentSequence().GetTimeBegin() - 1000
@@ -189,9 +204,9 @@ class Core(object):
         else:
             self.player.Seek(begin_time)
         self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeEnd())
-        self.SetCanSave(True)
 
 
+    #Write a character in current sequence at cursor position
     def WriteCharacter(self, character):
 
         if re.match('^[0-9\'a-zA-Z]$',character):
@@ -202,67 +217,70 @@ class Core(object):
         else:
             self.gui.SetSequence(self.exercise.GetCurrentSequence())
 
-
+    #Goto next word in current sequence
     def NextWord(self):
         self.exercise.GetCurrentSequence().NextWord(False)
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
-        self.SetCanSave(True)
 
+    #Goto previous word in current sequence
     def PreviousWord(self):
         self.exercise.GetCurrentSequence().PreviousWord(False)
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
-        self.SetCanSave(True)
 
+    #Choose current word in current sequence
     def SelectSequenceWord(self, wordIndex,wordIndexPos):
         self.exercise.GetCurrentSequence().SelectSequenceWord(wordIndex,wordIndexPos)
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
-        self.SetCanSave(True)
 
+    #Goto first word in current sequence
     def FirstWord(self):
         self.exercise.GetCurrentSequence().FirstWord()
-
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
-        self.SetCanSave(True)
 
+    #Goto last word in current sequence
     def LastWord(self):
         self.exercise.GetCurrentSequence().LastWord()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
-        self.SetCanSave(True)
 
+    #Delete a character before the cursor in current sequence
     def DeletePreviousChar(self):
         self.exercise.GetCurrentSequence().DeletePreviousCharacter()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ValidateSequence()
         self.SetCanSave(True)
 
+    #Delete a character after the cursor in current sequence
     def DeleteNextChar(self):
         self.exercise.GetCurrentSequence().DeleteNextCharacter()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ValidateSequence()
         self.SetCanSave(True)
 
+    #Goto previous character in current sequence
     def PreviousChar(self):
         self.exercise.GetCurrentSequence().PreviousCharacter()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
-        self.SetCanSave(True)
 
+    #Goto next character in current sequence
     def NextChar(self):
         self.exercise.GetCurrentSequence().NextCharacter()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
-        self.SetCanSave(True)
 
+    #Reveal correction for word at cursor in current sequence
     def CompleteWord(self):
         self.exercise.GetCurrentSequence().CompleteWord()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ValidateSequence()
         self.SetCanSave(True)
 
+    #Pause or play media
     def TooglePause(self):
         if self.player.IsPaused() and self.paused:
             self.Play()
         elif not self.player.IsPaused() and not self.paused:
             self.Pause()
 
+    #Change position in media and play it
     def SeekSequence(self, time):
         begin_time = self.exercise.GetCurrentSequence().GetTimeBegin() - 1000
         if begin_time < 0:
@@ -274,7 +292,7 @@ class Core(object):
         self.state = Core.WAIT_END
         self.Play()
 
-
+    #Thread to update slider position in gui
     def timeUpdateThread(self):
         timeUpdateThreadId = self.timeUpdateThreadId
         while timeUpdateThreadId == self.timeUpdateThreadId:
@@ -289,6 +307,7 @@ class Core(object):
                 pos = pos_int -begin_time
                 self.gui.SetSequenceTime(pos, duration)
 
+    #Save current exercice
     def Save(self, saveAs = False):
 
         if saveAs or self.outputSavePath == "":
@@ -305,6 +324,7 @@ class Core(object):
 
         self.SetCanSave(False)
 
+    #Load the exercice at path
     def LoadExercise(self, path):
         self.gui.Activate("closed")
         loader = ExerciseLoader()
@@ -333,7 +353,9 @@ class Core(object):
         self.ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
+        self.SetCanSave(False)
 
+    #Change paths of current exercice and reload subtitles and video
     def UpdatePaths(self, videoPath, exercisePath, translationPath):
         self.exercise.SetVideoPath(videoPath)
         self.exercise.SetExercisePath(exercisePath)
@@ -355,16 +377,20 @@ class Core(object):
         self.GotoSequenceBegin(True)
         self.Play()
 
+    #Get paths of current exercise
     def GetPaths(self):
         return (self.exercise.GetVideoPath(), self.exercise.GetExercisePath(), self.exercise.GetTranslationPath())
 
+    #Udpates vocabulary list in interface
     def UpdateWordList(self):
         self.gui.SetWordList(self.exercise.ExtractWordList())
 
+    #Notify the user use the repeat command (for stats)
     def UserRepeat(self):
         self.exercise.IncrementRepeatCount()
+        self.SetCanSave(True)
 
-
+    #Signal to the gui that the exercise has unsaved changes
     def SetCanSave(self, save):
 
         self.gui.SetCanSave(save)
