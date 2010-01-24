@@ -308,7 +308,11 @@ class Core(object):
     def LoadExercise(self, path):
         self.gui.Activate("closed")
         loader = ExerciseLoader()
-        self.exercise = loader.Load(path)
+        try:
+            self.exercise = loader.Load(path)
+        except:
+            print "Error: invalid file"
+            return
         if not self.exercise:
             return
 
