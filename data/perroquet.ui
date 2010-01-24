@@ -110,6 +110,15 @@
                   <object class="GtkMenu" id="menu3">
                     <property name="visible">True</property>
                     <child>
+                      <object class="GtkCheckMenuItem" id="checkmenuitemLateralPanel">
+                        <property name="visible">True</property>
+                        <property name="sensitive">True</property>
+                        <property name="label" translatable="yes">Lateral panel</property>
+                        <property name="use_underline">True</property>
+                        <signal name="toggled" handler="on_checkmenuitemLateralPanel_toggled"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkCheckMenuItem" id="checkmenuitemTranslation">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>

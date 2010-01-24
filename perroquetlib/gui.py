@@ -566,12 +566,23 @@ class Gui:
     def on_imagemenuitemHint_activate(self,widget,data=None):
         return self.on_toolbuttonHint_clicked(widget, data)
 
+    def on_checkmenuitemLateralPanel_toggled(self,widget,data=None):
+        self.ToogleLateralPanel()
+
     def on_checkmenuitemTranslation_toggled(self,widget,data=None):
         checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
         if checkmenuitemTranslation.props.active != self.translationVisible:
             self.ToogleTranslation()
 
 
+    def ToogleLateralPanel(self):
+        scrolledwindowTranslation = self.builder.get_object("vbox2")
+        if scrolledwindowTranslation.props.visible:
+            scrolledwindowTranslation.hide()
+        else:
+            scrolledwindowTranslation.show()
+        
+            
     def ToogleTranslation(self):
         scrolledwindowTranslation = self.builder.get_object("scrolledwindowTranslation")
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
