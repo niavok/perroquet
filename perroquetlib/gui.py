@@ -781,20 +781,6 @@ class SaveFileSelector(FileSelector):
                 self.add_filter(filter)
 
                 self.set_do_overwrite_confirmation(True)
-                self.connect("confirm-overwrite", self.__cb_confirm_overwrite)
-
-
-        def __cb_confirm_overwrite(self, widget, data = None):
-                "Handles confirm-overwrite signals"
-
-                try:
-                        FileReplace(self, io.file_normpath(self.get_uri())).run()
-
-                except:
-                        return gtk.FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN
-
-                else:
-                        return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
 
 
 
