@@ -26,6 +26,7 @@ APP_NAME = 'perroquet'
 APP_VERSION = '1.0.1'
 
 class ConfigSingleton(object):
+    """useful for gettexe"""
     _instance = None
 
     def __new__(cls):
@@ -41,6 +42,18 @@ class Config(ConfigSingleton):
 
         self.Set("version", APP_VERSION)
         self.Set("app_name", APP_NAME)
+        
+        self._setLocalPaths();
+        
+        gettext.install (self.Get("gettext_package"),self.Get("localedir"))
+        
+        configParser = self._loadConfigFiles()
+        self._properties.update( dict(configParser.items("string")) )
+        self._properties.update( dict(
+            ((s, int(i)) for (s,i) in configParser.items("int")) ))
+    
+    
+    def _setLocalPaths(self):
         self.Set("gettext_package", "perroquet")
         self.Set("executable", os.path.dirname(sys.executable))
         self.Set("script", sys.path[0])
@@ -76,16 +89,10 @@ class Config(ConfigSingleton):
         else:
             self.Set("logo_path", os.path.join(self.Get("script"), '../share/perroquet/perroquet.png'))
 
-        gettext.install (self.Get("gettext_package"),self.Get("localedir"))
-
-        configParser = self._loadConfigFiles()
-        self._properties.update( dict(configParser.items("string")) )
-        self._properties.update( dict(
-            ((s, int(i)) for (s,i) in configParser.items("int")) ))
-
     def _loadConfigFiles(self):
         """Load the config files and add it to configParser
-        All modifiable options must be on data/config"""
+        All modifiable options must be on data/config
+        Need _setLocalPaths before"""
         self._localConfFilHref = os.path.join( self.Get("localConfigDir"), "config")
         self._globalConfFilHref = os.path.join( self.Get("globalConfigDir"), "config")
 
@@ -112,10 +119,14 @@ class Config(ConfigSingleton):
 
         return configParser
 
+
+
     def Get(self, key):
+        """get a propertie"""
         return self._properties[key]
 
     def Set(self, key, value):
+        """Set a propertie"""
         self._properties[key] = value
 
         if key in self._writableOptions.keys():
@@ -125,6 +136,7 @@ class Config(ConfigSingleton):
             self._localConfigParser.set(section, key, value)
 
     def Save(self):
+        """Save the properties that have changed"""
         #FIXME: need to create the whole path, not only the final dir
         if not os.path.exists(self.Get("localConfigDir")):
            os.mkdir( self.Get("localConfigDir") )
