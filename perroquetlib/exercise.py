@@ -28,6 +28,7 @@ class Exercise(object):
         self.repeatCount = 0
         self.currentSequenceId = 0
         self.sequenceList = []
+        self.repeatAfterCompeted = True
 
     def Initialize(self):
         self.LoadSubtitles()
@@ -151,4 +152,8 @@ class Exercise(object):
     def GetTranslationList(self):
         return self.translationList
 
+    def SetRepeatAfterCompleted(self, state):
+        self.repeatAfterCompeted = state
 
+    def GetRepeatAfterCompleted(self):
+        return self.repeatAfterCompeted

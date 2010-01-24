@@ -190,7 +190,11 @@ class Core(object):
     #Verify if the sequence is complete
     def ValidateSequence(self):
         if self.exercise.GetCurrentSequence().IsValid():
-            self.RepeatSequence()
+            if self.exercise.GetRepeatAfterCompleted():
+                self.RepeatSequence()
+            else:
+                self.NextSequence(False)
+                self.Play()
 
     #Goto beginning of the current sequence. Can start to play as soon
     #as the media player is ready
@@ -400,3 +404,12 @@ class Core(object):
 
     def GetCanSave(self):
         return self.last_save
+
+    def GetExercise(self):
+        return self.exercise
+
+    def SetRepeatAfterCompleted(self, state):
+        self.exercise.SetRepeatAfterCompleted(state)
+        self.SetCanSave(True)
+
+

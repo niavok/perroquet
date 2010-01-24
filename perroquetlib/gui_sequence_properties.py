@@ -71,6 +71,10 @@ class GuiSequenceProperties:
         exerciseChooser.set_filename(exercisePath)
         translationChooser.set_filename(translationPath)
 
+        checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
+        checkbuttonRepeatAfterComplete.set_active(self.core.GetExercise().GetRepeatAfterCompleted())
+
+
 
     def on_buttonExercisePropOk_clicked(self,widget,data=None):
         dialogExerciseProperties = self.builder.get_object("dialogExerciseProperties")
@@ -89,6 +93,10 @@ class GuiSequenceProperties:
             translationPath = ""
 
         self.core.UpdatePaths(videoPath,exercisePath, translationPath)
+
+        checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
+        self.core.SetRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
+
         #dialogExerciseProperties.hide()
         self.dialog.response(gtk.RESPONSE_OK)
 
