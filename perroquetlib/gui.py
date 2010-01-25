@@ -51,7 +51,15 @@ class Gui:
         self.translationVisible = False
         self.disableChangedTextEvent = False
         self.mode = "closed"
-
+        
+        if not self.config.Get("showlateralpanel"):
+            self.builder.get_object("vbox2").hide()
+        else:
+            #ugly but needed (?)
+            self.builder.get_object("checkmenuitemLateralPanel").set_active(True)
+            self.builder.get_object("vbox2").show()
+            self.config.Set("showlateralpanel", 1)
+        
     def on_MainWindow_delete_event(self,widget,data=None):
         if not self.config.Get("autosave"):
             if not self.core.GetCanSave():
@@ -577,10 +585,13 @@ class Gui:
 
     def ToogleLateralPanel(self):
         scrolledwindowTranslation = self.builder.get_object("vbox2")
-        if scrolledwindowTranslation.props.visible:
+        print "toggle lateral panel :", 1-self.config.Get("showlateralpanel")
+        if self.config.Get("showlateralpanel"):
             scrolledwindowTranslation.hide()
+            self.config.Set("showlateralpanel", 0)
         else:
             scrolledwindowTranslation.show()
+            self.config.Set("showlateralpanel", 1)
         
             
     def ToogleTranslation(self):

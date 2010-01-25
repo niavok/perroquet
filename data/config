@@ -1,5 +1,6 @@
 [int]
 autosave = 1
+showlateralpanel = 0
 
 [string]
 lastopenfile =

@@ -36,6 +36,8 @@ class ConfigSingleton(object):
         return cls._instance
 
 class Config(ConfigSingleton):
+    """usage: config = Config()
+    Warning: all keys must be lowercase"""
     def init(self):
         self._properties = {}
         self._writableOptions = {}
@@ -50,17 +52,16 @@ class Config(ConfigSingleton):
         configParser = self._loadConfigFiles()
         self._properties.update( dict(configParser.items("string")) )
         self._properties.update( dict(
-            ((s, int(i)) for (s,i) in configParser.items("int")) ))
-    
+            ((s, int(i)) for (s,i) in configParser.items("int")) ))    
     
     def _setLocalPaths(self):
         self.Set("gettext_package", "perroquet")
         self.Set("executable", os.path.dirname(sys.executable))
         self.Set("script", sys.path[0])
-        self.Set("localConfigDir", os.path.join(
+        self.Set("localconfigdir", os.path.join(
             os.path.expanduser("~"),
             ".config/perroquet"))
-        self.Set("globalConfigDir", "/etc/perroquet") #FIXME ugly
+        self.Set("globalconfigdir", "/etc/perroquet") #FIXME ugly
 
         if os.path.isfile(os.path.join(self.Get("script"), 'data/perroquet.ui')):
             self.Set("ui_path", os.path.join(self.Get("script"), 'data/perroquet.ui'))
@@ -93,12 +94,8 @@ class Config(ConfigSingleton):
         """Load the config files and add it to configParser
         All modifiable options must be on data/config
         Need _setLocalPaths before"""
-        self._localConfFilHref = os.path.join( self.Get("localConfigDir"), "config")
-        self._globalConfFilHref = os.path.join( self.Get("globalConfigDir"), "config")
-
-        self._localConfigParser = ConfigParser.ConfigParser()
-        if len( self._localConfigParser.read(self._localConfFilHref)) == 0:
-            print "No local conf file find"
+        self._localConfFilHref = os.path.join( self.Get("localconfigdir"), "config")
+        self._globalConfFilHref = os.path.join( self.Get("globalconfigdir"), "config")
 
         configParser = ConfigParser.ConfigParser()
         if os.path.isfile(self._globalConfFilHref):
@@ -108,6 +105,10 @@ class Config(ConfigSingleton):
         else:
             print "Error : global conf file 'config' not found at "+ os.path.join(self.Get("script"), 'data/config')
             sys.exit(1)
+
+        self._localConfigParser = ConfigParser.ConfigParser()
+        if len( self._localConfigParser.read(self._localConfFilHref)) == 0:
+            print "No local conf file find"
 
         self._writableOptions = dict([(option, section)
                 for section in configParser.sections()
@@ -119,14 +120,17 @@ class Config(ConfigSingleton):
 
         return configParser
 
-
-
     def Get(self, key):
         """get a propertie"""
+        if not key.islower():
+            raise KeyError, key+" is not lowercase"
         return self._properties[key]
 
     def Set(self, key, value):
         """Set a propertie"""
+        if not key.islower():
+            raise KeyError, key+" is not lowercase"
+        
         self._properties[key] = value
 
         if key in self._writableOptions.keys():
@@ -138,6 +142,6 @@ class Config(ConfigSingleton):
     def Save(self):
         """Save the properties that have changed"""
         #FIXME: need to create the whole path, not only the final dir
-        if not os.path.exists(self.Get("localConfigDir")):
-           os.mkdir( self.Get("localConfigDir") )
+        if not os.path.exists(self.Get("localconfigdir")):
+           os.mkdir( self.Get("localconfigdir") )
         self._localConfigParser.write( open(self._localConfFilHref, "w"))
