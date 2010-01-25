@@ -411,7 +411,7 @@ class Gui:
     def on_typeView_key_press_event(self,widget, event):
 
         keyname = gtk.gdk.keyval_name(event.keyval)
-        if keyname == "Return":
+        if keyname == "Return" or keyname == "KP_Enter":
             self.core.UserRepeat()
             self.core.RepeatSequence()
         elif keyname == "BackSpace":
