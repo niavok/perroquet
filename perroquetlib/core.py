@@ -278,7 +278,7 @@ class Core(object):
         self.SetCanSave(True)
 
     #Pause or play media
-    def TooglePause(self):
+    def togglePause(self):
         if self.player.IsPaused() and self.paused:
             self.Play()
         elif not self.player.IsPaused() and not self.paused:

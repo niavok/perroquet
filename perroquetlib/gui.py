@@ -436,7 +436,7 @@ class Gui:
             toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
             toggletoolbuttonShowTranslation.set_active(not toggletoolbuttonShowTranslation.get_active())
         elif keyname == "Pause":
-            self.core.TooglePause()
+            self.core.togglePause()
         elif keyname == "KP_Add":
             if self.settedSpeed > 90:
                 self.core.SetSpeed(1.0)
@@ -525,7 +525,7 @@ class Gui:
     def on_toggletoolbuttonShowTranslation_toggled(self, widget, data=None):
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
         if toggletoolbuttonShowTranslation.props.active != self.translationVisible:
-            self.ToogleTranslation()
+            self.toggleTranslation()
 
     def on_typeView_move_cursor(self, textview, step_size, count, extend_selection):
 
@@ -575,17 +575,16 @@ class Gui:
         return self.on_toolbuttonHint_clicked(widget, data)
 
     def on_checkmenuitemLateralPanel_toggled(self,widget,data=None):
-        self.ToogleLateralPanel()
+        self.toggleLateralPanel()
 
     def on_checkmenuitemTranslation_toggled(self,widget,data=None):
         checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
         if checkmenuitemTranslation.props.active != self.translationVisible:
-            self.ToogleTranslation()
+            self.toggleTranslation()
 
 
-    def ToogleLateralPanel(self):
+    def toggleLateralPanel(self):
         scrolledwindowTranslation = self.builder.get_object("vbox2")
-        print "toggle lateral panel :", 1-self.config.Get("showlateralpanel")
         if self.config.Get("showlateralpanel"):
             scrolledwindowTranslation.hide()
             self.config.Set("showlateralpanel", 0)
@@ -594,7 +593,7 @@ class Gui:
             self.config.Set("showlateralpanel", 1)
         
             
-    def ToogleTranslation(self):
+    def toggleTranslation(self):
         scrolledwindowTranslation = self.builder.get_object("scrolledwindowTranslation")
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
         checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
