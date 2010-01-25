@@ -23,6 +23,7 @@
 
 from xml.dom.minidom import getDOMImplementation, parse
 from exercise import Exercise
+from perroquetlib.config import Config
 
 class ExerciseLoader(object):
 
@@ -75,6 +76,16 @@ class ExerciseLoader(object):
         xml_stats = dom.getElementsByTagName("stats")[0]
         self.exercise.SetRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
 
+        # Properties
+        if len(dom.getElementsByTagName("properties")) > 0:
+            xml_properties = dom.getElementsByTagName("properties")[0]
+            if len(xml_properties.getElementsByTagName("repeat_after_complete")) > 0:
+                self.exercise.SetRepeatAfterCompleted(bool(self.getText(xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes)))
+            if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
+                self.exercise.SetRepeatAfterCompleted(float(self.getText(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
+            if len(xml_properties.getElementsByTagName("time_between_sequence")) > 0:
+                self.exercise.SetMaxSequenceLength(float(self.getText(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
+
         dom.unlink()
 
         return self.exercise
@@ -99,6 +110,8 @@ class ExerciseSaver(object):
 
     def Save(self,exercise, outputPath):
         self.outputPath = outputPath
+        self.config = Config()
+
         impl = getDOMImplementation()
 
         newdoc = impl.createDocument(None, "perroquet", None)
@@ -106,7 +119,7 @@ class ExerciseSaver(object):
 
         # Version
         xml_version = newdoc.createElement("version")
-        xml_version.appendChild(newdoc.createTextNode("1.1.0"))
+        xml_version.appendChild(newdoc.createTextNode(self.config.Get("version")))
         root_element.appendChild(xml_version)
 
         # Paths
@@ -184,6 +197,22 @@ class ExerciseSaver(object):
 
         root_element.appendChild(xml_stats)
 
+        #Properties
+        xml_properties = newdoc.createElement("properties")
+
+        xml_repeatAfterComplete = newdoc.createElement("repeat_after_complete")
+        xml_repeatAfterComplete.appendChild(newdoc.createTextNode(str(exercise.GetRepeatAfterCompleted())))
+        xml_properties.appendChild(xml_repeatAfterComplete)
+
+        xml_maxSequenceLength = newdoc.createElement("max_sequence_length")
+        xml_maxSequenceLength.appendChild(newdoc.createTextNode(str(exercise.GetMaxSequenceLength())))
+        xml_properties.appendChild(xml_maxSequenceLength)
+
+        xml_timeBetweenSequences = newdoc.createElement("time_between_sequence")
+        xml_timeBetweenSequences.appendChild(newdoc.createTextNode(str(exercise.GetTimeBetweenSequence())))
+        xml_properties.appendChild(xml_timeBetweenSequences)
+
+        root_element.appendChild(xml_properties)
 
         xml_string = newdoc.toprettyxml()
 

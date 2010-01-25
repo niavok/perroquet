@@ -23,7 +23,7 @@ import gettext
 import ConfigParser
 
 APP_NAME = 'perroquet'
-APP_VERSION = '1.0.1'
+APP_VERSION = '1.1.0 dev'
 
 class ConfigSingleton(object):
     """useful for gettexe"""
@@ -44,16 +44,17 @@ class Config(ConfigSingleton):
 
         self.Set("version", APP_VERSION)
         self.Set("app_name", APP_NAME)
-        
+
         self._setLocalPaths();
-        
+
         gettext.install (self.Get("gettext_package"),self.Get("localedir"))
-        
+
         configParser = self._loadConfigFiles()
         self._properties.update( dict(configParser.items("string")) )
         self._properties.update( dict(
-            ((s, int(i)) for (s,i) in configParser.items("int")) ))    
-    
+            ((s, int(i)) for (s,i) in configParser.items("int")) ))
+
+
     def _setLocalPaths(self):
         self.Set("gettext_package", "perroquet")
         self.Set("executable", os.path.dirname(sys.executable))
@@ -130,7 +131,7 @@ class Config(ConfigSingleton):
         """Set a propertie"""
         if not key.islower():
             raise KeyError, key+" is not lowercase"
-        
+
         self._properties[key] = value
 
         if key in self._writableOptions.keys():

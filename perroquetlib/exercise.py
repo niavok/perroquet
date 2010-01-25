@@ -29,6 +29,8 @@ class Exercise(object):
         self.currentSequenceId = 0
         self.sequenceList = []
         self.repeatAfterCompeted = True
+        self.maxSequenceLength = 60.0
+        self.timeBetweenSequence = 0.0
 
     def Initialize(self):
         self.LoadSubtitles()
@@ -157,3 +159,15 @@ class Exercise(object):
 
     def GetRepeatAfterCompleted(self):
         return self.repeatAfterCompeted
+
+    def SetTimeBetweenSequence(self, time):
+        self.timeBetweenSequence = time
+
+    def GetTimeBetweenSequence(self):
+        return self.timeBetweenSequence
+
+    def SetMaxSequenceLength(self, time):
+        self.maxSequenceLength = time
+
+    def GetMaxSequenceLength(self):
+        return self.maxSequenceLength
