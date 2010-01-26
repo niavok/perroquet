@@ -48,7 +48,6 @@ class ExerciseLoader(object):
         self.exercise.SetTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
 
         xml_progress = dom.getElementsByTagName("progress")[0]
-        self.exercise.SetCurrentSequence(int(self.getText(xml_progress.getElementsByTagName("current_sequence")[0].childNodes)))
         currentWord = int(self.getText(xml_progress.getElementsByTagName("current_word")[0].childNodes))
 
         xml_sequences = xml_progress.getElementsByTagName("sequences")[0]
@@ -67,10 +66,6 @@ class ExerciseLoader(object):
 
             self.progress.append((id, state, words))
 
-        self.exercise.LoadSubtitles()
-        self.UpdateSequenceList()
-
-        self.exercise.GetCurrentSequence().SetActiveWordIndex(currentWord)
 
         # Stats
         xml_stats = dom.getElementsByTagName("stats")[0]
@@ -80,11 +75,19 @@ class ExerciseLoader(object):
         if len(dom.getElementsByTagName("properties")) > 0:
             xml_properties = dom.getElementsByTagName("properties")[0]
             if len(xml_properties.getElementsByTagName("repeat_after_complete")) > 0:
-                self.exercise.SetRepeatAfterCompleted(bool(self.getText(xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes)))
-            if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
-                self.exercise.SetRepeatAfterCompleted(float(self.getText(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
+                self.exercise.SetRepeatAfterCompleted(self.getText(xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes) == "True")
             if len(xml_properties.getElementsByTagName("time_between_sequence")) > 0:
-                self.exercise.SetMaxSequenceLength(float(self.getText(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
+                self.exercise.SetTimeBetweenSequence(float(self.getText(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
+            if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
+                self.exercise.SetMaxSequenceLength(float(self.getText(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
+
+        self.exercise.LoadSubtitles()
+        self.UpdateSequenceList()
+
+        self.exercise.SetCurrentSequence(int(self.getText(xml_progress.getElementsByTagName("current_sequence")[0].childNodes)))
+
+        self.exercise.GetCurrentSequence().SetActiveWordIndex(currentWord)
+
 
         dom.unlink()
 
@@ -96,12 +99,16 @@ class ExerciseLoader(object):
         sequenceList = self.exercise.GetSequenceList()
 
         for (id, state, words) in self.progress:
+            if id >= len(sequenceList):
+                break
             sequence = sequenceList[id]
             if state == "done":
                 sequence.CompleteAll()
             elif state == "in_progress":
                 i = 0
                 for word in words:
+                    if id >= len(sequence.GetWorkList()):
+                        break
                     sequence.GetWorkList()[i] = word
                     sequence.ComputeValidity(i)
                     i = i+1

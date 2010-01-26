@@ -109,12 +109,11 @@ class SubtitlesLoader(object):
                     outputList.append(current)
         return outputList
 
-    def CompactSubtitlesList(self, list):
+    def CompactSubtitlesList(self, list, timeToMerge, maxTime):
         outputList = []
         id = 0
-
         for sub in list:
-            if id == 0 or current.GetTimeEnd() != sub.GetTimeBegin():
+            if id == 0 or (sub.GetTimeBegin() - current.GetTimeEnd() > int(timeToMerge*1000)) or (sub.GetTimeEnd() - current.GetTimeBegin() > int(maxTime*1000)):
                 if id > 0:
                     outputList.append(current)
                 id += 1

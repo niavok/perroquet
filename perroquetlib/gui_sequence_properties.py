@@ -74,6 +74,11 @@ class GuiSequenceProperties:
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         checkbuttonRepeatAfterComplete.set_active(self.core.GetExercise().GetRepeatAfterCompleted())
 
+        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
+        adjustmentTimeBetweenSequence.set_value(self.core.GetExercise().GetTimeBetweenSequence())
+
+        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
+        adjustmentMaximumSequenceTime.set_value(self.core.GetExercise().GetMaxSequenceLength())
 
 
     def on_buttonExercisePropOk_clicked(self,widget,data=None):
@@ -92,16 +97,19 @@ class GuiSequenceProperties:
         if translationPath == "None" or translationPath == None:
             translationPath = ""
 
-        self.core.UpdatePaths(videoPath,exercisePath, translationPath)
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         self.core.SetRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
 
-        #dialogExerciseProperties.hide()
+        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
+        self.core.GetExercise().SetTimeBetweenSequence(adjustmentTimeBetweenSequence.get_value())
+
+        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
+        self.core.GetExercise().SetMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
+
+        self.core.UpdatePaths(videoPath,exercisePath, translationPath)
+
         self.dialog.response(gtk.RESPONSE_OK)
 
     def on_buttonExercisePropCancel_clicked(self,widget,data=None):
-        print "Cancel"
-        #dialogExerciseProperties = self.builder.get_object("dialogExerciseProperties")
-        #dialogExerciseProperties.hide()
         self.dialog.response(gtk.RESPONSE_CANCEL)

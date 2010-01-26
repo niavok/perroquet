@@ -142,6 +142,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">&#x2022;</property>
+                        <property name="adjustment">adjustmentTimeBetweenSequence</property>
+                        <property name="digits">1</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -182,6 +184,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">&#x2022;</property>
+                        <property name="adjustment">adjustmentMaximumSequenceTime</property>
+                        <property name="digits">1</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -290,5 +294,15 @@
       <action-widget response="0">buttonExercisePropCancel</action-widget>
       <action-widget response="0">buttonExercisePropOk</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentTimeBetweenSequence">
+    <property name="upper">100</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentMaximumSequenceTime">
+    <property name="upper">999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>

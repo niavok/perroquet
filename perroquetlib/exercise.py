@@ -40,19 +40,52 @@ class Exercise(object):
     def LoadSubtitles(self):
 
         self.subList = self.subtitles.GetSubtitleList(self.exercisePath)
-        self.subList = self.subtitles.CompactSubtitlesList(self.subList)
+        self.subList = self.subtitles.CompactSubtitlesList(self.subList, self.timeBetweenSequence, self.maxSequenceLength)
 
         self.translationList = None
         if self.translationPath != "":
             self.translationList = self.subtitles.GetSubtitleList(self.translationPath)
 
+        oldSequenceList = self.sequenceList
+
         self.sequenceList = []
+
         for sub in self.subList:
             self.sequence = Sequence()
             self.sequence.Load(sub.GetText())
             self.sequence.SetTimeBegin(sub.GetTimeBegin())
             self.sequence.SetTimeEnd(sub.GetTimeEnd())
             self.sequenceList.append(self.sequence)
+
+        #Restore found words
+        if len(oldSequenceList) > 0:
+            oldSequenceIndex = 0
+            newSequenceIndex = 0
+
+            oldWordIndex = 0
+            newWordIndex = 0
+
+            while oldSequenceIndex < len( oldSequenceList) and newSequenceIndex < len(self.sequenceList):
+
+                if oldWordIndex >= len(oldSequenceList[oldSequenceIndex].GetWorkList()):
+                    oldSequenceIndex += 1
+                    oldWordIndex = 0
+
+                    if oldSequenceIndex >= len(oldSequenceList):
+                        break
+
+                if newWordIndex >= len(self.sequenceList[newSequenceIndex].GetWorkList()):
+                    newSequenceIndex += 1
+                    newWordIndex = 0
+
+                    if newSequenceIndex >= len(self.sequenceList):
+                        break
+
+                self.sequenceList[newSequenceIndex].GetWorkList()[newWordIndex] = oldSequenceList[oldSequenceIndex].GetWorkList()[oldWordIndex]
+                self.sequenceList[newSequenceIndex].ComputeValidity(newWordIndex)
+                oldWordIndex += 1
+                newWordIndex += 1
+
 
 
     def ExtractWordList(self):
@@ -122,7 +155,10 @@ class Exercise(object):
         self.translationPath = translationPath
 
     def SetCurrentSequence(self, id):
-        self.currentSequenceId = id
+        if id >= len(self.sequenceList):
+            self.currentSequenceId = len(self.sequenceList)-1
+        else:
+            self.currentSequenceId = id
 
     def GetSequenceList(self):
         return self.sequenceList
