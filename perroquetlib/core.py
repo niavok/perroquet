@@ -21,8 +21,8 @@
 
 import thread, time, re, gtk, os
 from video_player import VideoPlayer
-from exercise_manager import ExerciseSaver
-from exercise_manager import ExerciseLoader
+from exercise_serializer import ExerciseSaver
+from exercise_serializer import ExerciseLoader
 from exercise import Exercise
 
 # The Core make the link between the GUI, the vidéo player, the current
