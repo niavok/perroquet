@@ -251,24 +251,13 @@ class Sequence(object):
             self.activeWordPos -= 1
 
     def IsValidWord(self):
-
-        if self.workValidityList[self.activeWordIndex] == 1:
-            return True
-        else:
-            return False
+        return self.workValidityList[self.activeWordIndex] == 1
 
     def GetValidity(self, index):
         return self.workValidityList[index]
 
     def IsValid(self):
-        valid = True
-        id = 0
-        for word in self.workList:
-            if word.lower() != self.wordList[id].lower():
-                valid = False
-                break
-            id += 1
-        return valid
+        return [w.lower() for w in self.workList] == [w.lower() for w in self.wordList]
 
     def GetWordFound(self):
         found = 0
@@ -280,12 +269,7 @@ class Sequence(object):
         return found
 
     def IsEmpty(self):
-        empty = True
-        for word in self.workList:
-            if word != "":
-                empty = False
-                break
-        return empty
+        return all(word=="" for word in self.workList)
 
     def CompleteWord(self):
         """Reveal correction for word at cursor in current sequence"""
@@ -320,11 +304,9 @@ class Sequence(object):
 
     def CompleteAll(self):
         """Reveal all words"""
-        id = 0
-        for word in self.wordList:
-            self.workList[id] = word
-            self.ComputeValidity(id)
-            id += 1
+        for (i, word) in enumerate(self.wordList):
+            self.workList[i] = word
+            self.ComputeValidity(i)
 
     def WorkChange(self):
         """Update the validity of the current word"""
@@ -347,7 +329,6 @@ class Sequence(object):
         # negative if the user type a lot of mistake
         # 20% of the score is given by the lenght and 80% by the good letters
 
-        validity = 0
         #Global check
         if self.workList[index].lower() == self.wordList[index].lower():
             validity = 1
