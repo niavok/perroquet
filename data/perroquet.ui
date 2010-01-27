@@ -89,12 +89,30 @@
                   <object class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
                     <child>
+                      <object class="GtkImageMenuItem" id="imagemenuitemExerciceManager">
+                        <property name="label" translatable="yes">_Exercice manager</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="image">image2</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_imagemenuitemExerciceManager_activate"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkImageMenuItem" id="imagemenuitemProperties">
                         <property name="label">gtk-properties</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_imagemenuitemProperties_activate"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="imagemenuitemPreferences">
+                        <property name="label">gtk-preferences</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                       </object>
                     </child>
                   </object>
@@ -112,7 +130,6 @@
                     <child>
                       <object class="GtkCheckMenuItem" id="checkmenuitemLateralPanel">
                         <property name="visible">True</property>
-                        <property name="sensitive">True</property>
                         <property name="label" translatable="yes">Lateral panel</property>
                         <property name="use_underline">True</property>
                         <signal name="toggled" handler="on_checkmenuitemLateralPanel_toggled"/>
@@ -833,5 +850,9 @@ Zarmakuizz</property>
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
     <signal name="value_changed" handler="on_adjustmentSpeed_value_changed"/>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-missing-image</property>
   </object>
 </interface>

@@ -23,6 +23,8 @@ import gtk, time, urllib, re, os, gettext
 import locale
 from perroquetlib.config import Config
 from gui_sequence_properties import GuiSequenceProperties
+from gui_exercise_manager import GuiExerciseManager
+
 _ = gettext.gettext
 
 class Gui:
@@ -51,7 +53,7 @@ class Gui:
         self.translationVisible = False
         self.disableChangedTextEvent = False
         self.mode = "closed"
-        
+
         if not self.config.Get("showlateralpanel"):
             self.builder.get_object("vbox2").hide()
         else:
@@ -59,7 +61,7 @@ class Gui:
             self.builder.get_object("checkmenuitemLateralPanel").set_active(True)
             self.builder.get_object("vbox2").show()
             self.config.Set("showlateralpanel", 1)
-        
+
     def on_MainWindow_delete_event(self,widget,data=None):
         if not self.config.Get("autosave"):
             if not self.core.GetCanSave():
@@ -353,7 +355,7 @@ class Gui:
         bcolor_not_found_bad = self.window.get_colormap().alloc_color(250*256, 218*256, 200*256)
         bcolor_not_found = self.window.get_colormap().alloc_color(150*256, 210*256, 250*256)
         color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
-        
+
         bcolor_near = self.window.get_colormap().alloc_color(150*256, 250*256, 150*256)
 
         buffer.create_tag("symbol",
@@ -362,7 +364,7 @@ class Gui:
              background=bcolor_not_found, foreground=color_not_found, size_points=18.0)
         buffer.create_tag("word_found",
              foreground=color_found, size_points=18.0)
-        buffer.create_tag("word_near", 
+        buffer.create_tag("word_near",
                 background=bcolor_near,
                 foreground=color_not_found,
                 size_points=18.0)
@@ -552,8 +554,15 @@ class Gui:
         self.AskProperties()
 
     def AskProperties(self):
-        dialogExerciseProperties = GuiSequenceProperties(self.config, self.core, self.window)
+        dialogExerciseProperties = GuiSequenceProperties(self.core, self.window)
         dialogExerciseProperties.Run()
+
+    def on_imagemenuitemExerciceManager_activate(self, widget, data=None):
+        self.DisplayExerciceManager()
+
+    def DisplayExerciceManager(self):
+        dialogExerciseManager = GuiExerciseManager(self.core, self.window)
+        dialogExerciseManager.Run()
 
     def on_imagemenuitemAbout_activate(self,widget,data=None):
         self.builder.get_object("aboutdialog").show()
@@ -578,8 +587,8 @@ class Gui:
         else:
             scrolledwindowTranslation.show()
             self.config.Set("showlateralpanel", 1)
-        
-            
+
+
     def toggleTranslation(self):
         scrolledwindowTranslation = self.builder.get_object("scrolledwindowTranslation")
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")

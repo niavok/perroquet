@@ -80,6 +80,14 @@ class Config(ConfigSingleton):
             print "Error : gui file 'properties.ui' not found"
             sys.exit(1)
 
+        if os.path.isfile(os.path.join(self.Get("script"), 'data/exercise_manager.ui')):
+            self.Set("ui_exercise_manager_path", os.path.join(self.Get("script"), 'data/exercise_manager.ui'))
+        elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/exercise_manager.ui')):
+            self.Set("ui_exercise_manager_path", os.path.join(self.Get("script"), '../share/perroquet/exercise_manager.ui'))
+        else:
+            print "Error : gui file 'exercise_manager.ui' not found"
+            sys.exit(1)
+
         # locale
         if os.path.exists(os.path.join(self.Get("script"), 'build/mo')):
             self.Set("localedir",  os.path.join(self.Get("script"), 'build/mo'))

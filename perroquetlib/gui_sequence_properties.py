@@ -24,13 +24,11 @@ from perroquetlib.config import Config
 _ = gettext.gettext
 
 class GuiSequenceProperties:
-    def __init__(self, config, core, parent):
+    def __init__(self, core, parent):
 
         self.core = core
-        self.config = config
+        self.config = Config()
         self.parent = parent
-
-        print self.parent
 
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
@@ -50,6 +48,7 @@ class GuiSequenceProperties:
         self.Load()
         self.dialog.run()
         self.dialog.destroy()
+
     def Load(self):
         (videoPath,exercisePath,translationPath)  = self.core.GetPaths()
 
