@@ -43,6 +43,10 @@ def levenshtein(a,b):
             
     return current[n]
 
+def startWith(w1, w2):
+    """Check if the first chars of w1 is w2)"""
+    return w1[:len(w2)]==w2
+
 
 
 class Sequence(object):
@@ -312,8 +316,9 @@ class Sequence(object):
         """Update the validity of the current word"""
         self.ComputeValidity(self.activeWordIndex)
 
-        if self.workValidityList[self.activeWordIndex] < 0:
-            #Verify position only if the score is negatif
+        if not startWith(self.wordList[self.activeWordIndex], self.workList[self.activeWordIndex]):
+            #Verify position only if the word isn't at his right place
+            #but maybe not fully written
             location = self.CheckLocation(self.activeWordIndex)
             if location != -1:
                 self.workList[location] = self.workList[self.activeWordIndex]
@@ -323,11 +328,11 @@ class Sequence(object):
                 self.activeWordPos = 0
 
     def ComputeValidity(self, index):
-        # Compute a score between 1 and 0 and -1 (or less)
-        # 0 if the word is empty
-        # 1 if the word is completed
-        # negative if the user type a lot of mistake
-        # 20% of the score is given by the lenght and 80% by the good letters
+        """Compute a score between 1 and 0 and -1 (or less)
+        0 if the word is empty
+        1 if the word is completed
+        negative if the user type a lot of mistake
+        20% of the score is given by the lenght and 80% by the good letters"""
 
         #Global check
         if self.workList[index].lower() == self.wordList[index].lower():
@@ -341,7 +346,7 @@ class Sequence(object):
         self.workValidityList[index] = validity
 
     def CheckLocation(self, index):
-        # Check if the word is correct but at the wrong place.
+        """Check if the word is correct but at the wrong place."""
         for i in range(1,4):
             if index+i < len(self.wordList) and self.GetValidity(index+i) != 1 and self.workList[index].lower() == self.wordList[index+i].lower():
                 return index + i
