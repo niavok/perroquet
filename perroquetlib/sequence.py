@@ -20,18 +20,39 @@
 
 import re
 
-class Sequence(object):
+class CompleteSequenceError(Exception):
+    pass
 
-    def Load(self, text):
+class Sequence(object):
+    def __init__(self):
+        
+        #self.symbolList = what is between words (or "")
+        #self.wordList = words that we want to find
+        #self.workList = words that was writen (or "")
+        #self.workValidityList = 1 if the word if good, 0 else
+        #
+        #self.activeWordIndex = the word that is currently being edited
+        #self.activeWordPos = the position in that word
+        #
+        #self.helpChar = the char printed when you want a hint
+        #
+        #Note: self.symbolList, self.word, Listself.workList 
+        #and self.workValidityList have always the same length
+        
         self.symbolList = []
         self.wordList = []
         self.workList = []
         self.workValidityList = []
-        textToParse = text
+        
         self.activeWordIndex = 0
         self.activeWordPos = 0
+        
         self.helpChar = '~'
+    
+    def Load(self, text):
+        textToParse = text
         while len(textToParse) > 0:
+            # ?
             if re.match('^([0-9\'a-zA-Z]+)[^0-9\'a-zA-Z]', textToParse):
                 m = re.search('^([0-9\'a-zA-Z]+)[^0-9\'a-zA-Z]', textToParse)
                 word = m.group(1)
@@ -42,19 +63,23 @@ class Sequence(object):
                 self.wordList.append(word)
                 self.workList.append("")
                 self.workValidityList.append(0)
+            # ?
             elif re.match('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse):
                 m = re.search('^([^0-9\'a-zA-Z]+)[0-9\'a-zA-Z]', textToParse)
                 symbol = m.group(1)
                 sizeToCut = len(symbol)
                 textToParse = textToParse[sizeToCut:]
                 self.symbolList.append(symbol)
+            # ?
             else:
+                # ?
                 if re.match('^([0-9\'a-zA-Z]+)', textToParse):
                     if len(self.wordList) == len(self.symbolList) :
                         self.symbolList.append('')
                     self.wordList.append(textToParse)
                     self.workList.append("")
                     self.workValidityList.append(0)
+                # ?
                 else:
                     self.symbolList.append(textToParse)
                 break
@@ -76,6 +101,7 @@ class Sequence(object):
 
     def SetActiveWordIndex(self, index):
         self.activeWordIndex = index
+        print index
 
     def GetActiveWordPos(self):
         return self.activeWordPos
@@ -94,7 +120,10 @@ class Sequence(object):
         if self.IsValidWord():
             if self.NextWord():
                 self.WriteCharacter(character)
+            else:
+                raise CompleteSequenceError
         else:
+            #if replacing an helpChar
             if self.activeWordPos < len(self.workList[self.activeWordIndex]) and self.workList[self.activeWordIndex][self.activeWordPos] == self.helpChar:
                 self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos+1:]
             else:
@@ -234,6 +263,7 @@ class Sequence(object):
         return empty
 
     def CompleteWord(self):
+        """Reveal correction for word at cursor in current sequence"""
         if self.IsValidWord():
             if self.NextWord(False):
                 self.CompleteWord()
@@ -264,6 +294,7 @@ class Sequence(object):
         self.WorkChange()
 
     def CompleteAll(self):
+        """Reveal all words"""
         id = 0
         for word in self.wordList:
             self.workList[id] = word
@@ -271,6 +302,7 @@ class Sequence(object):
             id += 1
 
     def WorkChange(self):
+        """Update the validity of the current word"""
         self.ComputeValidity(self.activeWordIndex)
         if self.workValidityList[self.activeWordIndex] < 0:
             location = self.CheckLocation(self.activeWordIndex)
@@ -282,6 +314,7 @@ class Sequence(object):
                 self.activeWordPos = 0
 
     def ComputeValidity(self, index):
+        # ?
 
         validity = 0
         #Global check
@@ -323,6 +356,7 @@ class Sequence(object):
         self.workValidityList[index] = validity
 
     def CheckLocation(self, index):
+        # ?
         for i in range(1,4):
             if index+i < len(self.wordList) and self.GetValidity(index+i) != 1 and self.workList[index].lower() == self.wordList[index+i].lower():
                 return index + i
