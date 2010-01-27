@@ -23,13 +23,36 @@ import re
 class CompleteSequenceError(Exception):
     pass
 
+def levenshtein(a,b):
+    "Calculates the Levenshtein distance between a and b."
+    n, m = len(a), len(b)
+    if n > m:
+        # Make sure n <= m, to use O(min(n,m)) space
+        a,b = b,a
+        n,m = m,n
+        
+    current = range(n+1)
+    for i in range(1,m+1):
+        previous, current = current, [i]+[0]*n
+        for j in range(1,n+1):
+            add, delete = previous[j]+1, current[j-1]+1
+            change = previous[j-1]
+            if a[j-1] != b[i-1]:
+                change = change + 1
+            current[j] = min(add, delete, change)
+            
+    return current[n]
+
+
+
 class Sequence(object):
     def __init__(self):
 
         # self.symbolList = what is between words (or "")
         # self.wordList = words that we want to find
         # self.workList = words that was writen (or "")
-        # self.workValidityList = 1 if the word if good, 0 else
+        # self.workValidityList = 1 if the word if good, 0 if it is empty
+        #        -levenshtein between it and the normal word otherwise
         #
         # self.activeWordIndex = the word that is currently being edited
         # self.activeWordPos = the position in that word
@@ -53,6 +76,11 @@ class Sequence(object):
         textToParse = text
         validChar = "0-9\'a-zA-Z"
         notValidChar = "^"+validChar
+        
+        #We want swswsw... (s=symbol, w=word)
+        #So if the 1st char isn't a symbole, we want an empty symbole
+        if re.match("["+validChar+"]", textToParse[0]):
+            self.symbolList.append('')    
         while len(textToParse) > 0:
             # if the text begin with a word followed by a not word character
             if re.match('^(['+validChar+']+)['+notValidChar+']', textToParse):
@@ -60,8 +88,6 @@ class Sequence(object):
                 word = m.group(1)
                 sizeToCut =  len(word)
                 textToParse = textToParse[sizeToCut:]
-                if len(self.wordList) == len(self.symbolList) :
-                    self.symbolList.append('')
                 self.wordList.append(word)
                 self.workList.append("")
                 self.workValidityList.append(0)
@@ -76,8 +102,6 @@ class Sequence(object):
             else:
                 # if there is only one word
                 if re.match('^(['+validChar+']+)', textToParse):
-                    if len(self.wordList) == len(self.symbolList) :
-                        self.symbolList.append('')
                     self.wordList.append(textToParse)
                     self.workList.append("")
                     self.workValidityList.append(0)
@@ -326,40 +350,13 @@ class Sequence(object):
         validity = 0
         #Global check
         if self.workList[index].lower() == self.wordList[index].lower():
-            validity = float(1)
+            validity = 1
+        elif self.workList[index] == "":
+            validity = 0
         else:
-            currentLength = len(self.workList[index])
-            targetLength = len(self.wordList[index])
-
-
-            #Length validity
-            lengthWeight = 0.2
-            lengthValidity = lengthWeight * (1 - abs(1-float(currentLength)/float(targetLength)))
-
-            if lengthValidity > lengthWeight:
-                lengthValidity = lengthWeight
-
-            #Character validity
-            charWeight = 0.8
-            weightPerChar = float(charWeight) / float(targetLength)
-            current = self.workList[index].lower()
-            target = self.wordList[index].lower()
-
-            charValidity = 0
-
-            for i in range(0, currentLength):
-                if i >= targetLength:
-                    charValidity -= weightPerChar
-                elif current[i] == target[i]:
-                    charValidity += weightPerChar
-                else:
-                    charValidity -= weightPerChar
-
-            if charValidity > charWeight:
-                charValidity = charWeight
-
-            validity = lengthValidity + charValidity
-
+            validity = -levenshtein(self.workList[index].lower(), 
+                                    self.wordList[index].lower())
+            
         self.workValidityList[index] = validity
 
     def CheckLocation(self, index):

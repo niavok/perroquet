@@ -295,7 +295,7 @@ class Gui:
         buffer.insert(iter1,symbol)
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
-        buffer.apply_tag_by_name("default", iter1, iter2)
+        buffer.apply_tag_by_name("symbol", iter1, iter2)
 
         for i in range(self.currentIndex, self.currentIndex + len(symbol)):
             self.wordIndexMap.append(self.currentWordIndex)
@@ -310,14 +310,12 @@ class Gui:
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
 
-        if validity == abs(0):
+        if validity == 0:
             tagName = "word_to_found"
-        elif validity > 0:
-            tagName = "word_to_found_good_" + str(abs(round(abs(validity)-0.05,1)))
-        elif validity <= -1:
-            tagName = "word_to_found_bad"
+        elif validity == -1 :
+            tagName = "word_near"
         else:
-            tagName = "word_to_found_bad_" + str(abs(round(abs(validity)-0.05,1)))
+            tagName = "word_to_found"
 
         buffer.apply_tag_by_name(tagName, iter1, iter2)
         self.currentWordIndex += 1
@@ -355,30 +353,19 @@ class Gui:
         bcolor_not_found_bad = self.window.get_colormap().alloc_color(250*256, 218*256, 200*256)
         bcolor_not_found = self.window.get_colormap().alloc_color(150*256, 210*256, 250*256)
         color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
+        
+        bcolor_near = self.window.get_colormap().alloc_color(150*256, 250*256, 150*256)
 
-        buffer.create_tag("default",
+        buffer.create_tag("symbol",
              size_points=18.0)
         buffer.create_tag("word_to_found",
              background=bcolor_not_found, foreground=color_not_found, size_points=18.0)
-        buffer.create_tag("word_to_found_bad",
-             background=bcolor_not_found_bad, foreground=color_not_found, size_points=18.0)
         buffer.create_tag("word_found",
              foreground=color_found, size_points=18.0)
-
-        for i in range(0, 10):
-            coefB = float(i)/10
-            coefA = 1-float(i)/10
-            color = self.window.get_colormap().alloc_color(int((coefA*200+coefB*200)*256), int((coefA*230+coefB*250)*256), int((coefA*250+coefB*200)*256))
-            buffer.create_tag("word_to_found_good_"+str(coefB),
-            background=color, foreground=color_not_found, size_points=18.0)
-
-        for i in range(0, 10):
-            coefB = float(i)/10
-            coefA = 1-float(i)/10
-            color = self.window.get_colormap().alloc_color(int((coefA*200+coefB*250)*256), int((coefA*230+coefB*218)*256), int((coefA*250+coefB*200)*256))
-            buffer.create_tag("word_to_found_bad_"+str(coefB),
-            background=color, foreground=color_not_found, size_points=18.0)
-
+        buffer.create_tag("word_near", 
+                background=bcolor_near,
+                foreground=color_not_found,
+                size_points=18.0)
 
 
     def on_textbufferView_changed(self,widget):
