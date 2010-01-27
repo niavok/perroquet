@@ -26,18 +26,18 @@ class CompleteSequenceError(Exception):
 class Sequence(object):
     def __init__(self):
         
-        #self.symbolList = what is between words (or "")
-        #self.wordList = words that we want to find
-        #self.workList = words that was writen (or "")
-        #self.workValidityList = 1 if the word if good, 0 else
-        #
-        #self.activeWordIndex = the word that is currently being edited
-        #self.activeWordPos = the position in that word
-        #
-        #self.helpChar = the char printed when you want a hint
-        #
-        #Note: self.symbolList, self.word, Listself.workList 
-        #and self.workValidityList have always the same length
+        # self.symbolList = what is between words (or "")
+        # self.wordList = words that we want to find
+        # self.workList = words that was writen (or "")
+        # self.workValidityList = 1 if the word if good, 0 else
+        # 
+        # self.activeWordIndex = the word that is currently being edited
+        # self.activeWordPos = the position in that word
+        # 
+        # self.helpChar = the char printed when you want a hint
+        # 
+        # Note: self.symbolList, self.word, Listself.workList 
+        # and self.workValidityList have always the same length
         
         self.symbolList = []
         self.wordList = []
@@ -101,7 +101,6 @@ class Sequence(object):
 
     def SetActiveWordIndex(self, index):
         self.activeWordIndex = index
-        print index
 
     def GetActiveWordPos(self):
         return self.activeWordPos
