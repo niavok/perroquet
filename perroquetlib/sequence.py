@@ -30,7 +30,7 @@ def levenshtein(a,b):
         # Make sure n <= m, to use O(min(n,m)) space
         a,b = b,a
         n,m = m,n
-        
+    
     current = range(n+1)
     for i in range(1,m+1):
         previous, current = current, [i]+[0]*n
@@ -43,6 +43,8 @@ def levenshtein(a,b):
             
     return current[n]
 
+
+
 def startWith(w1, w2):
     """Check if the first chars of w1 is w2)"""
     return w1[:len(w2)]==w2
@@ -50,97 +52,99 @@ def startWith(w1, w2):
 
 
 class Sequence(object):
-    def __init__(self):
+    def __init__(self, aditionnalChars=""):
 
-        # self.symbolList = what is between words (or "")
-        # self.wordList = words that we want to find
-        # self.workList = words that was writen (or "")
-        # self.workValidityList = 1 if the word if good, 0 if it is empty
+        # self._symbolList = what is between words (or "")
+        # self._wordList = words that we want to find
+        # self._workList = words that was writen (or "")
+        # self._workValidityList = 1 if the word if good, 0 if it is empty
         #        -levenshtein between it and the normal word otherwise
         #
-        # self.activeWordIndex = the word that is currently being edited
-        # self.activeWordPos = the position in that word
+        # self._activeWordIndex = the word that is currently being edited
+        # self._activeWordPos = the position in that word
         #
-        # self.helpChar = the char printed when you want a hint
+        # self._helpChar = the char printed when you want a hint
         #
-        # Note: self.symbolList, self.word, Listself.workList
-        # and self.workValidityList have always the same length
+        # Note: self._symbolList, self._wordList, Listself._workList
+        # and self._workValidityList have always the same length
 
-        self.symbolList = []
-        self.wordList = []
-        self.workList = []
-        self.workValidityList = []
+        self._symbolList = []
+        self._wordList = []
+        self._workList = []
+        self._workValidityList = []
 
-        self.activeWordIndex = 0
-        self.activeWordPos = 0
+        self._activeWordIndex = 0
+        self._activeWordPos = 0
 
-        self.helpChar = '~'
+        self._helpChar = '~'
+        
+        allChar = "0-9\'a-zA-Z"+aditionnalChars
+        self.validChar = "["+allChar+"]"
+        self.notValidChar = "[^"+allChar+"]"
 
     def Load(self, text):
         textToParse = text
-        validChar = "0-9\'a-zA-Z"
-        notValidChar = "^"+validChar
         
         #We want swswsw... (s=symbol, w=word)
         #So if the 1st char isn't a symbole, we want an empty symbole
-        if re.match("["+validChar+"]", textToParse[0]):
-            self.symbolList.append('')    
+        if re.match(self.validChar, textToParse[0]):
+            self._symbolList.append('')    
         while len(textToParse) > 0:
             # if the text begin with a word followed by a not word character
-            if re.match('^(['+validChar+']+)['+notValidChar+']', textToParse):
-                m = re.search('^(['+validChar+']+)['+notValidChar+']', textToParse)
+            if re.match('^('+self.validChar+'+)'+self.notValidChar, textToParse):
+                m = re.search('^('+self.validChar+'+)'+self.notValidChar, textToParse)
                 word = m.group(1)
                 sizeToCut =  len(word)
                 textToParse = textToParse[sizeToCut:]
-                self.wordList.append(word)
-                self.workList.append("")
-                self.workValidityList.append(0)
+                self._wordList.append(word)
+                self._workList.append("")
+                self._workValidityList.append(0)
             # if the text begin with no word character but followed by a word
-            elif re.match('^(['+notValidChar+']+)['+validChar+']', textToParse):
-                m = re.search('^(['+notValidChar+']+)['+validChar+']', textToParse)
+            elif re.match('^('+self.notValidChar+'+)'+self.validChar, textToParse):
+                m = re.search('^('+self.notValidChar+'+)'+self.validChar, textToParse)
                 symbol = m.group(1)
                 sizeToCut = len(symbol)
                 textToParse = textToParse[sizeToCut:]
-                self.symbolList.append(symbol)
+                self._symbolList.append(symbol)
             # if there is only one word or one separator
             else:
                 # if there is only one word
-                if re.match('^(['+validChar+']+)', textToParse):
-                    self.wordList.append(textToParse)
-                    self.workList.append("")
-                    self.workValidityList.append(0)
+                if re.match('^('+self.validChar+'+)', textToParse):
+                    self._wordList.append(textToParse)
+                    self._workList.append("")
+                    self._workValidityList.append(0)
                 # if there is only one separator
                 else:
-                    self.symbolList.append(textToParse)
+                    self._symbolList.append(textToParse)
                 break
 
     def GetSymbolList(self):
-        return self.symbolList
+        return self._symbolList
 
     def GetWordList(self):
-        return self.wordList
+        return self._wordList
 
     def GetWorkList(self):
-        return self.workList
+        return self._workList
 
     def GetWordCount(self):
-        return len(self.wordList)
+        return len(self._wordList)
 
     def GetActiveWordIndex(self):
-        return self.activeWordIndex
+        return self._activeWordIndex
 
     def SetActiveWordIndex(self, index):
-        self.activeWordIndex = index
+        self._activeWordIndex = index
 
     def GetActiveWordPos(self):
-        return self.activeWordPos
+        return self._activeWordPos
 
     def SetActiveWordPos(self, index):
-        self.activeWordPos = index
+        self._activeWordPos = index
 
     def SelectSequenceWord(self, wordIndex,wordIndexPos):
-        self.activeWordPos = wordIndexPos
-        self.activeWordIndex = wordIndex
+        self._activeWordPos = wordIndexPos
+        self._activeWordIndex = wordIndex
 
         if self.IsValidWord():
             self.NextWord()
@@ -153,11 +157,11 @@ class Sequence(object):
                 raise CompleteSequenceError
         else:
             #if replacing an helpChar
-            if self.activeWordPos < len(self.workList[self.activeWordIndex]) and self.workList[self.activeWordIndex][self.activeWordPos] == self.helpChar:
-                self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos+1:]
+            if self._activeWordPos < len(self._workList[self._activeWordIndex]) and self._workList[self._activeWordIndex][self._activeWordPos] == self._helpChar:
+                self._workList[self._activeWordIndex] = self._workList[self._activeWordIndex][:self._activeWordPos] + character + self._workList[self._activeWordIndex][self._activeWordPos+1:]
             else:
-                self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos] + character + self.workList[self.activeWordIndex][self.activeWordPos:]
-            self.activeWordPos += 1
+                self._workList[self._activeWordIndex] = self._workList[self._activeWordIndex][:self._activeWordPos] + character + self._workList[self._activeWordIndex][self._activeWordPos:]
+            self._activeWordPos += 1
             self.WorkChange()
 
 
@@ -165,115 +169,115 @@ class Sequence(object):
         if self.IsValidWord():
             if self.PreviousWord():
                 self.DeletePreviousCharacter()
-        elif len(self.workList[self.activeWordIndex]) == 0:
+        elif len(self._workList[self._activeWordIndex]) == 0:
             if self.PreviousWord():
                 self.DeletePreviousCharacter()
-        elif self.activeWordPos == 0:
+        elif self._activeWordPos == 0:
             if self.PreviousWord():
                 self.DeletePreviousCharacter()
         else:
-            self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos-1]  + self.workList[self.activeWordIndex][self.activeWordPos:]
-            self.activeWordPos -= 1
+            self._workList[self._activeWordIndex] = self._workList[self._activeWordIndex][:self._activeWordPos-1]  + self._workList[self._activeWordIndex][self._activeWordPos:]
+            self._activeWordPos -= 1
             self.WorkChange()
 
     def DeleteNextCharacter(self):
         if self.IsValidWord():
             if self.NextWord(False):
                 self.DeleteNextCharacter()
-        elif len(self.workList[self.activeWordIndex]) == 0:
+        elif len(self._workList[self._activeWordIndex]) == 0:
             if self.NextWord(False):
                 self.DeleteNextCharacter()
-        elif self.activeWordPos == len(self.workList[self.activeWordIndex]) :
+        elif self._activeWordPos == len(self._workList[self._activeWordIndex]) :
             if self.NextWord(False):
                 self.DeleteNextCharacter()
         else:
-            self.workList[self.activeWordIndex] = self.workList[self.activeWordIndex][:self.activeWordPos]  + self.workList[self.activeWordIndex][self.activeWordPos+1:]
+            self._workList[self._activeWordIndex] = self._workList[self._activeWordIndex][:self._activeWordPos]  + self._workList[self._activeWordIndex][self._activeWordPos+1:]
             self.WorkChange()
 
     def NextWord(self, end = True):
-        if self.activeWordIndex < len(self.workList) - 1:
-            self.activeWordIndex +=1
+        if self._activeWordIndex < len(self._workList) - 1:
+            self._activeWordIndex +=1
             if end:
-                self.activeWordPos = len(self.workList[self.activeWordIndex])
+                self._activeWordPos = len(self._workList[self._activeWordIndex])
             else:
-                self.activeWordPos = 0
+                self._activeWordPos = 0
             if self.IsValidWord():
                 return self.NextWord(end)
             else:
                 return True
         else:
             if end:
-                self.activeWordPos = len(self.workList[self.activeWordIndex])
+                self._activeWordPos = len(self._workList[self._activeWordIndex])
             else:
-                self.activeWordPos = 0
+                self._activeWordPos = 0
             return False
 
     def PreviousWord(self, end = True):
-        if self.activeWordIndex > 0:
-            self.activeWordIndex -=1
+        if self._activeWordIndex > 0:
+            self._activeWordIndex -=1
             if end:
-                self.activeWordPos = len(self.workList[self.activeWordIndex])
+                self._activeWordPos = len(self._workList[self._activeWordIndex])
             else:
-                self.activeWordPos = 0
+                self._activeWordPos = 0
             if self.IsValidWord():
                 return self.PreviousWord()
             else:
                 return True
         else:
             if end:
-                self.activeWordPos = len(self.workList[self.activeWordIndex])
+                self._activeWordPos = len(self._workList[self._activeWordIndex])
             else:
-                self.activeWordPos = 0
+                self._activeWordPos = 0
             return False
 
 
     def FirstWord(self):
-        self.activeWordIndex = 0
-        self.activeWordPos = 0
+        self._activeWordIndex = 0
+        self._activeWordPos = 0
         while self.IsValidWord():
             if not self.NextWord(False):
                 break
 
 
     def LastWord(self):
-        self.activeWordIndex = len(self.workList) -1
-        self.activeWordPos = len(self.workList[self.activeWordIndex])
+        self._activeWordIndex = len(self._workList) -1
+        self._activeWordPos = len(self._workList[self._activeWordIndex])
         while self.IsValidWord():
             if not self.PreviousWord(True):
                 break
 
     def NextCharacter(self):
-        if self.activeWordPos >= len(self.workList[self.activeWordIndex]):
+        if self._activeWordPos >= len(self._workList[self._activeWordIndex]):
             self.NextWord(False)
         else:
-            self.activeWordPos += 1
+            self._activeWordPos += 1
 
     def PreviousCharacter(self):
-        if self.activeWordPos == 0:
+        if self._activeWordPos == 0:
             self.PreviousWord()
         else:
-            self.activeWordPos -= 1
+            self._activeWordPos -= 1
 
     def IsValidWord(self):
-        return self.workValidityList[self.activeWordIndex] == 1
+        return self._workValidityList[self._activeWordIndex] == self._wordValidityList[self._activeWordIndex]
 
     def GetValidity(self, index):
-        return self.workValidityList[index]
+        return self._workValidityList[index]
 
     def IsValid(self):
-        return [w.lower() for w in self.workList] == [w.lower() for w in self.wordList]
+        return [w.lower() for w in self._workList] == [w.lower() for w in self._wordList]
 
     def GetWordFound(self):
         found = 0
         id = 0
-        for word in self.workList:
-            if word.lower() == self.wordList[id].lower():
+        for word in self._workList:
+            if word.lower() == self._wordList[id].lower():
                 found += 1
             id += 1
         return found
 
     def IsEmpty(self):
-        return all(word=="" for word in self.workList)
+        return all(word=="" for word in self._workList)
 
     def CompleteWord(self):
         """Reveal correction for word at cursor in current sequence"""
@@ -282,8 +286,8 @@ class Sequence(object):
                 self.CompleteWord()
             return
 
-        currentWord = self.workList[self.activeWordIndex]
-        goodWord = self.wordList[self.activeWordIndex]
+        currentWord = self._workList[self._activeWordIndex]
+        goodWord = self._wordList[self._activeWordIndex]
 
         outWord = ""
         first_error = -1
@@ -291,41 +295,41 @@ class Sequence(object):
             if i < len(currentWord) and currentWord[i].lower() == goodWord[i].lower():
                 outWord += goodWord[i]
             else:
-                outWord += self.helpChar
+                outWord += self._helpChar
                 if first_error == -1:
                     first_error = i
 
         if len(currentWord) == len(goodWord) and first_error != -1:
             outWord = outWord[:first_error] + goodWord[first_error] + outWord[first_error+1:]
-            self.activeWordPos = first_error+1
+            self._activeWordPos = first_error+1
         elif first_error != -1:
-            self.activeWordPos = first_error
+            self._activeWordPos = first_error
         else:
-            self.activeWordPos = 0
+            self._activeWordPos = 0
 
-        self.workList[self.activeWordIndex] = outWord
+        self._workList[self._activeWordIndex] = outWord
         self.WorkChange()
 
     def CompleteAll(self):
         """Reveal all words"""
-        for (i, word) in enumerate(self.wordList):
-            self.workList[i] = word
+        for (i, word) in enumerate(self._wordList):
+            self._workList[i] = word
             self.ComputeValidity(i)
 
     def WorkChange(self):
         """Update the validity of the current word"""
-        self.ComputeValidity(self.activeWordIndex)
+        self.ComputeValidity(self._activeWordIndex)
 
-        if not startWith(self.wordList[self.activeWordIndex], self.workList[self.activeWordIndex]):
+        if not startWith(self._wordList[self._activeWordIndex], self._workList[self._activeWordIndex]):
             #Verify position only if the word isn't at his right place
             #but maybe not fully written
-            location = self.CheckLocation(self.activeWordIndex)
+            location = self.CheckLocation(self._activeWordIndex)
             if location != -1:
-                self.workList[location] = self.workList[self.activeWordIndex]
-                self.workList[self.activeWordIndex] = ""
-                self.ComputeValidity(self.activeWordIndex)
+                self._workList[location] = self._workList[self._activeWordIndex]
+                self._workList[self._activeWordIndex] = ""
+                self.ComputeValidity(self._activeWordIndex)
                 self.ComputeValidity(location)
-                self.activeWordPos = 0
+                self._activeWordPos = 0
 
     def ComputeValidity(self, index):
         """Compute a score between 1 and 0 and -1 (or less)
@@ -335,22 +339,22 @@ class Sequence(object):
         20% of the score is given by the lenght and 80% by the good letters"""
 
         #Global check
-        if self.workList[index].lower() == self.wordList[index].lower():
+        if self._workList[index].lower() == self._wordList[index].lower():
             validity = 1
-        elif self.workList[index] == "":
+        elif self._workList[index] == "":
             validity = 0
         else:
-            validity = -levenshtein(self.workList[index].lower(), 
-                                    self.wordList[index].lower())
+            validity = -levenshtein(self._workList[index].lower(), 
+                                    self._wordList[index].lower())
             
-        self.workValidityList[index] = validity
+        self._workValidityList[index] = validity
 
     def CheckLocation(self, index):
         """Check if the word is correct but at the wrong place."""
         for i in range(1,4):
-            if index+i < len(self.wordList) and self.GetValidity(index+i) != 1 and self.workList[index].lower() == self.wordList[index+i].lower():
+            if index+i < len(self._wordList) and self.GetValidity(index+i) != 1 and self._workList[index].lower() == self._wordList[index+i].lower():
                 return index + i
-            if index-i >= 0 and self.GetValidity(index-i) != 1 and self.workList[index].lower() == self.wordList[index-i].lower():
+            if index-i >= 0 and self.GetValidity(index-i) != 1 and self._workList[index].lower() == self._wordList[index-i].lower():
                 return index - i
 
         return -1
