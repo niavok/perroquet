@@ -256,13 +256,13 @@ class Gui:
                 if sequence.GetActiveWordIndex() == i:
                     cursor_pos = pos
                 if sequence.IsEmptyWord(i):
-                    self.updateWord(" ", 0, isEmpty=True)
+                    self.UpdateWord(" ", 0, isEmpty=True)
                     pos += 1
                 elif sequence.IsValidWord(i) == 1:
-                    self.updateWord(sequence.GetWordList()[i], 0, isFound=True)
+                    self.UpdateWord(sequence.GetWordList()[i], 0, isFound=True)
                     pos += len(sequence.GetWordList()[i])
                 else:
-                    self.updateWord(sequence.GetWorkList()[i], sequence.GetValidity(i))
+                    self.UpdateWord(sequence.GetWorkList()[i], sequence.GetValidity(i))
                     pos += len(sequence.GetWorkList()[i])
                 i += 1
 
@@ -304,7 +304,7 @@ class Gui:
             self.wordPosMap.append(self.currentPosIndex)
         self.currentIndex += len(symbol)
 
-    def AddWordToFound(self, word, validity, isFound=False, isEmpty=False):
+    def UpdateWord(self, word, validity, isFound=False, isEmpty=False):
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
         size = buffer.get_char_count()
@@ -358,8 +358,6 @@ class Gui:
         path =saver.run()
         if path == None:
             return
-
-        path = result
 
         if path == "None" or path == None :
             path = ""
@@ -417,7 +415,13 @@ class Gui:
 
 
 
+
+
     #---------------------- Now the functions called directly by the gui--------
+    
+    
+    
+    
     def on_textbufferView_changed(self,widget):
         if self.mode != "loaded":
             self.ClearBuffer();
