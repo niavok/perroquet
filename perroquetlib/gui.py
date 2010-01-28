@@ -255,14 +255,14 @@ class Gui:
             if i < len(sequence.GetWordList()):
                 if sequence.GetActiveWordIndex() == i:
                     cursor_pos = pos
-                if len(sequence.GetWorkList()[i]) == 0:
-                    self.AddWordToFound(" ", 0)
+                if sequence.IsEmptyWord(i):
+                    self.updateWord(" ", 0, isEmpty=True)
                     pos += 1
-                elif sequence.GetValidity(i) == 1:
-                    self.AddWordFound(sequence.GetWordList()[i])
+                elif sequence.IsValidWord(i) == 1:
+                    self.updateWord(sequence.GetWordList()[i], 0, isFound=True)
                     pos += len(sequence.GetWordList()[i])
                 else:
-                    self.AddWordToFound(sequence.GetWorkList()[i], sequence.GetValidity(i))
+                    self.updateWord(sequence.GetWorkList()[i], sequence.GetValidity(i))
                     pos += len(sequence.GetWorkList()[i])
                 i += 1
 
@@ -304,7 +304,7 @@ class Gui:
             self.wordPosMap.append(self.currentPosIndex)
         self.currentIndex += len(symbol)
 
-    def AddWordToFound(self, word, validity):
+    def AddWordToFound(self, word, validity, isFound=False, isEmpty=False):
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
         size = buffer.get_char_count()
@@ -312,32 +312,16 @@ class Gui:
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
 
-        if validity == 0:
+        if isEmpty:
             tagName = "word_to_found"
+        elif isFound:
+            tagName = "word_found"
         elif validity == -1 :
             tagName = "word_near"
         else:
             tagName = "word_to_found"
 
         buffer.apply_tag_by_name(tagName, iter1, iter2)
-        self.currentWordIndex += 1
-        self.currentPosIndex = 0
-
-        for i in range(self.currentIndex, self.currentIndex + len(word)):
-            self.wordIndexMap.append(self.currentWordIndex)
-            self.wordPosMap.append(self.currentPosIndex)
-            self.currentPosIndex += 1
-        self.currentIndex += len(word)
-
-    def AddWordFound(self, word):
-        buffer = self.typeLabel.get_buffer()
-        iter1 = buffer.get_end_iter()
-        size = buffer.get_char_count()
-        buffer.insert(iter1,word)
-        iter1 = buffer.get_iter_at_offset(size)
-        iter2 = buffer.get_end_iter()
-        buffer.apply_tag_by_name("word_found", iter1, iter2)
-
         self.currentWordIndex += 1
         self.currentPosIndex = 0
 

@@ -258,9 +258,16 @@ class Sequence(object):
         else:
             self._activeWordPos -= 1
 
-    def IsValidWord(self):
-        return self._workValidityList[self._activeWordIndex] == self._wordValidityList[self._activeWordIndex]
-
+    def IsValidWord(self, i=None):
+        if i==None:
+            i=self._activeWordIndex
+        return self._workList[i].lower() == self._wordList[i].lower()
+    
+    def IsEmptyWord(self, i=None):
+        if i==None:
+            i=self._activeWordIndex
+        return self._workList[i]==""
+        
     def GetValidity(self, index):
         return self._workValidityList[index]
 
