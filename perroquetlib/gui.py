@@ -353,7 +353,71 @@ class Gui:
                 foreground=color_not_found,
                 size_points=18.0)
 
+    def AskSavePath(self):
+        saver = SaveFileSelector(self.window)
+        path =saver.run()
+        if path == None:
+            return
 
+        path = result
+
+        if path == "None" or path == None :
+            path = ""
+        elif not path.endswith(".perroquet"):
+            path = path +".perroquet"
+        return path
+        
+    def AskProperties(self):
+        dialogExerciseProperties = GuiSequenceProperties(self.core, self.window)
+        dialogExerciseProperties.Run()
+
+    def Activate(self, mode):
+        self.mode = mode
+        if mode == "loaded":
+            self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
+            self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
+            self.builder.get_object("toolbuttonHint").set_sensitive(True)
+            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(True)
+            self.builder.get_object("toolbuttonProperties").set_sensitive(True)
+            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(True)
+            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(True)
+            self.builder.get_object("checkmenuitemTranslation").set_sensitive(True)
+            self.builder.get_object("imagemenuitemHint").set_sensitive(True)
+            self.builder.get_object("hscaleSpeed").set_sensitive(True)
+
+
+        if mode == "load_failed":
+            self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
+            self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
+            self.builder.get_object("toolbuttonHint").set_sensitive(False)
+            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(False)
+            self.builder.get_object("toolbuttonProperties").set_sensitive(True)
+            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
+            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
+            self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
+            self.builder.get_object("imagemenuitemHint").set_sensitive(False)
+            self.builder.get_object("hscaleSpeed").set_sensitive(False)
+
+        if mode == "closed":
+            self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
+            self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
+            self.builder.get_object("toolbuttonHint").set_sensitive(False)
+            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(False)
+            self.builder.get_object("toolbuttonProperties").set_sensitive(False)
+            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
+            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
+            self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
+            self.builder.get_object("imagemenuitemHint").set_sensitive(False)
+            self.builder.get_object("hscaleSpeed").set_sensitive(False)
+
+    def Run(self):
+        gtk.gdk.threads_init()
+        self.window.show()
+        gtk.main()
+
+
+
+    #---------------------- Now the functions called directly by the gui--------
     def on_textbufferView_changed(self,widget):
         if self.mode != "loaded":
             self.ClearBuffer();
@@ -473,21 +537,6 @@ class Gui:
 
         self.core.LoadExercise(result)
 
-    def AskSavePath(self):
-
-        saver = SaveFileSelector(self.window)
-        result =saver.run()
-        if result == None:
-            return
-
-        path = result
-
-        if path == "None" or path == None :
-            path = ""
-        elif not path.endswith(".perroquet"):
-            path = path +".perroquet"
-        return path
-
     def on_buttonSaveExerciseOk_clicked(self, widget, data=None):
         saveChooser = self.builder.get_object("filechooserdialogSave")
         saveChooser.hide()
@@ -536,10 +585,6 @@ class Gui:
 
     def on_toolbuttonProperties_clicked(self, widget, data=None):
         self.AskProperties()
-
-    def AskProperties(self):
-        dialogExerciseProperties = GuiSequenceProperties(self.core, self.window)
-        dialogExerciseProperties.Run()
 
     def on_imagemenuitemExerciceManager_activate(self, widget, data=None):
         self.DisplayExerciceManager()
@@ -623,45 +668,6 @@ class Gui:
 
 
 
-    def Activate(self, mode):
-        self.mode = mode
-        if mode == "loaded":
-            self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
-            self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
-            self.builder.get_object("toolbuttonHint").set_sensitive(True)
-            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(True)
-            self.builder.get_object("toolbuttonProperties").set_sensitive(True)
-            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(True)
-            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(True)
-            self.builder.get_object("checkmenuitemTranslation").set_sensitive(True)
-            self.builder.get_object("imagemenuitemHint").set_sensitive(True)
-            self.builder.get_object("hscaleSpeed").set_sensitive(True)
-
-
-        if mode == "load_failed":
-            self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
-            self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
-            self.builder.get_object("toolbuttonHint").set_sensitive(False)
-            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(False)
-            self.builder.get_object("toolbuttonProperties").set_sensitive(True)
-            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
-            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
-            self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
-            self.builder.get_object("imagemenuitemHint").set_sensitive(False)
-            self.builder.get_object("hscaleSpeed").set_sensitive(False)
-
-        if mode == "closed":
-            self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
-            self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
-            self.builder.get_object("toolbuttonHint").set_sensitive(False)
-            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(False)
-            self.builder.get_object("toolbuttonProperties").set_sensitive(False)
-            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
-            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
-            self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
-            self.builder.get_object("imagemenuitemHint").set_sensitive(False)
-            self.builder.get_object("hscaleSpeed").set_sensitive(False)
-
     def on_aboutdialog_delete_event(self,widget,data=None):
         self.builder.get_object("aboutdialog").hide()
         return True
@@ -669,12 +675,6 @@ class Gui:
     def on_aboutdialog_response(self,widget,data=None):
         self.builder.get_object("aboutdialog").hide()
         return True
-
-    def Run(self):
-        gtk.gdk.threads_init()
-        self.window.show()
-        gtk.main()
-
 EVENT_FILTER = None
 
 class FileSelector(gtk.FileChooserDialog):
