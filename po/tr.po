@@ -7,66 +7,66 @@ msgid ""
 msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-01-08 22:08+0100\n"
+"POT-Creation-Date: 2010-01-24 18:48+0100\n"
 "PO-Revision-Date: 2010-01-08 15:22+0000\n"
 "Last-Translator: Fred Bertolus <fred.bertolus@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-09 07:59+0000\n"
+"X-Launchpad-Export-Date: 2010-01-31 04:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../perroquetlib/gui.py:57
+#: ../perroquetlib/gui.py:63
 msgid "Do you really quit without save ?"
 msgstr ""
 
-#: ../perroquetlib/gui.py:58
+#: ../perroquetlib/gui.py:64
 msgid "Confirm quit"
 msgstr ""
 
-#: ../perroquetlib/gui.py:73
+#: ../perroquetlib/gui.py:85
 #, python-format
-msgid "The file '%s' doesn't exist. Please modify exercice paths"
+msgid "The file '%s' doesn't exist. Please modify exercise paths"
 msgstr ""
 
-#: ../perroquetlib/gui.py:74
+#: ../perroquetlib/gui.py:86
 msgid "Load error"
 msgstr ""
 
-#: ../perroquetlib/gui.py:196
+#: ../perroquetlib/gui.py:213
 #, python-format
 msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
 msgstr ""
 
-#: ../perroquetlib/gui.py:197
+#: ../perroquetlib/gui.py:214
 #, python-format
 msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
 msgstr ""
 
-#: ../perroquetlib/gui.py:198
+#: ../perroquetlib/gui.py:215
 #, python-format
 msgid "- Repeat ratio: %s per words"
 msgstr ""
 
-#: ../perroquetlib/gui.py:203 ../data/perroquet.desktop.in.h:2
-#: ../data/perroquet.ui.h:19
+#: ../perroquetlib/gui.py:220 ../data/perroquet.desktop.in.h:2
+#: ../data/perroquet.ui.h:22
 msgid "Perroquet"
 msgstr ""
 
-#: ../perroquetlib/gui.py:660
+#: ../perroquetlib/gui.py:748
 msgid "Select File to Open"
 msgstr "Açıklacak Dosyayı Seçin"
 
-#: ../perroquetlib/gui.py:665 ../perroquetlib/gui.py:686
+#: ../perroquetlib/gui.py:753 ../perroquetlib/gui.py:774
 msgid "Perroquet files"
 msgstr ""
 
-#: ../perroquetlib/gui.py:670 ../perroquetlib/gui.py:691
+#: ../perroquetlib/gui.py:758 ../perroquetlib/gui.py:779
 msgid "All files"
 msgstr "Tüm dosyalar"
 
-#: ../perroquetlib/gui.py:681
+#: ../perroquetlib/gui.py:769
 msgid "Select File to Save to"
 msgstr ""
 
@@ -105,71 +105,119 @@ msgstr ""
 msgid "E_dit"
 msgstr "_Düzenle"
 
-#: ../data/perroquet.ui.h:10
-msgid "Exercice properties"
+#: ../data/perroquet.ui.h:10 ../data/properties.ui.h:1
+msgid "Exercise properties"
 msgstr ""
 
 #: ../data/perroquet.ui.h:11
-msgid "Exercice: "
-msgstr "Alıştırma: "
+msgid "Exercise subtitle: "
+msgstr ""
 
 #: ../data/perroquet.ui.h:12
+msgid "Exercise video or audio: "
+msgstr ""
+
+#: ../data/perroquet.ui.h:13
 msgid "H_elp"
 msgstr "_Yardım"
 
-#: ../data/perroquet.ui.h:13
+#: ../data/perroquet.ui.h:14
 msgid "Hint"
 msgstr "İpucu"
 
-#: ../data/perroquet.ui.h:14
-msgid "Media: "
-msgstr "Medya: "
-
 #: ../data/perroquet.ui.h:15
-msgid "New exercice"
-msgstr "Yeni alıştırma"
+msgid "List of all words to find in the exercise"
+msgstr ""
 
 #: ../data/perroquet.ui.h:16
-msgid "Next Sequence"
+msgid "New exercise"
 msgstr ""
 
 #: ../data/perroquet.ui.h:17
-msgid "Open saved exercice"
+msgid "Next Sequence"
 msgstr ""
 
 #: ../data/perroquet.ui.h:18
+msgid "Next sequence"
+msgstr ""
+
+#: ../data/perroquet.ui.h:19
+msgid "Open exercise"
+msgstr ""
+
+#: ../data/perroquet.ui.h:20
+msgid "Open saved exercise"
+msgstr ""
+
+#: ../data/perroquet.ui.h:21
 msgid "Pause"
 msgstr "Duraklat"
 
-#: ../data/perroquet.ui.h:20
+#: ../data/perroquet.ui.h:23
 msgid "Play"
 msgstr "Oynat"
 
-#: ../data/perroquet.ui.h:21
-msgid "Previous sequence"
-msgstr ""
-
-#: ../data/perroquet.ui.h:22
-msgid "Properties"
-msgstr "Özellikler"
-
-#: ../data/perroquet.ui.h:23
-msgid "Replay sequence"
-msgstr ""
-
 #: ../data/perroquet.ui.h:24
-msgid "Save exercice"
+msgid "Play speed"
 msgstr ""
 
 #: ../data/perroquet.ui.h:25
-msgid "Select a subtitle file"
-msgstr "Bir altyazı dosyası seç"
+msgid "Position in current sequence"
+msgstr ""
 
 #: ../data/perroquet.ui.h:26
-msgid "Select a video file"
+msgid "Position in exercise"
 msgstr ""
 
 #: ../data/perroquet.ui.h:27
+msgid "Previous sequence"
+msgstr ""
+
+#: ../data/perroquet.ui.h:28
+msgid "Progress statistics"
+msgstr ""
+
+#: ../data/perroquet.ui.h:29
+msgid "Properties"
+msgstr "Özellikler"
+
+#: ../data/perroquet.ui.h:30
+msgid "Replay sequence"
+msgstr ""
+
+#: ../data/perroquet.ui.h:31
+msgid "Save exercise"
+msgstr ""
+
+#: ../data/perroquet.ui.h:32 ../data/properties.ui.h:7
+msgid "Select a subtitle file"
+msgstr "Bir altyazı dosyası seç"
+
+#: ../data/perroquet.ui.h:33 ../data/properties.ui.h:8
+msgid "Select a video file"
+msgstr ""
+
+#: ../data/perroquet.ui.h:34
+msgid "Show/Hide translation"
+msgstr ""
+
+#: ../data/perroquet.ui.h:35
+msgid "The audio track should be in the exercise language"
+msgstr ""
+
+#: ../data/perroquet.ui.h:36
+msgid ""
+"These subtitles should be in the exercise language.\n"
+"Supported format: srt"
+msgstr ""
+
+#: ../data/perroquet.ui.h:38
+msgid ""
+"These subtitles should be in your mother language.\n"
+"Supported format: srt"
+msgstr ""
+
+#: ../data/perroquet.ui.h:40
 msgid ""
 "This program is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -185,14 +233,69 @@ msgid ""
 "this program.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 
-#: ../data/perroquet.ui.h:32
+#: ../data/perroquet.ui.h:45
 msgid "Translation"
 msgstr "Tercüme"
 
-#: ../data/perroquet.ui.h:33
+#: ../data/perroquet.ui.h:46
+msgid "Translation subtitles (optional): "
+msgstr ""
+
+#: ../data/perroquet.ui.h:47
+msgid ""
+"Word filter\n"
+"This filter use  regexp. Examples:\n"
+"abc = all words containing 'abc'\n"
+"^abc = all words starting with 'abc'\n"
+"abc$ = all words ending with 'abc'\n"
+"\n"
+"The character . can replace any character:\n"
+"^abc.. = all words of at least 5 letters starting with 'abc'\n"
+"^...$ = all 4-letter word\n"
+"^ab.c$ = all 4-letter word beginning with 'ab' and ending with 'c'\n"
+"\n"
+"For more information on regular expressions: "
+"http://en.wikipedia.org/wiki/Regular_expression"
+msgstr ""
+
+#: ../data/perroquet.ui.h:59
+msgid "_File"
+msgstr "_Dosya"
+
+#: ../data/properties.ui.h:2
+msgid "Exercise: "
+msgstr ""
+
+#: ../data/properties.ui.h:3
+msgid "Maximum sequence time (s): "
+msgstr ""
+
+#: ../data/properties.ui.h:4
+msgid "Media: "
+msgstr "Medya: "
+
+#: ../data/properties.ui.h:5
+msgid "Paths"
+msgstr ""
+
+#: ../data/properties.ui.h:6
+msgid "Repeat sequences after completed it"
+msgstr ""
+
+#: ../data/properties.ui.h:9
+msgid "Sequences"
+msgstr ""
+
+#: ../data/properties.ui.h:10
+msgid "Time between sequences (s):"
+msgstr ""
+
+#: ../data/properties.ui.h:11
 msgid "Translation: "
 msgstr ""
 
-#: ../data/perroquet.ui.h:34
-msgid "_File"
-msgstr "_Dosya"
+#~ msgid "New exercice"
+#~ msgstr "Yeni alıştırma"
+
+#~ msgid "Exercice: "
+#~ msgstr "Alıştırma: "

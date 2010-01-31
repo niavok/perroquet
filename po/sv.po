@@ -7,66 +7,66 @@ msgid ""
 msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-01-11 00:20+0100\n"
+"POT-Creation-Date: 2010-01-24 18:48+0100\n"
 "PO-Revision-Date: 2010-01-16 05:46+0000\n"
 "Last-Translator: Fred Bertolus <fred.bertolus@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-19 04:51+0000\n"
+"X-Launchpad-Export-Date: 2010-01-31 04:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../perroquetlib/gui.py:58
+#: ../perroquetlib/gui.py:63
 msgid "Do you really quit without save ?"
 msgstr "Vill du verkligen avsluta utan att spara?"
 
-#: ../perroquetlib/gui.py:59
+#: ../perroquetlib/gui.py:64
 msgid "Confirm quit"
 msgstr "Konfirmera avsluta"
 
-#: ../perroquetlib/gui.py:74
+#: ../perroquetlib/gui.py:85
 #, python-format
-msgid "The file '%s' doesn't exist. Please modify exercice paths"
-msgstr "Filen '% s' finns inte. Byta övningar vägar"
+msgid "The file '%s' doesn't exist. Please modify exercise paths"
+msgstr ""
 
-#: ../perroquetlib/gui.py:75
+#: ../perroquetlib/gui.py:86
 msgid "Load error"
 msgstr "Fel-laddat"
 
-#: ../perroquetlib/gui.py:197
+#: ../perroquetlib/gui.py:213
 #, python-format
 msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
 msgstr "- Sekvenser: %(found)s/%(count)s (%(percent)s %%)\n"
 
-#: ../perroquetlib/gui.py:198
+#: ../perroquetlib/gui.py:214
 #, python-format
 msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
 msgstr "- Ord: %(found)s/%(count)s (%(percent)s %%)\n"
 
-#: ../perroquetlib/gui.py:199
+#: ../perroquetlib/gui.py:215
 #, python-format
 msgid "- Repeat ratio: %s per words"
 msgstr "- Upprep förhållande: %s per words"
 
-#: ../perroquetlib/gui.py:204 ../data/perroquet.desktop.in.h:2
-#: ../data/perroquet.ui.h:25
+#: ../perroquetlib/gui.py:220 ../data/perroquet.desktop.in.h:2
+#: ../data/perroquet.ui.h:22
 msgid "Perroquet"
 msgstr "Perroquet"
 
-#: ../perroquetlib/gui.py:717
+#: ../perroquetlib/gui.py:748
 msgid "Select File to Open"
 msgstr "Välj fil att öppna"
 
-#: ../perroquetlib/gui.py:722 ../perroquetlib/gui.py:743
+#: ../perroquetlib/gui.py:753 ../perroquetlib/gui.py:774
 msgid "Perroquet files"
 msgstr "Perroquet filar"
 
-#: ../perroquetlib/gui.py:727 ../perroquetlib/gui.py:748
+#: ../perroquetlib/gui.py:758 ../perroquetlib/gui.py:779
 msgid "All files"
 msgstr "Alla filer"
 
-#: ../perroquetlib/gui.py:738
+#: ../perroquetlib/gui.py:769
 msgid "Select File to Save to"
 msgstr "Välj fil att spara till"
 
@@ -108,127 +108,113 @@ msgstr "Visa översättning"
 msgid "E_dit"
 msgstr "Re_digera"
 
-#: ../data/perroquet.ui.h:10
-msgid "Exercice properties"
-msgstr "Övning egenskaper"
+#: ../data/perroquet.ui.h:10 ../data/properties.ui.h:1
+msgid "Exercise properties"
+msgstr ""
 
 #: ../data/perroquet.ui.h:11
-msgid "Exercice subtitle: "
-msgstr "Övning undertexter "
+msgid "Exercise subtitle: "
+msgstr ""
 
 #: ../data/perroquet.ui.h:12
-msgid "Exercice video or audio: "
-msgstr "Ljud eller video övningar "
+msgid "Exercise video or audio: "
+msgstr ""
 
 #: ../data/perroquet.ui.h:13
-msgid "Exercice: "
-msgstr "Övning: "
-
-#: ../data/perroquet.ui.h:14
 msgid "H_elp"
 msgstr "H_jälp"
 
-#: ../data/perroquet.ui.h:15
+#: ../data/perroquet.ui.h:14
 msgid "Hint"
 msgstr "Ledtråd"
 
-#: ../data/perroquet.ui.h:16
+#: ../data/perroquet.ui.h:15
 msgid "List of all words to find in the exercise"
 msgstr "Ordlista som hittas i övningen"
 
-#: ../data/perroquet.ui.h:17
-msgid "Media: "
-msgstr "Media: "
-
-#: ../data/perroquet.ui.h:18
-msgid "New exercice"
-msgstr "Ny övning"
-
-#: ../data/perroquet.ui.h:19
+#: ../data/perroquet.ui.h:16
 msgid "New exercise"
 msgstr "Ny övning"
 
-#: ../data/perroquet.ui.h:20
+#: ../data/perroquet.ui.h:17
 msgid "Next Sequence"
 msgstr "Nästa sekvens"
 
-#: ../data/perroquet.ui.h:21
+#: ../data/perroquet.ui.h:18
 msgid "Next sequence"
 msgstr "Nästa sekvens"
 
-#: ../data/perroquet.ui.h:22
+#: ../data/perroquet.ui.h:19
 msgid "Open exercise"
 msgstr "Öpna övning"
 
-#: ../data/perroquet.ui.h:23
-msgid "Open saved exercice"
-msgstr "Öpna besparad övning"
+#: ../data/perroquet.ui.h:20
+msgid "Open saved exercise"
+msgstr ""
 
-#: ../data/perroquet.ui.h:24
+#: ../data/perroquet.ui.h:21
 msgid "Pause"
 msgstr "Pausa"
 
-#: ../data/perroquet.ui.h:26
+#: ../data/perroquet.ui.h:23
 msgid "Play"
 msgstr "Spela upp"
 
-#: ../data/perroquet.ui.h:27
+#: ../data/perroquet.ui.h:24
+msgid "Play speed"
+msgstr ""
+
+#: ../data/perroquet.ui.h:25
 msgid "Position in current sequence"
 msgstr "Lokalisering i löpande ordning"
 
-#: ../data/perroquet.ui.h:28
+#: ../data/perroquet.ui.h:26
 msgid "Position in exercise"
 msgstr "Lokalisering i övningen"
 
-#: ../data/perroquet.ui.h:29
+#: ../data/perroquet.ui.h:27
 msgid "Previous sequence"
 msgstr "Föregående sekvens"
 
-#: ../data/perroquet.ui.h:30
+#: ../data/perroquet.ui.h:28
 msgid "Progress statistics"
 msgstr "Utveckling statistik"
 
-#: ../data/perroquet.ui.h:31
+#: ../data/perroquet.ui.h:29
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: ../data/perroquet.ui.h:32
+#: ../data/perroquet.ui.h:30
 msgid "Replay sequence"
 msgstr "Spela om sekvens"
 
-#: ../data/perroquet.ui.h:33
-msgid "Save exercice"
-msgstr "Spara övning"
-
-#: ../data/perroquet.ui.h:34
+#: ../data/perroquet.ui.h:31
 msgid "Save exercise"
 msgstr "Spara övning"
 
-#: ../data/perroquet.ui.h:35
+#: ../data/perroquet.ui.h:32 ../data/properties.ui.h:7
 msgid "Select a subtitle file"
 msgstr "Välj en fil med undertexter"
 
-#: ../data/perroquet.ui.h:36
+#: ../data/perroquet.ui.h:33 ../data/properties.ui.h:8
 msgid "Select a video file"
 msgstr "Välj en video fil"
 
-#: ../data/perroquet.ui.h:37
+#: ../data/perroquet.ui.h:34
 msgid "Show/Hide translation"
 msgstr "Visa/Dölja översättning"
 
-#: ../data/perroquet.ui.h:38
-msgid "The audio track should be in the exercice language"
-msgstr "Ljudspåret skulle vara i språkövningen"
+#: ../data/perroquet.ui.h:35
+msgid "The audio track should be in the exercise language"
+msgstr ""
 
-#: ../data/perroquet.ui.h:39
+#: ../data/perroquet.ui.h:36
 msgid ""
-"These subtitles should be in the exercice language.\n"
+"These subtitles should be in the exercise language.\n"
 "Supported format: srt"
 msgstr ""
-"Dessa undertexter skulle vara i språkövningen.\n"
-"Stött format: SRT"
 
-#: ../data/perroquet.ui.h:41
+#: ../data/perroquet.ui.h:38
 msgid ""
 "These subtitles should be in your mother language.\n"
 "Supported format: srt"
@@ -236,7 +222,7 @@ msgstr ""
 "Dessa subtitler skuller vara i ditt modersmål.\n"
 "Stött format: srt"
 
-#: ../data/perroquet.ui.h:43
+#: ../data/perroquet.ui.h:40
 msgid ""
 "This program is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -264,19 +250,15 @@ msgstr ""
 "You should have received a copy of the GNU General Public License along with "
 "this program.  If not, see <http://www.gnu.org/licenses/>."
 
-#: ../data/perroquet.ui.h:48
+#: ../data/perroquet.ui.h:45
 msgid "Translation"
 msgstr "Översättning"
 
-#: ../data/perroquet.ui.h:49
+#: ../data/perroquet.ui.h:46
 msgid "Translation subtitles (optional): "
 msgstr "Översättning undertexter (fakultativ): "
 
-#: ../data/perroquet.ui.h:50
-msgid "Translation: "
-msgstr "Översättning: "
-
-#: ../data/perroquet.ui.h:51
+#: ../data/perroquet.ui.h:47
 msgid ""
 "Word filter\n"
 "This filter use  regexp. Examples:\n"
@@ -293,6 +275,73 @@ msgid ""
 "http://en.wikipedia.org/wiki/Regular_expression"
 msgstr ""
 
-#: ../data/perroquet.ui.h:63
+#: ../data/perroquet.ui.h:59
 msgid "_File"
 msgstr "_Fil"
+
+#: ../data/properties.ui.h:2
+msgid "Exercise: "
+msgstr ""
+
+#: ../data/properties.ui.h:3
+msgid "Maximum sequence time (s): "
+msgstr ""
+
+#: ../data/properties.ui.h:4
+msgid "Media: "
+msgstr "Media: "
+
+#: ../data/properties.ui.h:5
+msgid "Paths"
+msgstr ""
+
+#: ../data/properties.ui.h:6
+msgid "Repeat sequences after completed it"
+msgstr ""
+
+#: ../data/properties.ui.h:9
+msgid "Sequences"
+msgstr ""
+
+#: ../data/properties.ui.h:10
+msgid "Time between sequences (s):"
+msgstr ""
+
+#: ../data/properties.ui.h:11
+msgid "Translation: "
+msgstr "Översättning: "
+
+#, python-format
+#~ msgid "The file '%s' doesn't exist. Please modify exercice paths"
+#~ msgstr "Filen '% s' finns inte. Byta övningar vägar"
+
+#~ msgid "New exercice"
+#~ msgstr "Ny övning"
+
+#~ msgid "Exercice video or audio: "
+#~ msgstr "Ljud eller video övningar "
+
+#~ msgid "Exercice properties"
+#~ msgstr "Övning egenskaper"
+
+#~ msgid "Exercice subtitle: "
+#~ msgstr "Övning undertexter "
+
+#~ msgid "Exercice: "
+#~ msgstr "Övning: "
+
+#~ msgid "Open saved exercice"
+#~ msgstr "Öpna besparad övning"
+
+#~ msgid "Save exercice"
+#~ msgstr "Spara övning"
+
+#~ msgid "The audio track should be in the exercice language"
+#~ msgstr "Ljudspåret skulle vara i språkövningen"
+
+#~ msgid ""
+#~ "These subtitles should be in the exercice language.\n"
+#~ "Supported format: srt"
+#~ msgstr ""
+#~ "Dessa undertexter skulle vara i språkövningen.\n"
+#~ "Stött format: SRT"
