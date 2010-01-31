@@ -18,8 +18,10 @@
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
 
-class CompleteWordError(Exception):
+class ValidWordError(Exception):
     pass
+class NoCharPossible(Exception):
+    pass    
     
 def levenshtein(a,b):
     "Calculates the Levenshtein distance between a and b."
@@ -65,8 +67,24 @@ class Word:
     
     def isEmpty(self):
         return self._current == ""
+    
+    def complete(self):
+        "Reveal the correction"
+        self._current = self._valid
+    
+    def writeChar(self, char):
+        if len(char)>1:
+            raise AttributeError
+        if self.isValid():
+            raise Comp
+        #if replacing an helpChar
+        if self._pos < len(self._current) and self._current[self._pos] == self._helpChar:
+            self._current = self._current[:self._pos] + char + self._current[self._pos+1:]
+        else:
+            self._current = self._current[:self._pos] + char + self._current[self._pos:]
+        self._pos += 1
 
-    def completeWord(self):
+    def showHint(self):
         """Reveal correction for word at cursor in current sequence"""
         outWord = ""
         first_error = -1
@@ -89,24 +107,44 @@ class Word:
             self._pos = first_error
         else:
             #The word is valid
-            raise CompleteWordError
+            raise ValidWordError
         
         self._current = outWord
+    
+    def deletePreviousChar(self):
+        if self.isValid():
+            raise ValidWordError
+        elif self._pos == 0 or self._current =="":
+            raise NoCharPossible
+        else:
+            self._current = self._current[:self._pos-1]  + self._current[self._pos:]
+    
+    def deleteNextChar(self):
+        if self.isValid():
+            raise ValidWordError
+        elif self._pos == len(self._current) or self._current =="":
+            raise NoCharPossible
+        else:
+            self._current = self._current[:self._pos]  + self._current[self._pos+1:]
+            
     
     def setCurrent(self, current):
         self._current = current
         
     def getCurrent(self):
         return self._current
-    
-    def setValid(self, valid):
-        self._valid = valid
         
     def getValid(self):
         return self._valid
     
     def setPos(self, pos):
-        self._pos = pos
+        "if pos=-1, set at the last position"
+        if pos > len(self._current) or -2 >= pos:
+            raise NoCharPossible
+        elif pos==-1:
+            self._pos = len(self._current)
+        else:
+            self._pos = pos
         
     def getPos(self):
         return self._pos

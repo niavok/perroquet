@@ -282,13 +282,10 @@ class Sequence(object):
         if len(currentWord) == len(goodWord) and first_error != -1:
             outWord = outWord[:first_error] + goodWord[first_error] + outWord[first_error+1:]
             self._activeWordPos = first_error+1
-            print 1
         elif first_error != -1:
             self._activeWordPos = first_error
-            print 2
         else:
             self._activeWordPos = 0
-            print 3
             
         self._workList[self._activeWordIndex] = outWord
         self.WorkChange()
