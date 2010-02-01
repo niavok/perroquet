@@ -28,8 +28,7 @@ class Sequence(object):
     def __init__(self, aditionnalChars=""):
 
         # self._symbolList = what is between words (or "")
-        # self._wordList = words that we want to find
-        # self._workList = words that was writen (or "")
+        # self._wordList = a list of Words items that we want to find
         # self._workValidityList = 1 if the word if good, 0 if it is empty
         #        -levenshtein between it and the normal word otherwise
         #
