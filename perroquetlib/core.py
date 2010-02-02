@@ -267,10 +267,14 @@ class Core(object):
     #Goto previous char in current sequence
     def PreviousChar(self):
         self.exercise.GetCurrentSequence().previousChar()
+        #The sequence don't change but the cursor position is no more up to date
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
 
     #Goto next char in current sequence
     def NextChar(self):
         self.exercise.GetCurrentSequence().nextChar()
+        #The sequence don't change but the cursor position is no more up to date
+        self.gui.SetSequence(self.exercise.GetCurrentSequence())
 
     #Reveal correction for word at cursor in current sequence
     def CompleteWord(self):
