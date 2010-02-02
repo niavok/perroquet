@@ -88,6 +88,8 @@ class Config(ConfigSingleton):
             print "Error : gui file 'exercise_manager.ui' not found"
             sys.exit(1)
 
+        self.loadRepositoryPaths()
+
         # locale
         if os.path.exists(os.path.join(self.Get("script"), 'build/mo')):
             self.Set("localedir",  os.path.join(self.Get("script"), 'build/mo'))
@@ -154,3 +156,20 @@ class Config(ConfigSingleton):
         if not os.path.exists(self.Get("localconfigdir")):
            os.mkdir( self.Get("localconfigdir") )
         self._localConfigParser.write( open(self._localConfFilHref, "w"))
+
+    def loadRepositoryPaths(self):
+        localSourceFile = os.path.join( self.Get("localconfigdir"), "sources.conf")
+        globalSourceFile = os.path.join( self.Get("globalconfigdir"), "sources.conf")
+        scriptSourceFile = os.path.join( self.Get("script"), "data/sources.conf")
+
+        sourcePathList = []
+
+        if os.path.isfile(scriptSourceFile):
+            sourcePathList.append(scriptSourceFile)
+        if os.path.isfile(globalSourceFile):
+            sourcePathList.append(globalSourceFile)
+        if os.path.isfile(localSourceFile):
+            sourcePathList.append(localSourceFile)
+
+        self.Set("repository_path_list", os.path.join(sourcePathList))
+
