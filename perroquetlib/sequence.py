@@ -11,11 +11,11 @@
 #
 # Perroquet is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
+# along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 
 import re
@@ -54,7 +54,7 @@ class Sequence(object):
         #We want swswsw... (s=symbol, w=word)
         #So if the 1st char isn't a symbole, we want an empty symbole
         if re.match(self.validChar, textToParse[0]):
-            self._symbolList.append('')    
+            self._symbolList.append('')
         while len(textToParse) > 0:
             # if the text begin with a word followed by a not word char
             if re.match('^('+self.validChar+'+)'+self.notValidChar, textToParse):

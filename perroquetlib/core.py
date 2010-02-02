@@ -12,11 +12,11 @@
 #
 # Perroquet is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
+# along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 
 import thread, time, re, gtk, os
@@ -165,7 +165,7 @@ class Core(object):
                 begin = sub.GetTimeBegin()
                 end = sub.GetTimeEnd()
                 if (begin >= currentBegin and begin <= currentEnd) or (end >= currentBegin and end <= currentEnd) or (begin <= currentBegin and end >= currentEnd):
-                    translation +=  sub.GetText() + " "
+                    translation += sub.GetText() + " "
 
             self.gui.SetTranslation(translation)
 
@@ -175,7 +175,7 @@ class Core(object):
         sequenceFound = 0
         wordCount = 0
         wordFound = 0
-        for sequence in  self.exercise.GetSequenceList():
+        for sequence in self.exercise.GetSequenceList():
             wordCount = wordCount + sequence.getWordCount()
             if sequence.isValid():
                 sequenceFound += 1
@@ -266,7 +266,6 @@ class Core(object):
 
     #Goto previous char in current sequence
     def PreviousChar(self):
-        print "prev"
         self.exercise.GetCurrentSequence().previousChar()
 
     #Goto next char in current sequence
@@ -313,7 +312,7 @@ class Core(object):
                 begin_time = self.exercise.GetCurrentSequence().getTimeBegin() - 1000
                 if begin_time < 0:
                     begin_time = 0
-                duration =  end_time - begin_time
+                duration = end_time - begin_time
                 pos = pos_int -begin_time
                 self.gui.SetSequenceTime(pos, duration)
 

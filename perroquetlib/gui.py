@@ -12,11 +12,11 @@
 #
 # Perroquet is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
+# along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 
 import gtk, time, urllib, re, os, gettext
@@ -151,8 +151,8 @@ class Gui:
         ajustement.configure (sequenceNumber, 1, sequenceCount, 1, 10, 0)
         self.builder.get_object("labelSequenceNumber").set_text(str(sequenceNumber) + "/" + str(sequenceCount))
 
-        toolbuttonNextSequence =  self.builder.get_object("toolbuttonNextSequence")
-        toolbuttonPreviousSequence =  self.builder.get_object("toolbuttonPreviousSequence")
+        toolbuttonNextSequence = self.builder.get_object("toolbuttonNextSequence")
+        toolbuttonPreviousSequence = self.builder.get_object("toolbuttonPreviousSequence")
         if sequenceNumber == 1:
             toolbuttonPreviousSequence.set_sensitive(False)
         else:
@@ -220,8 +220,8 @@ class Gui:
     def SetStats(self, sequenceCount,sequenceFound, wordCount, wordFound, repeatRate):
         labelProgress = self.builder.get_object("labelProgress")
         text = ""
-        text = text + _("- Sequences: %(found)s/%(count)s (%(percent)s %%)\n") %  { 'found' : str(sequenceFound), 'count' : str(sequenceCount), 'percent' : str(round(100*sequenceFound/sequenceCount,1)) }
-        text = text + _("- Words: %(found)s/%(count)s (%(percent)s %%)\n") % {  'found' : str(wordFound), 'count' : str(wordCount),  'percent' : str(round(100*wordFound/wordCount,1))}
+        text = text + _("- Sequences: %(found)s/%(count)s (%(percent)s %%)\n") % {'found' : str(sequenceFound), 'count' : str(sequenceCount), 'percent' : str(round(100*sequenceFound/sequenceCount,1)) }
+        text = text + _("- Words: %(found)s/%(count)s (%(percent)s %%)\n") % {'found' : str(wordFound), 'count' : str(wordCount), 'percent' : str(round(100*wordFound/wordCount,1))}
         text = text + _("- Repeat ratio: %s per words") % str(round(repeatRate,1))
         labelProgress.set_label(text)
 
