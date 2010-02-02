@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-
 class ValidWordError(Exception):
     pass
 class NoCharPossible(Exception):
@@ -53,6 +52,8 @@ class Word:
     text    -> the word that is currently written
     valid   -> the word we want to find"""
     def __init__(self, validText, helpChar="~"):
+        if " " in validText:
+            raise AttributeError, "validText=' '"
         self._text = ""
         self._valid = validText
         
@@ -62,7 +63,7 @@ class Word:
     def levenshtein(self):
         return levenshtein(self._text, self._valid)
     
-    def score(self):
+    def getScore(self):
         return 2*len(self._valid) - 2*self.levenshtein() - len(self._text)
     
     def isValid(self):
@@ -76,10 +77,10 @@ class Word:
         self._text = self._valid
     
     def writeChar(self, char):
-        if len(char)>1:
-            raise AttributeError
+        if len(char)!=1 or char==" ":
+            raise AttributeError, "char='"+char+"'"
         if self.isValid():
-            raise Comp
+            raise ValidWordError
         #if replacing an helpChar
         if self._pos < len(self._text) and self._text[self._pos] == self._helpChar:
             self._text = self._text[:self._pos] + char + self._text[self._pos+1:]
@@ -123,6 +124,7 @@ class Word:
             raise NoCharPossible
         else:
             self._text = self._text[:self._pos-1]  + self._text[self._pos:]
+            self._pos -= 1
     
     def deleteNextChar(self):
         if self.isValid():
@@ -134,6 +136,8 @@ class Word:
             
     
     def setText(self, text):
+        if " " in text:
+            raise AttributeError
         self._text = text
         
     def getText(self):
@@ -153,3 +157,24 @@ class Word:
         
     def getPos(self):
         return self._pos
+    
+    def getLastPos(self):
+        return len(self.getText())
+    
+    def nextChar(self):
+        if self.getPos() < self.getLastPos():
+            self._pos += 1
+        else:
+            raise NoCharPossible
+    
+    def previousChar(self):
+        if self.getPos() > 0:
+            self._pos -= 1
+        else:
+            raise NoCharPossible
+    
+    def __print__(self):
+        return str(self.isValid())+" "+self.getText()+" instead of "+self.getValid()
+    
+    def __repr__(self):
+        return self.getText()+" VS "+self.getValid()

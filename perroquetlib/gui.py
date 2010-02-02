@@ -240,7 +240,6 @@ class Gui:
     def SetSequence(self, sequence):
         self.disableChangedTextEvent = True
         self.ClearBuffer()
-        i = 0
         pos = 1
         cursor_pos = 0
 
@@ -249,28 +248,27 @@ class Gui:
         self.AddSymbol(" ")
 
 
-        for symbol in sequence.GetSymbolList():
+        for i, symbol in enumerate(sequence.getSymbols()):
             pos += len(symbol)
             self.AddSymbol(symbol)
-            if i < len(sequence.GetWordList()):
-                if sequence.GetActiveWordIndex() == i:
+            if i < len(sequence.getWords()):
+                if sequence.getActiveWordIndex() == i:
                     cursor_pos = pos
-                if sequence.IsEmptyWord(i):
+                if sequence.getWords()[i].isEmpty():
                     self.UpdateWord(" ", 0, isEmpty=True)
                     pos += 1
-                elif sequence.IsValidWord(i) == 1:
-                    self.UpdateWord(sequence.GetWordList()[i], 0, isFound=True)
-                    pos += len(sequence.GetWordList()[i])
+                elif sequence.getWords()[i].isValid():
+                    self.UpdateWord(sequence.getWords()[i].getText(), 0, isFound=True)
+                    pos += len(sequence.getWords()[i].getText())
                 else:
-                    self.UpdateWord(sequence.GetWorkList()[i], sequence.GetValidity(i))
-                    pos += len(sequence.GetWorkList()[i])
-                i += 1
+                    self.UpdateWord(sequence.getWords()[i].getText(), sequence.getWords()[i].getScore())
+                    pos += len(sequence.getWords()[i].getText())
 
         self.wordIndexMap.append(self.currentWordIndex)
         self.wordPosMap.append(self.currentPosIndex)
 
         self.window.set_focus(self.typeLabel)
-        newCurPos = cursor_pos + sequence.GetActiveWordPos()
+        newCurPos = cursor_pos + sequence.getActiveWord().getPos()
         iter = buffer.get_iter_at_offset(newCurPos)
         buffer.place_cursor(iter)
         self.disableChangedTextEvent = False
@@ -445,7 +443,7 @@ class Gui:
             if char == " ":
                  self.core.NextWord()
             else:
-                self.core.WriteCharacter(char.lower())
+                self.core.WriteChar(char.lower())
 
         return True
 

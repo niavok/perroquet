@@ -86,7 +86,7 @@ class ExerciseLoader(object):
 
         self.exercise.SetCurrentSequence(int(self.getText(xml_progress.getElementsByTagName("current_sequence")[0].childNodes)))
 
-        self.exercise.GetCurrentSequence().SetActiveWordIndex(currentWord)
+        self.exercise.GetCurrentSequence().setActiveWordIndex(currentWord)
 
 
         dom.unlink()
@@ -103,14 +103,13 @@ class ExerciseLoader(object):
                 break
             sequence = sequenceList[id]
             if state == "done":
-                sequence.CompleteAll()
+                sequence.completeAll()
             elif state == "in_progress":
                 i = 0
                 for word in words:
-                    if id >= len(sequence.GetWorkList()):
+                    if id >= sequence.getWordCount():
                         break
-                    sequence.GetWorkList()[i] = word
-                    sequence.ComputeValidity(i)
+                    sequence.GetWords()[i].setText(word)
                     i = i+1
 
 class ExerciseSaver(object):
@@ -154,13 +153,13 @@ class ExerciseSaver(object):
         xml_progress.appendChild(xml_current_sequence)
 
         xml_current_word = newdoc.createElement("current_word")
-        xml_current_word.appendChild(newdoc.createTextNode(str(exercise.GetCurrentSequence().GetActiveWordIndex())))
+        xml_current_word.appendChild(newdoc.createTextNode(str(exercise.GetCurrentSequence().getActiveWordIndex())))
         xml_progress.appendChild(xml_current_word)
 
         xml_sequences = newdoc.createElement("sequences")
         id = 0
         for sequence in exercise.GetSequenceList():
-            if sequence.IsValid():
+            if sequence.isValid():
                 xml_sequence = newdoc.createElement("sequence")
                 xml_sequence_id = newdoc.createElement("id")
                 xml_sequence_id.appendChild(newdoc.createTextNode(str(id)))
@@ -170,7 +169,7 @@ class ExerciseSaver(object):
                 xml_sequence.appendChild(xml_sequence_state)
 
                 xml_sequences.appendChild(xml_sequence)
-            elif not sequence.IsEmpty():
+            elif not sequence.isEmpty():
                 xml_sequence = newdoc.createElement("sequence")
                 xml_sequence_id = newdoc.createElement("id")
                 xml_sequence_id.appendChild(newdoc.createTextNode(str(id)))
@@ -181,7 +180,7 @@ class ExerciseSaver(object):
 
                 xml_sequence_words = newdoc.createElement("words")
 
-                for word in sequence.GetWorkList():
+                for word in (w.getText() for w in sequence.getWords()):
                     xml_sequence_word = newdoc.createElement("word")
                     xml_sequence_word.appendChild(newdoc.createTextNode(word))
                     xml_sequence_words.appendChild(xml_sequence_word)

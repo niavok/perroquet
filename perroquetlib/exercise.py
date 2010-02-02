@@ -35,8 +35,6 @@ class Exercise(object):
     def Initialize(self):
         self.LoadSubtitles()
 
-
-
     def LoadSubtitles(self):
 
         self.subList = self.subtitles.GetSubtitleList(self.exercisePath)
@@ -52,9 +50,9 @@ class Exercise(object):
 
         for sub in self.subList:
             self.sequence = Sequence()
-            self.sequence.Load(sub.GetText())
-            self.sequence.SetTimeBegin(sub.GetTimeBegin())
-            self.sequence.SetTimeEnd(sub.GetTimeEnd())
+            self.sequence.load(sub.GetText())
+            self.sequence.setTimeBegin(sub.GetTimeBegin())
+            self.sequence.setTimeEnd(sub.GetTimeEnd())
             self.sequenceList.append(self.sequence)
 
         #Restore found words
@@ -67,7 +65,7 @@ class Exercise(object):
 
             while oldSequenceIndex < len( oldSequenceList) and newSequenceIndex < len(self.sequenceList):
 
-                if oldWordIndex >= len(oldSequenceList[oldSequenceIndex].GetWorkList()):
+                if oldWordIndex >= oldSequenceList[oldSequenceIndex].GetWordCount():
                     oldSequenceIndex += 1
                     oldWordIndex = 0
 
@@ -81,7 +79,7 @@ class Exercise(object):
                     if newSequenceIndex >= len(self.sequenceList):
                         break
 
-                self.sequenceList[newSequenceIndex].GetWorkList()[newWordIndex] = oldSequenceList[oldSequenceIndex].GetWorkList()[oldWordIndex]
+                self.sequenceList[newSequenceIndex].GetWords()[newWordIndex].setText(oldSequenceList[oldSequenceIndex].GetWords()[oldWordIndex].getText())
                 self.sequenceList[newSequenceIndex].ComputeValidity(newWordIndex)
                 oldWordIndex += 1
                 newWordIndex += 1
@@ -92,9 +90,8 @@ class Exercise(object):
         wordList = []
 
         for sequence in self.sequenceList:
-            sequenceWordList = sequence.GetWordList()
-            for word in sequenceWordList:
-                wordList.append(word.lower())
+            for word in sequence.getWords():
+                wordList.append(word.getText().lower())
 
         wordList = list(set(wordList))
         wordList.sort()
@@ -120,10 +117,9 @@ class Exercise(object):
         else:
             return False
 
-
     def UpdateCurrentInfos(self):
         self.currentSequence = self.sequenceList[self.currentSequenceId]
-        self.currentSequenceValid = self.currentSequence.IsValid()
+        self.currentSequenceValid = self.currentSequence.isValid()
 
     def IsPathsValid(self):
         error = False

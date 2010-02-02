@@ -24,6 +24,7 @@ from video_player import VideoPlayer
 from exercise_serializer import ExerciseSaver
 from exercise_serializer import ExerciseLoader
 from exercise import Exercise
+from word import NoCharPossible, ValidWordError
 
 # The Core make the link between the GUI, the vidéo player, the current
 # open exercise and all others part of the application
@@ -99,11 +100,11 @@ class Core(object):
     #Stop the media at the end of uncompleted sequences
     def TimeCallback(self):
         if self.state == Core.WAIT_BEGIN:
-            self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeEnd() + 500)
+            self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().getTimeEnd() + 500)
             self.state = Core.WAIT_END
         elif self.state == Core.WAIT_END:
             self.state = Core.WAIT_BEGIN
-            if self.exercise.GetCurrentSequence().IsValid():
+            if self.exercise.GetCurrentSequence().isValid():
                 gtk.gdk.threads_enter()
                 self.NextSequence(False)
                 gtk.gdk.threads_leave()
@@ -145,7 +146,7 @@ class Core(object):
     def ActivateSequence(self):
         self.state = Core.WAIT_BEGIN
         self.SetSpeed(1)
-        self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeBegin())
+        self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().getTimeBegin())
 
         self.gui.SetSequenceNumber(self.exercise.GetCurrentSequenceId(), self.exercise.GetSequenceCount())
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
@@ -158,8 +159,8 @@ class Core(object):
             self.gui.SetTranslation("")
         else:
             translation = ""
-            currentBegin = self.exercise.GetCurrentSequence().GetTimeBegin()
-            currentEnd = self.exercise.GetCurrentSequence().GetTimeEnd()
+            currentBegin = self.exercise.GetCurrentSequence().getTimeBegin()
+            currentEnd = self.exercise.GetCurrentSequence().getTimeEnd()
             for sub in self.exercise.GetTranslationList():
                 begin = sub.GetTimeBegin()
                 end = sub.GetTimeEnd()
@@ -175,10 +176,10 @@ class Core(object):
         wordCount = 0
         wordFound = 0
         for sequence in  self.exercise.GetSequenceList():
-            wordCount = wordCount + sequence.GetWordCount()
-            if sequence.IsValid():
+            wordCount = wordCount + sequence.getWordCount()
+            if sequence.isValid():
                 sequenceFound += 1
-                wordFound += sequence.GetWordCount()
+                wordFound += sequence.getWordCount()
             else :
                 wordFound += sequence.GetWordFound()
         if wordFound == 0:
@@ -189,7 +190,7 @@ class Core(object):
 
     #Verify if the sequence is complete
     def ValidateSequence(self):
-        if self.exercise.GetCurrentSequence().IsValid():
+        if self.exercise.GetCurrentSequence().isValid():
             if self.exercise.GetRepeatAfterCompleted():
                 self.RepeatSequence()
             else:
@@ -200,21 +201,21 @@ class Core(object):
     #as the media player is ready
     def GotoSequenceBegin(self, asSoonAsReady = False):
         self.state = Core.WAIT_END
-        begin_time = self.exercise.GetCurrentSequence().GetTimeBegin() - 1000
+        begin_time = self.exercise.GetCurrentSequence().getTimeBegin() - 1000
         if begin_time < 0:
             begin_time = 0
         if asSoonAsReady:
             self.player.SeekAsSoonAsReady(begin_time)
         else:
             self.player.Seek(begin_time)
-        self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeEnd())
+        self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().getTimeEnd())
 
 
-    #Write a character in current sequence at cursor position
-    def WriteCharacter(self, character):
+    #Write a char in current sequence at cursor position
+    def WriteChar(self, char):
 
-        if re.match('^[0-9\'a-zA-Z]$',character):
-            self.exercise.GetCurrentSequence().WriteCharacter(character)
+        if re.match('^[0-9\'a-zA-Z]$',char):
+            self.exercise.GetCurrentSequence().writeChar(char)
             self.gui.SetSequence(self.exercise.GetCurrentSequence())
             self.ValidateSequence()
             self.SetCanSave(True)
@@ -223,56 +224,61 @@ class Core(object):
 
     #Goto next word in current sequence
     def NextWord(self):
-        self.exercise.GetCurrentSequence().NextWord(False)
+        self.exercise.GetCurrentSequence().nextWord()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
 
     #Goto previous word in current sequence
     def PreviousWord(self):
-        self.exercise.GetCurrentSequence().PreviousWord(False)
+        self.exercise.GetCurrentSequence().previousWord()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
 
     #Choose current word in current sequence
     def SelectSequenceWord(self, wordIndex,wordIndexPos):
-        self.exercise.GetCurrentSequence().SelectSequenceWord(wordIndex,wordIndexPos)
+        try:
+            self.exercise.GetCurrentSequence().selectSequenceWord(wordIndex,wordIndexPos)
+        except NoCharPossible:
+            self.exercise.GetCurrentSequence().selectSequenceWord(wordIndex,-1)
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
 
     #Goto first word in current sequence
     def FirstWord(self):
-        self.exercise.GetCurrentSequence().FirstWord()
+        self.exercise.GetCurrentSequence().firstFalseWord()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
 
     #Goto last word in current sequence
     def LastWord(self):
-        self.exercise.GetCurrentSequence().LastWord()
+        self.exercise.GetCurrentSequence().lastFalseWord()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
 
-    #Delete a character before the cursor in current sequence
+    #Delete a char before the cursor in current sequence
     def DeletePreviousChar(self):
-        self.exercise.GetCurrentSequence().DeletePreviousCharacter()
+        self.exercise.GetCurrentSequence().deletePreviousChar()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ValidateSequence()
         self.SetCanSave(True)
 
-    #Delete a character after the cursor in current sequence
+    #Delete a char after the cursor in current sequence
     def DeleteNextChar(self):
-        self.exercise.GetCurrentSequence().DeleteNextCharacter()
+        self.exercise.GetCurrentSequence().deleteNextChar()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ValidateSequence()
         self.SetCanSave(True)
 
-    #Goto previous character in current sequence
+    #Goto previous char in current sequence
     def PreviousChar(self):
-        self.exercise.GetCurrentSequence().PreviousCharacter()
-        self.gui.SetSequence(self.exercise.GetCurrentSequence())
+        print "prev"
+        self.exercise.GetCurrentSequence().previousChar()
 
-    #Goto next character in current sequence
+    #Goto next char in current sequence
     def NextChar(self):
-        self.exercise.GetCurrentSequence().NextCharacter()
-        self.gui.SetSequence(self.exercise.GetCurrentSequence())
+        self.exercise.GetCurrentSequence().nextChar()
 
     #Reveal correction for word at cursor in current sequence
     def CompleteWord(self):
-        self.exercise.GetCurrentSequence().CompleteWord()
+        try:
+            self.exercise.GetCurrentSequence().getActiveWord().showHint()
+        except ValidWordError:
+            return
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.ValidateSequence()
         self.SetCanSave(True)
@@ -286,13 +292,13 @@ class Core(object):
 
     #Change position in media and play it
     def SeekSequence(self, time):
-        begin_time = self.exercise.GetCurrentSequence().GetTimeBegin() - 1000
+        begin_time = self.exercise.GetCurrentSequence().getTimeBegin() - 1000
         if begin_time < 0:
             begin_time = 0
 
         pos = begin_time + time
         self.player.Seek(pos)
-        self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().GetTimeEnd() + 500)
+        self.player.SetNextCallbackTime(self.exercise.GetCurrentSequence().getTimeEnd() + 500)
         self.state = Core.WAIT_END
         self.Play()
 
@@ -303,8 +309,8 @@ class Core(object):
             time.sleep(0.5)
             pos_int = self.player.GetCurrentTime()
             if pos_int != None:
-                end_time = self.exercise.GetCurrentSequence().GetTimeEnd()
-                begin_time = self.exercise.GetCurrentSequence().GetTimeBegin() - 1000
+                end_time = self.exercise.GetCurrentSequence().getTimeEnd()
+                begin_time = self.exercise.GetCurrentSequence().getTimeBegin() - 1000
                 if begin_time < 0:
                     begin_time = 0
                 duration =  end_time - begin_time
@@ -332,11 +338,7 @@ class Core(object):
     def LoadExercise(self, path):
         self.gui.Activate("closed")
         loader = ExerciseLoader()
-        try:
-            self.exercise = loader.Load(path)
-        except:
-            print "Error: invalid file"
-            return
+        self.exercise = loader.Load(path)
         if not self.exercise:
             return
 

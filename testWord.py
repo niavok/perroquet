@@ -60,12 +60,14 @@ class TestWord(unittest.TestCase):
             w.writeChar(i)
         w.setText("spi"+w._helpChar*6)
         w.writeChar("d")
-        self.assertEqual(w.getText(), "spid"+w._helpChar*5)
+        self.assertEqual(w.getText(), "spid"+w._helpChar*5) 
         
         w.setPos(9)
         w.writeChar("m")
         self.assertEqual(w.getText(), "spidm")
         
+        w.setText(w.getValid())
+        self.failUnlessRaises(ValidWordError, lambda: w.writeChar("r"))
     
     def test_setPos(self):
         w=Word("superman")
