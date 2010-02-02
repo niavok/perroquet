@@ -93,6 +93,12 @@ class Sequence(object):
         return self._activeWordIndex
 
     def setActiveWordIndex(self, index):
+        if index==-1:
+            index=self.getWordCount()
+            
+        if index<0 or index>self.getWordCount():
+            raise AttributeError, str(index)
+            
         self._activeWordIndex = index
     
     def getLastIndex(self):
@@ -103,7 +109,7 @@ class Sequence(object):
     
     def GetWordFound(self):
         return len([w for w in self.getWords() if w.isValid()])
-       
+        
     def nextWord(self, loop=False):
         "go to the next word"
         if self.getActiveWordIndex() < self.getLastIndex():
@@ -113,12 +119,14 @@ class Sequence(object):
             if not loop:
                 pass
             else:
-                self.setPos(0)
+                raise NotImplemented
             
     def nextFalseWord(self, loop=False):
         "go to the next non valid word"
+        if loop:
+            raise NotImplemented
         if self.getActiveWord().isValid():
-            if self.isValid():
+            if self.isValid() or self.getActiveWordIndex() == self.getLastIndex():
                 return
             self.nextWord()
             self.nextFalseWord()
@@ -132,12 +140,14 @@ class Sequence(object):
             if not loop:
                 pass
             else:
-                self.setPos(-1)
+                raise NotImplemented
             
     def previousFalseWord(self, loop=False):
         "go to the previous non valid word"
+        if loop:
+            raise NotImplemented
         if self.getActiveWord().isValid():
-            if self.isValid():
+            if self.isValid() or self.getActiveWordIndex() == 0:
                 return
             self.previousWord()
             self.previousFalseWord()
@@ -151,15 +161,20 @@ class Sequence(object):
     def writeChar(self, char):
         try:
             self.getActiveWord().writeChar(char)
+            if self.getActiveWord().isValid():
+                self.nextChar()
         except ValidWordError:
             self.nextWord()
             self.nextFalseWord()
             self.writeChar(char)
     
-    def writeSentence(self, sentence):
-        "write many chars. a ' ' mean next word."
+    def _writeSentence(self, sentence):
+        """write many chars. a ' ' mean next word.
+        Only for tests"""
         for char in sentence:
             if char==" ":
+                pass
+            elif char=="+":
                 self.nextWord()
                 self.nextFalseWord()
             else:
@@ -170,16 +185,18 @@ class Sequence(object):
         try:
             self.getActiveWord().deleteNextChar()
         except NoCharPossible:
-            self.previousWord()
-            self.deleteNextChar()
+            if self.getActiveWordIndex() < self.getWordCount():
+                self.previousWord()
+                self.deleteNextChar()
 
     def deletePreviousChar(self):
         self.previousFalseWord()
         try:
             self.getActiveWord().deletePreviousChar()
         except NoCharPossible:
-            self.previousWord()
-            self.deletePreviousChar()
+            if self.getActiveWordIndex() > 0:
+                self.previousWord()
+                self.deletePreviousChar()
 
     def firstFalseWord(self):
         self._activeWordIndex = 0
@@ -203,7 +220,7 @@ class Sequence(object):
         try:
             self.getActiveWord().previousChar()
         except NoCharPossible:
-            self.nextWord()
+            self.previousWord()
             self.previousFalseWord()
             self.getActiveWord().setPos(-1)
 

@@ -67,7 +67,7 @@ class Word:
         return 2*len(self._valid) - 2*self.levenshtein() - len(self._text)
     
     def isValid(self):
-        return self._text == self._valid
+        return self._text.lower() == self._valid.lower()
     
     def isEmpty(self):
         return self._text == ""

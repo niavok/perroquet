@@ -65,22 +65,21 @@ class Exercise(object):
 
             while oldSequenceIndex < len( oldSequenceList) and newSequenceIndex < len(self.sequenceList):
 
-                if oldWordIndex >= oldSequenceList[oldSequenceIndex].GetWordCount():
+                if oldWordIndex >= oldSequenceList[oldSequenceIndex].getWordCount():
                     oldSequenceIndex += 1
                     oldWordIndex = 0
 
                     if oldSequenceIndex >= len(oldSequenceList):
                         break
 
-                if newWordIndex >= len(self.sequenceList[newSequenceIndex].GetWorkList()):
+                if newWordIndex >= len(self.sequenceList[newSequenceIndex].getWords()):
                     newSequenceIndex += 1
                     newWordIndex = 0
 
                     if newSequenceIndex >= len(self.sequenceList):
                         break
 
-                self.sequenceList[newSequenceIndex].GetWords()[newWordIndex].setText(oldSequenceList[oldSequenceIndex].GetWords()[oldWordIndex].getText())
-                self.sequenceList[newSequenceIndex].ComputeValidity(newWordIndex)
+                self.sequenceList[newSequenceIndex].getWords()[newWordIndex].setText(oldSequenceList[oldSequenceIndex].getWords()[oldWordIndex].getText())
                 oldWordIndex += 1
                 newWordIndex += 1
 

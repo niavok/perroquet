@@ -279,6 +279,7 @@ class Core(object):
         except ValidWordError:
             return
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
+        self.exercise.GetCurrentSequence().nextChar()
         self.ValidateSequence()
         self.SetCanSave(True)
 
@@ -337,7 +338,11 @@ class Core(object):
     def LoadExercise(self, path):
         self.gui.Activate("closed")
         loader = ExerciseLoader()
-        self.exercise = loader.Load(path)
+        try:
+            self.exercise = loader.Load(path)
+        except IOError:
+            print "No file at "+path
+            return
         if not self.exercise:
             return
 

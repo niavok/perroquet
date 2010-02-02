@@ -24,6 +24,7 @@ import locale
 from perroquetlib.config import Config
 from gui_sequence_properties import GuiSequenceProperties
 from gui_exercise_manager import GuiExerciseManager
+from word import Word
 
 _ = gettext.gettext
 
@@ -302,7 +303,7 @@ class Gui:
             self.wordPosMap.append(self.currentPosIndex)
         self.currentIndex += len(symbol)
 
-    def UpdateWord(self, word, validity, isFound=False, isEmpty=False):
+    def UpdateWord(self, word, score, isFound=False, isEmpty=False):
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
         size = buffer.get_char_count()
@@ -314,7 +315,7 @@ class Gui:
             tagName = "word_to_found"
         elif isFound:
             tagName = "word_found"
-        elif validity == -1 :
+        elif score > 0 :
             tagName = "word_near"
         else:
             tagName = "word_to_found"

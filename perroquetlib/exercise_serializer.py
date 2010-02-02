@@ -109,7 +109,7 @@ class ExerciseLoader(object):
                 for word in words:
                     if id >= sequence.getWordCount():
                         break
-                    sequence.GetWords()[i].setText(word)
+                    sequence.getWords()[i].setText(word)
                     i = i+1
 
 class ExerciseSaver(object):
@@ -157,8 +157,7 @@ class ExerciseSaver(object):
         xml_progress.appendChild(xml_current_word)
 
         xml_sequences = newdoc.createElement("sequences")
-        id = 0
-        for sequence in exercise.GetSequenceList():
+        for id, sequence in enumerate(exercise.GetSequenceList()):
             if sequence.isValid():
                 xml_sequence = newdoc.createElement("sequence")
                 xml_sequence_id = newdoc.createElement("id")
@@ -188,8 +187,7 @@ class ExerciseSaver(object):
                 xml_sequence.appendChild(xml_sequence_words)
 
                 xml_sequences.appendChild(xml_sequence)
-
-            id = id +1
+                
         xml_progress.appendChild(xml_sequences)
 
         root_element.appendChild(xml_progress)
