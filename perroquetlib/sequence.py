@@ -167,6 +167,7 @@ class Sequence(object):
             self.nextWord()
             self.nextFalseWord()
             self.writeChar(char)
+        self.updateAfterWrite()
     
     def _writeSentence(self, sentence):
         """write many chars. a ' ' mean next word.
@@ -188,6 +189,7 @@ class Sequence(object):
             if self.getActiveWordIndex() < self.getWordCount():
                 self.previousWord()
                 self.deleteNextChar()
+        self.updateAfterWrite()
 
     def deletePreviousChar(self):
         self.previousFalseWord()
@@ -197,6 +199,7 @@ class Sequence(object):
             if self.getActiveWordIndex() > 0:
                 self.previousWord()
                 self.deletePreviousChar()
+        self.updateAfterWrite()
 
     def firstFalseWord(self):
         self._activeWordIndex = 0
@@ -235,10 +238,19 @@ class Sequence(object):
         for w in self.getWords():
             w.complete()
     
-    def checkLocation(self, index):
-        """Check if the word is correct but at the wrong place."""
-        #TODO
-        return -1
+    def updateAfterWrite(self):
+        "update after a modification of the text"
+        self._checkLocation()
+    
+    def _checkLocation(self):
+        """Check if a word is correct but at a wrong place."""
+        for w1 in self.getWords():
+            for j, w2 in enumerate(self.getWords()):
+                if w1.getScore()<=0 and w1.getText()==w2.getValid():
+                    w2.setText(w1.getText())
+                    w1.setText("")
+                    self.setActiveWordIndex(j)
+                    self.nextFalseWord()
 
     def getTimeBegin(self):
         return self.beginTime

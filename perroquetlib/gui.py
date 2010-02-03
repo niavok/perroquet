@@ -259,7 +259,7 @@ class Gui:
                     self.UpdateWord(" ", 0, isEmpty=True)
                     pos += 1
                 elif sequence.getWords()[i].isValid():
-                    self.UpdateWord(sequence.getWords()[i].getText(), 0, isFound=True)
+                    self.UpdateWord(sequence.getWords()[i].getValid(lower=False), 0, isFound=True)
                     pos += len(sequence.getWords()[i].getText())
                 else:
                     self.UpdateWord(sequence.getWords()[i].getText(), sequence.getWords()[i].getScore())

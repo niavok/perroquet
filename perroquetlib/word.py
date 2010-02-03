@@ -61,33 +61,35 @@ class Word:
         self._pos = 0
 
     def levenshtein(self):
-        return levenshtein(self._text, self._valid)
+        return levenshtein(self.getText(), self.getValid())
     
     def getScore(self):
-        return 2*len(self._valid) - 2*self.levenshtein() - len(self._text)
+        return 2*len(self.getValid()) - 2*self.levenshtein() - len(self.getText())
     
     def isValid(self):
-        return self._text.lower() == self._valid.lower()
+        return self.getText() == self.getValid()
     
     def isEmpty(self):
-        return self._text == ""
+        return self.getText() == ""
     
     def complete(self):
         "Reveal the correction"
-        self._text = self._valid
+        self.setText(self.getValid())
     
     def writeChar(self, char):
+        char = char.lower()
         if len(char)!=1 or char==" ":
             raise AttributeError, "char='"+char+"'"
         if self.isValid():
             raise ValidWordError
         #if replacing an helpChar
-        if self._pos < len(self._text) and self._text[self._pos] == self._helpChar:
-            self._text = self._text[:self._pos] + char + self._text[self._pos+1:]
+        if self.getPos() < len(self.getText()) and self.getText()[self.getPos()] == self._helpChar:
+            self.setText(self.getText()[:self.getPos()] + char + self.getText()[self.getPos()+1:])
         else:
-            if self._helpChar in self._text:
-                self._text="".join(c for c in self._text if c!=self._helpChar)
-            self._text = self._text[:self._pos] + char + self._text[self._pos:]
+            if self._helpChar in self.getText():
+                #removing helps chars
+                self.setText("".join(c for c in self.getText() if c!=self._helpChar))
+            self.setText(self.getText()[:self.getPos()] + char + self.getText()[self.getPos():])
         self._pos += 1
 
     def showHint(self):
@@ -95,9 +97,9 @@ class Word:
         outWord = ""
         first_error = -1
         
-        for i in range(0, len(self._valid)):
-            if i < len(self._text) and self._text[i].lower() == self._valid[i].lower():
-                outWord += self._valid[i]
+        for i in range(0, len(self.getValid())):
+            if i < len(self.getText()) and self.getText()[i] == self.getValid()[i]:
+                outWord += self.getValid()[i]
             else:
                 outWord += self._helpChar
                 if first_error == -1:
@@ -106,52 +108,54 @@ class Word:
         # if fist_error != -1 => the first false char is fist_error  
         # else                => The word is valid
         
-        if len(self._text) == len(self._valid) and first_error != -1:
-            outWord = outWord[:first_error] + self._valid[first_error] + outWord[first_error+1:]
-            self._pos = first_error+1
+        if len(self.getText()) == len(self.getValid()) and first_error != -1:
+            outWord = outWord[:first_error] + self.getValid()[first_error] + outWord[first_error+1:]
+            self.setPos(first_error+1)
         elif first_error != -1:
-            self._pos = first_error
+            self.setPos(first_error)
         else:
             #The word is valid
             raise ValidWordError
         
-        self._text = outWord
+        self.setText(outWord)
     
     def deletePreviousChar(self):
         if self.isValid():
             raise ValidWordError
-        elif self._pos == 0 or self._text =="":
+        elif self.getPos() == 0 or self.getText() =="":
             raise NoCharPossible
         else:
-            self._text = self._text[:self._pos-1]  + self._text[self._pos:]
+            self.setText(self.getText()[:self.getPos()-1]  + self.getText()[self.getPos():])
             self._pos -= 1
     
     def deleteNextChar(self):
         if self.isValid():
             raise ValidWordError
-        elif self._pos == len(self._text) or self._text =="":
+        elif self.getPos() == len(self.getText()) or self.getText() =="":
             raise NoCharPossible
         else:
-            self._text = self._text[:self._pos]  + self._text[self._pos+1:]
+            self.setText(self.getText()[:self.getPos()]  + self.getText()[self.getPos()+1:])
             
-    
     def setText(self, text):
         if " " in text:
             raise AttributeError
-        self._text = text
+        self._text = text.lower()
         
     def getText(self):
-        return self._text
+        return self._text.lower()
         
-    def getValid(self):
-        return self._valid
+    def getValid(self, lower=True):
+        if lower:
+            return self._valid.lower()
+        else:
+            return self._valid
     
     def setPos(self, pos):
         "if pos=-1, set at the last position"
-        if pos > len(self._text) or -2 >= pos:
+        if pos > len(self.getText()) or -2 >= pos:
             raise NoCharPossible
         elif pos==-1:
-            self._pos = len(self._text)
+            self._pos = len(self.getText())
         else:
             self._pos = pos
         
