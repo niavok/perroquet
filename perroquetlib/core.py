@@ -278,10 +278,7 @@ class Core(object):
 
     #Reveal correction for word at cursor in current sequence
     def CompleteWord(self):
-        try:
-            self.exercise.GetCurrentSequence().getActiveWord().showHint()
-        except ValidWordError:
-            return
+        self.exercise.GetCurrentSequence().showHint()
         self.gui.SetSequence(self.exercise.GetCurrentSequence())
         self.exercise.GetCurrentSequence().nextChar()
         self.ValidateSequence()

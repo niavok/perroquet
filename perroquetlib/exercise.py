@@ -90,7 +90,7 @@ class Exercise(object):
 
         for sequence in self.sequenceList:
             for word in sequence.getWords():
-                wordList.append(word.getText().lower())
+                wordList.append(word.getText())
 
         wordList = list(set(wordList))
         wordList.sort()

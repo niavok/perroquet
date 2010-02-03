@@ -444,7 +444,7 @@ class Gui:
             if char == " ":
                  self.core.NextWord()
             else:
-                self.core.WriteChar(char.lower())
+                self.core.WriteChar(char)
 
         return True
 

@@ -50,7 +50,9 @@ def startWith(w1, w2):
 class Word:
     """A class that implement a word manipulation with a reference
     text    -> the word that is currently written
-    valid   -> the word we want to find"""
+    valid   -> the word we want to find
+    
+    NB: texts are stored lowercases"""
     def __init__(self, validText, helpChar="~"):
         if " " in validText:
             raise AttributeError, "validText=' '"
@@ -114,7 +116,6 @@ class Word:
         elif first_error != -1:
             self.setPos(first_error)
         else:
-            #The word is valid
             raise ValidWordError
         
         self.setText(outWord)

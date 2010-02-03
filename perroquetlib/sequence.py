@@ -199,6 +199,11 @@ class Sequence(object):
             if self.getActiveWordIndex() > 0:
                 self.previousWord()
                 self.deletePreviousChar()
+        except ValidWordError:
+            if self.getActiveWordIndex() > 0:
+                self.previousWord()
+                self.deletePreviousChar()
+            
         self.updateAfterWrite()
 
     def firstFalseWord(self):
@@ -246,7 +251,7 @@ class Sequence(object):
         """Check if a word is correct but at a wrong place."""
         for w1 in self.getWords():
             for j, w2 in enumerate(self.getWords()):
-                if w1.getScore()<=0 and w1.getText()==w2.getValid():
+                if w1.getScore()<=0 and w1.getText()==w2.getValid() and not w2.isValid():
                     w2.setText(w1.getText())
                     w1.setText("")
                     self.setActiveWordIndex(j)
@@ -263,6 +268,15 @@ class Sequence(object):
 
     def setTimeEnd(self, time):
         self.endTime = time
+    
+    def showHint(self): 
+        try:
+            self.getActiveWord().showHint()
+        except ValidWordError:
+            if self.getActiveWordIndex()==self.getWordCount():
+                return
+            self.nextWord()
+            self.showHint()  
     
     def __print__(self):
         return "-".join(w.getText() for w in self.getWords())+" VS "+"-".join(w.getValid() for w in self.getWords())
