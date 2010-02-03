@@ -20,7 +20,7 @@
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 from perroquetlib.config import Config
 
-class ExerciseRepository(object):
+class ExerciseRepository:
 
     def __init__(self):
         self.name =""
@@ -50,10 +50,17 @@ class ExerciseRepository(object):
     def getVersion(self):
         return self.version
 
-    class ExercisesGroup(object):
+    def addGroup(self, group):
+        self.exercisesGroupList.append(group)
+
+    def getGroups(self):
+        return self.exercisesGroupList
+
+    class ExercisesGroup:
         def __init__(self):
             self.name =""
             self.description = ""
+            self.exercisesList = []
 
         def setName(self, name):
             self.name = name
@@ -61,7 +68,21 @@ class ExerciseRepository(object):
         def setDescription(self, description):
             self.description = description
 
-    class Exercise(object):
+        def getName(self):
+            return self.name
+
+        def getDescription(self):
+            return self.description
+
+        def addExercise(self, exercise):
+            self.exercisesList.append(exercise)
+            print exercise.getName()
+            print exercise.getDescription()
+
+        def getExercises(self):
+            return self.exercisesList
+
+    class Exercise:
         def __init__(self):
             self.name =""
             self.description = ""
@@ -69,5 +90,84 @@ class ExerciseRepository(object):
         def setName(self, name):
             self.name = name
 
+        def getName(self):
+            return self.name
+
         def setDescription(self, description):
             self.description = description
+
+        def getDescription(self):
+            return self.description
+
+        def setLicence(self, licence):
+            self.licence = licence
+
+        def getLicence(self):
+            return self.licence
+
+        def setLanguage(self, language):
+            self.language = language
+
+        def getLanguage(self):
+            return self.language
+
+        def setMediaType(self, mediaType):
+            self.mediaType = mediaType
+
+        def getMediaType(self):
+            return self.mediaType
+
+        def setVersion(self, version):
+            self.version = version
+
+        def getVersion(self):
+            return self.version
+
+        def setAuthor(self, author):
+            self.author = author
+
+        def getAuthor(self):
+            return self.author
+
+        def setAuthorWebsite(self, authorWebsite):
+            self.authorWebsite = authorWebsite
+
+        def getAuthorWebsite(self):
+            return self.authorWebsite
+
+        def setAuthorContact(self, authorContact):
+            self.authorContact = authorContact
+
+        def getAuthorContact(self):
+            return self.authorContact
+
+        def setPackager(self, packager):
+            self.packager = packager
+
+        def getPackager(self):
+            return self.packager
+
+        def setPackagerWebsite(self, packagerWebsite):
+            self.packagerWebsite = packagerWebsite
+
+        def getPackagerWebsite(self):
+            return self.packagerWebsite
+
+        def setPackagerContact(self, packagerContact):
+            self.packagerContact = packagerContact
+
+        def getPackagerContact(self):
+            return self.packagerContact
+
+        def setFilePath(self, filePath):
+            self.filePath = filePath
+
+        def getFilePath(self):
+            return self.filePath
+
+        def setTranslationsList(self, translationList):
+            self.translationList = translationList
+
+        def getTranslationsList(self):
+            return self.translationList
+
