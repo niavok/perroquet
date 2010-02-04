@@ -27,3 +27,7 @@ if __name__=="__main__":
                 print exo.getPackagerWebsite()
                 print exo.getPackagerContact()
                 print exo.getFilePath()
+                exo.startInstall()
+                print "Install started"
+                exo.waitInstallEnd()
+                print "Install ended"

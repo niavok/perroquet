@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 from perroquetlib.config import Config
+import thread, urllib2, tempfile, os, tarfile, errno
+from multiprocessing import Lock
 
 class ExerciseRepository:
 
@@ -86,6 +88,72 @@ class ExerciseRepository:
         def __init__(self):
             self.name =""
             self.description = ""
+            self.mutexInstalling = Lock()
+
+        def isInstalled(self):
+            return False
+
+        def startInstall(self):
+            self.mutexInstalling.acquire()
+            self.play_thread_id = thread.start_new_thread(self.installThread, ())
+
+        def cancelInstall(self):
+            print "TODO"
+
+        def waitInstallEnd(self):
+            self.mutexInstalling.acquire()
+            self.mutexInstalling.release()
+
+        def download(self):
+            print "Start download"
+            f=urllib2.urlopen('http://perroquet.b219.org/ressources/elephant_dream_en.tar.gz')
+            print "Url open" + str(f.info())
+            _, tempPath = tempfile.mkstemp("","perroquet-");
+            wf = open(tempPath, 'w+b')
+            print "File open"
+            size = f.info().get('Content-Length')
+            if size is None:
+                size = 0
+            else:
+                size = int(size)
+            print "size " +str(size)
+            count=0
+            sizeToRead = 50000
+            while True:
+                data=f.read(sizeToRead)
+                wf.write(data)
+                if len(data) != sizeToRead:
+                    break;
+                count+=sizeToRead
+                print "%d%% complete" % (round((float(count)/float(size))*100))
+
+            return tempPath
+
+        def installThread(self):
+            tmpPath = self.download()
+
+            tar = tarfile.open(tmpPath)
+
+            outPath = self.getDirPath()
+            try:
+                os.makedirs(outPath)
+            except OSError as exc: # Python >2.5
+                if exc.errno == errno.EEXIST:
+                    pass
+                else: raise
+
+            tar.extractall(outPath)
+            tar.close()
+            os.remove(tmpPath)
+
+            self.mutexInstalling.release()
+
+        def getTemplatePath(self):
+            print "TODO"
+
+        def getDirPath(self):
+            return os.path.join(os.path.expanduser("~"),".local/share/perroquet/repo_root/main/blender/exercise_elephant-dream_1.0")
+
 
         def setName(self, name):
             self.name = name
