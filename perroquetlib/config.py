@@ -74,24 +74,21 @@ class Config(ConfigSingleton):
         elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/perroquet.ui')):
             self.Set("ui_path", os.path.join(self.Get("script"), '../share/perroquet/perroquet.ui'))
         else:
-            print "Error : gui file 'perroquet.ui' not found"
-            sys.exit(1)
+            raise IOError, "Error : gui file 'perroquet.ui' not found"
 
         if os.path.isfile(os.path.join(self.Get("script"), 'data/properties.ui')):
             self.Set("ui_sequence_properties_path", os.path.join(self.Get("script"), 'data/properties.ui'))
         elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/properties.ui')):
             self.Set("ui_sequence_properties_path", os.path.join(self.Get("script"), '../share/perroquet/properties.ui'))
         else:
-            print "Error : gui file 'properties.ui' not found"
-            sys.exit(1)
+            raise IOError,  "Error : gui file 'properties.ui' not found"
 
         if os.path.isfile(os.path.join(self.Get("script"), 'data/exercise_manager.ui')):
             self.Set("ui_exercise_manager_path", os.path.join(self.Get("script"), 'data/exercise_manager.ui'))
         elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/exercise_manager.ui')):
             self.Set("ui_exercise_manager_path", os.path.join(self.Get("script"), '../share/perroquet/exercise_manager.ui'))
         else:
-            print "Error : gui file 'exercise_manager.ui' not found"
-            sys.exit(1)
+            raise IOError,  "Error : gui file 'exercise_manager.ui' not found"
 
         self.loadRepositoryPaths()
 
@@ -119,8 +116,7 @@ class Config(ConfigSingleton):
         elif  os.path.isfile(os.path.join(self.Get("script"), 'data/config')):
             configParser.read(os.path.join(self.Get("script"), 'data/config'))
         else:
-            print "Error : global conf file 'config' not found at "+ os.path.join(self.Get("script"), 'data/config')
-            sys.exit(1)
+            raise IOError,  "Error : global conf file 'config' not found at "+ os.path.join(self.Get("script"), 'data/config')
 
         self._localConfigParser = ConfigParser.ConfigParser()
         if len( self._localConfigParser.read(self._localConfFilHref)) == 0:

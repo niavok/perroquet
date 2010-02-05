@@ -273,10 +273,11 @@ class Sequence(object):
         try:
             self.getActiveWord().showHint()
         except ValidWordError:
-            if self.getActiveWordIndex()==self.getWordCount():
+            if self.getActiveWordIndex()==self.getWordCount()-1:
                 return
-            self.nextWord()
-            self.showHint()  
+            else:
+                self.nextWord()
+                self.showHint()
     
     def __print__(self):
         return "-".join(w.getText() for w in self.getWords())+" VS "+"-".join(w.getValid() for w in self.getWords())

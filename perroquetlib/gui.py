@@ -63,33 +63,6 @@ class Gui:
             self.builder.get_object("vbox2").show()
             self.config.Set("showlateralpanel", 1)
 
-    def on_MainWindow_delete_event(self,widget,data=None):
-        if not self.config.Get("autosave"):
-            if not self.core.GetCanSave():
-                gtk.main_quit()
-                return False
-
-            dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
-                                       gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
-                                       _("Do you really quit without save ?"))
-            dialog.set_title(_("Confirm quit"))
-
-            response = dialog.run()
-            dialog.destroy()
-            if response == gtk.RESPONSE_YES:
-                gtk.main_quit()
-                self.config.Save()
-                return False # returning False makes "destroy-event" be signalled
-                             # for the window.
-            else:
-                return True # returning True avoids it to signal "destroy-event"
-        else:
-            if self.core.GetCanSave():
-                self.core.Save()
-            gtk.main_quit()
-            self.config.Save()
-            return True
-
     def SignalExerciseBadPath(self, path):
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
                                    gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
@@ -98,41 +71,6 @@ class Gui:
 
         response = dialog.run()
         dialog.destroy()
-
-
-
-    def on_newExerciseButton_clicked(self,widget,data=None):
-        self.newExerciseDialog = self.builder.get_object("newExerciseDialog")
-
-        videoChooser = self.builder.get_object("filechooserbuttonVideo")
-        exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
-        translationChooser = self.builder.get_object("filechooserbuttonTranslation")
-        videoChooser.set_filename("None")
-        exerciseChooser.set_filename("None")
-        translationChooser.set_filename("None")
-        self.newExerciseDialog.show()
-
-
-
-    def on_buttonNewExerciseOk_clicked(self,widget,data=None):
-        videoChooser = self.builder.get_object("filechooserbuttonVideo")
-        videoPath = videoChooser.get_filename()
-        exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
-        exercisePath = exerciseChooser.get_filename()
-        translationChooser = self.builder.get_object("filechooserbuttonTranslation")
-        translationPath = translationChooser.get_filename()
-        if videoPath == "None" or videoPath == None:
-            videoPath = ""
-        if exercisePath == "None" or exercisePath == None:
-            exercisePath = ""
-        if translationPath == "None" or translationPath == None:
-            translationPath = ""
-
-        self.core.NewExercise(videoPath,exercisePath, translationPath)
-        self.newExerciseDialog.hide()
-
-    def on_buttonNewExerciseCancel_clicked(self,widget,data=None):
-        self.newExerciseDialog.hide()
 
     def SetCore(self, core):
         self.core = core
@@ -316,7 +254,7 @@ class Gui:
         elif isFound:
             tagName = "word_found"
         elif score > 0 :
-            tagName = "word_near"
+            tagName = "word_near"+str(score) #score between 0 and 10
         else:
             tagName = "word_to_found"
 
@@ -339,7 +277,8 @@ class Gui:
         bcolor_not_found = self.window.get_colormap().alloc_color(150*256, 210*256, 250*256)
         color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
 
-        bcolor_near = self.window.get_colormap().alloc_color(150*256, 250*256, 150*256)
+        def get_bcolor_near(i):
+            return self.window.get_colormap().alloc_color(150*256, 250*256, (250-i)*256)
 
         buffer.create_tag("symbol",
              size_points=18.0)
@@ -347,10 +286,11 @@ class Gui:
              background=bcolor_not_found, foreground=color_not_found, size_points=18.0)
         buffer.create_tag("word_found",
              foreground=color_found, size_points=18.0)
-        buffer.create_tag("word_near",
-                background=bcolor_near,
-                foreground=color_not_found,
-                size_points=18.0)
+        for i in xrange(251):
+            buffer.create_tag("word_near"+str(i),
+                    background=get_bcolor_near(i),
+                    foreground=color_not_found,
+                    size_points=18.0+i/50.)
 
     def AskSavePath(self):
         saver = SaveFileSelector(self.window)
@@ -418,8 +358,66 @@ class Gui:
 
     #---------------------- Now the functions called directly by the gui--------
     
-    
-    
+    def on_MainWindow_delete_event(self,widget,data=None):
+        if not self.config.Get("autosave"):
+            if not self.core.GetCanSave():
+                gtk.main_quit()
+                return False
+
+            dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
+                                       gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
+                                       _("Do you really quit without save ?"))
+            dialog.set_title(_("Confirm quit"))
+
+            response = dialog.run()
+            dialog.destroy()
+            if response == gtk.RESPONSE_YES:
+                gtk.main_quit()
+                self.config.Save()
+                return False # returning False makes "destroy-event" be signalled
+                             # for the window.
+            else:
+                return True # returning True avoids it to signal "destroy-event"
+        else:
+            if self.core.GetCanSave():
+                self.core.Save()
+            gtk.main_quit()
+            self.config.Save()
+            return True
+
+
+    def on_newExerciseButton_clicked(self,widget,data=None):
+        self.newExerciseDialog = self.builder.get_object("newExerciseDialog")
+
+        videoChooser = self.builder.get_object("filechooserbuttonVideo")
+        exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
+        translationChooser = self.builder.get_object("filechooserbuttonTranslation")
+        videoChooser.set_filename("None")
+        exerciseChooser.set_filename("None")
+        translationChooser.set_filename("None")
+        self.newExerciseDialog.show()
+
+
+
+    def on_buttonNewExerciseOk_clicked(self,widget,data=None):
+        videoChooser = self.builder.get_object("filechooserbuttonVideo")
+        videoPath = videoChooser.get_filename()
+        exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
+        exercisePath = exerciseChooser.get_filename()
+        translationChooser = self.builder.get_object("filechooserbuttonTranslation")
+        translationPath = translationChooser.get_filename()
+        if videoPath == "None" or videoPath == None:
+            videoPath = ""
+        if exercisePath == "None" or exercisePath == None:
+            exercisePath = ""
+        if translationPath == "None" or translationPath == None:
+            translationPath = ""
+
+        self.core.NewExercise(videoPath,exercisePath, translationPath)
+        self.newExerciseDialog.hide()
+
+    def on_buttonNewExerciseCancel_clicked(self,widget,data=None):
+        self.newExerciseDialog.hide()    
     
     def on_textbufferView_changed(self,widget):
         if self.mode != "loaded":

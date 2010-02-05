@@ -66,7 +66,9 @@ class Word:
         return levenshtein(self.getText(), self.getValid())
     
     def getScore(self):
-        return 2*len(self.getValid()) - 2*self.levenshtein() - len(self.getText())
+        """Show if we are near the solution.
+        return an int from -inf to 250. more is better"""
+        return 250*(2*len(self.getValid()) - 2*self.levenshtein() - len(self.getText())) / (len(self.getValid()))
     
     def isValid(self):
         return self.getText() == self.getValid()
