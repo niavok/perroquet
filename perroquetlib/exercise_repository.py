@@ -29,7 +29,7 @@ class ExerciseRepository:
         self.description = ""
         self.version = ""
         self.exercisesGroupList = []
-
+        self.config = Config()
 
     def setName(self, name):
         self.name = name
@@ -46,6 +46,12 @@ class ExerciseRepository:
     def getName(self):
         return self.name
 
+    def setId(self, id):
+        self.id = id
+
+    def getId(self):
+        return self.id
+
     def getDescription(self):
         return self.description
 
@@ -54,9 +60,15 @@ class ExerciseRepository:
 
     def addGroup(self, group):
         self.exercisesGroupList.append(group)
+        group.setParent(self)
 
     def getGroups(self):
         return self.exercisesGroupList
+
+    def getLocalPath(self):
+        print self.config.Get("local_repo_root_dir")
+        print self.id
+        return os.path.join(self.config.Get("local_repo_root_dir"), self.id)
 
     class ExercisesGroup:
         def __init__(self):
@@ -76,13 +88,24 @@ class ExerciseRepository:
         def getDescription(self):
             return self.description
 
+        def setId(self, id):
+            self.id = id
+
+        def getId(self):
+            return self.id
+
         def addExercise(self, exercise):
             self.exercisesList.append(exercise)
-            print exercise.getName()
-            print exercise.getDescription()
+            exercise.setParent(self)
 
         def getExercises(self):
             return self.exercisesList
+
+        def setParent(self,parent):
+            self.parent = parent
+
+        def getLocalPath(self):
+            return os.path.join(self.parent.getLocalPath(), self.id)
 
     class Exercise:
         def __init__(self):
@@ -133,26 +156,20 @@ class ExerciseRepository:
             tmpPath = self.download()
 
             tar = tarfile.open(tmpPath)
-
-            outPath = self.getDirPath()
+            outPath = self.getLocalPath()
             try:
                 os.makedirs(outPath)
             except OSError as exc: # Python >2.5
                 if exc.errno == errno.EEXIST:
                     pass
                 else: raise
-
             tar.extractall(outPath)
             tar.close()
             os.remove(tmpPath)
-
             self.mutexInstalling.release()
 
         def getTemplatePath(self):
             print "TODO"
-
-        def getDirPath(self):
-            return os.path.join(os.path.expanduser("~"),".local/share/perroquet/repo_root/main/blender/exercise_elephant-dream_1.0")
 
 
         def setName(self, name):
@@ -160,6 +177,12 @@ class ExerciseRepository:
 
         def getName(self):
             return self.name
+
+        def setId(self, id):
+            self.id = id
+
+        def getId(self):
+            return self.id
 
         def setDescription(self, description):
             self.description = description
@@ -239,3 +262,8 @@ class ExerciseRepository:
         def getTranslationsList(self):
             return self.translationList
 
+        def setParent(self,parent):
+            self.parent = parent
+
+        def getLocalPath(self):
+            return os.path.join(self.parent.getLocalPath(), self.id)

@@ -56,6 +56,7 @@ class ExerciseRepositoryManager:
         repository = ExerciseRepository()
         repository.setName(self._getText(dom.getElementsByTagName("name")[0].childNodes))
         repository.setDescription(self._getText(dom.getElementsByTagName("description")[0].childNodes))
+        repository.setId(self._getText(dom.getElementsByTagName("id")[0].childNodes))
         repository.setVersion(self._getText(dom.getElementsByTagName("version")[0].childNodes))
 
         xml_groups = dom.getElementsByTagName("exercises_groups")[0]
@@ -63,6 +64,7 @@ class ExerciseRepositoryManager:
         for xml_group in xml_groups.getElementsByTagName("exercises_group"):
             group = ExerciseRepository.ExercisesGroup()
             group.setName(self._getText(xml_group.getElementsByTagName("name")[0].childNodes))
+            group.setId(self._getText(xml_group.getElementsByTagName("id")[0].childNodes))
             group.setDescription(self._getText(xml_group.getElementsByTagName("description")[0].childNodes))
             repository.addGroup(group)
 
@@ -71,6 +73,7 @@ class ExerciseRepositoryManager:
                 exercise = ExerciseRepository.Exercise()
                 group.addExercise(exercise)
                 exercise.setName(self._getText(xml_exercise.getElementsByTagName("name")[0].childNodes))
+                exercise.setId(self._getText(xml_exercise.getElementsByTagName("id")[0].childNodes))
                 exercise.setDescription(self._getText(xml_exercise.getElementsByTagName("description")[0].childNodes))
                 exercise.setLicence(self._getText(xml_exercise.getElementsByTagName("licence")[0].childNodes))
                 exercise.setLanguage(self._getText(xml_exercise.getElementsByTagName("language")[0].childNodes))

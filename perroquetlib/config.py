@@ -62,6 +62,11 @@ class Config(ConfigSingleton):
         self.Set("localconfigdir", os.path.join(
             os.path.expanduser("~"),
             ".config/perroquet"))
+        self.Set("localdatadir", os.path.join(
+            os.path.expanduser("~"),
+            ".local/share/perroquet"))
+        self.Set("local_repo_root_dir", os.path.join(self.Get("localdatadir"),
+            "repo_root"))
         self.Set("globalconfigdir", "/etc/perroquet") #FIXME ugly
 
         if os.path.isfile(os.path.join(self.Get("script"), 'data/perroquet.ui')):
