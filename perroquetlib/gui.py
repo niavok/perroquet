@@ -276,21 +276,23 @@ class Gui:
         bcolor_not_found_bad = self.window.get_colormap().alloc_color(250*256, 218*256, 200*256)
         bcolor_not_found = self.window.get_colormap().alloc_color(150*256, 210*256, 250*256)
         color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
-
-        def get_bcolor_near(i):
-            return self.window.get_colormap().alloc_color(150*256, 250*256, (250-i)*256)
+        def get_bcolor_near(score):
+            return self.window.get_colormap().alloc_color(150*256, 250*256, (250-score)*256)
 
         buffer.create_tag("symbol",
-             size_points=18.0)
+            size_points=18.0)
         buffer.create_tag("word_to_found",
-             background=bcolor_not_found, foreground=color_not_found, size_points=18.0)
+            background=bcolor_not_found, 
+            foreground=color_not_found, 
+            size_points=18.0)
         buffer.create_tag("word_found",
-             foreground=color_found, size_points=18.0)
-        for i in xrange(251):
-            buffer.create_tag("word_near"+str(i),
-                    background=get_bcolor_near(i),
-                    foreground=color_not_found,
-                    size_points=18.0+i/50.)
+            foreground=color_found, 
+            size_points=18.0)
+        for score in xrange(251):
+            buffer.create_tag("word_near"+str(score),
+                background=get_bcolor_near(score),
+                foreground=color_not_found,
+                size_points=18.0+score/50.)
 
     def AskSavePath(self):
         saver = SaveFileSelector(self.window)
