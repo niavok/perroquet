@@ -42,11 +42,6 @@ def levenshtein(a,b):
             
     return text[n]
 
-def startWith(w1, w2):
-    """Check if the first chars of w1 is w2)"""
-    return w1[:len(w2)]==w2
-
-
 class Word:
     """A class that implement a word manipulation with a reference
     text    -> the word that is currently written
@@ -67,8 +62,17 @@ class Word:
     
     def getScore(self):
         """Show if we are near the solution.
-        return an int from -inf to 250. more is better"""
-        return 250*(2*len(self.getValid()) - 2*self.levenshtein() - len(self.getText())) / (len(self.getValid()))
+        return a float from -1 to 1. more is better"""
+        #score1 and score2 are between -inf and 1
+        score1_ = (2.*len(self.getValid()) - 2*self.levenshtein() - len(self.getText())) / max(len(self.getValid()), len(self.getText()))
+        score1 = max(score1_, -1)
+        score2 = 2*self.getBeginRight()-1
+        return (score1*9+score2*1)/10
+        
+    def getBeginRight(self):
+        """Check if the first chars of self.getValid() is self.getText())"""
+        return self.getValid()[:len(self.getText())]==self.getText()
+        
     
     def isValid(self):
         return self.getText() == self.getValid()

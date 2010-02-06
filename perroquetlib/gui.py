@@ -249,14 +249,16 @@ class Gui:
         iter1 = buffer.get_iter_at_offset(size)
         iter2 = buffer.get_end_iter()
 
+        score250 = int(score*250) #score between -250 and 250
         if isEmpty:
-            tagName = "word_to_found"
+            tagName = "word_empty"
         elif isFound:
             tagName = "word_found"
         elif score > 0 :
-            tagName = "word_near"+str(score) #score between 0 and 10
+            tagName = "word_near"+str(score250)
         else:
-            tagName = "word_to_found"
+            tagName = "word_to_found"+str(score250)
+        
 
         buffer.apply_tag_by_name(tagName, iter1, iter2)
         self.currentWordIndex += 1
@@ -269,30 +271,51 @@ class Gui:
         self.currentIndex += len(word)
 
     def initTypeLabel(self):
-
+        """creates the labels used for the coloration of the text"""
         buffer = self.typeLabel.get_buffer()
 
-        color_not_found = self.window.get_colormap().alloc_color(0*256, 0*256, 80*256)
-        bcolor_not_found_bad = self.window.get_colormap().alloc_color(250*256, 218*256, 200*256)
-        bcolor_not_found = self.window.get_colormap().alloc_color(150*256, 210*256, 250*256)
-        color_found = self.window.get_colormap().alloc_color(10*256, 150*256, 10*256)
-        def get_bcolor_near(score):
-            return self.window.get_colormap().alloc_color(150*256, 250*256, (250-score)*256)
+        color_not_found = self.window.get_colormap().alloc_color(
+            0*256,
+            0*256, 
+            80*256)
+        bcolor_not_found_bad = self.window.get_colormap().alloc_color(
+            250*256, 
+            218*256, 
+            200*256)
+        color_found = self.window.get_colormap().alloc_color(
+            10*256, 
+            150*256, 
+            10*256)
+        def get_bcolor_not_found(score250):
+            return self.window.get_colormap().alloc_color((
+                150+score250*100/250)*256, 
+                (210-score250*210/250/2)*256, 
+                (250-score250/2)*256)
+        def get_bcolor_near(score250):
+            return self.window.get_colormap().alloc_color(
+                150*256, 
+                250*256, 
+                (250-score250)*256)
 
         buffer.create_tag("symbol",
             size_points=18.0)
-        buffer.create_tag("word_to_found",
-            background=bcolor_not_found, 
+        buffer.create_tag("word_empty",
+            background=get_bcolor_not_found(0), 
             foreground=color_not_found, 
             size_points=18.0)
+        for score250 in xrange(251):
+            buffer.create_tag("word_to_found"+str(-score250),
+                background=get_bcolor_not_found(score250), 
+                foreground=color_not_found, 
+                size_points=18.0)
         buffer.create_tag("word_found",
             foreground=color_found, 
             size_points=18.0)
-        for score in xrange(251):
-            buffer.create_tag("word_near"+str(score),
-                background=get_bcolor_near(score),
+        for score250 in xrange(251):
+            buffer.create_tag("word_near"+str(score250),
+                background=get_bcolor_near(score250),
                 foreground=color_not_found,
-                size_points=18.0+score/50.)
+                size_points=18.0+score250/50.)
 
     def AskSavePath(self):
         saver = SaveFileSelector(self.window)
