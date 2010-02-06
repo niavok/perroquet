@@ -19,8 +19,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 from perroquetlib.config import Config
-import thread, urllib2, tempfile, os, tarfile, errno
-from multiprocessing import Lock
+from xml.dom.minidom import getDOMImplementation, parse
+from perroquetlib.exercise_repository_group import ExerciseRepositoryGroup
+from perroquetlib.exercise_repository_exercise import ExerciseRepositoryExercise
+
+import os
 
 class ExerciseRepository:
 
@@ -28,8 +31,12 @@ class ExerciseRepository:
         self.name =""
         self.description = ""
         self.version = ""
+        self.url = ""
         self.exercisesGroupList = []
         self.config = Config()
+
+
+
 
     def setName(self, name):
         self.name = name
@@ -46,11 +53,23 @@ class ExerciseRepository:
     def getName(self):
         return self.name
 
+    def setType(self, type):
+        self.type = type
+
+    def getType(self):
+        return self.type
+
     def setId(self, id):
         self.id = id
 
     def getId(self):
         return self.id
+
+    def setUrl(self, url):
+        self.url = url
+
+    def getUrl(self):
+        return self.url
 
     def getDescription(self):
         return self.description
@@ -65,205 +84,119 @@ class ExerciseRepository:
     def getGroups(self):
         return self.exercisesGroupList
 
+    def getOrphanGroups(self):
+        groupPathList = os.listDir(self.getLocalPath())
+
+        groupUsedPath = []
+        orphanGroupList = []
+        for group in self.getGroups():
+            groupUsedPath.append(group.getLocalPath())
+
+        for groupPath in groupPathList:
+            if groupPath not in groupUsedPath:
+                group = ExerciseRepositoryManager.createGroupFromPath(repoPath)
+                orphanGroupList.append(group)
+
+        return orphanGroupList
+
     def getLocalPath(self):
-        print self.config.Get("local_repo_root_dir")
-        print self.id
         return os.path.join(self.config.Get("local_repo_root_dir"), self.id)
 
-    class ExercisesGroup:
-        def __init__(self):
-            self.name =""
-            self.description = ""
-            self.exercisesList = []
+    def generateDescription(self):
+        self._generateDescription()
+        for group in self.getGroups():
+            group.generateDescription()
 
-        def setName(self, name):
-            self.name = name
+    def _generateDescription(self):
 
-        def setDescription(self, description):
-            self.description = description
+        impl = getDOMImplementation()
 
-        def getName(self):
-            return self.name
+        newdoc = impl.createDocument(None, "perroquet_repository", None)
+        root_element = newdoc.documentElement
 
-        def getDescription(self):
-            return self.description
+        # Name
+        xml_name = newdoc.createElement("name")
+        xml_name.appendChild(newdoc.createTextNode(self.getName()))
+        root_element.appendChild(xml_name)
 
-        def setId(self, id):
-            self.id = id
+        # Id
+        xml_id = newdoc.createElement("id")
+        xml_id.appendChild(newdoc.createTextNode(self.getId()))
+        root_element.appendChild(xml_id)
 
-        def getId(self):
-            return self.id
+        # Description
+        xml_description = newdoc.createElement("description")
+        xml_description.appendChild(newdoc.createTextNode(self.getDescription()))
+        root_element.appendChild(xml_description)
 
-        def addExercise(self, exercise):
-            self.exercisesList.append(exercise)
-            exercise.setParent(self)
+        # Version
+        xml_version = newdoc.createElement("version")
+        xml_version.appendChild(newdoc.createTextNode(self.getVersion()))
+        root_element.appendChild(xml_version)
 
-        def getExercises(self):
-            return self.exercisesList
-
-        def setParent(self,parent):
-            self.parent = parent
-
-        def getLocalPath(self):
-            return os.path.join(self.parent.getLocalPath(), self.id)
-
-    class Exercise:
-        def __init__(self):
-            self.name =""
-            self.description = ""
-            self.mutexInstalling = Lock()
-
-        def isInstalled(self):
-            return False
-
-        def startInstall(self):
-            self.mutexInstalling.acquire()
-            self.play_thread_id = thread.start_new_thread(self.installThread, ())
-
-        def cancelInstall(self):
-            print "TODO"
-
-        def waitInstallEnd(self):
-            self.mutexInstalling.acquire()
-            self.mutexInstalling.release()
-
-        def download(self):
-            print "Start download"
-            f=urllib2.urlopen('http://perroquet.b219.org/ressources/elephant_dream_en.tar.gz')
-            print "Url open" + str(f.info())
-            _, tempPath = tempfile.mkstemp("","perroquet-");
-            wf = open(tempPath, 'w+b')
-            print "File open"
-            size = f.info().get('Content-Length')
-            if size is None:
-                size = 0
-            else:
-                size = int(size)
-            print "size " +str(size)
-            count=0
-            sizeToRead = 50000
-            while True:
-                data=f.read(sizeToRead)
-                wf.write(data)
-                if len(data) != sizeToRead:
-                    break;
-                count+=sizeToRead
-                print "%d%% complete" % (round((float(count)/float(size))*100))
-
-            return tempPath
-
-        def installThread(self):
-            tmpPath = self.download()
-
-            tar = tarfile.open(tmpPath)
-            outPath = self.getLocalPath()
-            try:
-                os.makedirs(outPath)
-            except OSError as exc: # Python >2.5
-                if exc.errno == errno.EEXIST:
-                    pass
-                else: raise
-            tar.extractall(outPath)
-            tar.close()
-            os.remove(tmpPath)
-            self.mutexInstalling.release()
-
-        def getTemplatePath(self):
-            print "TODO"
+        # Url
+        xml_url = newdoc.createElement("url")
+        xml_url.appendChild(newdoc.createTextNode(self.getUrl()))
+        root_element.appendChild(xml_url)
 
 
-        def setName(self, name):
-            self.name = name
+        xml_string = newdoc.toprettyxml()
+        xml_string = xml_string.encode('utf8')
+        repoDescriptionPath = os.path.join(self.getLocalPath(),"repository.xml")
+        f = open(repoDescriptionPath, 'w')
+        f.write(xml_string)
+        f.close()
 
-        def getName(self):
-            return self.name
+    def initFromPath(self,path):
 
-        def setId(self, id):
-            self.id = id
+        repoDescriptionPath = os.path.join(path,"repository.xml")
+        if os.path.isfile(repoDescriptionPath):
+            f = open(repoDescriptionPath, 'r')
+            dom = parse(f)
+            self.parseDescription(dom)
+        else:
+            self.setId(os.path.basename(path))
+            self.setName(os.path.basename(path))
 
-        def getId(self):
-            return self.id
+        groupPathList = os.listdir(self.getLocalPath())
 
-        def setDescription(self, description):
-            self.description = description
+        for groupPath in groupPathList:
+            path = os.path.join(self.getLocalPath(), groupPath)
+            if os.path.isdir(path):
+                group = ExerciseRepositoryGroup()
+                group.initFromPath(path)
+                self.addGroup(group)
 
-        def getDescription(self):
-            return self.description
+    def parseDescription(self,dom):
+        self.setName(self._getText(dom.getElementsByTagName("name")[0].childNodes))
+        self.setDescription(self._getText(dom.getElementsByTagName("description")[0].childNodes))
+        self.setId(self._getText(dom.getElementsByTagName("id")[0].childNodes))
+        self.setVersion(self._getText(dom.getElementsByTagName("version")[0].childNodes))
 
-        def setLicence(self, licence):
-            self.licence = licence
+    def parseDistantRepositoryFile(self, handle):
+        dom = parse(handle)
 
-        def getLicence(self):
-            return self.licence
+        self.parseDescription(dom)
+        self.setType("distant")
 
-        def setLanguage(self, language):
-            self.language = language
+        xml_groups = dom.getElementsByTagName("exercises_groups")[0]
 
-        def getLanguage(self):
-            return self.language
+        for xml_group in xml_groups.getElementsByTagName("exercises_group"):
+            group = ExerciseRepositoryGroup()
+            group.parseDescription(xml_group)
+            self.addGroup(group)
 
-        def setMediaType(self, mediaType):
-            self.mediaType = mediaType
+            xml_exercises = xml_group.getElementsByTagName("exercises")[0]
+            for xml_exercise in xml_exercises.getElementsByTagName("exercise"):
+                exercise = ExerciseRepositoryExercise()
+                exercise.parseDescription(xml_exercise)
+                group.addExercise(exercise)
 
-        def getMediaType(self):
-            return self.mediaType
 
-        def setVersion(self, version):
-            self.version = version
-
-        def getVersion(self):
-            return self.version
-
-        def setAuthor(self, author):
-            self.author = author
-
-        def getAuthor(self):
-            return self.author
-
-        def setAuthorWebsite(self, authorWebsite):
-            self.authorWebsite = authorWebsite
-
-        def getAuthorWebsite(self):
-            return self.authorWebsite
-
-        def setAuthorContact(self, authorContact):
-            self.authorContact = authorContact
-
-        def getAuthorContact(self):
-            return self.authorContact
-
-        def setPackager(self, packager):
-            self.packager = packager
-
-        def getPackager(self):
-            return self.packager
-
-        def setPackagerWebsite(self, packagerWebsite):
-            self.packagerWebsite = packagerWebsite
-
-        def getPackagerWebsite(self):
-            return self.packagerWebsite
-
-        def setPackagerContact(self, packagerContact):
-            self.packagerContact = packagerContact
-
-        def getPackagerContact(self):
-            return self.packagerContact
-
-        def setFilePath(self, filePath):
-            self.filePath = filePath
-
-        def getFilePath(self):
-            return self.filePath
-
-        def setTranslationsList(self, translationList):
-            self.translationList = translationList
-
-        def getTranslationsList(self):
-            return self.translationList
-
-        def setParent(self,parent):
-            self.parent = parent
-
-        def getLocalPath(self):
-            return os.path.join(self.parent.getLocalPath(), self.id)
+    def _getText(self, nodelist):
+        rc = ""
+        for node in nodelist:
+            if node.nodeType == node.TEXT_NODE:
+                rc = rc + node.data
+        rc = rc.strip()
+        return rc

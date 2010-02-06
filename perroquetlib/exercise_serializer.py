@@ -187,7 +187,7 @@ class ExerciseSaver(object):
                 xml_sequence.appendChild(xml_sequence_words)
 
                 xml_sequences.appendChild(xml_sequence)
-                
+
         xml_progress.appendChild(xml_sequences)
 
         root_element.appendChild(xml_progress)
@@ -219,6 +219,7 @@ class ExerciseSaver(object):
         root_element.appendChild(xml_properties)
 
         xml_string = newdoc.toprettyxml()
+        xml_string = xml_string.encode('utf8')
 
         f = open(self.outputPath, 'w')
         f.write(xml_string)
