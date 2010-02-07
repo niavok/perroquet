@@ -59,7 +59,7 @@ class ExerciseRepositoryExercise:
     def download(self):
         print "Start download"
 
-        f=urllib2.urlopen('http://perroquet.b219.org/ressources/elephant_dream_en.tar.gz')
+        f=urllib2.urlopen(self.getFilePath())
         print "Url open" + str(f.info())
         _, tempPath = tempfile.mkstemp("","perroquet-");
         wf = open(tempPath, 'w+b')
