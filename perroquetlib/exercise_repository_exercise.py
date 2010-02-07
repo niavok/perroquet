@@ -30,12 +30,23 @@ class ExerciseRepositoryExercise:
         self.name ="No name"
         self.description = ""
         self.mutexInstalling = Lock()
+        self.downloadPercent = 0
+        self.downloading = False
 
     def isInstalled(self):
         return os.path.isfile(self.getTemplatePath())
 
+    def isInstalling(self):
+        if self.mutexInstalling.acquire(0):
+            self.mutexInstalling.release()
+            return False
+        else:
+            return True
+
     def startInstall(self):
         self.mutexInstalling.acquire()
+        self.downloading = True
+        self.downloadPercent = 0
         self.play_thread_id = thread.start_new_thread(self.installThread, ())
 
     def cancelInstall(self):
@@ -47,6 +58,7 @@ class ExerciseRepositoryExercise:
 
     def download(self):
         print "Start download"
+
         f=urllib2.urlopen('http://perroquet.b219.org/ressources/elephant_dream_en.tar.gz')
         print "Url open" + str(f.info())
         _, tempPath = tempfile.mkstemp("","perroquet-");
@@ -66,9 +78,16 @@ class ExerciseRepositoryExercise:
             if len(data) != sizeToRead:
                 break;
             count+=sizeToRead
-            print "%d%% complete" % (round((float(count)/float(size))*100))
+            self.downloadPercent =  (round((float(count)/float(size))*100))
 
+        self.downloading = False
         return tempPath
+
+    def isDownloading(self):
+        return self.downloading
+
+    def getDownloadPercent(self):
+        return self.downloadPercent
 
     def installThread(self):
         tmpPath = self.download()
