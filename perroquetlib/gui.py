@@ -125,7 +125,6 @@ class Gui:
         self.wordList = wordList
         self.UpdateWordList()
 
-
     def UpdateWordList(self):
         buffer = self.builder.get_object("textviewWordList").get_buffer()
         entry = self.builder.get_object("entryFilter")
@@ -258,7 +257,6 @@ class Gui:
             tagName = "word_near"+str(score250)
         else:
             tagName = "word_to_found"+str(score250)
-        
 
         buffer.apply_tag_by_name(tagName, iter1, iter2)
         self.currentWordIndex += 1
@@ -287,8 +285,8 @@ class Gui:
             150*256, 
             10*256)
         def get_bcolor_not_found(score250):
-            return self.window.get_colormap().alloc_color((
-                150+score250*100/250)*256, 
+            return self.window.get_colormap().alloc_color(
+                (150+score250*100/250)*256, 
                 (210-score250*210/250/2)*256, 
                 (250-score250/2)*256)
         def get_bcolor_near(score250):

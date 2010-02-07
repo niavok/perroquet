@@ -19,7 +19,7 @@
 
 
 import re
-from word import *
+from word import Word, ValidWordError, NoCharPossible
 
 class Sequence(object):
     def __init__(self, aditionnalChars=""):

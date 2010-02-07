@@ -20,7 +20,7 @@
 class ValidWordError(Exception):
     pass
 class NoCharPossible(Exception):
-    pass    
+    pass
     
 def levenshtein(a,b):
     "Calculates the Levenshtein distance between a and b."
@@ -59,20 +59,19 @@ class Word:
 
     def levenshtein(self):
         return levenshtein(self.getText(), self.getValid())
+        
+    def getBeginRight(self):
+        """Check if the first chars of self.getValid() is self.getText())"""
+        return self.getValid()[:len(self.getText(helpChar=False))]==self.getText(helpChar=False)
     
     def getScore(self):
         """Show if we are near the solution.
         return a float from -1 to 1. more is better"""
-        #score1 and score2 are between -inf and 1
-        score1_ = (2.*len(self.getValid()) - 2*self.levenshtein() - len(self.getText())) / max(len(self.getValid()), len(self.getText()))
+        #score1 and score2 are between -1 and 1
+        score1_ = (2.*len(self.getValid()) - 2*self.levenshtein() - len(self.getText(helpChar=False))) / max(len(self.getValid()), len(self.getText(helpChar=False)))
         score1 = max(score1_, -1)
-        score2 = 2*self.getBeginRight()-1
-        return (score1*9+score2*1)/10
-        
-    def getBeginRight(self):
-        """Check if the first chars of self.getValid() is self.getText())"""
-        return self.getValid()[:len(self.getText())]==self.getText()
-        
+        score2 = self.getBeginRight()
+        return (score1*8+score2*2)/10
     
     def isValid(self):
         return self.getText() == self.getValid()
@@ -148,8 +147,11 @@ class Word:
             raise AttributeError
         self._text = text.lower()
         
-    def getText(self):
-        return self._text.lower()
+    def getText(self, helpChar=True):
+        if helpChar:
+            return self._text.lower()
+        else:
+            return "".join([i for i in self.getText() if i!=self._helpChar])
         
     def getValid(self, lower=True):
         if lower:
