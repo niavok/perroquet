@@ -199,14 +199,16 @@ class ExerciseRepositoryExercise:
         self.setPackager(self._getText(xml_exercise.getElementsByTagName("packager")[0].childNodes))
         self.setPackagerWebsite(self._getText(xml_exercise.getElementsByTagName("packager_website")[0].childNodes))
         self.setPackagerContact(self._getText(xml_exercise.getElementsByTagName("packager_contact")[0].childNodes))
-        self.setFilePath(self._getText(xml_exercise.getElementsByTagName("file")[0].childNodes))
+        if len(xml_exercise.getElementsByTagName("file")) > 0:
+            self.setFilePath(self._getText(xml_exercise.getElementsByTagName("file")[0].childNodes))
 
-        xml_translations = xml_exercise.getElementsByTagName("translations")[0]
-        translationList = []
-        for xml_translation in xml_translations.getElementsByTagName("translation"):
-            translationList.append(self._getText(xml_translation.childNodes))
+        if len(xml_exercise.getElementsByTagName("translations")) > 0:
+            xml_translations = xml_exercise.getElementsByTagName("translations")[0]
+            translationList = []
+            for xml_translation in xml_translations.getElementsByTagName("translation"):
+                translationList.append(self._getText(xml_translation.childNodes))
 
-        self.setTranslationsList(translationList)
+            self.setTranslationsList(translationList)
 
     def generateDescription(self):
         self._generateDescription()
@@ -242,7 +244,7 @@ class ExerciseRepositoryExercise:
         root_element.appendChild(xml_description)
 
         # Version
-        xml_version = newdoc.createElement("excercise_version")
+        xml_version = newdoc.createElement("exercise_version")
         xml_version.appendChild(newdoc.createTextNode(self.getVersion()))
         root_element.appendChild(xml_version)
 
@@ -313,7 +315,7 @@ class ExerciseRepositoryExercise:
 
     def initFromPath(self, exercisePath):
         exerciseDescriptionPath = os.path.join(exercisePath,"exercise.xml")
-        if os.path.isFile(exerciseDescriptionPath):
+        if os.path.isfile(exerciseDescriptionPath):
             exercise = ExerciseRepositoryExercise()
             f = open(exerciseDescriptionPath, 'r')
             dom = parse(f)

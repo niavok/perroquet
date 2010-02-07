@@ -2,6 +2,7 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
+  <object class="GtkListStore" id="liststoreRepositories"/>
   <object class="GtkDialog" id="dialogExerciseManager">
     <property name="border_width">5</property>
     <property name="type_hint">normal</property>
@@ -16,26 +17,42 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <object class="GtkTreeView" id="treeview1">
+              <object class="GtkHBox" id="box1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="model">liststoreExercices</property>
-                <property name="level_indentation">1</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn">
-                    <property name="title">Categories</property>
-                    <property name="expand">True</property>
+                  <object class="GtkTreeView" id="treeviewExercises">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="level_indentation">1</property>
                   </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                    <property name="title">Words</property>
+                  <object class="GtkHBox" id="hbox1">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkLabel" id="labelStatus">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="padding">1</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                    <property name="title">State</property>
-                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="padding">1</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -187,8 +204,6 @@
       <action-widget response="0">button1</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkListStore" id="liststoreExercices"/>
-  <object class="GtkListStore" id="liststoreRepositories"/>
   <object class="GtkMenu" id="menuRepositories">
     <property name="visible">True</property>
   </object>

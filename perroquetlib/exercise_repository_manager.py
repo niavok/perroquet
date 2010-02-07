@@ -84,15 +84,20 @@ class ExerciseRepositoryManager:
                     repository.generateDescription()
 
         if len(offlineRepoList) > 0:
-            repoPathList = os.listDir(self.config.Get("local_repo_root_dir"))
+            repoPathList = os.listdir(self.config.Get("local_repo_root_dir"))
             for repoPath in repoPathList:
                 repository = ExerciseRepository()
-                repoDescriptionPath = os.path.join(repoPath,"repository.xml")
+                repoDescriptionPath = os.path.join(self.config.Get("local_repo_root_dir"),repoPath,"repository.xml")
+                if not os.path.isfile(repoDescriptionPath):
+                    continue
                 f = open(repoDescriptionPath, 'r')
                 dom = parse(f)
-                self.parseDescription(dom)
-                if repositoty.getUrl() in  offlineRepoList:
-                    repository = _createRepositoryFromPath(repoPath)
+                repository.parseDescription(dom)
+                print "test offline url : " +repository.getUrl()
+                if repository.getUrl() in offlineRepoList:
+                    print "add url : " +repository.getUrl()
+                    repository = ExerciseRepository()
+                    repository.initFromPath(os.path.join(self.config.Get("local_repo_root_dir"),repoPath))
                     repository.setType("offline")
                     repositoryList.append(repository)
 

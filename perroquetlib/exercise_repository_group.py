@@ -21,6 +21,7 @@
 
 import os
 from xml.dom.minidom import getDOMImplementation, parse
+from perroquetlib.exercise_repository_exercise import ExerciseRepositoryExercise
 
 class ExerciseRepositoryGroup:
     def __init__(self):
@@ -120,11 +121,11 @@ class ExerciseRepositoryGroup:
 
         exercisePathList = os.listdir(groupPath)
         for exercisePath in exercisePathList:
-            path = os.path.join(self.getLocalPath(), groupPath)
+            path = os.path.join(groupPath, exercisePath)
             if os.path.isdir(path):
                 exo = ExerciseRepositoryExercise()
-                exo.iniFromPath(path)
-                group.addExercise(exo)
+                exo.initFromPath(path)
+                self.addExercise(exo)
 
 
     def _getText(self, nodelist):

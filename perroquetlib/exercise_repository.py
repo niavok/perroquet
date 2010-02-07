@@ -109,6 +109,14 @@ class ExerciseRepository:
 
     def _generateDescription(self):
 
+        if not os.path.isdir(self.getLocalPath()):
+            try:
+                os.makedirs(self.getLocalPath())
+            except OSError as exc: # Python >2.5
+                if exc.errno == errno.EEXIST:
+                    pass
+                else: raise
+
         impl = getDOMImplementation()
 
         newdoc = impl.createDocument(None, "perroquet_repository", None)
@@ -172,6 +180,8 @@ class ExerciseRepository:
         self.setDescription(self._getText(dom.getElementsByTagName("description")[0].childNodes))
         self.setId(self._getText(dom.getElementsByTagName("id")[0].childNodes))
         self.setVersion(self._getText(dom.getElementsByTagName("version")[0].childNodes))
+        if len(dom.getElementsByTagName("url")) > 0:
+            self.setUrl(self._getText(dom.getElementsByTagName("url")[0].childNodes))
 
     def parseDistantRepositoryFile(self, handle):
         dom = parse(handle)
