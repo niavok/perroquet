@@ -113,7 +113,8 @@ class GuiExerciseManager:
 
 
 
-                    self.treeStoreExercices.append(iterGroup,[name, _("<small>Exercise</small>"), desc, installStatus, True, exo])
+                    iter = self.treeStoreExercices.append(iterGroup,[name, _("<small>Exercise</small>"), desc, installStatus, True, exo])
+                    exo.setStateChangeCallback(self.exerciceStateChangeListener, iter)
 
 
         cell = gtk.CellRendererText()
@@ -168,57 +169,64 @@ class GuiExerciseManager:
 
         if isExo:
             self.selectedExo = exo
-            self.buttonAction.set_sensitive(True)
-            if exo.isInstalling():
-                self.buttonAction.set_label(_("Cancel install"))
-                self.action = "cancel"
-            elif exo.isInstalled():
-                self.buttonAction.set_label(_("Use"))
-                self.action = "use"
-            else:
-                self.buttonAction.set_label(_("Install"))
-                self.action = "install"
-
-            print "is exo selected"
         else:
             print "is not exo selected"
-            self.buttonAction.set_sensitive(False)
             self.selectedExo = None
-            self.action = "none"
+
+        self._updateActionButton()
+
+
+    def _updateActionButton(self):
+        if self.selectedExo == None:
+            self.buttonAction.set_sensitive(False)
+            return
+
+        exo = self.selectedExo
+
+        if exo.getState() == "available" or exo.getState() == "corrupted" or exo.getState() == "canceled":
+            self.buttonAction.set_label(_("Install"))
+            self.action = "install"
+            self.buttonAction.set_sensitive(True)
+        elif exo.getState() == "downloading":
+            self.buttonAction.set_label(_("Cancel install"))
+            self.action = "cancel"
+            self.buttonAction.set_sensitive(True)
+        elif exo.getState() == "installing":
+            self.buttonAction.set_label(_("Cancel install"))
+            self.action = "cancel"
+            self.buttonAction.set_sensitive(False)
+        elif exo.getState() == "installed":
+            self.buttonAction.set_label(_("Use"))
+            self.action = "Use"
+            self.buttonAction.set_sensitive(True)
+        elif exo.getState() == "removing":
+            self.buttonAction.set_label(_("Remove"))
+            self.action = "remove"
+            self.buttonAction.set_sensitive(False)
+        elif exo.getState() == "used":
+            self.buttonAction.set_label(_("Continue"))
+            self.action = "continue"
+            self.buttonAction.set_sensitive(True)
+        elif exo.getState() == "done":
+            self.buttonAction.set_label(_("Remove"))
+            self.action = "remove"
+            self.buttonAction.set_sensitive(True)
 
     def on_buttonAction_clicked(self,widget,data=None):
         print "on_buttonAction_activate"
         if self.action == "install":
             self._installSelectedExercise()
+        elif self.action == "cancel":
+            self._cancelSelectedExercise()
+
 
     def _installSelectedExercise(self):
-
-        idThread = thread.start_new_thread(self._installSelectedExerciseThread, (self.iterExo, ))
-        #self._installSelectedExerciseThread(self.iterExo)
-
-    def _installSelectedExerciseThread(self, iter):
-        (exo,) = self.treeStoreExercices.get(iter, 5)
-        print "start install"
+        (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
         exo.startInstall()
-        self.on_treeviewExercises_cursor_changed(None)
-        print "set label to downlowding"
-        self.treeStoreExercices.set_value(iter, 3, _("<small>Downloading ... %d%%</small>") % exo.getDownloadPercent() )
-        print "wait download end"
-        while exo.isDownloading():
-            self.treeStoreExercices.set_value(iter, 3, _("<small>Downloading ... %d%%</small>") % exo.getDownloadPercent())
-            time.sleep(0.5)
-        print "download end"
-        self.treeStoreExercices.set_value(iter, 3, _("Installing ... "))
-        exo.waitInstallEnd()
-        if exo.isInstalled():
-            self.treeStoreExercices.set_value(iter, 3, _("Installed"))
-        else:
-            self.treeStoreExercices.set_value(iter, 3, _("Corrupted"))
-        self.on_treeviewExercises_cursor_changed(None)
-        print "isntall end"
-        self.availableExoCount -= 1
-        self.installedExoCount += 1
-        self._updateStatus()
+
+    def _cancelSelectedExercise(self):
+        (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
+        exo.cancelInstall()
 
     def _updateStatus(self):
         if self.availableExoCount > 1:
@@ -234,5 +242,46 @@ class GuiExerciseManager:
 
 
         self.labelStatus.set_text(status)
+
+    def exerciceStateChangeListener(self, oldState, iter):
+        (exo,) = self.treeStoreExercices.get(iter, 5)
+        if oldState == "installed" and exo.getState() != "installed":
+            self.availableExoCount += 1
+            self.installedExoCount -= 1
+        elif oldState != "installed" and exo.getState() == "installed":
+            self.availableExoCount -= 1
+            self.installedExoCount += 1
+
+        if exo.getState() == "available":
+            self.treeStoreExercices.set_value(iter, 3, _("Available"))
+        elif exo.getState() == "downloading":
+            self.treeStoreExercices.set_value(iter, 3, _("Downloading"))
+            thread.start_new_thread(self._downloadExerciseThread, (iter, ))
+        elif exo.getState() == "installing":
+            self.treeStoreExercices.set_value(iter, 3, _("Installing"))
+        elif exo.getState() == "installed":
+            self.treeStoreExercices.set_value(iter, 3, _("Installed"))
+        elif exo.getState() == "corrupted":
+            self.treeStoreExercices.set_value(iter, 3, _("Corrupted"))
+        elif exo.getState() == "canceled":
+            self.treeStoreExercices.set_value(iter, 3, _("Canceled"))
+        elif exo.getState() == "removing":
+            self.treeStoreExercices.set_value(iter, 3, _("Removing"))
+        elif exo.getState() == "used":
+            self.treeStoreExercices.set_value(iter, 3, _("Used"))
+        elif exo.getState() == "done":
+            self.treeStoreExercices.set_value(iter, 3, _("Done"))
+
+        self._updateStatus()
+        self._updateActionButton()
+
+    def _downloadExerciseThread(self, iter):
+        (exo,) = self.treeStoreExercices.get(iter, 5)
+        print "_installSelectedExerciseThread"
+        while exo.getState() == "downloading":
+            print " while exo.getState() == downloading:"
+            self.treeStoreExercices.set_value(iter, 3, _("<small>Downloading ... %d%%</small>") % exo.getDownloadPercent())
+            time.sleep(0.5)
+
 
 

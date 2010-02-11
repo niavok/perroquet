@@ -31,26 +31,26 @@ class ExerciseRepositoryExercise:
         self.description = ""
         self.mutexInstalling = Lock()
         self.downloadPercent = 0
-        self.downloading = False
+        self.state = "none"
 
     def isInstalled(self):
         return os.path.isfile(self.getTemplatePath())
 
-    def isInstalling(self):
-        if self.mutexInstalling.acquire(0):
-            self.mutexInstalling.release()
-            return False
-        else:
-            return True
+    def isUsed(self):
+        return os.path.isfile(self.getInstancePath())
+
+    def isDone(self):
+        return os.path.isfile(self.getDonePath())
+
 
     def startInstall(self):
         self.mutexInstalling.acquire()
-        self.downloading = True
+        self.canceled = False
         self.downloadPercent = 0
         self.play_thread_id = thread.start_new_thread(self.installThread, ())
 
     def cancelInstall(self):
-        print "TODO"
+        self.canceled = True
 
     def waitInstallEnd(self):
         self.mutexInstalling.acquire()
@@ -72,7 +72,7 @@ class ExerciseRepositoryExercise:
         print "size " +str(size)
         count=0
         sizeToRead = 50000
-        while True:
+        while not self.canceled:
             data=f.read(sizeToRead)
             wf.write(data)
             if len(data) != sizeToRead:
@@ -83,30 +83,76 @@ class ExerciseRepositoryExercise:
         self.downloading = False
         return tempPath
 
-    def isDownloading(self):
-        return self.downloading
 
     def getDownloadPercent(self):
         return self.downloadPercent
 
-    def installThread(self):
-        tmpPath = self.download()
+    def getState(self):
+        #available
+        #downloading
+        #installing
+        #installed
+        #corrupted
+        #canceled
+        #removing
+        #used
+        #done
 
-        tar = tarfile.open(tmpPath)
-        outPath = self.getLocalPath()
-        try:
-            os.makedirs(outPath)
-        except OSError as exc: # Python >2.5
-            if exc.errno == errno.EEXIST:
-                pass
-            else: raise
-        tar.extractall(outPath)
-        tar.close()
-        os.remove(tmpPath)
+        if self.state == "none":
+            if self.isDone():
+                self.state = "done"
+            elif self.isUsed():
+                self.state = "used"
+            if self.isInstalled():
+                self.state = "installed"
+            else:
+                self.state = "available"
+
+        return self.state
+
+    def setState(self, state):
+        oldState = self.state
+        self.state = state
+        self.notifyStateChange(oldState, self.callbackData)
+
+    def setStateChangeCallback(self, callback, callbackData):
+        self.notifyStateChange = callback
+        self.callbackData = callbackData
+
+    def installThread(self):
+        self.setState("downloading")
+        tmpPath = self.download()
+        if self.canceled:
+            print "remove temp file"
+            self.setState("canceled")
+            os.remove(tmpPath)
+        else:
+            self.setState("installing")
+            tar = tarfile.open(tmpPath)
+            outPath = self.getLocalPath()
+            try:
+                os.makedirs(outPath)
+            except OSError as exc: # Python >2.5
+                if exc.errno == errno.EEXIST:
+                    pass
+                else: raise
+            tar.extractall(outPath)
+            tar.close()
+            os.remove(tmpPath)
+            if self.isInstalled():
+                self.setState("installed")
+            else:
+                self.setState("corrupted")
         self.mutexInstalling.release()
 
     def getTemplatePath(self):
         return os.path.join(self.getLocalPath(),"template.perroquet")
+
+    def getInstancePath(self):
+        return os.path.join(self.getLocalPath(),"instance.perroquet")
+
+    def getDonePath(self):
+        return os.path.join(self.getLocalPath(),"done.perroquet")
 
     def setName(self, name):
         self.name = name
