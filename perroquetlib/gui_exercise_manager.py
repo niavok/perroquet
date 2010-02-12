@@ -218,6 +218,8 @@ class GuiExerciseManager:
             self._installSelectedExercise()
         elif self.action == "cancel":
             self._cancelSelectedExercise()
+        elif self.action == "USE":
+            self._useSelectedExercise()
 
 
     def _installSelectedExercise(self):
@@ -227,6 +229,11 @@ class GuiExerciseManager:
     def _cancelSelectedExercise(self):
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
         exo.cancelInstall()
+    
+    def _useSelectedExercise(self):
+        (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
+        self.core.LoadExercise(exo.getTemplate())
+
 
     def _updateStatus(self):
         if self.availableExoCount > 1:
