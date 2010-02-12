@@ -31,6 +31,9 @@ class Exercise(object):
         self.repeatAfterCompeted = True
         self.maxSequenceLength = 60.0
         self.timeBetweenSequence = 0.0
+        self.outputSavePath = None
+        self.template = False
+        self.name = None
 
     def Initialize(self):
         self.LoadSubtitles()
@@ -202,3 +205,22 @@ class Exercise(object):
 
     def GetMaxSequenceLength(self):
         return self.maxSequenceLength
+
+    def getOutputSavePath(self):
+        return self.outputSavePath
+    
+    def setOutputSavePath(self, outputSavePath):
+        self.outputSavePath = outputSavePath
+        self.setTemplate(False)
+
+    def getName(self):
+        return self.name
+        
+    def setName(self, name):
+        self.name = name
+
+    def isTemplate(self):
+        return self.template
+        
+    def setTemplate(self, isTemplate):
+        self.template = isTemplate

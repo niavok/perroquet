@@ -41,6 +41,16 @@ class ExerciseLoader(object):
         self.exercise = Exercise()
 
         dom = parse(path)
+        
+        #Name
+        if len(dom.getElementsByTagName("name")) > 0:
+                self.exercise.setName(self.getText(dom.getElementsByTagName("name")[0].childNodes))
+        
+        #Template
+        if len(dom.getElementsByTagName("template")) > 0:
+                self.exercise.setTemplate(self.getText(dom.getElementsByTagName("template")[0].childNodes) == "True")
+        
+        
         xml_paths = dom.getElementsByTagName("paths")[0]
         self.exercise.SetVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
         self.exercise.SetExercisePath(self.getText(xml_paths.getElementsByTagName("exercise")[0].childNodes))
@@ -88,6 +98,8 @@ class ExerciseLoader(object):
 
         self.exercise.GetCurrentSequence().setActiveWordIndex(currentWord)
 
+        if not self.exercise.isTemplate():
+            self.exercise.setOutputSavePath(path)
 
         dom.unlink()
 
@@ -127,6 +139,17 @@ class ExerciseSaver(object):
         xml_version = newdoc.createElement("version")
         xml_version.appendChild(newdoc.createTextNode(self.config.Get("version")))
         root_element.appendChild(xml_version)
+        
+        #Name
+        if exercise.getName() != None:
+            xml_node = newdoc.createElement("name")
+            xml_node.appendChild(newdoc.createTextNode(exercise.getName()))
+            root_element.appendChild(xml_node)
+
+        #Template    
+        xml_node = newdoc.createElement("template")
+        xml_node.appendChild(newdoc.createTextNode(str(exercise.isTemplate())))
+        root_element.appendChild(xml_node)
 
         # Paths
         xml_paths = newdoc.createElement("paths")

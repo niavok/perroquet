@@ -33,7 +33,6 @@ class Core(object):
     WAIT_END = 1
 
     def __init__(self):
-        self.outputSavePath = ""
         self.player = None
         self.last_save = False
         self.exercise = None
@@ -46,7 +45,6 @@ class Core(object):
     #begin to play
     def NewExercise(self, videoPath, exercisePath, translationPath, load = True):
         self.exercise = Exercise()
-        self.outputSavePath = ""
         self.SetPaths(videoPath, exercisePath, translationPath)
         self.exercise.Initialize()
         self.Reload(load);
@@ -321,17 +319,16 @@ class Core(object):
     #Save current exercice
     def Save(self, saveAs = False):
 
-        if saveAs or self.outputSavePath == "":
+        if saveAs or self.exercise.getOutputSavePath() == None:
             outputSavePath = self.gui.AskSavePath()
             if outputSavePath == None:
                 return
-            self.outputSavePath = outputSavePath
+            self.exercise.setOutputSavePath(outputSavePath)
 
-        self.gui.SetTitle(self.outputSavePath, False)
         saver = ExerciseSaver()
-        saver.Save(self.exercise, self.outputSavePath)
+        saver.Save(self.exercise, self.exercise.getOutputSavePath())
 
-        self.gui.config.Set("lastopenfile", self.outputSavePath)
+        self.gui.config.Set("lastopenfile", self.exercise.getOutputSavePath())
 
         self.SetCanSave(False)
 
@@ -346,25 +343,26 @@ class Core(object):
             return
         if not self.exercise:
             return
-
+            
+        
         validPaths, errorList = self.exercise.IsPathsValid()
         if not validPaths:
             for error in errorList:
                 self.gui.SignalExerciseBadPath(error)
 
-            self.outputSavePath = path
-            self.gui.SetTitle(self.outputSavePath, False)
+            self.SetCanSave(False)
             self.gui.Activate("load_failed")
             self.gui.AskProperties()
             return
 
         self.Reload(False)
-        self.outputSavePath = path
-        self.gui.SetTitle(self.outputSavePath, False)
+        if self.exercise.getOutputSavePath() == None:
+            self.SetCanSave(True)
+        else:
+            self.SetCanSave(False)
         self.ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
-        self.SetCanSave(False)
 
     #Change paths of current exercice and reload subtitles and video
     def UpdatePaths(self, videoPath, exercisePath, translationPath):
@@ -377,12 +375,11 @@ class Core(object):
             for error in errorList:
                 self.gui.SignalExerciseBadPath(error)
             self.gui.Activate("load_failed")
-            self.gui.SetTitle(self.outputSavePath, False)
+            self.SetCanSave(False)
             return
 
         self.SetPaths( videoPath, exercisePath, translationPath)
         self.Reload(True)
-        self.gui.SetTitle(self.outputSavePath, True)
         self.SetCanSave(True)
         self.ActivateSequence()
         self.GotoSequenceBegin(True)
@@ -405,9 +402,18 @@ class Core(object):
     def SetCanSave(self, save):
 
         self.gui.SetCanSave(save)
-        if self.last_save != save:
-            self.last_save = save
-            self.gui.SetTitle(self.outputSavePath, save)
+        
+        if self.exercise == None:
+            title = ""
+        elif self.exercise.getName() != None:
+            title = self.exercise.getName()
+        elif self.exercise.getOutputSavePath != None:
+            title = self.exercise.getOutputSavePath()
+        else:
+            title = _("Untitled exercise")
+        
+        self.last_save = save
+        self.gui.SetTitle(title, save)
 
     def GetCanSave(self):
         return self.last_save
