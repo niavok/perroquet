@@ -57,19 +57,15 @@ class ExerciseRepositoryExercise:
         self.mutexInstalling.release()
 
     def download(self):
-        print "Start download"
-
+        
         f=urllib2.urlopen(self.getFilePath())
-        print "Url open" + str(f.info())
         _, tempPath = tempfile.mkstemp("","perroquet-");
         wf = open(tempPath, 'w+b')
-        print "File open"
         size = f.info().get('Content-Length')
         if size is None:
             size = 0
         else:
             size = int(size)
-        print "size " +str(size)
         count=0
         sizeToRead = 50000
         while not self.canceled:
@@ -103,7 +99,7 @@ class ExerciseRepositoryExercise:
                 self.state = "done"
             elif self.isUsed():
                 self.state = "used"
-            if self.isInstalled():
+            elif self.isInstalled():
                 self.state = "installed"
             else:
                 self.state = "available"

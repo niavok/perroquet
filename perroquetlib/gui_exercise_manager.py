@@ -51,16 +51,13 @@ class GuiExerciseManager:
         self.dialog.run()
         self.dialog.destroy()
     def Load(self):
-        print "Load"
         self.play_thread_id = thread.start_new_thread(self.UpdateExerciseListThread, ())
-        #self.UpdateExerciseListThread()
+        
     def UpdateExerciseListThread(self):
         self.labelStatus.set_text(_("Updating repositories..."))
         self.repositoryManager = ExerciseRepositoryManager()
-        print "Get repository list"
         self.repositoryList = self.repositoryManager.getExerciseRepositoryList()
-        print "get repository list"
-
+        
         self.treeStoreExercices = gtk.TreeStore(str,str, str, str, bool, object)
 
         self.availableExoCount = 0
@@ -158,8 +155,7 @@ class GuiExerciseManager:
 
 
     def on_treeviewExercises_cursor_changed(self,widget,data=None):
-        print "on_treeviewExercises_cursor_changed"
-
+        
         (modele, iter) =  self.treeselectionExercises.get_selected()
         self.iterExo = iter
         if iter == None:
@@ -170,7 +166,6 @@ class GuiExerciseManager:
         if isExo:
             self.selectedExo = exo
         else:
-            print "is not exo selected"
             self.selectedExo = None
 
         self._updateActionButton()
@@ -197,7 +192,7 @@ class GuiExerciseManager:
             self.buttonAction.set_sensitive(False)
         elif exo.getState() == "installed":
             self.buttonAction.set_label(_("Use"))
-            self.action = "Use"
+            self.action = "use"
             self.buttonAction.set_sensitive(True)
         elif exo.getState() == "removing":
             self.buttonAction.set_label(_("Remove"))
@@ -218,6 +213,10 @@ class GuiExerciseManager:
             self._installSelectedExercise()
         elif self.action == "cancel":
             self._cancelSelectedExercise()
+        elif self.action == "use":
+            self._useSelectedExercise()
+        elif self.action == "continue":
+            self._continueSelectedExercise()
 
 
     def _installSelectedExercise(self):
@@ -227,6 +226,20 @@ class GuiExerciseManager:
     def _cancelSelectedExercise(self):
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
         exo.cancelInstall()
+    
+    def _useSelectedExercise(self):
+        (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
+        self.core.LoadExercise(exo.getTemplatePath())
+        self.core.exercise.setOutputSavePath(exo.getInstancePath())
+        self.core.Save()
+        self.dialog.response(gtk.RESPONSE_OK)
+
+    
+    def _continueSelectedExercise(self):
+        (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
+        self.core.LoadExercise(exo.getInstancePath())
+        self.dialog.response(gtk.RESPONSE_OK)
+
 
     def _updateStatus(self):
         if self.availableExoCount > 1:

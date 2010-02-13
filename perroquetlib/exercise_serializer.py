@@ -24,6 +24,7 @@
 from xml.dom.minidom import getDOMImplementation, parse
 from exercise import Exercise
 from perroquetlib.config import Config
+import os
 
 class ExerciseLoader(object):
 
@@ -37,16 +38,26 @@ class ExerciseLoader(object):
 
 
     def Load(self, path):
-
         self.exercise = Exercise()
-
+        
         dom = parse(path)
+        
+        #Name
+        if len(dom.getElementsByTagName("name")) > 0:
+                self.exercise.setName(self.getText(dom.getElementsByTagName("name")[0].childNodes))
+        
+        #Template
+        if len(dom.getElementsByTagName("template")) > 0:
+                self.exercise.setTemplate(self.getText(dom.getElementsByTagName("template")[0].childNodes) == "True")
+        
         xml_paths = dom.getElementsByTagName("paths")[0]
         self.exercise.SetVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
         self.exercise.SetExercisePath(self.getText(xml_paths.getElementsByTagName("exercise")[0].childNodes))
 
+        
         self.exercise.SetTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
 
+        
         xml_progress = dom.getElementsByTagName("progress")[0]
         currentWord = int(self.getText(xml_progress.getElementsByTagName("current_word")[0].childNodes))
 
@@ -54,6 +65,7 @@ class ExerciseLoader(object):
 
         self.progress = []
 
+        
         for xml_sequence in xml_sequences.getElementsByTagName("sequence"):
             id = int(self.getText(xml_sequence.getElementsByTagName("id")[0].childNodes))
             state = self.getText(xml_sequence.getElementsByTagName("state")[0].childNodes)
@@ -67,10 +79,11 @@ class ExerciseLoader(object):
             self.progress.append((id, state, words))
 
 
+        
         # Stats
         xml_stats = dom.getElementsByTagName("stats")[0]
         self.exercise.SetRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
-
+        
         # Properties
         if len(dom.getElementsByTagName("properties")) > 0:
             xml_properties = dom.getElementsByTagName("properties")[0]
@@ -80,17 +93,46 @@ class ExerciseLoader(object):
                 self.exercise.SetTimeBetweenSequence(float(self.getText(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
             if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
                 self.exercise.SetMaxSequenceLength(float(self.getText(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
-
+        
+        #Convert relative path
+        
+        
+        if not os.path.isfile(self.exercise.GetExercisePath()):
+            absPath = os.path.join(os.path.dirname(path), self.exercise.GetExercisePath())
+            if not os.path.isfile(absPath):
+                self.exercise.SetExercisePath("")
+            else:
+                self.exercise.SetExercisePath(absPath)
+        
+        if not os.path.isfile(self.exercise.GetVideoPath()):
+            absPath = os.path.join(os.path.dirname(path), self.exercise.GetVideoPath())
+            if not os.path.isfile(absPath):
+                self.exercise.SetVideoPath("")
+            else:
+                self.exercise.SetVideoPath(absPath)
+        
+        if not os.path.isfile(self.exercise.GetTranslationPath()):
+            absPath = os.path.join(os.path.dirname(path), self.exercise.GetTranslationPath())
+            if not os.path.isfile(absPath):
+                self.exercise.SetTranslationPath("")
+            else:
+                self.exercise.SetTranslationPath(absPath)
+                
+        
         self.exercise.LoadSubtitles()
+        
         self.UpdateSequenceList()
-
+        
         self.exercise.SetCurrentSequence(int(self.getText(xml_progress.getElementsByTagName("current_sequence")[0].childNodes)))
 
         self.exercise.GetCurrentSequence().setActiveWordIndex(currentWord)
 
-
+        if not self.exercise.isTemplate():
+            self.exercise.setOutputSavePath(path)
+        
+        
         dom.unlink()
-
+        
         return self.exercise
 
 
@@ -127,6 +169,17 @@ class ExerciseSaver(object):
         xml_version = newdoc.createElement("version")
         xml_version.appendChild(newdoc.createTextNode(self.config.Get("version")))
         root_element.appendChild(xml_version)
+        
+        #Name
+        if exercise.getName() != None:
+            xml_node = newdoc.createElement("name")
+            xml_node.appendChild(newdoc.createTextNode(exercise.getName()))
+            root_element.appendChild(xml_node)
+
+        #Template    
+        xml_node = newdoc.createElement("template")
+        xml_node.appendChild(newdoc.createTextNode(str(exercise.isTemplate())))
+        root_element.appendChild(xml_node)
 
         # Paths
         xml_paths = newdoc.createElement("paths")
