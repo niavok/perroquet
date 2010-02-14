@@ -1,6 +1,7 @@
 [int]
 autosave = 1
 showlateralpanel = 0
+repositorymanager.displayonlyexercises = 1
 
 [string]
 lastopenfile =
