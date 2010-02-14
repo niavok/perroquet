@@ -44,6 +44,9 @@ class GuiExerciseManager:
         self.dialog.set_transient_for(self.parent)
         #self.dialog.set_functions (gtk.gdk.FUNC_RESIZE | gtk.gdk.FUNC_MOVE | gtk.gdk.FUNC_MINIMIZE |gtk.gdk.FUNC_MAXIMIZE)
 
+        checkbuttonTreeViewMode = self.builder.get_object("checkbuttonTreeViewMode")
+        checkbuttonTreeViewMode.props.active = (self.config.Get("repositorymanager.displayonlyexercises") != 1)
+        
 
 
     def Run(self):
@@ -58,35 +61,47 @@ class GuiExerciseManager:
         self.repositoryManager = ExerciseRepositoryManager()
         self.repositoryList = self.repositoryManager.getExerciseRepositoryList()
         
+        self._updateExerciseTreeView()
+        
+    def _updateExerciseTreeView(self):
         self.treeStoreExercices = gtk.TreeStore(str,str, str, str, bool, object)
-
+        
+        displayOnlyExercises = (self.config.Get("repositorymanager.displayonlyexercises") == 1)
+        
         self.availableExoCount = 0
         self.installedExoCount = 0
 
         for repo in self.repositoryList:
+            
+            if not displayOnlyExercises:
+                if repo.getType() == "local":
+                    type = _("Local repository")
+                elif repo.getType() == "distant":
+                    type = _("Distant repository")
+                elif repo.getType() == "offline":
+                    type = _("Offline repository")
+                elif repo.getType() == "orphan":
+                    type = _("Orphan repository")
+                else:
+                    type = _("")
 
-            if repo.getType() == "local":
-                type = _("Local repository")
-            elif repo.getType() == "distant":
-                type = _("Distant repository")
-            elif repo.getType() == "offline":
-                type = _("Offline repository")
-            elif repo.getType() == "orphan":
-                type = _("Orphan repository")
+                desc = repo.getDescription()
+                desc = "<small>"+desc+"</small>"
+                type = "<small>"+type+"</small>"
+                name = "<b>"+ repo.getName()+"</b>"
+                iterRepo = self.treeStoreExercices.append(None,[name, type, desc , "", False, None])
             else:
-                type = _("")
-
-            desc = repo.getDescription()
-            desc = "<small>"+desc+"</small>"
-            type = "<small>"+type+"</small>"
-            name = "<b>"+ repo.getName()+"</b>"
-            iterRepo = self.treeStoreExercices.append(None,[name, type, desc , "", False, None])
+                iterRepo = None
 
             for group in repo.getGroups():
-                desc = group.getDescription()
-                desc = "<small>"+desc+"</small>"
-                name = "<b>"+ group.getName()+"</b>"
-                iterGroup = self.treeStoreExercices.append(iterRepo,[name, _("<small>Group</small>"), desc , "", False, None])
+                if not displayOnlyExercises:
+                
+                    desc = group.getDescription()
+                    desc = "<small>"+desc+"</small>"
+                    name = "<b>"+ group.getName()+"</b>"
+                    iterGroup = self.treeStoreExercices.append(iterRepo,[name, _("<small>Group</small>"), desc , "", False, None])
+                else:
+                    iterGroup = None
 
                 for exo in group.getExercises():
                     descList = textwrap.wrap(exo.getDescription(), 40)
@@ -99,13 +114,20 @@ class GuiExerciseManager:
 
                     desc = "<small>"+desc+"</small>"
 
-                    if exo.isInstalled():
+                    if exo.getState() == "installed":
                         installStatus = _("Installed")
                         self.installedExoCount += 1
-                    else:
+                    elif exo.getState() == "available":
                         installStatus = _("Available")
                         self.availableExoCount += 1
-
+                    elif exo.getState() == "used":
+                        installStatus = _("Used")
+                        self.installedExoCount += 1
+                    elif exo.getState() == "done":
+                        installStatus = _("Done")
+                        self.installedExoCount += 1
+                    
+                        
                     name = "<b>"+ exo.getName()+"</b>"
 
 
@@ -116,7 +138,7 @@ class GuiExerciseManager:
 
         cell = gtk.CellRendererText()
         pix = gtk.CellRendererPixbuf()
-
+        
         treeviewcolumnName = gtk.TreeViewColumn(_("Name"))
         treeviewcolumnName.pack_start(cell, False)
         treeviewcolumnName.add_attribute(cell, 'markup', 0)
@@ -137,6 +159,11 @@ class GuiExerciseManager:
         treeviewcolumnStatus.add_attribute(cell, 'markup', 3)
         treeviewcolumnStatus.set_expand(False)
 
+        columns = self.treeviewExercises.get_columns()
+        
+        for column in columns:
+            self.treeviewExercises.remove_column(column)
+        
         self.treeviewExercises.append_column(treeviewcolumnType)
         self.treeviewExercises.append_column(treeviewcolumnName)
         self.treeviewExercises.append_column(treeviewcolumnDescription)
@@ -290,11 +317,15 @@ class GuiExerciseManager:
 
     def _downloadExerciseThread(self, iter):
         (exo,) = self.treeStoreExercices.get(iter, 5)
-        print "_installSelectedExerciseThread"
         while exo.getState() == "downloading":
-            print " while exo.getState() == downloading:"
             self.treeStoreExercices.set_value(iter, 3, _("<small>Downloading ... %d%%</small>") % exo.getDownloadPercent())
             time.sleep(0.5)
 
 
-
+    def on_checkbuttonTreeViewMode_toggled(self, widget, data=None):
+        checkbuttonTreeViewMode = self.builder.get_object("checkbuttonTreeViewMode")
+        if checkbuttonTreeViewMode.props.active:
+            self.config.Set("repositorymanager.displayonlyexercises",0)
+        else:
+            self.config.Set("repositorymanager.displayonlyexercises",1)
+        self._updateExerciseTreeView()
