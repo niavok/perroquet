@@ -164,7 +164,7 @@ class Config(ConfigSingleton):
         scriptSourceFile = os.path.join( self.Get("script"), "data/sources.conf")
 
         sourcePathList = []
-
+    
         if os.path.isfile(scriptSourceFile):
             sourcePathList.append(scriptSourceFile)
         if os.path.isfile(globalSourceFile):
@@ -173,4 +173,7 @@ class Config(ConfigSingleton):
             sourcePathList.append(localSourceFile)
 
         self.Set("repository_source_list", os.path.join(sourcePathList))
+        self.Set("personal_repository_source_path", localSourceFile)
+        
+        
 

@@ -109,16 +109,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">liststoreRepositories</property>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumnName">
-                        <property name="title">Name</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumnPath">
-                        <property name="title">Path</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="position">0</property>
@@ -170,6 +160,7 @@
                         <property name="use_stock">True</property>
                       </object>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="position">2</property>
                       </packing>
                     </child>

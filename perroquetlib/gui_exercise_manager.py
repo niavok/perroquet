@@ -38,6 +38,7 @@ class GuiExerciseManager:
         self.dialog = self.builder.get_object("dialogExerciseManager")
         self.labelStatus = self.builder.get_object("labelStatus")
         self.treeviewExercises = self.builder.get_object("treeviewExercises")
+        self.treeviewRepositories = self.builder.get_object("treeviewRepositories")
         self.buttonAction = self.builder.get_object("buttonAction")
 
         self.dialog.set_modal(True)
@@ -54,7 +55,8 @@ class GuiExerciseManager:
         self.dialog.run()
         self.dialog.destroy()
     def Load(self):
-        self.play_thread_id = thread.start_new_thread(self.UpdateExerciseListThread, ())
+        #self.play_thread_id = thread.start_new_thread(self.UpdateExerciseListThread, ())
+        self.UpdateExerciseListThread()
         
     def UpdateExerciseListThread(self):
         self.labelStatus.set_text(_("Updating repositories..."))
@@ -62,6 +64,7 @@ class GuiExerciseManager:
         self.repositoryList = self.repositoryManager.getExerciseRepositoryList()
         
         self._updateExerciseTreeView()
+        self._updateRepositoryTreeView()
         
     def _updateExerciseTreeView(self):
         self.treeStoreExercices = gtk.TreeStore(str,str, str, str, bool, object)
@@ -179,6 +182,34 @@ class GuiExerciseManager:
 
 
         self._updateStatus()
+
+    def _updateRepositoryTreeView(self):
+        self.treeStoreRepository = gtk.TreeStore(str,str)
+        
+        personnalRepoList = self.repositoryManager._getPersonalExerciseRepositoryList()
+        
+        for repo in personnalRepoList:
+            #self.treeStoreRepository.append(None,["<small>"+repo+"</small>", repo])
+            self.treeStoreRepository.append(None,[repo, repo])
+            
+
+        cell = gtk.CellRendererText()
+        
+        treeviewcolumnPath = gtk.TreeViewColumn(_("Path"))
+        treeviewcolumnPath.pack_start(cell, True)
+        treeviewcolumnPath.add_attribute(cell, 'markup', 0)
+        treeviewcolumnPath.set_expand(True)
+
+        columns = self.treeviewRepositories.get_columns()
+        
+        for column in columns:
+            self.treeviewRepositories.remove_column(column)
+        
+        self.treeviewRepositories.append_column(treeviewcolumnPath)
+        
+
+        self.treeviewRepositories.set_model(self.treeStoreRepository)
+        self.treeselectionRepositories = self.treeviewRepositories.get_selection()
 
 
     def on_treeviewExercises_cursor_changed(self,widget,data=None):
