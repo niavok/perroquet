@@ -102,31 +102,32 @@ class ExerciseRepositoryManager:
                     repositoryList.append(repository)
 
         return repositoryList
-        
-        
-    
+
+
+
     def _getPersonalExerciseRepositoryList(self):
         repositoryPath = self.config.Get("personal_repository_source_path")
         repositoryList = []
-        
-        f = open(repositoryPath, 'r')
-        for line in f:
-            line = line.rstrip()
-            if line[0] == "#":
-                #Comment line
-                continue
-            
-            repositoryList.append(line)
-                
+
+        if os.path.isfile(repositoryPath):
+            f = open(repositoryPath, 'r')
+            for line in f:
+                line = line.rstrip()
+                if line[0] == "#":
+                    #Comment line
+                    continue
+
+                repositoryList.append(line)
+
         return repositoryList
-        
+
     def _writePersonalExerciseRepositoryList(self, newRepositoryList):
         #The goal of this methods is to make an inteligent write of config file
         #Line biginning with # are comment and must be keep in place
-        
+
         repositoryPath = self.config.Get("personal_repository_source_path")
         oldRepositoryLine = []
-        
+
         f = open(path, 'r')
         for line in f:
             line = line.rstrip()
@@ -136,16 +137,16 @@ class ExerciseRepositoryManager:
             elif line in newRepositoryList:
                 repositoryList.append(line)
                 newRepositoryList.remove(line)
-            
+
         for newRepo in newRepositoryList:
             repositoryList.append(newRepo)
-                
+
         f.close()
-        
+
         f = open(path+".temp", 'w')
         f.writelines(repositoryList)
         f.close()
-                
+
     def _getOrphanExerciseRepositoryList(self,repositoryListIn):
         repoPathList = os.listdir(self.config.Get("local_repo_root_dir"))
         repoUsedPath = []

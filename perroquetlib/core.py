@@ -343,8 +343,8 @@ class Core(object):
             return
         if not self.exercise:
             return
-            
-        
+
+
         validPaths, errorList = self.exercise.IsPathsValid()
         if not validPaths:
             for error in errorList:
@@ -402,16 +402,16 @@ class Core(object):
     def SetCanSave(self, save):
 
         self.gui.SetCanSave(save)
-        
+
         if self.exercise == None:
             title = ""
         elif self.exercise.getName() != None:
             title = self.exercise.getName()
-        elif self.exercise.getOutputSavePath != None:
+        elif self.exercise.getOutputSavePath() != None:
             title = self.exercise.getOutputSavePath()
         else:
             title = _("Untitled exercise")
-        
+
         self.last_save = save
         self.gui.SetTitle(title, save)
 
