@@ -107,6 +107,10 @@ class SubtitlesLoader(object):
                 else:
                     state = SubtitlesLoader.LOOK_FOR_ID
                     outputList.append(current)
+
+        if len(current.GetText()) > 0:
+            outputList.append(current)
+
         return outputList
 
     def CompactSubtitlesList(self, list, timeToMerge, maxTime):
