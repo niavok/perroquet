@@ -217,15 +217,15 @@ class ExerciseSaver(object):
             xml_subExo.appendChild(xml_paths)
 
             xml_video_paths = newdoc.createElement("video")
-            xml_video_paths.appendChild(newdoc.createTextNode(exercise.GetVideoPath()))
+            xml_video_paths.appendChild(newdoc.createTextNode(subExo.GetVideoPath()))
             xml_paths.appendChild(xml_video_paths)
 
             xml_exercice_paths = newdoc.createElement("exercise")
-            xml_exercice_paths.appendChild(newdoc.createTextNode(exercise.GetExercisePath()))
+            xml_exercice_paths.appendChild(newdoc.createTextNode(subExo.GetExercisePath()))
             xml_paths.appendChild(xml_exercice_paths)
 
             xml_translation_paths = newdoc.createElement("translation")
-            xml_translation_paths.appendChild(newdoc.createTextNode(exercise.GetTranslationPath()))
+            xml_translation_paths.appendChild(newdoc.createTextNode(subExo.GetTranslationPath()))
             xml_paths.appendChild(xml_translation_paths)
 
             xml_sequences = newdoc.createElement("sequences")

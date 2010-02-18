@@ -29,12 +29,14 @@ class Exercise(object):
         self.repeatCount = 0
         self.currentSubExerciseId = 0
         self.subExercisesList = []
+        self.currentSubExercise = None
         self.repeatAfterCompeted = True
         self.maxSequenceLength = 60.0
         self.timeBetweenSequence = 0.0
         self.outputSavePath = None
         self.template = False
         self.name = None
+        self.mediaChangeCallback = None
 
     def Initialize(self):
         self.LoadSubtitles()
@@ -72,10 +74,12 @@ class Exercise(object):
         for subExo in self.subExercisesList:
             if localId < len(subExo.GetSequenceList()):
                 subExo.SetCurrentSequence(localId)
-                self.currentSubExercise = subExo
+                if self.currentSubExercise != subExo:
+                    self.currentSubExercise = subExo
+                    self.notifyMediaChange()
                 return True
             else:
-                localId -= len(subExo.GetSequenceCount())
+                localId -= len(subExo.GetSequenceList())
 
 
         self.currentSequenceId = self.GotoSequence(self.GetSequenceCount()-1)
@@ -86,7 +90,12 @@ class Exercise(object):
         return self.GotoSequence(self.currentSequenceId+1)
 
     def GotoPreviousSequence(self):
-        return self.GotoSequence(self.currentSequenceId-1)
+        if self.currentSequenceId > 0:
+            return self.GotoSequence(self.currentSequenceId-1)
+        else:
+            return False
+
+
 
     def IsPathsValid(self):
         error = False
@@ -104,13 +113,13 @@ class Exercise(object):
         self.repeatCount += 1
 
     def SetVideoPath(self, videoPath):
-        self.subExercisesList[0].SetVideoPath(videoPath)
+        elf.currentSubExercise.SetVideoPath(videoPath)
 
     def SetExercisePath(self, exercisePath):
-        self.subExercisesList[0].SetExercisePath(exercisePath)
+        elf.currentSubExercise.SetExercisePath(exercisePath)
 
     def SetTranslationPath(self, translationPath):
-         self.subExercisesList[0].SetTranslationPath(translationPath)
+         elf.currentSubExercise.SetTranslationPath(translationPath)
 
     def getCurrentSequence(self):
         return self.currentSubExercise.getCurrentSequence()
@@ -137,13 +146,13 @@ class Exercise(object):
         return self.repeatCount
 
     def GetVideoPath(self):
-        return self.subExercisesList[0].GetVideoPath()
+        return self.currentSubExercise.GetVideoPath()
 
     def GetExercisePath(self):
-        return self.subExercisesList[0].GetExercisePath()
+        return self.currentSubExercise.GetExercisePath()
 
     def GetTranslationPath(self):
-        return self.subExercisesList[0].GetTranslationPath()
+        return self.currentSubExercise.GetTranslationPath()
 
     def GetTranslationList(self):
         return self.currentSubExercise.GetTranslationList()
@@ -184,3 +193,10 @@ class Exercise(object):
 
     def setTemplate(self, isTemplate):
         self.template = isTemplate
+
+    def setMediaChangeCallback(self, mediaChangeCallback):
+        self.mediaChangeCallback = mediaChangeCallback
+
+    def notifyMediaChange(self):
+        if self.mediaChangeCallback != None:
+            self.mediaChangeCallback()

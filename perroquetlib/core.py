@@ -45,6 +45,7 @@ class Core(object):
     #begin to play
     def NewExercise(self, videoPath, exercisePath, translationPath, load = True):
         self.exercise = Exercise()
+        self.exercise.setMediaChangeCallback(self.mediaChangeCallBack)
         self.exercise.new()
         self.SetPaths(videoPath, exercisePath, translationPath)
         self.exercise.Initialize()
@@ -339,6 +340,7 @@ class Core(object):
         loader = ExerciseLoader()
         try:
             self.exercise = loader.Load(path)
+            self.exercise.setMediaChangeCallback(self.mediaChangeCallBack)
         except IOError:
             print "No file at "+path
             return
@@ -427,3 +429,12 @@ class Core(object):
         self.SetCanSave(True)
 
 
+    def mediaChangeCallBack(self):
+        print "new media : "+self.exercise.GetVideoPath()
+        """self.Pause()
+        self.player.Open(self.exercise.GetVideoPath())
+        """
+        self.Reload(True)
+        self.ActivateSequence()
+        self.GotoSequenceBegin(True)
+        self.Play()
