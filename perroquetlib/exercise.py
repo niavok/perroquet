@@ -19,6 +19,7 @@
 
 from subtitles_loader import SubtitlesLoader
 from sequence import Sequence
+from sub_exercise import SubExercise
 import os
 
 class Exercise(object):
@@ -26,8 +27,8 @@ class Exercise(object):
     def __init__(self):
         self.subtitles = SubtitlesLoader()
         self.repeatCount = 0
-        self.currentSequenceId = 0
-        self.sequenceList = []
+        self.currentSubExerciseId = 0
+        self.subExercisesList = []
         self.repeatAfterCompeted = True
         self.maxSequenceLength = 60.0
         self.timeBetweenSequence = 0.0
@@ -38,105 +39,64 @@ class Exercise(object):
     def Initialize(self):
         self.LoadSubtitles()
 
+    def new(self):
+        if len(self.subExercisesList) == 0:
+            self.currentSubExercise = SubExercise(self)
+            self.subExercisesList.append(self.currentSubExercise)
+            self.currentSubExerciseId = 0
+            self.currentSequenceId = 0
+
     def LoadSubtitles(self):
-        
-        self.subList = self.subtitles.GetSubtitleList(self.exercisePath)
-        self.subList = self.subtitles.CompactSubtitlesList(self.subList, self.timeBetweenSequence, self.maxSequenceLength)
 
-        self.translationList = None
-        if self.translationPath != "":
-            self.translationList = self.subtitles.GetSubtitleList(self.translationPath)
-
-        oldSequenceList = self.sequenceList
-
-        self.sequenceList = []
-
-        for sub in self.subList:
-            self.sequence = Sequence()
-            self.sequence.load(sub.GetText())
-            self.sequence.setTimeBegin(sub.GetTimeBegin())
-            self.sequence.setTimeEnd(sub.GetTimeEnd())
-            self.sequenceList.append(self.sequence)
-
-        #Restore found words
-        if len(oldSequenceList) > 0:
-            oldSequenceIndex = 0
-            newSequenceIndex = 0
-
-            oldWordIndex = 0
-            newWordIndex = 0
-
-            while oldSequenceIndex < len( oldSequenceList) and newSequenceIndex < len(self.sequenceList):
-
-                if oldWordIndex >= oldSequenceList[oldSequenceIndex].getWordCount():
-                    oldSequenceIndex += 1
-                    oldWordIndex = 0
-
-                    if oldSequenceIndex >= len(oldSequenceList):
-                        break
-
-                if newWordIndex >= len(self.sequenceList[newSequenceIndex].getWords()):
-                    newSequenceIndex += 1
-                    newWordIndex = 0
-
-                    if newSequenceIndex >= len(self.sequenceList):
-                        break
-
-                self.sequenceList[newSequenceIndex].getWords()[newWordIndex].setText(oldSequenceList[oldSequenceIndex].getWords()[oldWordIndex].getText())
-                oldWordIndex += 1
-                newWordIndex += 1
-
+        for subExo in self.subExercisesList:
+            subExo.LoadSubtitles()
 
 
     def ExtractWordList(self):
         wordList = []
 
-        for sequence in self.sequenceList:
-            for word in sequence.getWords():
-                wordList.append(word.getText())
+        for subExo in self.subExercisesList:
+            wordList = wordList + subExo.ExtractWordList()
 
+        #Remove double words and sort
         wordList = list(set(wordList))
         wordList.sort()
         return wordList
 
     def GotoSequence(self, id):
+
         self.currentSequenceId = id
-        self.UpdateCurrentInfos()
+        localId = id
+
+
+        for subExo in self.subExercisesList:
+            if localId < len(subExo.GetSequenceList()):
+                subExo.SetCurrentSequence(localId)
+                self.currentSubExercise = subExo
+                return True
+            else:
+                localId -= len(subExo.GetSequenceCount())
+
+
+        self.currentSequenceId = self.GotoSequence(self.GetSequenceCount()-1)
+        return False
+
 
     def GotoNextSequence(self):
-        if self.currentSequenceId < len(self.sequenceList)-1:
-            self.currentSequenceId += 1
-            self.UpdateCurrentInfos()
-            return True
-        else:
-            return False
+        return self.GotoSequence(self.currentSequenceId+1)
 
     def GotoPreviousSequence(self):
-        if self.currentSequenceId > 0:
-            self.currentSequenceId -= 1
-            self.UpdateCurrentInfos()
-            return True
-        else:
-            return False
-
-    def UpdateCurrentInfos(self):
-        self.currentSequence = self.sequenceList[self.currentSequenceId]
-        self.currentSequenceValid = self.currentSequence.isValid()
+        return self.GotoSequence(self.currentSequenceId-1)
 
     def IsPathsValid(self):
         error = False
         errorList = []
-        if not os.path.exists(self.videoPath):
-            error = True;
-            errorList.append(self.videoPath)
 
-        if not os.path.exists(self.exercisePath):
-            error = True;
-            errorList.append(self.exercisePath)
-
-        if self.translationPath != "" and not os.path.exists(self.translationPath):
-            error = True;
-            errorList.append(self.translationPath)
+        for subExo in self.subExercisesList:
+            (valid, subErrorList) = subExo.IsPathsValid()
+            if not valid:
+                error = True
+            errorList = errorList + subErrorList
 
         return (not error), errorList
 
@@ -144,31 +104,31 @@ class Exercise(object):
         self.repeatCount += 1
 
     def SetVideoPath(self, videoPath):
-        self.videoPath = videoPath
+        self.subExercisesList[0].SetVideoPath(videoPath)
 
     def SetExercisePath(self, exercisePath):
-        self.exercisePath = exercisePath
+        self.subExercisesList[0].SetExercisePath(exercisePath)
 
     def SetTranslationPath(self, translationPath):
-        self.translationPath = translationPath
+         self.subExercisesList[0].SetTranslationPath(translationPath)
 
-    def SetCurrentSequence(self, id):
-        if id >= len(self.sequenceList):
-            self.currentSequenceId = len(self.sequenceList)-1
-        else:
-            self.currentSequenceId = id
+    def getCurrentSequence(self):
+        return self.currentSubExercise.getCurrentSequence()
 
-    def GetSequenceList(self):
-        return self.sequenceList
-
-    def GetCurrentSequence(self):
-        return self.sequenceList[self.currentSequenceId]
-
-    def GetCurrentSequenceId(self):
+    def getCurrentSequenceId(self):
         return self.currentSequenceId
 
+    def GetSequenceList(self):
+        list = []
+        for subExo in self.subExercisesList:
+            list += subExo.GetSequenceList()
+        return list
+
     def GetSequenceCount(self):
-        return len(self.sequenceList)
+        count = 0
+        for subExo in self.subExercisesList:
+            count += subExo.GetSequenceCount()
+        return count
 
     def SetRepeatCount(self, count):
         self.repeatCount = count
@@ -177,16 +137,16 @@ class Exercise(object):
         return self.repeatCount
 
     def GetVideoPath(self):
-        return self.videoPath
+        return self.subExercisesList[0].GetVideoPath()
 
     def GetExercisePath(self):
-        return self.exercisePath
+        return self.subExercisesList[0].GetExercisePath()
 
     def GetTranslationPath(self):
-        return self.translationPath
+        return self.subExercisesList[0].GetTranslationPath()
 
     def GetTranslationList(self):
-        return self.translationList
+        return self.currentSubExercise.GetTranslationList()
 
     def SetRepeatAfterCompleted(self, state):
         self.repeatAfterCompeted = state
@@ -208,19 +168,19 @@ class Exercise(object):
 
     def getOutputSavePath(self):
         return self.outputSavePath
-    
+
     def setOutputSavePath(self, outputSavePath):
         self.outputSavePath = outputSavePath
         self.setTemplate(False)
 
     def getName(self):
         return self.name
-        
+
     def setName(self, name):
         self.name = name
 
     def isTemplate(self):
         return self.template
-        
+
     def setTemplate(self, isTemplate):
         self.template = isTemplate
