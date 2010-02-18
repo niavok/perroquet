@@ -87,7 +87,7 @@ class SubExercise(object):
 
         for sequence in self.sequenceList:
             for word in sequence.getWords():
-                wordList.append(word.getText())
+                wordList.append(word.getValid())
 
         return wordList
 
