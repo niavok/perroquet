@@ -171,7 +171,8 @@ class GuiExerciseManager:
         for column in columns:
             self.treeviewExercises.remove_column(column)
 
-        self.treeviewExercises.append_column(treeviewcolumnType)
+        if not displayOnlyExercises:
+            self.treeviewExercises.append_column(treeviewcolumnType)
         self.treeviewExercises.append_column(treeviewcolumnName)
         self.treeviewExercises.append_column(treeviewcolumnDescription)
         self.treeviewExercises.append_column(treeviewcolumnStatus)
