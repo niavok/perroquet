@@ -47,7 +47,7 @@ class GuiExerciseManager:
 
         checkbuttonTreeViewMode = self.builder.get_object("checkbuttonTreeViewMode")
         checkbuttonTreeViewMode.props.active = (self.config.Get("repositorymanager.displayonlyexercises") != 1)
-        
+
 
 
     def Run(self):
@@ -57,25 +57,29 @@ class GuiExerciseManager:
     def Load(self):
         #self.play_thread_id = thread.start_new_thread(self.UpdateExerciseListThread, ())
         self.UpdateExerciseListThread()
-        
+
     def UpdateExerciseListThread(self):
+
+
         self.labelStatus.set_text(_("Updating repositories..."))
         self.repositoryManager = ExerciseRepositoryManager()
-        self.repositoryList = self.repositoryManager.getExerciseRepositoryList()
-        
-        self._updateExerciseTreeView()
         self._updateRepositoryTreeView()
-        
+
+
+        self.repositoryList = self.repositoryManager.getExerciseRepositoryList()
+        self._updateExerciseTreeView()
+
+
     def _updateExerciseTreeView(self):
         self.treeStoreExercices = gtk.TreeStore(str,str, str, str, bool, object)
-        
+
         displayOnlyExercises = (self.config.Get("repositorymanager.displayonlyexercises") == 1)
-        
+
         self.availableExoCount = 0
         self.installedExoCount = 0
 
         for repo in self.repositoryList:
-            
+
             if not displayOnlyExercises:
                 if repo.getType() == "local":
                     type = _("Local repository")
@@ -98,7 +102,7 @@ class GuiExerciseManager:
 
             for group in repo.getGroups():
                 if not displayOnlyExercises:
-                
+
                     desc = group.getDescription()
                     desc = "<small>"+desc+"</small>"
                     name = "<b>"+ group.getName()+"</b>"
@@ -129,8 +133,8 @@ class GuiExerciseManager:
                     elif exo.getState() == "done":
                         installStatus = _("Done")
                         self.installedExoCount += 1
-                    
-                        
+
+
                     name = "<b>"+ exo.getName()+"</b>"
 
 
@@ -141,7 +145,7 @@ class GuiExerciseManager:
 
         cell = gtk.CellRendererText()
         pix = gtk.CellRendererPixbuf()
-        
+
         treeviewcolumnName = gtk.TreeViewColumn(_("Name"))
         treeviewcolumnName.pack_start(cell, False)
         treeviewcolumnName.add_attribute(cell, 'markup', 0)
@@ -163,10 +167,10 @@ class GuiExerciseManager:
         treeviewcolumnStatus.set_expand(False)
 
         columns = self.treeviewExercises.get_columns()
-        
+
         for column in columns:
             self.treeviewExercises.remove_column(column)
-        
+
         self.treeviewExercises.append_column(treeviewcolumnType)
         self.treeviewExercises.append_column(treeviewcolumnName)
         self.treeviewExercises.append_column(treeviewcolumnDescription)
@@ -185,35 +189,35 @@ class GuiExerciseManager:
 
     def _updateRepositoryTreeView(self):
         self.treeStoreRepository = gtk.TreeStore(str,str)
-        
-        personnalRepoList = self.repositoryManager._getPersonalExerciseRepositoryList()
-        
+
+        personnalRepoList = self.repositoryManager.getPersonalExerciseRepositoryList()
+
         for repo in personnalRepoList:
             #self.treeStoreRepository.append(None,["<small>"+repo+"</small>", repo])
             self.treeStoreRepository.append(None,[repo, repo])
-            
+
 
         cell = gtk.CellRendererText()
-        
+
         treeviewcolumnPath = gtk.TreeViewColumn(_("Path"))
         treeviewcolumnPath.pack_start(cell, True)
         treeviewcolumnPath.add_attribute(cell, 'markup', 0)
         treeviewcolumnPath.set_expand(True)
 
         columns = self.treeviewRepositories.get_columns()
-        
+
         for column in columns:
             self.treeviewRepositories.remove_column(column)
-        
+
         self.treeviewRepositories.append_column(treeviewcolumnPath)
-        
+
 
         self.treeviewRepositories.set_model(self.treeStoreRepository)
         self.treeselectionRepositories = self.treeviewRepositories.get_selection()
 
 
     def on_treeviewExercises_cursor_changed(self,widget,data=None):
-        
+
         (modele, iter) =  self.treeselectionExercises.get_selected()
         self.iterExo = iter
         if iter == None:
@@ -284,7 +288,7 @@ class GuiExerciseManager:
     def _cancelSelectedExercise(self):
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
         exo.cancelInstall()
-    
+
     def _useSelectedExercise(self):
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
         self.core.LoadExercise(exo.getTemplatePath())
@@ -292,7 +296,7 @@ class GuiExerciseManager:
         self.core.Save()
         self.dialog.response(gtk.RESPONSE_OK)
 
-    
+
     def _continueSelectedExercise(self):
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
         self.core.LoadExercise(exo.getInstancePath())
@@ -360,3 +364,11 @@ class GuiExerciseManager:
         else:
             self.config.Set("repositorymanager.displayonlyexercises",1)
         self._updateExerciseTreeView()
+
+
+    def on_buttonAddRepo_clicked(self, widget, data=None):
+        personnalRepoList = self.repositoryManager.getPersonalExerciseRepositoryList()
+        personnalRepoList.append(self.builder.get_object("entryNewRepo").get_text())
+        self.builder.get_object("entryNewRepo").set_text("")
+        self.repositoryManager.writePersonalExerciseRepositoryList(personnalRepoList)
+        self.Load()

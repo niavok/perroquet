@@ -76,6 +76,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="clicked" handler="on_buttonDetails_clicked"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -127,7 +128,7 @@
                   <object class="GtkHBox" id="hbox2">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkEntry" id="entry1">
+                      <object class="GtkEntry" id="entryNewRepo">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">&#x2022;</property>
@@ -138,12 +139,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="button3">
+                      <object class="GtkButton" id="buttonAddRepo">
                         <property name="label">gtk-add</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="clicked" handler="on_buttonAddRepo_clicked"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -152,12 +154,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="buttonDelete">
+                      <object class="GtkButton" id="buttonDeleteRepo">
                         <property name="label">gtk-remove</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="clicked" handler="on_buttonDeleteRepo_clicked"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>

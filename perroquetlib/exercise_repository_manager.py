@@ -75,6 +75,9 @@ class ExerciseRepositoryManager:
                 except IOError:
                     print "Fail to connection to repository '"+line+"'"
                     offlineRepoList.append(line)
+                except ValueError:
+                    print "Unknown url type '"+line+"'"
+                    offlineRepoList.append(line)
                 else:
                     print "init distant repo"
                     repository = ExerciseRepository()
@@ -105,7 +108,7 @@ class ExerciseRepositoryManager:
 
 
 
-    def _getPersonalExerciseRepositoryList(self):
+    def getPersonalExerciseRepositoryList(self):
         repositoryPath = self.config.Get("personal_repository_source_path")
         repositoryList = []
 
@@ -121,30 +124,33 @@ class ExerciseRepositoryManager:
 
         return repositoryList
 
-    def _writePersonalExerciseRepositoryList(self, newRepositoryList):
+    def writePersonalExerciseRepositoryList(self, newRepositoryList):
         #The goal of this methods is to make an inteligent write of config file
         #Line biginning with # are comment and must be keep in place
 
         repositoryPath = self.config.Get("personal_repository_source_path")
-        oldRepositoryLine = []
+        repositoryList = []
 
-        f = open(path, 'r')
-        for line in f:
-            line = line.rstrip()
-            if line[0] == "#":
-                #Comment line, set as keep
-                repositoryList.append(line)
-            elif line in newRepositoryList:
-                repositoryList.append(line)
-                newRepositoryList.remove(line)
+        if os.path.isfile(repositoryPath):
+            f = open(repositoryPath, 'r')
+            for line in f:
+                line = line.rstrip()
+                if line[0] == "#":
+                    #Comment line, set as keep
+                    repositoryList.append(line)
+                elif line in newRepositoryList:
+                    repositoryList.append(line)
+                    newRepositoryList.remove(line)
+            f.close()
 
         for newRepo in newRepositoryList:
             repositoryList.append(newRepo)
 
-        f.close()
+        f = open(repositoryPath, 'w')
+        for line in repositoryList:
+            print line
+            f.writelines(line+'\n')
 
-        f = open(path+".temp", 'w')
-        f.writelines(repositoryList)
         f.close()
 
     def _getOrphanExerciseRepositoryList(self,repositoryListIn):
