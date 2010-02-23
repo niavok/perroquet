@@ -32,6 +32,7 @@ class ExerciseRepositoryExercise:
         self.mutexInstalling = Lock()
         self.downloadPercent = 0
         self.state = "none"
+        self.wordsCount = 0
 
     def isInstalled(self):
         return os.path.isfile(self.getTemplatePath())
@@ -57,7 +58,7 @@ class ExerciseRepositoryExercise:
         self.mutexInstalling.release()
 
     def download(self):
-        
+
         f=urllib2.urlopen(self.getFilePath())
         _, tempPath = tempfile.mkstemp("","perroquet-");
         wf = open(tempPath, 'w+b')
@@ -198,6 +199,12 @@ class ExerciseRepositoryExercise:
     def getAuthor(self):
         return self.author
 
+    def setWordsCount(self, wordsCount):
+        self.wordsCount = wordsCount
+
+    def getWordsCount(self):
+        return self.wordsCount
+
     def setAuthorWebsite(self, authorWebsite):
         self.authorWebsite = authorWebsite
 
@@ -260,6 +267,8 @@ class ExerciseRepositoryExercise:
         self.setPackager(self._getText(xml_exercise.getElementsByTagName("packager")[0].childNodes))
         self.setPackagerWebsite(self._getText(xml_exercise.getElementsByTagName("packager_website")[0].childNodes))
         self.setPackagerContact(self._getText(xml_exercise.getElementsByTagName("packager_contact")[0].childNodes))
+        if len(xml_exercise.getElementsByTagName("words_count")) > 0:
+            self.setWordsCount(self._getText(xml_exercise.getElementsByTagName("words_count")[0].childNodes))
         if len(xml_exercise.getElementsByTagName("file")) > 0:
             self.setFilePath(self._getText(xml_exercise.getElementsByTagName("file")[0].childNodes))
 
@@ -303,6 +312,11 @@ class ExerciseRepositoryExercise:
         xml_description = newdoc.createElement("description")
         xml_description.appendChild(newdoc.createTextNode(self.getDescription()))
         root_element.appendChild(xml_description)
+
+        # Words count
+        xml_version = newdoc.createElement("words_count")
+        xml_version.appendChild(newdoc.createTextNode(str(self.getWordsCount())))
+        root_element.appendChild(xml_version)
 
         # Version
         xml_version = newdoc.createElement("exercise_version")

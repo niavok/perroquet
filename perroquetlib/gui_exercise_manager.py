@@ -71,7 +71,7 @@ class GuiExerciseManager:
 
 
     def _updateExerciseTreeView(self):
-        self.treeStoreExercices = gtk.TreeStore(str,str, str, str, bool, object)
+        self.treeStoreExercices = gtk.TreeStore(str,str, str, str, bool, object, str)
 
         displayOnlyExercises = (self.config.Get("repositorymanager.displayonlyexercises") == 1)
 
@@ -96,7 +96,7 @@ class GuiExerciseManager:
                 desc = "<small>"+desc+"</small>"
                 type = "<small>"+type+"</small>"
                 name = "<b>"+ repo.getName()+"</b>"
-                iterRepo = self.treeStoreExercices.append(None,[name, type, desc , "", False, None])
+                iterRepo = self.treeStoreExercices.append(None,[name, type, desc , "", False, None,""])
             else:
                 iterRepo = None
 
@@ -106,7 +106,7 @@ class GuiExerciseManager:
                     desc = group.getDescription()
                     desc = "<small>"+desc+"</small>"
                     name = "<b>"+ group.getName()+"</b>"
-                    iterGroup = self.treeStoreExercices.append(iterRepo,[name, _("<small>Group</small>"), desc , "", False, None])
+                    iterGroup = self.treeStoreExercices.append(iterRepo,[name, _("<small>Group</small>"), desc , "", False, None,""])
                 else:
                     iterGroup = None
 
@@ -137,9 +137,12 @@ class GuiExerciseManager:
 
                     name = "<b>"+ exo.getName()+"</b>"
 
+                    if exo.getWordsCount() == 0:
+                        words = "-"
+                    else:
+                        words = str(exo.getWordsCount())
 
-
-                    iter = self.treeStoreExercices.append(iterGroup,[name, _("<small>Exercise</small>"), desc, installStatus, True, exo])
+                    iter = self.treeStoreExercices.append(iterGroup,[name, _("<small>Exercise</small>"), desc, installStatus, True, exo, words])
                     exo.setStateChangeCallback(self.exerciceStateChangeListener, iter)
 
 
@@ -166,6 +169,11 @@ class GuiExerciseManager:
         treeviewcolumnStatus.add_attribute(cell, 'markup', 3)
         treeviewcolumnStatus.set_expand(False)
 
+        treeviewcolumnWordsCount = gtk.TreeViewColumn(_("Words count"))
+        treeviewcolumnWordsCount.pack_start(cell, False)
+        treeviewcolumnWordsCount.add_attribute(cell, 'markup', 6)
+        treeviewcolumnWordsCount.set_expand(False)
+
         columns = self.treeviewExercises.get_columns()
 
         for column in columns:
@@ -175,6 +183,9 @@ class GuiExerciseManager:
             self.treeviewExercises.append_column(treeviewcolumnType)
         self.treeviewExercises.append_column(treeviewcolumnName)
         self.treeviewExercises.append_column(treeviewcolumnDescription)
+
+        if displayOnlyExercises:
+            self.treeviewExercises.append_column(treeviewcolumnWordsCount)
         self.treeviewExercises.append_column(treeviewcolumnStatus)
 
         self.treeviewExercises.set_expander_column(treeviewcolumnName)
