@@ -110,6 +110,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">liststoreRepositories</property>
+                    <signal name="cursor_changed" handler="on_treeviewRepositories_cursor_changed"/>
                   </object>
                   <packing>
                     <property name="position">0</property>

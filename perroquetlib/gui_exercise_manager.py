@@ -373,3 +373,18 @@ class GuiExerciseManager:
         self.builder.get_object("entryNewRepo").set_text("")
         self.repositoryManager.writePersonalExerciseRepositoryList(personnalRepoList)
         self.Load()
+
+    def on_buttonDeleteRepo_clicked(self, widget, data=None):
+        personnalRepoList = self.repositoryManager.getPersonalExerciseRepositoryList()
+        personnalRepoList.remove(self.builder.get_object("entryNewRepo").get_text())
+        self.builder.get_object("entryNewRepo").set_text("")
+        self.repositoryManager.writePersonalExerciseRepositoryList(personnalRepoList)
+        self.Load()
+
+    def on_treeviewRepositories_cursor_changed(self,widget,data=None):
+
+        (modele, iter) =  self.treeselectionRepositories.get_selected()
+        if iter == None:
+            return
+        (repo,) = self.treeStoreRepository.get(iter, 0)
+        self.builder.get_object("entryNewRepo").set_text(repo)
