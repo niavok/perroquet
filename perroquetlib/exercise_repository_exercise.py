@@ -33,6 +33,7 @@ class ExerciseRepositoryExercise:
         self.downloadPercent = 0
         self.state = "none"
         self.wordsCount = 0
+        self.translationList = []
 
     def isInstalled(self):
         return os.path.isfile(self.getTemplatePath())

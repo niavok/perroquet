@@ -36,6 +36,7 @@ class GuiExerciseManager:
         self.builder.add_from_file(self.config.Get("ui_exercise_manager_path"))
         self.builder.connect_signals(self)
         self.dialog = self.builder.get_object("dialogExerciseManager")
+        self.dialogDetails = self.builder.get_object("dialogDetails")
         self.labelStatus = self.builder.get_object("labelStatus")
         self.treeviewExercises = self.builder.get_object("treeviewExercises")
         self.treeviewRepositories = self.builder.get_object("treeviewRepositories")
@@ -48,7 +49,9 @@ class GuiExerciseManager:
         checkbuttonTreeViewMode = self.builder.get_object("checkbuttonTreeViewMode")
         checkbuttonTreeViewMode.props.active = (self.config.Get("repositorymanager.displayonlyexercises") != 1)
 
+        self.treeviewDetails = self.builder.get_object("treeviewDetails")
 
+        self.selectedExo = None
 
     def Run(self):
         self.Load()
@@ -68,6 +71,8 @@ class GuiExerciseManager:
 
         self.repositoryList = self.repositoryManager.getExerciseRepositoryList()
         self._updateExerciseTreeView()
+
+        self._updateDetailsTreeView()
 
 
     def _updateExerciseTreeView(self):
@@ -227,6 +232,79 @@ class GuiExerciseManager:
         self.treeviewRepositories.set_model(self.treeStoreRepository)
         self.treeselectionRepositories = self.treeviewRepositories.get_selection()
 
+    def _updateDetailsTreeView(self):
+        print "_updateDetailsTreeView"
+        self.treeStoreDetails = gtk.TreeStore(str,str)
+
+        #Clean old colomns
+        columns = self.treeviewDetails.get_columns()
+
+        for column in columns:
+            self.treeviewDetails.remove_column(column)
+
+
+        if self.selectedExo:
+            exo = self.selectedExo
+            if exo.getState() == "installed":
+                installStatus = _("Installed")
+            elif exo.getState() == "available":
+                installStatus = _("Available")
+            elif exo.getState() == "used":
+                installStatus = _("Used")
+            elif exo.getState() == "done":
+                installStatus = _("Done")
+
+            self.treeStoreDetails.append(None,["<b>"+_("Name")+"</b>",exo.getName()])
+            self.treeStoreDetails.append(None,["<b>"+_("Licence")+"</b>",exo.getLicence()])
+            self.treeStoreDetails.append(None,["<b>"+_("Description")+"</b>",exo.getDescription()])
+            self.treeStoreDetails.append(None,["<b>"+_("Author")+"</b>",exo.getAuthor()])
+            self.treeStoreDetails.append(None,["<b>"+_("Author website")+"</b>",exo.getAuthorWebsite()])
+            self.treeStoreDetails.append(None,["<b>"+_("Author contact")+"</b>",exo.getAuthorContact()])
+
+
+            self.treeStoreDetails.append(None,["<b>"+_("Version")+"</b>",exo.getVersion()])
+            self.treeStoreDetails.append(None,["<b>"+_("Words count")+"</b>",exo.getWordsCount()])
+            self.treeStoreDetails.append(None,["<b>"+_("Language")+"</b>",exo.getLanguage()])
+            self.treeStoreDetails.append(None,["<b>"+_("Media type")+"</b>",exo.getMediaType()])
+            self.treeStoreDetails.append(None,["<b>"+_("Id")+"</b>",exo.getId()])
+            self.treeStoreDetails.append(None,["<b>"+_("Install status")+"</b>",installStatus])
+
+
+            for translation in exo.getTranslationsList():
+                self.treeStoreDetails.append(None,["<b>"+_("Translation")+"</b>",translation])
+
+
+
+            self.treeStoreDetails.append(None,["<b>"+_("Packager")+"</b>",exo.getPackager()])
+            self.treeStoreDetails.append(None,["<b>"+_("Packager website")+"</b>",exo.getPackagerWebsite()])
+            self.treeStoreDetails.append(None,["<b>"+_("Packager contact")+"</b>",exo.getPackagerContact()])
+
+            self.treeStoreDetails.append(None,["<b>"+_("Exercise path")+"</b>",exo.getLocalPath()])
+            self.treeStoreDetails.append(None,["<b>"+_("Package path")+"</b>",exo.getFilePath()])
+            self.treeStoreDetails.append(None,["<b>"+_("Template path")+"</b>",exo.getTemplatePath()])
+            self.treeStoreDetails.append(None,["<b>"+_("Instance path")+"</b>",exo.getInstancePath()])
+            self.treeStoreDetails.append(None,["<b>"+_("Done path")+"</b>",exo.getDonePath()])
+
+        cell = gtk.CellRendererText()
+
+        treeviewcolumnName = gtk.TreeViewColumn(_("Name"))
+        treeviewcolumnName.pack_start(cell, False)
+        treeviewcolumnName.add_attribute(cell, 'markup', 0)
+        treeviewcolumnName.set_expand(False)
+
+        treeviewcolumnValue = gtk.TreeViewColumn(_("Value"))
+        treeviewcolumnValue.pack_start(cell, True)
+        treeviewcolumnValue.add_attribute(cell, 'markup', 1)
+        treeviewcolumnValue.set_expand(True)
+
+
+
+        self.treeviewDetails.append_column(treeviewcolumnName)
+        self.treeviewDetails.append_column(treeviewcolumnValue)
+
+
+        self.treeviewDetails.set_model(self.treeStoreDetails)
+
 
     def on_treeviewExercises_cursor_changed(self,widget,data=None):
 
@@ -243,6 +321,7 @@ class GuiExerciseManager:
             self.selectedExo = None
 
         self._updateActionButton()
+        self._updateDetailsTreeView()
 
 
     def _updateActionButton(self):
@@ -399,3 +478,9 @@ class GuiExerciseManager:
             return
         (repo,) = self.treeStoreRepository.get(iter, 0)
         self.builder.get_object("entryNewRepo").set_text(repo)
+
+    def on_expanderDetails_activate(self,widget,data=None):
+        if self.builder.get_object("box1").get_homogeneous():
+            self.builder.get_object("box1").set_homogeneous(False)
+        else:
+            self.builder.get_object("box1").set_homogeneous(True)
