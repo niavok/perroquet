@@ -38,8 +38,7 @@ class VideoPlayer(object):
             self.audiospeedchanger = gst.element_factory_make("pitch")
         except gst.ElementNotFoundError:
             print (_(u"You need to install the gstreamer soundtouch elements for "
-                    "play it slowly to. They are part of gstreamer-plugins-bad. Consult the "
-                    "README if you need more information."))
+                    "play it slowly to."))
             raise SystemExit()
         audiobin.add(self.audiospeedchanger)
 

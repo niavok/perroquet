@@ -20,7 +20,8 @@
 from subtitles_loader import SubtitlesLoader
 from sequence import Sequence
 from sub_exercise import SubExercise
-import os
+from languages_manager import LanguagesManager
+import os, re
 
 class Exercise(object):
 
@@ -37,6 +38,8 @@ class Exercise(object):
         self.template = False
         self.name = None
         self.mediaChangeCallback = None
+        self.language = None
+
 
     def Initialize(self):
         self.LoadSubtitles()
@@ -47,6 +50,8 @@ class Exercise(object):
             self.subExercisesList.append(self.currentSubExercise)
             self.currentSubExerciseId = 0
             self.currentSequenceId = 0
+            languageManager = LanguagesManager()
+            self.language = languageManager.getDefaultLanguage()
 
     def LoadSubtitles(self):
 
@@ -113,13 +118,13 @@ class Exercise(object):
         self.repeatCount += 1
 
     def SetVideoPath(self, videoPath):
-        elf.currentSubExercise.SetVideoPath(videoPath)
+        self.currentSubExercise.SetVideoPath(videoPath)
 
     def SetExercisePath(self, exercisePath):
-        elf.currentSubExercise.SetExercisePath(exercisePath)
+        self.currentSubExercise.SetExercisePath(exercisePath)
 
     def SetTranslationPath(self, translationPath):
-         elf.currentSubExercise.SetTranslationPath(translationPath)
+        self.currentSubExercise.SetTranslationPath(translationPath)
 
     def getCurrentSequence(self):
         return self.currentSubExercise.getCurrentSequence()
@@ -200,3 +205,16 @@ class Exercise(object):
     def notifyMediaChange(self):
         if self.mediaChangeCallback != None:
             self.mediaChangeCallback()
+
+
+    def setLanguageId(self, langId):
+        languageManager = LanguagesManager()
+        self.language =languageManager.getLanguageById(langId)
+
+    def getLanguageId(self):
+        (langId, langName, langCharList) = self.language
+        return langId
+
+    def isCharacterMatch(self,char):
+        (langId, langName, langCharList) = self.language
+        return re.match('^['+langCharList+']$',char)

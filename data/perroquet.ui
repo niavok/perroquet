@@ -90,7 +90,7 @@
                     <property name="visible">True</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitemExerciceManager">
-                        <property name="label" translatable="yes">_Exercice manager</property>
+                        <property name="label" translatable="yes">_Exercise manager</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="image">image2</property>
@@ -726,6 +726,32 @@ Supported format: srt</property>
           </object>
           <packing>
             <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox5">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkLabel" id="labelInputLanguage">
+                <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Exercise language</property>
+                <property name="label" translatable="yes">Language:</property>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="comboboxLanguage">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">4</property>
           </packing>
         </child>
         <child internal-child="action_area">

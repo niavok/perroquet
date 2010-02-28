@@ -22,7 +22,7 @@ import re
 from word import Word, ValidWordError, NoCharPossible
 
 class Sequence(object):
-    def __init__(self, aditionnalChars=""):
+    def __init__(self, charToFind):
 
         # self._symbolList = what is between words (or "")
         # self._wordList = a list of Words items that we want to find
@@ -43,8 +43,8 @@ class Sequence(object):
         self._activeWordIndex = 0
 
         self._helpChar = '~'
-        
-        allChar = "0-9\'a-zA-Z"+aditionnalChars
+
+        allChar = charToFind
         self.validChar = "["+allChar+"]"
         self.notValidChar = "[^"+allChar+"]"
 
@@ -79,13 +79,13 @@ class Sequence(object):
                 else:
                     self._symbolList.append(textToParse)
                 break
-        
+
     def getSymbols(self):
         return self._symbolList
 
     def getWords(self):
         return self._wordList
-    
+
     def getWordCount(self):
         return len(self._wordList)
 
@@ -95,21 +95,21 @@ class Sequence(object):
     def setActiveWordIndex(self, index):
         if index==-1:
             index=self.getWordCount()
-            
+
         if index<0 or index>self.getWordCount():
             raise AttributeError, str(index)
-            
+
         self._activeWordIndex = index
-    
+
     def getLastIndex(self):
         return len(self._wordList) - 1
 
     def getActiveWord(self):
         return self.getWords()[self.getActiveWordIndex()]
-    
+
     def GetWordFound(self):
         return len([w for w in self.getWords() if w.isValid()])
-        
+
     def nextWord(self, loop=False):
         "go to the next word"
         if self.getActiveWordIndex() < self.getLastIndex():
@@ -120,7 +120,7 @@ class Sequence(object):
                 pass
             else:
                 raise NotImplemented
-            
+
     def nextFalseWord(self, loop=False):
         "go to the next non valid word"
         if loop:
@@ -130,7 +130,7 @@ class Sequence(object):
                 return
             self.nextWord()
             self.nextFalseWord()
-    
+
     def previousWord(self, loop=False):
         "go to the previous word"
         if self.getActiveWordIndex() > 0:
@@ -141,7 +141,7 @@ class Sequence(object):
                 pass
             else:
                 raise NotImplemented
-            
+
     def previousFalseWord(self, loop=False):
         "go to the previous non valid word"
         if loop:
@@ -168,7 +168,7 @@ class Sequence(object):
             self.nextFalseWord()
             self.writeChar(char)
         self.updateAfterWrite()
-    
+
     def _writeSentence(self, sentence):
         """write many chars. a ' ' mean next word.
         Only for tests"""
@@ -180,7 +180,7 @@ class Sequence(object):
                 self.nextFalseWord()
             else:
                 self.writeChar(char)
-    
+
     def deleteNextChar(self):
         self.previousFalseWord()
         try:
@@ -203,7 +203,7 @@ class Sequence(object):
             if self.getActiveWordIndex() > 0:
                 self.previousWord()
                 self.deletePreviousChar()
-            
+
         self.updateAfterWrite()
 
     def firstFalseWord(self):
@@ -215,7 +215,7 @@ class Sequence(object):
         self._activeWordIndex = self.getLastIndex()
         self.getActiveWord().setPos(self.getActiveWord().getLastPos())
         self.previousFalseWord()
-        
+
     def nextChar(self):
         try:
             self.getActiveWord().nextChar()
@@ -237,16 +237,16 @@ class Sequence(object):
 
     def isEmpty(self):
         return all(w.isEmpty() for w in self.getWords())
-        
+
     def completeAll(self):
         """Reveal all words"""
         for w in self.getWords():
             w.complete()
-    
+
     def updateAfterWrite(self):
         "update after a modification of the text"
         self._checkLocation()
-    
+
     def _checkLocation(self):
         """Check if a word is correct but at a wrong place."""
         for w1 in self.getWords():
@@ -268,8 +268,8 @@ class Sequence(object):
 
     def setTimeEnd(self, time):
         self.endTime = time
-    
-    def showHint(self): 
+
+    def showHint(self):
         try:
             self.getActiveWord().showHint()
         except ValidWordError:
@@ -278,9 +278,9 @@ class Sequence(object):
             else:
                 self.nextWord()
                 self.showHint()
-    
+
     def __print__(self):
         return "-".join(w.getText() for w in self.getWords())+" VS "+"-".join(w.getValid() for w in self.getWords())
-    
+
     def __repr__(self):
         return self.__print__()

@@ -19,7 +19,7 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 
-import thread, time, re, gtk, os
+import thread, time, gtk, os
 from video_player import VideoPlayer
 from exercise_serializer import ExerciseSaver
 from exercise_serializer import ExerciseLoader
@@ -37,19 +37,22 @@ class Core(object):
         self.last_save = False
         self.exercise = None
 
+
+
     #Call by the main, give an handler to the main gui
     def SetGui(self, gui):
         self.gui = gui
 
     #Create a new exercice based on paths. Load the new exercise and
     #begin to play
-    def NewExercise(self, videoPath, exercisePath, translationPath, load = True):
+    def NewExercise(self, videoPath, exercisePath, translationPath, langId):
         self.exercise = Exercise()
         self.exercise.setMediaChangeCallback(self.mediaChangeCallBack)
         self.exercise.new()
         self.SetPaths(videoPath, exercisePath, translationPath)
+        self.exercise.setLanguageId(langId)
         self.exercise.Initialize()
-        self.Reload(load);
+        self.Reload(True);
         self.ActivateSequence()
         self.gui.SetTitle("", True)
 
@@ -214,7 +217,7 @@ class Core(object):
     #Write a char in current sequence at cursor position
     def WriteChar(self, char):
 
-        if re.match('^[0-9\'a-zA-Z]$',char):
+        if self.exercise.isCharacterMatch(char):
             self.exercise.getCurrentSequence().writeChar(char)
             self.gui.SetSequence(self.exercise.getCurrentSequence())
             self.ValidateSequence()

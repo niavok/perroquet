@@ -25,6 +25,7 @@ from xml.dom.minidom import getDOMImplementation, parse
 from exercise import Exercise
 from sub_exercise import SubExercise
 from perroquetlib.config import Config
+from languages_manager import LanguagesManager
 import os
 
 class ExerciseLoader(object):
@@ -45,11 +46,19 @@ class ExerciseLoader(object):
 
         #Name
         if len(dom.getElementsByTagName("name")) > 0:
-                self.exercise.setName(self.getText(dom.getElementsByTagName("name")[0].childNodes))
+            self.exercise.setName(self.getText(dom.getElementsByTagName("name")[0].childNodes))
+
+        #Language
+        if len(dom.getElementsByTagName("language")) > 0:
+            self.exercise.setLanguageId(self.getText(dom.getElementsByTagName("language")[0].childNodes))
+        else:
+            languageManager = LanguagesManager()
+            (langId, langName, langChars) = languageManager.getDefaultLanguage()
+            self.exercise.setLanguageId(langId)
 
         #Template
         if len(dom.getElementsByTagName("template")) > 0:
-                self.exercise.setTemplate(self.getText(dom.getElementsByTagName("template")[0].childNodes) == "True")
+            self.exercise.setTemplate(self.getText(dom.getElementsByTagName("template")[0].childNodes) == "True")
 
 
         #Exercise
@@ -188,6 +197,12 @@ class ExerciseSaver(object):
         if exercise.getName() != None:
             xml_node = newdoc.createElement("name")
             xml_node.appendChild(newdoc.createTextNode(exercise.getName()))
+            root_element.appendChild(xml_node)
+
+        #Language
+        if exercise.getLanguageId() != None:
+            xml_node = newdoc.createElement("language")
+            xml_node.appendChild(newdoc.createTextNode(exercise.getLanguageId()))
             root_element.appendChild(xml_node)
 
         #Template

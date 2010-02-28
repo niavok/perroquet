@@ -45,8 +45,10 @@ class SubExercise(object):
 
         self.sequenceList = []
 
+        (langId,langName,charToFind) = self.parent.language
+
         for sub in self.subList:
-            self.sequence = Sequence()
+            self.sequence = Sequence(charToFind)
             self.sequence.load(sub.GetText())
             self.sequence.setTimeBegin(sub.GetTimeBegin())
             self.sequence.setTimeEnd(sub.GetTimeEnd())

@@ -24,6 +24,7 @@ import locale
 from perroquetlib.config import Config
 from gui_sequence_properties import GuiSequenceProperties
 from gui_exercise_manager import GuiExerciseManager
+from languages_manager import LanguagesManager
 from word import Word
 
 _ = gettext.gettext
@@ -274,40 +275,40 @@ class Gui:
 
         color_not_found = self.window.get_colormap().alloc_color(
             0*256,
-            0*256, 
+            0*256,
             80*256)
         bcolor_not_found_bad = self.window.get_colormap().alloc_color(
-            250*256, 
-            218*256, 
+            250*256,
+            218*256,
             200*256)
         color_found = self.window.get_colormap().alloc_color(
-            10*256, 
-            150*256, 
+            10*256,
+            150*256,
             10*256)
         def get_bcolor_not_found(score250):
             return self.window.get_colormap().alloc_color(
-                (150+score250*100/250)*256, 
-                (210-score250*210/250/2)*256, 
+                (150+score250*100/250)*256,
+                (210-score250*210/250/2)*256,
                 (250-score250/2)*256)
         def get_bcolor_near(score250):
             return self.window.get_colormap().alloc_color(
-                150*256, 
-                250*256, 
+                150*256,
+                250*256,
                 (250-score250)*256)
 
         buffer.create_tag("symbol",
             size_points=18.0)
         buffer.create_tag("word_empty",
-            background=get_bcolor_not_found(0), 
-            foreground=color_not_found, 
+            background=get_bcolor_not_found(0),
+            foreground=color_not_found,
             size_points=18.0)
         for score250 in xrange(251):
             buffer.create_tag("word_to_found"+str(-score250),
-                background=get_bcolor_not_found(score250), 
-                foreground=color_not_found, 
+                background=get_bcolor_not_found(score250),
+                foreground=color_not_found,
                 size_points=18.0)
         buffer.create_tag("word_found",
-            foreground=color_found, 
+            foreground=color_found,
             size_points=18.0)
         for score250 in xrange(251):
             buffer.create_tag("word_near"+str(score250),
@@ -326,7 +327,7 @@ class Gui:
         elif not path.endswith(".perroquet"):
             path = path +".perroquet"
         return path
-        
+
     def AskProperties(self):
         dialogExerciseProperties = GuiSequenceProperties(self.core, self.window)
         dialogExerciseProperties.Run()
@@ -380,7 +381,7 @@ class Gui:
 
 
     #---------------------- Now the functions called directly by the gui--------
-    
+
     def on_MainWindow_delete_event(self,widget,data=None):
         if not self.config.Get("autosave"):
             if not self.core.GetCanSave():
@@ -418,6 +419,26 @@ class Gui:
         videoChooser.set_filename("None")
         exerciseChooser.set_filename("None")
         translationChooser.set_filename("None")
+
+        self.liststoreLanguage = gtk.ListStore(str,str)
+
+        languageManager = LanguagesManager()
+        languagesList =languageManager.getLanguagesList()
+
+        for language in languagesList:
+            (langId,langName,chars) = language
+            self.liststoreLanguage.append([langName,langId])
+
+        comboboxLanguage = self.builder.get_object("comboboxLanguage")
+
+        cell = gtk.CellRendererText()
+        comboboxLanguage.set_model(self.liststoreLanguage)
+        comboboxLanguage.pack_start(cell, True)
+        comboboxLanguage.add_attribute(cell, 'text', 0)
+
+        firstIter = self.liststoreLanguage.get_iter_first()
+        comboboxLanguage.set_active_iter(firstIter)
+
         self.newExerciseDialog.show()
 
 
@@ -436,12 +457,17 @@ class Gui:
         if translationPath == "None" or translationPath == None:
             translationPath = ""
 
-        self.core.NewExercise(videoPath,exercisePath, translationPath)
+        comboboxLanguage = self.builder.get_object("comboboxLanguage")
+        self.liststoreLanguage.get_iter_first()
+        iter = comboboxLanguage.get_active_iter()
+        langId = self.liststoreLanguage.get_value(iter,1)
+
+        self.core.NewExercise(videoPath,exercisePath, translationPath, langId)
         self.newExerciseDialog.hide()
 
     def on_buttonNewExerciseCancel_clicked(self,widget,data=None):
-        self.newExerciseDialog.hide()    
-    
+        self.newExerciseDialog.hide()
+
     def on_textbufferView_changed(self,widget):
         if self.mode != "loaded":
             self.ClearBuffer();

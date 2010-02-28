@@ -90,6 +90,13 @@ class Config(ConfigSingleton):
         else:
             raise IOError,  "Error : gui file 'exercise_manager.ui' not found"
 
+        if os.path.isfile(os.path.join(self.Get("script"), 'data/languages.list')):
+            self.Set("languages_list_path", os.path.join(self.Get("script"), 'data/languages.list'))
+        elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/languages.list')):
+            self.Set("languages_list_path", os.path.join(self.Get("script"), '../share/perroquet/languages.list'))
+        else:
+            raise IOError,  "Error : data file 'languages.list' not found"
+
         self.loadRepositorySources()
 
         # locale
@@ -164,7 +171,7 @@ class Config(ConfigSingleton):
         scriptSourceFile = os.path.join( self.Get("script"), "data/sources.conf")
 
         sourcePathList = []
-    
+
         if os.path.isfile(scriptSourceFile):
             sourcePathList.append(scriptSourceFile)
         if os.path.isfile(globalSourceFile):
@@ -174,6 +181,6 @@ class Config(ConfigSingleton):
 
         self.Set("repository_source_list", os.path.join(sourcePathList))
         self.Set("personal_repository_source_path", localSourceFile)
-        
-        
+
+
 
