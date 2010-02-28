@@ -21,6 +21,7 @@
 import gtk, time, urllib, re, os, gettext
 import locale
 from perroquetlib.config import Config
+from languages_manager import LanguagesManager
 _ = gettext.gettext
 
 class GuiSequenceProperties:
@@ -73,11 +74,34 @@ class GuiSequenceProperties:
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         checkbuttonRepeatAfterComplete.set_active(self.core.GetExercise().GetRepeatAfterCompleted())
 
-        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        adjustmentTimeBetweenSequence.set_value(self.core.GetExercise().GetTimeBetweenSequence())
+        self.liststoreLanguage = gtk.ListStore(str,str)
 
-        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        adjustmentMaximumSequenceTime.set_value(self.core.GetExercise().GetMaxSequenceLength())
+        languageManager = LanguagesManager()
+        languagesList =languageManager.getLanguagesList()
+
+        currentLangId = self.core.GetExercise().getLanguageId()
+
+        for language in languagesList:
+            (langId,langName,chars) = language
+            iter = self.liststoreLanguage.append([langName,langId])
+            if langId == currentLangId:
+                currentIter = iter
+
+
+        comboboxLanguage = self.builder.get_object("comboboxLanguage")
+
+        cell = gtk.CellRendererText()
+        comboboxLanguage.set_model(self.liststoreLanguage)
+        comboboxLanguage.pack_start(cell, True)
+        comboboxLanguage.add_attribute(cell, 'text', 0)
+
+        comboboxLanguage.set_active_iter(currentIter)
+
+        #adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
+        #adjustmentTimeBetweenSequence.set_value(self.core.GetExercise().GetTimeBetweenSequence())
+
+        #adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
+        #adjustmentMaximumSequenceTime.set_value(self.core.GetExercise().GetMaxSequenceLength())
 
 
     def on_buttonExercisePropOk_clicked(self,widget,data=None):
@@ -100,11 +124,18 @@ class GuiSequenceProperties:
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         self.core.SetRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
 
-        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        self.core.GetExercise().SetTimeBetweenSequence(adjustmentTimeBetweenSequence.get_value())
+        comboboxLanguage = self.builder.get_object("comboboxLanguage")
+        self.liststoreLanguage.get_iter_first()
+        iter = comboboxLanguage.get_active_iter()
+        langId = self.liststoreLanguage.get_value(iter,1)
 
-        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        self.core.GetExercise().SetMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
+        self.core.GetExercise().setLanguageId(langId)
+
+        #adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
+        #self.core.GetExercise().SetTimeBetweenSequence(adjustmentTimeBetweenSequence.get_value())
+
+        #adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
+        #self.core.GetExercise().SetMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
 
         self.core.UpdatePaths(videoPath,exercisePath, translationPath)
 
