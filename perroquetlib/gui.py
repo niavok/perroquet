@@ -22,8 +22,8 @@
 import gtk, time, urllib, re, os, gettext
 import locale
 from perroquetlib.config import Config
-from gui_sequence_properties import GuiSequenceProperties
-from gui_exercise_manager import GuiExerciseManager
+from gui_sequence_properties import *
+from gui_exercise_manager import *
 from languages_manager import LanguagesManager
 from word import Word
 
@@ -330,6 +330,10 @@ class Gui:
 
     def AskProperties(self):
         dialogExerciseProperties = GuiSequenceProperties(self.core, self.window)
+        dialogExerciseProperties.Run()
+
+    def AskPropertiesAdvanced(self):
+        dialogExerciseProperties = GuiSequencePropertiesAdvanced(self.core, self.window)
         dialogExerciseProperties.Run()
 
     def Activate(self, mode):
@@ -685,6 +689,12 @@ class Gui:
 
     def on_imagemenuitemProperties_activate(self,widget,data=None):
         return self.on_toolbuttonProperties_clicked(widget, data)
+
+    def on_imagemenuitemAdvancedProperties_activate(self,widget,data=None):
+        self.AskPropertiesAdvanced()
+
+
+
 
     def on_imagemenuitemQuit_activate(self,widget,data=None):
         return self.on_MainWindow_delete_event(widget, data)

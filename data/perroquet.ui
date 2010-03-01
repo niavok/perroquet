@@ -108,6 +108,16 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkImageMenuItem" id="imagemenuitemAdvancedProperties">
+                        <property name="label" translatable="yes">_Advanced properties</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="image">image3</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_imagemenuitemAdvancedProperties_activate"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkImageMenuItem" id="imagemenuitemPreferences">
                         <property name="label">gtk-preferences</property>
                         <property name="visible">True</property>
@@ -880,5 +890,9 @@ Zarmakuizz</property>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="stock">gtk-missing-image</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-properties</property>
   </object>
 </interface>
