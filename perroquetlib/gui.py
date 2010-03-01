@@ -23,6 +23,7 @@ import gtk, time, urllib, re, os, gettext
 import locale
 from perroquetlib.config import Config
 from gui_sequence_properties import *
+from gui_sequence_properties_advanced import *
 from gui_exercise_manager import *
 from languages_manager import LanguagesManager
 from word import Word

@@ -83,6 +83,13 @@ class Config(ConfigSingleton):
         else:
             raise IOError,  "Error : gui file 'properties.ui' not found"
 
+        if os.path.isfile(os.path.join(self.Get("script"), 'data/properties_advanced.ui')):
+            self.Set("ui_sequence_properties_advanced_path", os.path.join(self.Get("script"), 'data/properties_advanced.ui'))
+        elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/properties.ui')):
+            self.Set("ui_sequence_properties_advanced_path", os.path.join(self.Get("script"), '../share/perroquet/properties_advanced.ui'))
+        else:
+            raise IOError,  "Error : gui file 'properties_advanced.ui' not found"
+
         if os.path.isfile(os.path.join(self.Get("script"), 'data/exercise_manager.ui')):
             self.Set("ui_exercise_manager_path", os.path.join(self.Get("script"), 'data/exercise_manager.ui'))
         elif  os.path.isfile(os.path.join(self.Get("script"), '../share/perroquet/exercise_manager.ui')):

@@ -58,8 +58,8 @@ class GuiExerciseManager:
         self.dialog.run()
         self.dialog.destroy()
     def Load(self):
-        #self.play_thread_id = thread.start_new_thread(self.UpdateExerciseListThread, ())
-        self.UpdateExerciseListThread()
+        self.play_thread_id = thread.start_new_thread(self.UpdateExerciseListThread, ())
+        #self.UpdateExerciseListThread()
 
     def UpdateExerciseListThread(self):
 

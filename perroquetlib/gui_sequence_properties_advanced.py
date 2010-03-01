@@ -24,7 +24,7 @@ from perroquetlib.config import Config
 from languages_manager import LanguagesManager
 _ = gettext.gettext
 
-class GuiSequenceProperties:
+class GuiSequencePropertiesAdvanced:
     def __init__(self, core, parent):
 
         self.core = core
@@ -33,12 +33,9 @@ class GuiSequenceProperties:
 
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
-        self.builder.add_from_file(self.config.Get("ui_sequence_properties_path"))
+        self.builder.add_from_file(self.config.Get("ui_sequence_properties_advanced_path"))
         self.builder.connect_signals(self)
-        self.dialog = self.builder.get_object("dialogExerciseProperties")
-
-        self.pagePaths = self.builder.get_object("pagePaths")
-        self.pageSequences = self.builder.get_object("pageSequences")
+        self.dialog = self.builder.get_object("dialogExercisePropertiesAdvanced")
 
         self.dialog.set_modal(True)
         self.dialog.set_transient_for(self.parent)
@@ -97,15 +94,15 @@ class GuiSequenceProperties:
 
         comboboxLanguage.set_active_iter(currentIter)
 
-        #adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        #adjustmentTimeBetweenSequence.set_value(self.core.GetExercise().GetTimeBetweenSequence())
+        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
+        adjustmentTimeBetweenSequence.set_value(self.core.GetExercise().GetTimeBetweenSequence())
 
-        #adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        #adjustmentMaximumSequenceTime.set_value(self.core.GetExercise().GetMaxSequenceLength())
+        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
+        adjustmentMaximumSequenceTime.set_value(self.core.GetExercise().GetMaxSequenceLength())
 
 
     def on_buttonExercisePropOk_clicked(self,widget,data=None):
-        dialogExerciseProperties = self.builder.get_object("dialogExerciseProperties")
+        dialogExerciseProperties = self.builder.get_object("dialogExercisePropertiesAdvanced")
 
         videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
         videoPath = videoChooser.get_filename()
@@ -131,11 +128,11 @@ class GuiSequenceProperties:
 
         self.core.GetExercise().setLanguageId(langId)
 
-        #adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        #self.core.GetExercise().SetTimeBetweenSequence(adjustmentTimeBetweenSequence.get_value())
+        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
+        self.core.GetExercise().SetTimeBetweenSequence(adjustmentTimeBetweenSequence.get_value())
 
-        #adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        #self.core.GetExercise().SetMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
+        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
+        self.core.GetExercise().SetMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
 
         self.core.UpdatePaths(videoPath,exercisePath, translationPath)
 
@@ -143,4 +140,3 @@ class GuiSequenceProperties:
 
     def on_buttonExercisePropCancel_clicked(self,widget,data=None):
         self.dialog.response(gtk.RESPONSE_CANCEL)
-
