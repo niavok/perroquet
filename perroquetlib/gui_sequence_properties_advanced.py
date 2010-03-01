@@ -71,6 +71,12 @@ class GuiSequencePropertiesAdvanced:
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         checkbuttonRepeatAfterComplete.set_active(self.core.GetExercise().GetRepeatAfterCompleted())
 
+        checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
+        checkbuttonRandomOrder.set_active(self.core.GetExercise().isRandomOrder())
+
+
+
+
         self.liststoreLanguage = gtk.ListStore(str,str)
 
         languageManager = LanguagesManager()
@@ -119,7 +125,10 @@ class GuiSequencePropertiesAdvanced:
 
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        self.core.SetRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
+        self.core.GetExercise().SetRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
+
+        checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
+        self.core.GetExercise().setRandomOrder(checkbuttonRandomOrder.get_active())
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
@@ -135,6 +144,8 @@ class GuiSequencePropertiesAdvanced:
         self.core.GetExercise().SetMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
 
         self.core.UpdatePaths(videoPath,exercisePath, translationPath)
+
+        self.core.SetCanSave(True)
 
         self.dialog.response(gtk.RESPONSE_OK)
 

@@ -97,11 +97,6 @@ class GuiSequenceProperties:
 
         comboboxLanguage.set_active_iter(currentIter)
 
-        #adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        #adjustmentTimeBetweenSequence.set_value(self.core.GetExercise().GetTimeBetweenSequence())
-
-        #adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        #adjustmentMaximumSequenceTime.set_value(self.core.GetExercise().GetMaxSequenceLength())
 
 
     def on_buttonExercisePropOk_clicked(self,widget,data=None):
@@ -122,7 +117,7 @@ class GuiSequenceProperties:
 
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        self.core.SetRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
+        self.core.GetExercise().SetRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
@@ -131,13 +126,10 @@ class GuiSequenceProperties:
 
         self.core.GetExercise().setLanguageId(langId)
 
-        #adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        #self.core.GetExercise().SetTimeBetweenSequence(adjustmentTimeBetweenSequence.get_value())
-
-        #adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        #self.core.GetExercise().SetMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
 
         self.core.UpdatePaths(videoPath,exercisePath, translationPath)
+
+        self.core.SetCanSave(True)
 
         self.dialog.response(gtk.RESPONSE_OK)
 

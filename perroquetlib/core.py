@@ -427,10 +427,6 @@ class Core(object):
     def GetExercise(self):
         return self.exercise
 
-    def SetRepeatAfterCompleted(self, state):
-        self.exercise.SetRepeatAfterCompleted(state)
-        self.SetCanSave(True)
-
 
     def mediaChangeCallBack(self):
         print "new media : "+self.exercise.GetVideoPath()
