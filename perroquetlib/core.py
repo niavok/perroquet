@@ -391,6 +391,15 @@ class Core(object):
         self.GotoSequenceBegin(True)
         self.Play()
 
+    def UpdateProperties(self):
+
+        self.exercise.Initialize()
+        self.Reload(True)
+        self.SetCanSave(True)
+        self.ActivateSequence()
+        self.GotoSequenceBegin(True)
+        self.Play()
+
     #Get paths of current exercise
     def GetPaths(self):
         return (self.exercise.GetVideoPath(), self.exercise.GetExercisePath(), self.exercise.GetTranslationPath())

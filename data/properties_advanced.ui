@@ -2,12 +2,6 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkListStore" id="liststorePathsList">
-    <columns>
-      <!-- column-name Path -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkAdjustment" id="adjustmentTimeBetweenSequence">
     <property name="upper">100</property>
     <property name="step_increment">0.10000000000000001</property>
@@ -60,6 +54,7 @@
                         <property name="visible">True</property>
                         <property name="create_folders">False</property>
                         <property name="title" translatable="yes">Select a video file</property>
+                        <signal name="file_set" handler="on_filechooserbuttonVideoProp_file_set"/>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -67,6 +62,7 @@
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -94,6 +90,7 @@
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -121,6 +118,7 @@
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -132,11 +130,11 @@
                       <object class="GtkHBox" id="hbox10">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkTreeView" id="treeviewPathsList1">
+                          <object class="GtkTreeView" id="treeviewPathsList">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="model">liststorePathsList</property>
                             <property name="search_column">0</property>
+                            <signal name="cursor_changed" handler="on_treeviewPathsList_cursor_changed"/>
                           </object>
                           <packing>
                             <property name="position">0</property>
@@ -153,8 +151,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
+                                <signal name="activate" handler="on_buttonAddPath_activate"/>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -165,8 +165,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
+                                <signal name="activate" handler="on_buttonRemovePath_activate"/>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -177,8 +179,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
+                                <signal name="activate" handler="on_buttonUpPath_activate"/>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
                                 <property name="position">2</property>
                               </packing>
                             </child>
@@ -189,8 +193,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
+                                <signal name="activate" handler="on_buttonDownPath_activate"/>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
                                 <property name="position">3</property>
                               </packing>
                             </child>
