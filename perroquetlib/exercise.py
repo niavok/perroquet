@@ -21,7 +21,7 @@ from subtitles_loader import SubtitlesLoader
 from sequence import Sequence
 from sub_exercise import SubExercise
 from languages_manager import LanguagesManager
-import os, re
+import os, re, random, copy
 
 class Exercise(object):
 
@@ -39,10 +39,16 @@ class Exercise(object):
         self.name = None
         self.mediaChangeCallback = None
         self.language = None
-
+        self.randomOrder = False
 
     def Initialize(self):
-        self.LoadSubtitles()
+        self._LoadSubtitles()
+        if self.randomOrder:
+            self.order = [x for x in range(self.GetSequenceCount())]
+            random.shuffle(self.order)
+            self.reverseOrder = copy.copy(self.order)
+            for i,j in enumerate(self.order):
+                self.reverseOrder[j] = i
 
     def new(self):
         if len(self.subExercisesList) == 0:
@@ -53,7 +59,7 @@ class Exercise(object):
             languageManager = LanguagesManager()
             self.language = languageManager.getDefaultLanguage()
 
-    def LoadSubtitles(self):
+    def _LoadSubtitles(self):
 
         for subExo in self.subExercisesList:
             subExo.LoadSubtitles()
@@ -70,11 +76,10 @@ class Exercise(object):
         wordList.sort()
         return wordList
 
-    def GotoSequence(self, id):
 
+    def GotoSequence(self, id):
         self.currentSequenceId = id
         localId = id
-
 
         for subExo in self.subExercisesList:
             if localId < len(subExo.GetSequenceList()):
@@ -87,18 +92,35 @@ class Exercise(object):
                 localId -= len(subExo.GetSequenceList())
 
 
-        self.currentSequenceId = self.GotoSequence(self.GetSequenceCount()-1)
+        self.GotoSequence(self.GetSequenceCount()-1)
         return False
 
 
     def GotoNextSequence(self):
-        return self.GotoSequence(self.currentSequenceId+1)
+
+        if self.randomOrder:
+            randomId = self.reverseOrder[self.currentSequenceId]
+            randomId += 1
+            if randomId >= len(self.order):
+                randomId = 0
+            return self.GotoSequence(self.order[randomId])
+        else:
+            return self.GotoSequence(self.currentSequenceId+1)
 
     def GotoPreviousSequence(self):
-        if self.currentSequenceId > 0:
-            return self.GotoSequence(self.currentSequenceId-1)
+
+
+        if self.randomOrder:
+            randomId = self.reverseOrder[self.currentSequenceId]
+            randomId -= 1
+            if randomId < 0:
+                randomId = len(self.order)-1
+            return self.GotoSequence(self.order[randomId])
         else:
-            return False
+            if self.currentSequenceId > 0:
+                return self.GotoSequence(self.currentSequenceId-1)
+            else:
+                return False
 
 
 
@@ -198,6 +220,12 @@ class Exercise(object):
 
     def setTemplate(self, isTemplate):
         self.template = isTemplate
+
+    def isRandomOrder(self):
+        return self.randomOrder
+
+    def setRandomOrder(self, isRandomOrder):
+        self.randomOrder = isRandomOrder
 
     def setMediaChangeCallback(self, mediaChangeCallback):
         self.mediaChangeCallback = mediaChangeCallback

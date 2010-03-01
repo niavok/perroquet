@@ -60,6 +60,10 @@ class ExerciseLoader(object):
         if len(dom.getElementsByTagName("template")) > 0:
             self.exercise.setTemplate(self.getText(dom.getElementsByTagName("template")[0].childNodes) == "True")
 
+        #Random order
+        if len(dom.getElementsByTagName("random_order")) > 0:
+            self.exercise.setRandomOrder(self.getText(dom.getElementsByTagName("random_order")[0].childNodes) == "True")
+
 
         #Exercise
         xml_exercise = dom.getElementsByTagName("exercise")[0]
@@ -142,7 +146,7 @@ class ExerciseLoader(object):
                     subExo.SetTranslationPath(absPath)
 
 
-        self.exercise.LoadSubtitles()
+        self.exercise.Initialize()
 
         self.UpdateSequenceList()
 
@@ -208,6 +212,11 @@ class ExerciseSaver(object):
         #Template
         xml_node = newdoc.createElement("template")
         xml_node.appendChild(newdoc.createTextNode(str(exercise.isTemplate())))
+        root_element.appendChild(xml_node)
+
+        #RandomOrder
+        xml_node = newdoc.createElement("random_order")
+        xml_node.appendChild(newdoc.createTextNode(str(exercise.isRandomOrder())))
         root_element.appendChild(xml_node)
 
         #Exercise

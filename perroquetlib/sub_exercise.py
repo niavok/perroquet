@@ -29,9 +29,6 @@ class SubExercise(object):
         self.sequenceList = []
         self.parent = parent
 
-    def Initialize(self):
-        self.LoadSubtitles()
-
     def LoadSubtitles(self):
 
         self.subList = self.subtitles.GetSubtitleList(self.exercisePath)

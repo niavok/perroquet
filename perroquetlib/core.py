@@ -61,7 +61,7 @@ class Core(object):
         self.exercise.SetVideoPath(videoPath)
         self.exercise.SetExercisePath(exercisePath)
         self.exercise.SetTranslationPath(translationPath)
-        self.exercise.LoadSubtitles()
+        self.exercise.Initialize()
 
     #Reload media player and begin to play (if the params is True)
     def Reload(self, load):
