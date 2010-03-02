@@ -13,7 +13,6 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="dialogExercisePropertiesAdvanced">
-    <property name="width_request">400</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Exercise properties</property>
     <property name="modal">True</property>
@@ -222,9 +221,9 @@
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="labelPath1">
+              <object class="GtkLabel" id="labelExercise">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Paths</property>
+                <property name="label" translatable="yes">Exercise</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -267,6 +266,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="clicked" handler="on_buttonDefautTimeBetweenSequences_clicked"/>
                       </object>
                       <packing>
                         <property name="padding">3</property>
@@ -311,6 +311,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="clicked" handler="on_buttonDefautMaximumSequenceTime_clicked"/>
                       </object>
                       <packing>
                         <property name="padding">3</property>
@@ -324,6 +325,94 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkHBox" id="hbox1">
+                    <property name="visible">True</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkLabel" id="labelTimeBeforeSequence">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Playing time before sequences (ms):</property>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="spinbuttonTimeBeforeSequence">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="invisible_char">&#x2022;</property>
+                        <property name="adjustment">adjustmentTimeBeforeSequence</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="buttonDefautTimeBeforeSequence">
+                        <property name="label">gtk-redo</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="use_stock">True</property>
+                        <signal name="clicked" handler="on_buttonDefautTimeBeforeSequence_clicked"/>
+                      </object>
+                      <packing>
+                        <property name="padding">3</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="padding">3</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="hbox6">
+                    <property name="visible">True</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkLabel" id="labelTimeAfterSequence">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Playing time after sequences (ms):</property>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="spinbuttonTimeAfterSequence">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="invisible_char">&#x2022;</property>
+                        <property name="adjustment">adjustmentTimeAfterSequence</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="buttonDefautTimeAfterSequence">
+                        <property name="label">gtk-redo</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="use_stock">True</property>
+                        <signal name="clicked" handler="on_buttonDefautTimeAfterSequence_clicked"/>
+                      </object>
+                      <packing>
+                        <property name="padding">3</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="padding">3</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="checkbuttonRepeatAfterComplete">
                     <property name="label" translatable="yes">Repeat sequences after completed it</property>
                     <property name="visible">True</property>
@@ -332,7 +421,7 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="position">2</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -344,7 +433,7 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="position">3</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
               </object>
@@ -353,9 +442,9 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="labelSequences1">
+              <object class="GtkLabel" id="labelPath1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Sequences</property>
+                <property name="label" translatable="yes">Paths</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -517,9 +606,9 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="labelExercise">
+              <object class="GtkLabel" id="labelSequences1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Exercise</property>
+                <property name="label" translatable="yes">Sequences</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -579,5 +668,17 @@
       <action-widget response="0">buttonExercisePropCancel</action-widget>
       <action-widget response="0">buttonExercisePropOk</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentTimeBeforeSequence">
+    <property name="upper">1000</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">100</property>
+    <property name="page_size">100</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentTimeAfterSequence">
+    <property name="upper">5000</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">100</property>
+    <property name="page_size">100</property>
   </object>
 </interface>

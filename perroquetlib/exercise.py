@@ -40,6 +40,8 @@ class Exercise(object):
         self.mediaChangeCallback = None
         self.language = None
         self.randomOrder = False
+        self.playMarginAfter = 500
+        self.playMarginBefore = 1000
 
     def Initialize(self):
         self._LoadSubtitles()
@@ -246,3 +248,15 @@ class Exercise(object):
     def isCharacterMatch(self,char):
         (langId, langName, langCharList) = self.language
         return re.match('^['+langCharList+']$',char)
+
+    def getPlayMarginBefore(self):
+        return self.playMarginBefore
+
+    def setPlayMarginBefore(self, margin):
+        self.playMarginBefore = margin
+
+    def getPlayMarginAfter(self):
+        return self.playMarginAfter
+
+    def setPlayMarginAfter(self, margin):
+        self.playMarginAfter = margin

@@ -86,6 +86,10 @@ class ExerciseLoader(object):
                 self.exercise.SetTimeBetweenSequence(float(self.getText(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
             if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
                 self.exercise.SetMaxSequenceLength(float(self.getText(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
+            if len(xml_properties.getElementsByTagName("play_margin_before")) > 0:
+                self.exercise.setPlayMarginBefore(int(self.getText(xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
+            if len(xml_properties.getElementsByTagName("play_margin_after")) > 0:
+                self.exercise.setPlayMarginAfter(int(self.getText(xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
 
 
         #Subexercises
@@ -309,6 +313,15 @@ class ExerciseSaver(object):
         xml_timeBetweenSequences = newdoc.createElement("time_between_sequence")
         xml_timeBetweenSequences.appendChild(newdoc.createTextNode(str(exercise.GetTimeBetweenSequence())))
         xml_properties.appendChild(xml_timeBetweenSequences)
+
+        xml_playMarginBefore = newdoc.createElement("play_margin_before")
+        xml_playMarginBefore.appendChild(newdoc.createTextNode(str(exercise.getPlayMarginBefore())))
+        xml_properties.appendChild(xml_playMarginBefore)
+
+        xml_playMarginAfter = newdoc.createElement("play_margin_after")
+        xml_playMarginAfter.appendChild(newdoc.createTextNode(str(exercise.getPlayMarginAfter())))
+        xml_properties.appendChild(xml_playMarginAfter)
+
 
         root_element.appendChild(xml_properties)
 

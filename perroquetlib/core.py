@@ -103,7 +103,7 @@ class Core(object):
     #Stop the media at the end of uncompleted sequences
     def TimeCallback(self):
         if self.state == Core.WAIT_BEGIN:
-            self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + 500)
+            self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + self.exercise.getPlayMarginAfter())
             self.state = Core.WAIT_END
         elif self.state == Core.WAIT_END:
             self.state = Core.WAIT_BEGIN
@@ -204,7 +204,7 @@ class Core(object):
     #as the media player is ready
     def GotoSequenceBegin(self, asSoonAsReady = False):
         self.state = Core.WAIT_END
-        begin_time = self.exercise.getCurrentSequence().getTimeBegin() - 1000
+        begin_time = self.exercise.getCurrentSequence().getTimeBegin() - self.exercise.getPlayMarginBefore()
         if begin_time < 0:
             begin_time = 0
         if asSoonAsReady:
@@ -296,13 +296,13 @@ class Core(object):
 
     #Change position in media and play it
     def SeekSequence(self, time):
-        begin_time = self.exercise.getCurrentSequence().getTimeBegin() - 1000
+        begin_time = self.exercise.getCurrentSequence().getTimeBegin() - self.exercise.getPlayMarginBefore()
         if begin_time < 0:
             begin_time = 0
 
         pos = begin_time + time
         self.player.Seek(pos)
-        self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + 500)
+        self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + self.exercise.getPlayMarginAfter())
         self.state = Core.WAIT_END
         self.Play()
 
@@ -314,7 +314,7 @@ class Core(object):
             pos_int = self.player.GetCurrentTime()
             if pos_int != None:
                 end_time = self.exercise.getCurrentSequence().getTimeEnd()
-                begin_time = self.exercise.getCurrentSequence().getTimeBegin() - 1000
+                begin_time = self.exercise.getCurrentSequence().getTimeBegin() - self.exercise.getPlayMarginBefore()
                 if begin_time < 0:
                     begin_time = 0
                 duration = end_time - begin_time

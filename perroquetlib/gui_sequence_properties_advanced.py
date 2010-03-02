@@ -119,6 +119,13 @@ class GuiSequencePropertiesAdvanced:
         adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
         adjustmentMaximumSequenceTime.set_value(self.core.GetExercise().GetMaxSequenceLength())
 
+        adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
+        adjustmentTimeBeforeSequence.set_value(self.core.GetExercise().getPlayMarginBefore())
+
+        adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
+        adjustmentTimeAfterSequence.set_value(self.core.GetExercise().getPlayMarginAfter())
+
+
         self._updatePathButtons()
 
     def _LoadPath(self, videoPath, exercisePath, translationPath):
@@ -211,6 +218,12 @@ class GuiSequencePropertiesAdvanced:
 
         adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
         self.core.GetExercise().SetMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
+
+        adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
+        self.core.GetExercise().setPlayMarginBefore(int(adjustmentTimeBeforeSequence.get_value()))
+
+        adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
+        self.core.GetExercise().setPlayMarginAfter(int(adjustmentTimeAfterSequence.get_value()))
 
         # Update paths
         if len(self.pathListStore) != len(self.core.GetExercise().subExercisesList):
