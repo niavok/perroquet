@@ -22,6 +22,7 @@ import gtk, time, urllib, re, os, gettext
 import locale
 from perroquetlib.config import Config
 from languages_manager import LanguagesManager
+from exercise import Exercise
 _ = gettext.gettext
 
 class GuiSequencePropertiesAdvanced:
@@ -316,3 +317,29 @@ class GuiSequencePropertiesAdvanced:
         self.pathListStore.remove(self.iterPath)
         self.iterPath = None
         self._updatePathButtons()
+
+
+    def on_buttonDefautTimeBetweenSequences_clicked(self,widget,data=None):
+        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
+        exercice = Exercise()
+        adjustmentTimeBetweenSequence.set_value(exercice.GetTimeBetweenSequence())
+
+    def on_buttonDefautMaximumSequenceTime_clicked(self,widget,data=None):
+        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
+        exercice = Exercise()
+        adjustmentMaximumSequenceTime.set_value(exercice.GetMaxSequenceLength())
+
+    def on_buttonDefautTimeBeforeSequence_clicked(self,widget,data=None):
+        adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
+        exercice = Exercise()
+        adjustmentTimeBeforeSequence.set_value(exercice.getPlayMarginBefore())
+
+    def on_buttonDefautTimeAfterSequence_clicked(self,widget,data=None):
+        adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
+        exercice = Exercise()
+        adjustmentTimeAfterSequence.set_value(exercice.getPlayMarginAfter())
+
+
+
+
+
