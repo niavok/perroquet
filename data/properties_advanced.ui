@@ -151,7 +151,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="on_buttonAddPath_activate"/>
+                                <signal name="clicked" handler="on_buttonAddPath_clicked"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -165,7 +165,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="on_buttonRemovePath_activate"/>
+                                <signal name="clicked" handler="on_buttonRemovePath_clicked"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -179,7 +179,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="on_buttonUpPath_activate"/>
+                                <signal name="clicked" handler="on_buttonUpPath_clicked"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -193,7 +193,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="on_buttonDownPath_activate"/>
+                                <signal name="clicked" handler="on_buttonDownPath_clicked"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

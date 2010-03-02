@@ -119,6 +119,7 @@ class GuiSequencePropertiesAdvanced:
         adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
         adjustmentMaximumSequenceTime.set_value(self.core.GetExercise().GetMaxSequenceLength())
 
+        self._updatePathButtons()
 
     def _LoadPath(self, videoPath, exercisePath, translationPath):
 
@@ -153,12 +154,38 @@ class GuiSequencePropertiesAdvanced:
         self._StorePathChanges()
 
         self.iterPath = iter
+        self._updatePathButtons()
         if iter == None:
             return
 
         videoPath, exercisePath, translationPath = modele.get(iter, 1, 2, 3)
 
         self._LoadPath(videoPath,exercisePath,translationPath)
+
+    def _updatePathButtons(self):
+        if self.iterPath == None:
+            buttonRemovePath = self.builder.get_object("buttonRemovePath")
+            buttonRemovePath.set_sensitive(False)
+            buttonUpPath = self.builder.get_object("buttonUpPath")
+            buttonUpPath.set_sensitive(False)
+            buttonDownPath = self.builder.get_object("buttonDownPath")
+            buttonDownPath.set_sensitive(False)
+        else:
+            buttonRemovePath = self.builder.get_object("buttonRemovePath")
+            buttonRemovePath.set_sensitive(True)
+
+
+            buttonUpPath = self.builder.get_object("buttonUpPath")
+            if self.previous_iter(self.pathListStore,self.iterPath) == None:
+                buttonUpPath.set_sensitive(False)
+            else:
+                buttonUpPath.set_sensitive(True)
+
+            buttonDownPath = self.builder.get_object("buttonDownPath")
+            if self.pathListStore.iter_next(self.iterPath) == None:
+                buttonDownPath.set_sensitive(False)
+            else:
+                buttonDownPath.set_sensitive(True)
 
 
     def on_buttonExercisePropOk_clicked(self,widget,data=None):
@@ -244,3 +271,35 @@ class GuiSequencePropertiesAdvanced:
                 exerciseChooser.set_current_folder(filePath)
             if not translationChooser.get_filename() or not os.path.isfile(translationChooser.get_filename()):
                 translationChooser.set_current_folder(filePath)
+
+    def previous_iter(self, model, iter):
+        if not iter:
+            return None
+        path = model.get_string_from_iter(iter)
+        if not path:
+            return None
+        prow = int(path) - 1
+        if prow == -1:
+            return None
+        prev = model.get_iter_from_string("%d" % prow)
+        return prev
+
+    def on_buttonDownPath_clicked(self,widget,data=None):
+        self.pathListStore.move_after(self.iterPath, self.pathListStore.iter_next(self.iterPath))
+        self._updatePathButtons()
+
+
+    def on_buttonUpPath_clicked(self,widget,data=None):
+        self.pathListStore.move_before(self.iterPath, self.previous_iter(self.pathListStore, self.iterPath))
+        self._updatePathButtons()
+
+    def on_buttonAddPath_clicked(self,widget,data=None):
+        self._StorePathChanges()
+        iter = self.pathListStore.insert_after(self.iterPath, [self.pathListStore.get_value(self.iterPath,0), self.pathListStore.get_value(self.iterPath,1), self.pathListStore.get_value(self.iterPath,2), self.pathListStore.get_value(self.iterPath,3) ])
+        self.iterPath = None
+        self.treeviewSelectionPathsList.select_iter(iter)
+
+    def on_buttonRemovePath_clicked(self,widget,data=None):
+        self.pathListStore.remove(self.iterPath)
+        self.iterPath = None
+        self._updatePathButtons()
