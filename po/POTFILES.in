@@ -4,6 +4,8 @@ perroquetlib/gui.py
 perroquetlib/core.py
 perroquetlib/video_player.py
 perroquetlib/gui_exercise_manager.py
+perroquetlib/gui_sequence_properties_advanced.py
 data/perroquet.desktop.in
 [type: gettext/glade]data/perroquet.ui
 [type: gettext/glade]data/properties.ui
+[type: gettext/glade]data/properties_advanced.ui
