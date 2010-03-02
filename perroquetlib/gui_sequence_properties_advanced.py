@@ -126,6 +126,9 @@ class GuiSequencePropertiesAdvanced:
         adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
         adjustmentTimeAfterSequence.set_value(self.core.GetExercise().getPlayMarginAfter())
 
+        entryExerciseName = self.builder.get_object("entryExerciseName")
+        entryExerciseName.set_text(self.core.GetExercise().getName())
+
 
         self._updatePathButtons()
 
@@ -225,6 +228,11 @@ class GuiSequencePropertiesAdvanced:
 
         adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
         self.core.GetExercise().setPlayMarginAfter(int(adjustmentTimeAfterSequence.get_value()))
+
+        entryExerciseName = self.builder.get_object("entryExerciseName")
+        self.core.GetExercise().setName(entryExerciseName.get_text())
+
+
 
         # Update paths
         if len(self.pathListStore) != len(self.core.GetExercise().subExercisesList):
