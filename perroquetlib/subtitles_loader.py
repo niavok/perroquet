@@ -28,10 +28,6 @@ class SubtitlesLoader(object):
     LOOK_FOR_TIME = 1
     LOOK_FOR_TEXT = 2
 
-    #def __init__(self):
-
-
-
     sourceFormats = ['ascii', 'iso-8859-1']
     targetFormat = 'utf-8'
     outputDir = 'converted'
@@ -67,8 +63,11 @@ class SubtitlesLoader(object):
             if state == SubtitlesLoader.LOOK_FOR_ID:
                 if len(line) > 0:
                     current = Subtitle()
-                    current.SetId(int(line))
-                    state = SubtitlesLoader.LOOK_FOR_TIME
+                    try:
+                        current.SetId(int(line))
+                        state = SubtitlesLoader.LOOK_FOR_TIME
+                    except:
+                        pass
             elif state == SubtitlesLoader.LOOK_FOR_TIME:
                  if len(line) > 0:
                     #00:00:06,290 --> 00:00:07,550
@@ -116,6 +115,7 @@ class SubtitlesLoader(object):
     def CompactSubtitlesList(self, list, timeToMerge, maxTime):
         outputList = []
         id = 0
+        current = None
         for sub in list:
             if id == 0 or (sub.GetTimeBegin() - current.GetTimeEnd() > int(timeToMerge*1000)) or (sub.GetTimeEnd() - current.GetTimeBegin() > int(maxTime*1000)):
                 if id > 0:
@@ -129,10 +129,16 @@ class SubtitlesLoader(object):
             else:
                 current.SetText(current.GetText() + " " + sub.GetText())
                 current.SetTimeEnd(sub.GetTimeEnd())
-        outputList.append(current)
+        if current:
+            outputList.append(current)
         return outputList
 
 class Subtitle(object):
+
+
+    def __init__(self):
+        self.text = ""
+
     def GetText(self):
         return self.text
 
