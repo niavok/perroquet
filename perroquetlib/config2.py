@@ -40,6 +40,9 @@ class Config:
         parser = ConfigParser.ConfigParser()
         localParser = ConfigParser.ConfigParser()
         
+        if not os.path.isfile(referencePath):
+            raise IOError, referencePath
+        
         #Load
         parser.read(referencePath)
         localParser.read(writablePath)
@@ -81,4 +84,10 @@ class Config:
         """Save the properties that have changed"""
         #FIXME: need to create all the recursive dirs, not only the final path
         for (parser, _, path) in self._writableParsers:
-            parser.write(path)
+            parser.write(open(path, "w"))
+    
+    def __str__(self):
+        return str(self._properties)
+    
+    def __repr__(self):
+        return "<Config "+str(self)[:50]+">"
