@@ -30,6 +30,10 @@ APP_VERSION = '1.1.0 dev'
 class Config:
     """Usage: config = Config()
     Warning: all keys must be lowercase"""
+    functionsOfSection = {
+        "int": int,
+        "string": lambda x: x  ,}
+    
     def __init__(self):
         self._properties = {}
         self._writableParsers = [] #[(localParser, writableOptions, writablePath),...]
@@ -37,27 +41,27 @@ class Config:
     
     def loadWritableConfigFile(self, writablePath, referencePath):
         """Load an ini config file that can be modified. Don't deal with file management"""
-        parser = ConfigParser.ConfigParser()
+        #localParser exists because we din't want to fill the wirtablePath
+        #in case the config change
+        parser      = ConfigParser.ConfigParser()
         localParser = ConfigParser.ConfigParser()
         
         if not os.path.isfile(referencePath):
             raise IOError, referencePath
         
         #Load
-        parser.read(referencePath)
         localParser.read(writablePath)
+        
+        parser.read(referencePath)
         writableOptions = dict([(option, section)
                 for section in parser.sections()
                 for option in parser.options(section) ])
-
-        for section in localParser.sections():
-            for (key, value) in localParser.items(section):
-                parser.set(section, key, value)
+        parser.read(writablePath)
         
         #Write
         for section in parser.sections():
             for (key, value) in parser.items(section):
-                self.Set(key, value)
+                self.Set(key, self.functionsOfSection[section](value))
         self._writableParsers.append((localParser, writableOptions, writablePath))
 
     def Get(self, key):
