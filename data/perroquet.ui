@@ -126,11 +126,12 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitemPreferences">
+                      <object class="GtkImageMenuItem" id="imagemenuitemSettings">
                         <property name="label">gtk-preferences</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_imagemenuitemSettings_activate"/>
                       </object>
                     </child>
                   </object>

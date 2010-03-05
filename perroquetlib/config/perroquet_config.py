@@ -35,11 +35,11 @@ config.Set("app_name", APP_NAME)
 #Paths
 config.Set("executable", os.path.dirname(sys.executable))
 config.Set("script", sys.path[0])
-config.Set("localconfigdir", os.path.join(os.path.expanduser("~"), 
+config.Set("localconfigdir", os.path.join(os.path.expanduser("~"),
     ".config/perroquet"))
 config.Set("localdatadir", os.path.join(os.path.expanduser("~"),
     ".local/share/perroquet"))
-config.Set("local_repo_root_dir", 
+config.Set("local_repo_root_dir",
     os.path.join(config.Get("localdatadir"), "repo_root"))
 config.Set("globalconfigdir", "/etc/perroquet") #FIXME ugly
 
@@ -81,6 +81,15 @@ elif  os.path.isfile(os.path.join(config.Get("script"), '../share/perroquet/perr
     config.Set("ui_path", os.path.join(config.Get("script"), '../share/perroquet/perroquet.ui'))
 else:
     raise IOError, "Error : gui file 'perroquet.ui' not found"
+
+#settings.ui
+if os.path.isfile(os.path.join(config.Get("script"), 'data/settings.ui')):
+    config.Set("ui_settings_path", os.path.join(config.Get("script"), 'data/settings.ui'))
+elif  os.path.isfile(os.path.join(config.Get("script"), '../share/perroquet/settings.ui')):
+    config.Set("ui_settings_path", os.path.join(config.Get("script"), '../share/perroquet/settings.ui'))
+else:
+    raise IOError,  "Error : gui file 'settings.ui' not found"
+
 
 #properties.ui
 if os.path.isfile(os.path.join(config.Get("script"), 'data/properties.ui')):

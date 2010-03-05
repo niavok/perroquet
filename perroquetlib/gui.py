@@ -24,6 +24,7 @@ import locale
 from perroquetlib.config import config
 from gui_sequence_properties import *
 from gui_sequence_properties_advanced import *
+from gui_settings import *
 from gui_exercise_manager import *
 from languages_manager import LanguagesManager
 from word import Word
@@ -336,6 +337,10 @@ class Gui:
     def AskPropertiesAdvanced(self):
         dialogExerciseProperties = GuiSequencePropertiesAdvanced(self.core, self.window)
         dialogExerciseProperties.Run()
+
+    def AskSettings(self):
+        dialogSettings = GuiSettings(self.window)
+        dialogSettings.Run()
 
     def Activate(self, mode):
         self.mode = mode
@@ -694,7 +699,8 @@ class Gui:
     def on_imagemenuitemAdvancedProperties_activate(self,widget,data=None):
         self.AskPropertiesAdvanced()
 
-
+    def on_imagemenuitemSettings_activate(self,widget,data=None):
+        self.AskSettings()
 
 
     def on_imagemenuitemQuit_activate(self,widget,data=None):
