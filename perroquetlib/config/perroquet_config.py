@@ -125,14 +125,14 @@ else:
 
 #config.ini
 globalPaths = (
-    os.path.join( config.Get("localconfigdir"), "config.ini"),
+    os.path.join( config.Get("globalconfigdir"), "config.ini"),
     os.path.join(config.Get("script"), 'data/config.ini') ,)
 existantGlobalPaths = [path for path in globalPaths if os.path.isfile(path)]
 if existantGlobalPaths == []:
     raise IOError,  "Error : global conf file 'config.ini' not found"
 else:
     globalPath = existantGlobalPaths[0]
-localPath = os.path.join( config.Get("localconfigdir"), "config")
+localPath = os.path.join( config.Get("localconfigdir"), "config.ini")
 if not os.path.isfile(localPath):
     print "No local conf file found"
 config.loadWritableConfigFile(localPath, globalPath)

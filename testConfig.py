@@ -22,7 +22,7 @@
 import os
 
 import unittest
-from perroquetlib.config_new import Config
+from perroquetlib.config import Config
 
 pathRef = "./testConfigReference.ini"
 pathWritable = "./testConfigWritable.ini"
@@ -61,6 +61,10 @@ class testConfig(unittest.TestCase):
         c=Config()
         self.failUnlessRaises(KeyError, lambda :c.Set("MAJ", 3))
         self.failUnlessRaises(KeyError, lambda :c.Get("MAJ"))
+
+        c.loadWritableConfigFile(pathWritable, pathRef)
+        self.failUnlessRaises(KeyError, lambda :c.Get("easter"))
+
 
 if __name__=="__main__":
     unittest.main()

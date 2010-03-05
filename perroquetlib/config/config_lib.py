@@ -59,9 +59,9 @@ class Config:
         parser.read(writablePath)
         
         #Write
-        for section in parser.sections():
-            for (key, value) in parser.items(section):
-                self.Set(key, self.functionsOfSection[section](value))
+        for (option, section) in writableOptions.items():
+            self.Set(option, self.functionsOfSection[section](parser.get(section, option)))
+
         self._writableParsers.append((localParser, writableOptions, writablePath))
 
     def Get(self, key):
@@ -81,7 +81,7 @@ class Config:
             if key in writableOptions.keys():
                 section = writableOptions[key]
                 if not parser.has_section(section):
-                    localParser.add_section(section)
+                    parser.add_section(section)
                 parser.set(section, key, value)
             
     def Save(self):
@@ -91,7 +91,7 @@ class Config:
             parser.write(open(path, "w"))
     
     def __str__(self):
-        return str(self._properties)
+        return str(self._properties).replace(", ", "\n")
     
     def __repr__(self):
         return "<Config "+str(self)[:50]+">"
