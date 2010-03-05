@@ -1,4 +1,3 @@
-#! /usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2009-2010 Frédéric Bertolus.
@@ -18,29 +17,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
-from core import Core
-from gui.gui import Gui
-import sys, os
 
-class Perroquet(object):
-
-    def __init__(self):
-
-        self.core = Core()
-        self.gui = Gui()
-
-        self.core.SetGui(self.gui)
-        self.gui.SetCore(self.core)
-
-
-    def run(self):
-        if len(sys.argv) > 1:
-            path = os.path.abspath(sys.argv[1])
-            self.core.LoadExercise( path )
-        elif self.gui.config.Get("lastopenfile"):
-            print "last open file : " + self.gui.config.Get("lastopenfile")
-            self.core.LoadExercise(self.gui.config.Get("lastopenfile"))
-
-        self.gui.Run()
-
+"""The gui of perroquet.
+"""
 

@@ -26,8 +26,8 @@ from gui_sequence_properties import *
 from gui_sequence_properties_advanced import *
 from gui_settings import *
 from gui_exercise_manager import *
-from languages_manager import LanguagesManager
-from word import Word
+from perroquetlib.languages_manager import LanguagesManager
+from perroquetlib.word import Word
 
 _ = gettext.gettext
 

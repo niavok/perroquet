@@ -21,8 +21,8 @@
 import gtk, time, urllib, re, os, gettext
 import locale
 from perroquetlib.config import config
-from languages_manager import LanguagesManager
-from exercise import Exercise
+from perroquetlib.languages_manager import LanguagesManager
+from perroquetlib.exercise import Exercise
 _ = gettext.gettext
 
 class GuiSequencePropertiesAdvanced:
