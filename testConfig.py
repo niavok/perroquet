@@ -22,7 +22,7 @@
 import os
 
 import unittest
-from perroquetlib.config2 import Config
+from perroquetlib.config_new import Config
 
 pathRef = "./testConfigReference.ini"
 pathWritable = "./testConfigWritable.ini"
