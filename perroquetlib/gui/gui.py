@@ -413,7 +413,8 @@ class Gui:
             else:
                 return True # returning True avoids it to signal "destroy-event"
         else:
-            self.core.Save()
+            if self.core.GetCanSave():
+                self.core.Save()
             gtk.main_quit()
             self.config.Save()
             return True
