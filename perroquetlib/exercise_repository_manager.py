@@ -18,7 +18,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
-from perroquetlib.config import Config
+from perroquetlib.config import config
 from perroquetlib.exercise_repository import ExerciseRepository
 from perroquetlib.exercise_repository_group import ExerciseRepositoryGroup
 from perroquetlib.exercise_repository_exercise import ExerciseRepositoryExercise
@@ -28,7 +28,7 @@ import urllib2, os
 class ExerciseRepositoryManager:
 
     def __init__(self):
-        self.config = Config()
+        self.config = config
 
     def getExerciseRepositoryList(self):
         repositoryPathList = self.config.Get("repository_source_list")

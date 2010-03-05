@@ -21,7 +21,7 @@
 
 import gtk, time, urllib, re, os, gettext
 import locale
-from perroquetlib.config import Config
+from perroquetlib.config import config
 from gui_sequence_properties import *
 from gui_sequence_properties_advanced import *
 from gui_exercise_manager import *
@@ -32,7 +32,7 @@ _ = gettext.gettext
 
 class Gui:
     def __init__(self):
-        self.config = Config()
+        self.config = config
 
         locale.bindtextdomain(self.config.Get("gettext_package"),self.config.Get("localedir"))
 

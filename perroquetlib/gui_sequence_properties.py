@@ -20,7 +20,7 @@
 
 import gtk, time, urllib, re, os, gettext
 import locale
-from perroquetlib.config import Config
+from perroquetlib.config import config
 from languages_manager import LanguagesManager
 _ = gettext.gettext
 
@@ -28,7 +28,7 @@ class GuiSequenceProperties:
     def __init__(self, core, parent):
 
         self.core = core
-        self.config = Config()
+        self.config = config
         self.parent = parent
 
         self.builder = gtk.Builder()

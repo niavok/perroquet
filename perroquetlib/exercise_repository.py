@@ -18,7 +18,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
-from perroquetlib.config import Config
+from perroquetlib.config import config
 from xml.dom.minidom import getDOMImplementation, parse
 from perroquetlib.exercise_repository_group import ExerciseRepositoryGroup
 from perroquetlib.exercise_repository_exercise import ExerciseRepositoryExercise
@@ -33,7 +33,7 @@ class ExerciseRepository:
         self.version = ""
         self.url = ""
         self.exercisesGroupList = []
-        self.config = Config()
+        self.config = config
 
 
 

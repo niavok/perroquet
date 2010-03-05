@@ -20,7 +20,6 @@
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 from core import Core
 from gui import Gui
-from perroquetlib.config import Config
 import sys, os
 
 class Perroquet(object):

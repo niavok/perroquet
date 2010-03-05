@@ -24,7 +24,7 @@
 from xml.dom.minidom import getDOMImplementation, parse
 from exercise import Exercise
 from sub_exercise import SubExercise
-from perroquetlib.config import Config
+from perroquetlib.config import config
 from languages_manager import LanguagesManager
 import os
 
@@ -189,7 +189,7 @@ class ExerciseSaver(object):
 
     def Save(self,exercise, outputPath):
         self.outputPath = outputPath
-        self.config = Config()
+        self.config = config
 
         impl = getDOMImplementation()
 

@@ -191,3 +191,5 @@ class Config(ConfigSingleton):
 
 
 
+config = Config()
+

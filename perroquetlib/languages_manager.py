@@ -18,7 +18,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
-from perroquetlib.config import Config
+from perroquetlib.config import config
 
 class LanguagesManager:
 
@@ -27,7 +27,7 @@ class LanguagesManager:
     LOOK_FOR_CHARLIST = 2
 
     def __init__(self):
-        self.config = Config()
+        self.config = config
         self.languageList = []
         self._load()
 

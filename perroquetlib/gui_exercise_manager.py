@@ -21,14 +21,14 @@
 import gtk, time, urllib, re, os, gettext
 import locale, thread, textwrap
 from perroquetlib.exercise_repository_manager import *
-from perroquetlib.config import Config
+from perroquetlib.config import config
 _ = gettext.gettext
 
 class GuiExerciseManager:
     def __init__(self, core, parent):
 
         self.core = core
-        self.config = Config()
+        self.config = config
         self.parent = parent
 
         self.builder = gtk.Builder()
