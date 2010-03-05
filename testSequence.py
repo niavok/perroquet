@@ -23,7 +23,7 @@ from perroquetlib.sequence import *
 import unittest
 
 def Seq(text):
-    s=Sequence()
+    s=Sequence("0-9\'a-zA-Z")
     s.load(text)
     return s
 
