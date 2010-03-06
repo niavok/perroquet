@@ -344,6 +344,7 @@ class Gui:
 
     def Activate(self, mode):
         self.mode = mode
+
         if mode == "loaded":
             self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
             self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
@@ -355,6 +356,9 @@ class Gui:
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(True)
             self.builder.get_object("imagemenuitemHint").set_sensitive(True)
             self.builder.get_object("hscaleSpeed").set_sensitive(True)
+            self.builder.get_object("imagemenuitemProperties").set_sensitive(True)
+            self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(True)
+            self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(True)
 
 
         if mode == "load_failed":
@@ -368,6 +372,9 @@ class Gui:
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
             self.builder.get_object("imagemenuitemHint").set_sensitive(False)
             self.builder.get_object("hscaleSpeed").set_sensitive(False)
+            self.builder.get_object("imagemenuitemProperties").set_sensitive(True)
+            self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(True)
+            self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(True)
 
         if mode == "closed":
             self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
@@ -380,6 +387,10 @@ class Gui:
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
             self.builder.get_object("imagemenuitemHint").set_sensitive(False)
             self.builder.get_object("hscaleSpeed").set_sensitive(False)
+            self.builder.get_object("imagemenuitemProperties").set_sensitive(False)
+            self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(False)
+            self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(False)
+
 
     def Run(self):
         gtk.gdk.threads_init()
