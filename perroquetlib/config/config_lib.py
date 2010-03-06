@@ -27,6 +27,40 @@ import ConfigParser
 APP_NAME = 'perroquet'
 APP_VERSION = '1.1.0 dev'
 
+def getWritableOptions(parser):
+    return dict([(option, section)
+                for section in parser.sections()
+                for option in parser.options(section) ])
+
+class Parser(ConfigParser.ConfigParser):
+    def __init__(self):
+        ConfigParser.ConfigParser.__init__(self)
+        
+    def getWritableOptions(self):
+        return dict([(option, section)
+                for section in self.sections()
+                for option in self.options(section) ])
+
+
+class WritableParser(Parser):
+    """a class that deal with writable parsers"""
+    def __init__(self, path):
+        Parser.__init__(self)
+        self.path = path
+        self.read(self.path)
+        self.options = self.getWritableOptions()
+        
+    def save(self):
+        #TODO create the dir .config/perroquet if not existant
+        self.write(open(self.path, "w"))
+        
+    def set_if_existant_key(self, key, value):
+        if key in self.options.keys():
+            section = self.options[key]
+            if not self.has_section(section):
+                self.add_section(section)
+            self.set(section, key, value)
+    
 class Config:
     """Usage: config = Config()
     Warning: all keys must be lowercase"""
@@ -43,15 +77,12 @@ class Config:
         """Load an ini config file that can be modified. Don't deal with file management"""
         #localParser exists because we din't want to fill the wirtablePath
         #in case the config change
-        parser      = ConfigParser.ConfigParser()
-        localParser = ConfigParser.ConfigParser()
+        parser      = Parser()
         
         if not os.path.isfile(referencePath):
             raise IOError, referencePath
         
         #Load
-        localParser.read(writablePath)
-        
         parser.read(referencePath)
         writableOptions = dict([(option, section)
                 for section in parser.sections()
@@ -61,8 +92,10 @@ class Config:
         #Write
         for (option, section) in writableOptions.items():
             self.Set(option, self.functionsOfSection[section](parser.get(section, option)))
-
-        self._writableParsers.append((localParser, writableOptions, writablePath))
+        
+        newParser = WritableParser( writablePath)
+        newParser.options = writableOptions
+        self._writableParsers.append(newParser)
 
     def Get(self, key):
         """Get a propertie"""
@@ -77,18 +110,14 @@ class Config:
 
         self._properties[key] = value
         
-        for (parser, writableOptions, _) in self._writableParsers:
-            if key in writableOptions.keys():
-                section = writableOptions[key]
-                if not parser.has_section(section):
-                    parser.add_section(section)
-                parser.set(section, key, value)
+        for writableParser in self._writableParsers:
+            writableParser.set_if_existant_key(key, value)
             
     def Save(self):
         """Save the properties that have changed"""
         #FIXME: need to create all the recursive dirs, not only the final path
-        for (parser, _, path) in self._writableParsers:
-            parser.write(open(path, "w"))
+        for writableParser in self._writableParsers:
+            writableParser.save()
     
     def __str__(self):
         return str(self._properties).replace(", ", "\n")
