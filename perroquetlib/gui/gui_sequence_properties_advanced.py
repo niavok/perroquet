@@ -127,7 +127,10 @@ class GuiSequencePropertiesAdvanced:
         adjustmentTimeAfterSequence.set_value(self.core.GetExercise().getPlayMarginAfter())
 
         entryExerciseName = self.builder.get_object("entryExerciseName")
-        entryExerciseName.set_text(self.core.GetExercise().getName())
+        if self.core.GetExercise().getName():
+            entryExerciseName.set_text(self.core.GetExercise().getName())
+        else:
+            entryExerciseName.set_text("")
 
 
         self._updatePathButtons()

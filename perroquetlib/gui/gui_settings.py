@@ -48,6 +48,20 @@ class GuiSettings:
 
     def Load(self):
         print "TODO"
+
+
+        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
+        adjustmentTimeBetweenSequence.set_value(float(config.Get("default_exercise_time_between_sequences"))/1000)
+
+        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
+        adjustmentMaximumSequenceTime.set_value(float(config.Get("default_exercise_max_sequence_length"))/1000)
+
+        adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
+        adjustmentTimeBeforeSequence.set_value(float(config.Get("default_exercise_play_margin_after")))
+
+        adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
+        adjustmentTimeAfterSequence.set_value(float(config.Get("default_exercise_play_margin_before")))
+
         """checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         checkbuttonRepeatAfterComplete.set_active(self.core.GetExercise().GetRepeatAfterCompleted())
 
@@ -77,17 +91,7 @@ class GuiSettings:
 
         comboboxLanguage.set_active_iter(currentIter)
 
-        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        adjustmentTimeBetweenSequence.set_value(self.core.GetExercise().GetTimeBetweenSequence())
 
-        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        adjustmentMaximumSequenceTime.set_value(self.core.GetExercise().GetMaxSequenceLength())
-
-        adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
-        adjustmentTimeBeforeSequence.set_value(self.core.GetExercise().getPlayMarginBefore())
-
-        adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
-        adjustmentTimeAfterSequence.set_value(self.core.GetExercise().getPlayMarginAfter())
 
 
 
@@ -95,6 +99,18 @@ class GuiSettings:
 
 
     def on_buttonExercisePropOk_clicked(self,widget,data=None):
+
+        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
+        config.Set("default_exercise_time_between_sequences",int(1000*adjustmentTimeBetweenSequence.get_value()))
+
+        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
+        config.Set("default_exercise_max_sequence_length",int(1000*adjustmentMaximumSequenceTime.get_value()))
+
+        adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
+        config.Set("default_exercise_play_margin_before",int(adjustmentTimeBeforeSequence.get_value()))
+
+        adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
+        config.Set("default_exercise_play_margin_after",int(adjustmentTimeAfterSequence.get_value()))
 
 
         """checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
@@ -110,17 +126,6 @@ class GuiSettings:
 
         self.core.GetExercise().setLanguageId(langId)
 
-        adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        self.core.GetExercise().SetTimeBetweenSequence(adjustmentTimeBetweenSequence.get_value())
-
-        adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        self.core.GetExercise().SetMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
-
-        adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
-        self.core.GetExercise().setPlayMarginBefore(int(adjustmentTimeBeforeSequence.get_value()))
-
-        adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
-        self.core.GetExercise().setPlayMarginAfter(int(adjustmentTimeAfterSequence.get_value()))
         """
         self.dialog.response(gtk.RESPONSE_OK)
 

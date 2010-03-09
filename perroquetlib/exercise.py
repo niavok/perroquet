@@ -21,6 +21,7 @@ from subtitles_loader import SubtitlesLoader
 from sequence import Sequence   #Can be removed ?
 from sub_exercise import SubExercise
 from languages_manager import LanguagesManager
+from perroquetlib.config import config
 import os, re, random, copy
 
 class Exercise(object):
@@ -60,6 +61,11 @@ class Exercise(object):
             self.currentSequenceId = 0
             languageManager = LanguagesManager()
             self.language = languageManager.getDefaultLanguage()
+
+            self.maxSequenceLength = float(config.Get("default_exercise_max_sequence_length"))/1000
+            self.timeBetweenSequence = float(config.Get("default_exercise_time_between_sequences"))/1000
+            self.playMarginAfter = config.Get("default_exercise_play_margin_before")
+            self.playMarginBefore = config.Get("default_exercise_play_margin_after")
 
     def _LoadSubtitles(self):
 
