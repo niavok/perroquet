@@ -123,6 +123,7 @@ class Gui:
 
     def SetCanSave(self, state):
         self.builder.get_object("saveButton").set_sensitive(state)
+        self.builder.get_object("imagemenuitemSave").set_sensitive(state)
 
     def SetWordList(self, wordList):
         self.wordList = wordList
@@ -353,6 +354,7 @@ class Gui:
             self.builder.get_object("toolbuttonProperties").set_sensitive(True)
             self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(True)
             self.builder.get_object("imagemenuitemSaveAs").set_sensitive(True)
+            self.builder.get_object("imagemenuitemSave").set_sensitive(True)
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(True)
             self.builder.get_object("imagemenuitemHint").set_sensitive(True)
             self.builder.get_object("hscaleSpeed").set_sensitive(True)
@@ -369,6 +371,7 @@ class Gui:
             self.builder.get_object("toolbuttonProperties").set_sensitive(True)
             self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
             self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
+            self.builder.get_object("imagemenuitemSave").set_sensitive(False)
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
             self.builder.get_object("imagemenuitemHint").set_sensitive(False)
             self.builder.get_object("hscaleSpeed").set_sensitive(False)
@@ -384,6 +387,7 @@ class Gui:
             self.builder.get_object("toolbuttonProperties").set_sensitive(False)
             self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
             self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
+            self.builder.get_object("imagemenuitemSave").set_sensitive(False)
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
             self.builder.get_object("imagemenuitemHint").set_sensitive(False)
             self.builder.get_object("hscaleSpeed").set_sensitive(False)
