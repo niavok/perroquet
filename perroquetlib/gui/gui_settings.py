@@ -47,8 +47,6 @@ class GuiSettings:
         self.dialog.destroy()
 
     def Load(self):
-        print "TODO"
-
 
         adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
         adjustmentTimeBetweenSequence.set_value(float(config.Get("default_exercise_time_between_sequences"))/1000)
@@ -62,18 +60,19 @@ class GuiSettings:
         adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
         adjustmentTimeAfterSequence.set_value(float(config.Get("default_exercise_play_margin_before")))
 
-        """checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        checkbuttonRepeatAfterComplete.set_active(self.core.GetExercise().GetRepeatAfterCompleted())
+        checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
+        checkbuttonRepeatAfterComplete.set_active(config.Get("default_exercise_repeat_after_competed") == 1)
 
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
-        checkbuttonRandomOrder.set_active(self.core.GetExercise().isRandomOrder())
+        checkbuttonRandomOrder.set_active(config.Get("default_exercise_random_order") == 1)
 
+        # Language
         self.liststoreLanguage = gtk.ListStore(str,str)
 
         languageManager = LanguagesManager()
         languagesList =languageManager.getLanguagesList()
 
-        currentLangId = self.core.GetExercise().getLanguageId()
+        currentLangId = config.Get("default_exercise_language")
 
         for language in languagesList:
             (langId,langName,chars) = language
@@ -91,13 +90,6 @@ class GuiSettings:
 
         comboboxLanguage.set_active_iter(currentIter)
 
-
-
-
-
-        """
-
-
     def on_buttonExercisePropOk_clicked(self,widget,data=None):
 
         adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
@@ -112,21 +104,25 @@ class GuiSettings:
         adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
         config.Set("default_exercise_play_margin_after",int(adjustmentTimeAfterSequence.get_value()))
 
-
-        """checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        self.core.GetExercise().SetRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
+        checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
+        if checkbuttonRepeatAfterComplete.get_active():
+            config.Set("default_exercise_repeat_after_competed",1)
+        else:
+            config.Set("default_exercise_repeat_after_competed",0)
 
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
-        self.core.GetExercise().setRandomOrder(checkbuttonRandomOrder.get_active())
+        if checkbuttonRandomOrder.get_active():
+            config.Set("default_exercise_random_order",1)
+        else:
+            config.Set("default_exercise_random_order",0)
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
         iter = comboboxLanguage.get_active_iter()
         langId = self.liststoreLanguage.get_value(iter,1)
 
-        self.core.GetExercise().setLanguageId(langId)
+        config.Set("default_exercise_language",langId)
 
-        """
         self.dialog.response(gtk.RESPONSE_OK)
 
     def on_buttonExercisePropCancel_clicked(self,widget,data=None):

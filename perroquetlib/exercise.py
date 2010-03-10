@@ -67,6 +67,11 @@ class Exercise(object):
             self.playMarginAfter = config.Get("default_exercise_play_margin_before")
             self.playMarginBefore = config.Get("default_exercise_play_margin_after")
 
+            self.repeatAfterCompeted = (config.Get("default_exercise_repeat_after_competed") == 1)
+            self.randomOrder = (config.Get("default_exercise_random_order") == 1)
+
+            self.setLanguageId(config.Get("default_exercise_language"))
+
     def _LoadSubtitles(self):
 
         for subExo in self.subExercisesList:

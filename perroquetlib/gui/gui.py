@@ -452,17 +452,25 @@ class Gui:
 
         for language in languagesList:
             (langId,langName,chars) = language
-            self.liststoreLanguage.append([langName,langId])
+            iter = self.liststoreLanguage.append([langName,langId])
+            if langId == config.Get("default_exercise_language"):
+                currentIter = iter
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
+
+        #Clear old values
+        comboboxLanguage.clear()
+
+        """columns = comboboxLanguage.get_columns()
+        for column in columns:
+            comboboxLanguage.remove_column(column)"""
 
         cell = gtk.CellRendererText()
         comboboxLanguage.set_model(self.liststoreLanguage)
         comboboxLanguage.pack_start(cell, True)
         comboboxLanguage.add_attribute(cell, 'text', 0)
 
-        firstIter = self.liststoreLanguage.get_iter_first()
-        comboboxLanguage.set_active_iter(firstIter)
+        comboboxLanguage.set_active_iter(currentIter)
 
         self.newExerciseDialog.show()
 

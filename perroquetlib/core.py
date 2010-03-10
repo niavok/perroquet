@@ -49,8 +49,8 @@ class Core(object):
         self.exercise = Exercise()
         self.exercise.setMediaChangeCallback(self.mediaChangeCallBack)
         self.exercise.new()
-        self.SetPaths(videoPath, exercisePath, translationPath)
         self.exercise.setLanguageId(langId)
+        self.SetPaths(videoPath, exercisePath, translationPath)
         self.exercise.Initialize()
         self.Reload(True);
         self.ActivateSequence()
