@@ -342,11 +342,15 @@ class Gui:
     def AskSettings(self):
         dialogSettings = GuiSettings(self.window)
         dialogSettings.Run()
+        self.Refresh()
 
     def Activate(self, mode):
         self.mode = mode
+        self.Refresh()
 
-        if mode == "loaded":
+    def Refresh(self):
+
+        if self.mode == "loaded":
             self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
             self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
             self.builder.get_object("toolbuttonHint").set_sensitive(True)
@@ -363,7 +367,7 @@ class Gui:
             self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(True)
 
 
-        if mode == "load_failed":
+        if self.mode == "load_failed":
             self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
             self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
             self.builder.get_object("toolbuttonHint").set_sensitive(False)
@@ -379,7 +383,7 @@ class Gui:
             self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(True)
             self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(True)
 
-        if mode == "closed":
+        if self.mode == "closed":
             self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
             self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
             self.builder.get_object("toolbuttonHint").set_sensitive(False)
@@ -395,6 +399,12 @@ class Gui:
             self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(False)
             self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(False)
 
+        if config.Get("interface_show_play_pause_buttons") == 1:
+            self.builder.get_object("toolbuttonPlay").show()
+            self.builder.get_object("toolbuttonPause").show()
+        else:
+            self.builder.get_object("toolbuttonPlay").hide()
+            self.builder.get_object("toolbuttonPause").hide()
 
     def Run(self):
         gtk.gdk.threads_init()

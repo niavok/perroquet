@@ -299,7 +299,6 @@
             </child>
             <child>
               <object class="GtkToolButton" id="toolbuttonPause">
-                <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="tooltip_text" translatable="yes">Pause</property>
                 <property name="label" translatable="yes">Pause</property>
@@ -314,7 +313,6 @@
             </child>
             <child>
               <object class="GtkToolButton" id="toolbuttonPlay">
-                <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="tooltip_text" translatable="yes">Play</property>
                 <property name="label" translatable="yes">Play</property>

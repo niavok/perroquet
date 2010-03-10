@@ -66,6 +66,10 @@ class GuiSettings:
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
         checkbuttonRandomOrder.set_active(config.Get("default_exercise_random_order") == 1)
 
+        #Interface
+        checkbuttonShowPlayPauseButtons = self.builder.get_object("checkbuttonShowPlayPauseButtons")
+        checkbuttonShowPlayPauseButtons.set_active(config.Get("interface_show_play_pause_buttons") == 1)
+
         # Language
         self.liststoreLanguage = gtk.ListStore(str,str)
 
@@ -116,6 +120,16 @@ class GuiSettings:
         else:
             config.Set("default_exercise_random_order",0)
 
+        #Interface
+        checkbuttonShowPlayPauseButtons = self.builder.get_object("checkbuttonShowPlayPauseButtons")
+        if checkbuttonShowPlayPauseButtons.get_active():
+            config.Set("interface_show_play_pause_buttons",1)
+        else:
+            config.Set("interface_show_play_pause_buttons",0)
+
+
+
+        #Language
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
         iter = comboboxLanguage.get_active_iter()
