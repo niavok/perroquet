@@ -24,7 +24,7 @@ from video_player import VideoPlayer
 from exercise_serializer import ExerciseSaver
 from exercise_serializer import ExerciseLoader
 from exercise import Exercise
-from word import NoCharPossible, ValidWordError
+from structure import NoCharPossible, ValidWordError
 
 # The Core make the link between the GUI, the vidéo player, the current
 # open exercise and all others part of the application

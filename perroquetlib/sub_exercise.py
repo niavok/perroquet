@@ -18,7 +18,7 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 from subtitles_loader import SubtitlesLoader
-from sequence import Sequence
+from structure import Sequence
 import os
 
 class SubExercise(object):

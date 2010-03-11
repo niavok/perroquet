@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from perroquetlib.word import *
+from perroquetlib.structure import *
 import unittest
 
 class TestLevenshtein(unittest.TestCase):

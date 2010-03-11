@@ -18,7 +18,6 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 from subtitles_loader import SubtitlesLoader
-from sequence import Sequence   #Can be removed ?
 from sub_exercise import SubExercise
 from languages_manager import LanguagesManager
 from perroquetlib.config import config
