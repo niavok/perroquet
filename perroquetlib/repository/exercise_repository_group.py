@@ -21,7 +21,8 @@
 
 import os
 from xml.dom.minidom import getDOMImplementation, parse
-from perroquetlib.exercise_repository_exercise import ExerciseRepositoryExercise
+
+from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
 
 class ExerciseRepositoryGroup:
     def __init__(self):

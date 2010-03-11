@@ -18,10 +18,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
+
 from perroquetlib.config import config
-from perroquetlib.exercise_repository import ExerciseRepository
-from perroquetlib.exercise_repository_group import ExerciseRepositoryGroup
-from perroquetlib.exercise_repository_exercise import ExerciseRepositoryExercise
+from perroquetlib.repository.exercise_repository import ExerciseRepository
+from perroquetlib.repository.exercise_repository_group import ExerciseRepositoryGroup
+from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
+
 from xml.dom.minidom import getDOMImplementation, parse
 import urllib2, os
 
