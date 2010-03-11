@@ -17,16 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-
 import gst
 import gtk
 import thread, time, traceback, sys
 
-
 class VideoPlayer(object):
-
     def __init__(self):
-
 
         self.player =  gst.Pipeline()
         self.playbin =  gst.element_factory_make("playbin2", "player")
@@ -154,7 +150,6 @@ class VideoPlayer(object):
             if pos_int != -1 and self.timeToSeek != -1:
                 self.Seek(self.timeToSeek)
                 self.timeToSeek = -1
-
 
     def Close(self):
         self.player.set_state(gst.STATE_NULL)

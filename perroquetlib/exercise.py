@@ -17,11 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
+import os, re, random, copy
+
 from subtitles_loader import SubtitlesLoader
 from sub_exercise import SubExercise
 from languages_manager import LanguagesManager
 from perroquetlib.config import config
-import os, re, random, copy
 
 class Exercise(object):
 

@@ -17,9 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
 from subtitles_loader import SubtitlesLoader
 from structure import Sequence
-import os
 
 class SubExercise(object):
 

@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-
 import thread, time, gtk, os
+
 from video_player import VideoPlayer
 from exercise_serializer import ExerciseSaver
 from exercise_serializer import ExerciseLoader

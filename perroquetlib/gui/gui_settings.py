@@ -17,11 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import gtk, time, urllib, re, os, gettext
 import locale
+
 from perroquetlib.config import config
 from perroquetlib.languages_manager import LanguagesManager
+
 _ = gettext.gettext
 
 class GuiSettings:

@@ -20,8 +20,10 @@
 
 import gtk, time, urllib, re, os, gettext
 import locale, thread, textwrap
-from perroquetlib.repository.exercise_repository_manager import *
+
+from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 from perroquetlib.config import config
+
 _ = gettext.gettext
 
 class GuiExerciseManager:

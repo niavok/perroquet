@@ -24,9 +24,6 @@ import os, sys
 import gettext
 import ConfigParser
 
-APP_NAME = 'perroquet'
-APP_VERSION = '1.1.0 dev'
-
 class Parser(ConfigParser.ConfigParser):
     """A general class to make parsers"""
     def __init__(self):

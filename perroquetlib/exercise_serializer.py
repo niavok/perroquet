@@ -18,11 +18,12 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 from xml.dom.minidom import getDOMImplementation, parse
+import os
+
 from exercise import Exercise
 from sub_exercise import SubExercise
 from perroquetlib.config import config
 from languages_manager import LanguagesManager
-import os
 
 class ExerciseLoader(object):
 

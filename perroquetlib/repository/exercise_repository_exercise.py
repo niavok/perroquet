@@ -23,7 +23,6 @@ import thread, urllib2, tempfile, os, tarfile, errno
 from xml.dom.minidom import getDOMImplementation, parse
 from multiprocessing import Lock
 
-
 class ExerciseRepositoryExercise:
     def __init__(self):
         self.id ="no-id"
