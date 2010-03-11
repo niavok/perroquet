@@ -242,6 +242,11 @@ class Sequence(object):
         """Reveal all words"""
         for w in self.getWords():
             w.complete()
+            
+    def erase(self):
+        "RAZ the current seq"
+        for w in self.getWords():
+            w.erase()
 
     def updateAfterWrite(self):
         "update after a modification of the text"

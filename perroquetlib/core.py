@@ -190,7 +190,11 @@ class Core(object):
         else:
             repeatRate = float(self.exercise.GetRepeatCount()) / float(wordFound)
         self.gui.SetStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
-
+    
+    def update(self):
+        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.ValidateSequence()
+    
     #Verify if the sequence is complete
     def ValidateSequence(self):
         if self.exercise.getCurrentSequence().isValid():
@@ -216,24 +220,22 @@ class Core(object):
 
     #Write a char in current sequence at cursor position
     def WriteChar(self, char):
-
         if self.exercise.isCharacterMatch(char):
             self.exercise.getCurrentSequence().writeChar(char)
-            self.gui.SetSequence(self.exercise.getCurrentSequence())
-            self.ValidateSequence()
+            self.update()
             self.SetCanSave(True)
         else:
-            self.gui.SetSequence(self.exercise.getCurrentSequence())
+            pass
 
     #Goto next word in current sequence
     def NextWord(self):
         self.exercise.getCurrentSequence().nextWord()
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.update()
 
     #Goto previous word in current sequence
     def PreviousWord(self):
         self.exercise.getCurrentSequence().previousWord()
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.update()
 
     #Choose current word in current sequence
     def SelectSequenceWord(self, wordIndex,wordIndexPos):
@@ -241,52 +243,55 @@ class Core(object):
             self.exercise.getCurrentSequence().selectSequenceWord(wordIndex,wordIndexPos)
         except NoCharPossible:
             self.exercise.getCurrentSequence().selectSequenceWord(wordIndex,-1)
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.update()
 
     #Goto first word in current sequence
     def FirstWord(self):
         self.exercise.getCurrentSequence().firstFalseWord()
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.update()
 
     #Goto last word in current sequence
     def LastWord(self):
         self.exercise.getCurrentSequence().lastFalseWord()
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.update()
 
     #Delete a char before the cursor in current sequence
     def DeletePreviousChar(self):
         self.exercise.getCurrentSequence().deletePreviousChar()
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
-        self.ValidateSequence()
+        self.update()
         self.SetCanSave(True)
 
     #Delete a char after the cursor in current sequence
     def DeleteNextChar(self):
         self.exercise.getCurrentSequence().deleteNextChar()
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
-        self.ValidateSequence()
+        self.update()
         self.SetCanSave(True)
 
     #Goto previous char in current sequence
     def PreviousChar(self):
         self.exercise.getCurrentSequence().previousChar()
         #The sequence don't change but the cursor position is no more up to date
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.update()
 
     #Goto next char in current sequence
     def NextChar(self):
         self.exercise.getCurrentSequence().nextChar()
         #The sequence don't change but the cursor position is no more up to date
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.update()
 
     #Reveal correction for word at cursor in current sequence
     def CompleteWord(self):
         self.exercise.getCurrentSequence().showHint()
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
         self.exercise.getCurrentSequence().nextChar()
-        self.ValidateSequence()
+        self.update()
         self.SetCanSave(True)
-
+    
+    #Erase the current sequence
+    def eraseCurrentSequence(self):
+        self.exercise.getCurrentSequence().erase()
+        self.update()
+        self.SetCanSave(True)
+        
     #Pause or play media
     def togglePause(self):
         if self.player.IsPaused() and self.paused:
@@ -392,7 +397,6 @@ class Core(object):
         self.Play()
 
     def UpdateProperties(self):
-
         self.exercise.Initialize()
         self.Reload(True)
         self.SetCanSave(True)
@@ -415,7 +419,6 @@ class Core(object):
 
     #Signal to the gui that the exercise has unsaved changes
     def SetCanSave(self, save):
-
         self.gui.SetCanSave(save)
 
         if self.exercise == None:
@@ -435,7 +438,6 @@ class Core(object):
 
     def GetExercise(self):
         return self.exercise
-
 
     def mediaChangeCallBack(self):
         print "new media : "+self.exercise.GetVideoPath()

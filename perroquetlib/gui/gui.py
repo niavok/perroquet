@@ -565,6 +565,8 @@ class Gui:
         elif keyname == "F2":
             toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
             toggletoolbuttonShowTranslation.set_active(not toggletoolbuttonShowTranslation.get_active())
+        elif keyname == "F9":
+            self.toggleLateralPanel()
         elif keyname == "Pause":
             self.core.togglePause()
         elif keyname == "KP_Add":
@@ -710,7 +712,6 @@ class Gui:
             scrolledwindowTranslation.show()
             self.config.Set("showlateralpanel", 1)
 
-
     def toggleTranslation(self):
         scrolledwindowTranslation = self.builder.get_object("scrolledwindowTranslation")
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
@@ -725,7 +726,6 @@ class Gui:
             toggletoolbuttonShowTranslation.set_active(False)
             checkmenuitemTranslation.set_active(False)
             self.translationVisible = False
-
 
     def on_imagemenuitemProperties_activate(self,widget,data=None):
         return self.on_toolbuttonProperties_clicked(widget, data)
@@ -766,8 +766,6 @@ class Gui:
             if not translationChooser.get_filename() or not os.path.isfile(translationChooser.get_filename()):
                 translationChooser.set_current_folder(filePath)
 
-
-
     def on_aboutdialog_delete_event(self,widget,data=None):
         self.builder.get_object("aboutdialog").hide()
         return True
@@ -775,7 +773,14 @@ class Gui:
     def on_aboutdialog_response(self,widget,data=None):
         self.builder.get_object("aboutdialog").hide()
         return True
+        
+    def on_EraseCurrentSequence_clicked(self, widget, data=None):
+        self.core.eraseCurrentSequence()
+        return True
+        
+        
 EVENT_FILTER = None
+
 
 class FileSelector(gtk.FileChooserDialog):
         "A normal file selector"
@@ -841,6 +846,8 @@ class FileSelector(gtk.FileChooserDialog):
                         return None
 
 
+
+
 class OpenFileSelector(FileSelector):
         "A file selector for opening files"
 
@@ -859,6 +866,7 @@ class OpenFileSelector(FileSelector):
                 filter.set_name(_('All files'))
                 filter.add_pattern("*")
                 self.add_filter(filter)
+
 
 
 

@@ -395,12 +395,25 @@
             <child>
               <object class="GtkToolButton" id="toolbuttonProperties">
                 <property name="visible">True</property>
-                <property name="sensitive">False</property>
                 <property name="tooltip_text" translatable="yes">Exercise properties</property>
                 <property name="label" translatable="yes">Properties</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-properties</property>
                 <signal name="clicked" handler="on_toolbuttonProperties_clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="EraseCurrentSequence">
+                <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Erase the current sequence</property>
+                <property name="label" translatable="yes">Erase</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-delete</property>
+                <signal name="clicked" handler="on_EraseCurrentSequence_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>

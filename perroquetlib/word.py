@@ -83,6 +83,10 @@ class Word:
         "Reveal the correction"
         self.setText(self.getValid())
     
+    def erase(self):
+        "RAZ the current word"
+        self.setText("")
+    
     def writeChar(self, char):
         char = char.lower()
         if len(char)!=1 or char==" ":
