@@ -21,7 +21,7 @@
 
 import thread, urllib2, tempfile, os, tarfile, errno
 from xml.dom.minidom import getDOMImplementation, parse
-from multiprocessing import Lock
+from threading import Lock
 
 class ExerciseRepositoryExercise:
     def __init__(self):
@@ -129,8 +129,8 @@ class ExerciseRepositoryExercise:
             outPath = self.getLocalPath()
             try:
                 os.makedirs(outPath)
-            except OSError as exc: # Python >2.5
-                if exc.errno == errno.EEXIST:
+            except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
+                if ErrorNumber == errno.EEXIST:
                     pass
                 else: raise
             tar.extractall(outPath)
@@ -288,8 +288,8 @@ class ExerciseRepositoryExercise:
         if not os.path.isdir(self.getLocalPath()):
             try:
                 os.makedirs(self.getLocalPath())
-            except OSError as exc: # Python >2.5
-                if exc.errno == errno.EEXIST:
+            except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
+                if ErrorNumber == 666: #EEXIST ???
                     pass
                 else: raise
 

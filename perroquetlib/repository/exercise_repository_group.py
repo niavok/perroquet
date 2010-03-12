@@ -76,8 +76,8 @@ class ExerciseRepositoryGroup:
         if not os.path.isdir(self.getLocalPath()):
             try:
                 os.makedirs(self.getLocalPath())
-            except OSError as exc: # Python >2.5
-                if exc.errno == errno.EEXIST:
+            except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
+                if ErrorNumber == errno.EEXIST:
                     pass
                 else: raise
 
