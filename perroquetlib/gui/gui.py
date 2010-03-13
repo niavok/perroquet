@@ -775,7 +775,13 @@ class Gui:
         self.builder.get_object("aboutdialog").hide()
         return True
 
+    def on_menuitemResetProgress_activate(self, widget, data=None):
+        self.resetExerciseContent()
+
     def on_ResetExerciseContent_clicked(self, widget, data=None):
+        self.resetExerciseContent()
+
+    def resetExerciseContent(self):
         dialogExerciseProperties = GuiResetExercise(self.core, self.window)
         dialogExerciseProperties.Run()
         return True

@@ -97,24 +97,43 @@
                   <object class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkMenuItem" id="menuitemResetProgress">
+                      <object class="GtkImageMenuItem" id="imagemenuitemExerciceManager">
+                        <property name="label" translatable="yes">_Exercise manager</property>
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Reset exercise progress</property>
                         <property name="use_underline">True</property>
-                        <child type="submenu">
-                          <object class="GtkMenu" id="menu4">
-                            <property name="visible">True</property>
-                            <child>
-                              <object class="GtkImageMenuItem" id="imagemenuitemResetProgressConfirm">
-                                <property name="label" translatable="yes">Confirm reset</property>
-                                <property name="visible">True</property>
-                                <property name="image">image5</property>
-                                <property name="use_stock">False</property>
-                                <signal name="activate" handler="on_imagemenuitemResetProgressConfirm_activate"/>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
+                        <property name="image">image2</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_imagemenuitemExerciceManager_activate"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="imagemenuitemSettings">
+                        <property name="label">gtk-preferences</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_imagemenuitemSettings_activate"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuitemExercise">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Exercise</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu4">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImageMenuItem" id="menuitemResetProgress">
+                        <property name="label" translatable="yes">Reset exercise progress</property>
+                        <property name="visible">True</property>
+                        <property name="image">image5</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_menuitemResetProgress_activate"/>
                       </object>
                     </child>
                     <child>
@@ -139,30 +158,6 @@
                         <property name="image">image3</property>
                         <property name="use_stock">False</property>
                         <signal name="activate" handler="on_imagemenuitemAdvancedProperties_activate"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSeparatorMenuItem" id="separatormenuitem4">
-                        <property name="visible">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitemExerciceManager">
-                        <property name="label" translatable="yes">_Exercise manager</property>
-                        <property name="visible">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="image">image2</property>
-                        <property name="use_stock">False</property>
-                        <signal name="activate" handler="on_imagemenuitemExerciceManager_activate"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitemSettings">
-                        <property name="label">gtk-preferences</property>
-                        <property name="visible">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_imagemenuitemSettings_activate"/>
                       </object>
                     </child>
                   </object>
@@ -440,7 +435,7 @@
             <child>
               <object class="GtkToolButton" id="ResetExerciseContent">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes">Reset the exercise</property>
+                <property name="tooltip_text" translatable="yes">Reset the exercise progress</property>
                 <property name="label" translatable="yes">Erase</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-clear</property>
@@ -938,10 +933,6 @@ Zarmakuizz</property>
     <property name="page_increment">1</property>
     <signal name="value_changed" handler="on_adjustmentSpeed_value_changed"/>
   </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="stock">gtk-properties</property>
-  </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="stock">gtk-missing-image</property>
@@ -950,8 +941,12 @@ Zarmakuizz</property>
     <property name="visible">True</property>
     <property name="stock">gtk-missing-image</property>
   </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-properties</property>
+  </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
-    <property name="stock">gtk-revert-to-saved</property>
+    <property name="stock">gtk-missing-image</property>
   </object>
 </interface>
