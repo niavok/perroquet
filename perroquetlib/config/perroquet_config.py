@@ -100,6 +100,14 @@ elif  os.path.isfile(os.path.join(config.Get("script"), '../share/perroquet/prop
 else:
     raise IOError,  "Error : gui file 'properties.ui' not found"
 
+#reset.ui
+if os.path.isfile(os.path.join(config.Get("script"), 'data/reset.ui')):
+    config.Set("ui_reset_path", os.path.join(config.Get("script"), 'data/reset.ui'))
+elif  os.path.isfile(os.path.join(config.Get("script"), '../share/perroquet/reset.ui')):
+    config.Set("ui_reset_path", os.path.join(config.Get("script"), '../share/perroquet/reset.ui'))
+else:
+    raise IOError,  "Error : gui file 'reset.ui' not found"
+
 #properties_advanced.ui
 if os.path.isfile(os.path.join(config.Get("script"), 'data/properties_advanced.ui')):
     config.Set("ui_sequence_properties_advanced_path", os.path.join(config.Get("script"), 'data/properties_advanced.ui'))

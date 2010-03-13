@@ -28,6 +28,7 @@ from perroquetlib.structure import Word
 
 from gui_sequence_properties import GuiSequenceProperties
 from gui_sequence_properties_advanced import GuiSequencePropertiesAdvanced
+from gui_reset_exercise import GuiResetExercise
 from gui_settings import GuiSettings
 from gui_exercise_manager import GuiExerciseManager
 
@@ -776,7 +777,8 @@ class Gui:
         return True
         
     def on_EraseCurrentSequence_clicked(self, widget, data=None):
-        self.core.eraseCurrentSequence()
+        dialogExerciseProperties = GuiResetExercise(self.core, self.window)
+        dialogExerciseProperties.Run()
         return True
         
         
