@@ -37,8 +37,6 @@ class Core(object):
         self.last_save = False
         self.exercise = None
 
-
-
     #Call by the main, give an handler to the main gui
     def SetGui(self, gui):
         self.gui = gui
@@ -286,10 +284,10 @@ class Core(object):
         self.update()
         self.SetCanSave(True)
     
-    #Erase the current sequence
-    def eraseCurrentSequence(self):
+    #reset the current sequence
+    def resetCurrentSequence(self):
         for sequence in self.exercise.GetSequenceList():
-            sequence.erase()
+            sequence.reset()
         self.exercise.GotoSequence(0) #FIXME
         self.update()
         self.SetCanSave(True)

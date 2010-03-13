@@ -407,17 +407,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="EraseCurrentSequence">
+              <object class="GtkToolButton" id="ResetCurrentSequence">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes">Erase the current sequence</property>
+                <property name="tooltip_text" translatable="yes">Reset the exercise</property>
                 <property name="label" translatable="yes">Erase</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-clear</property>
-                <signal name="clicked" handler="on_EraseCurrentSequence_clicked"/>
+                <signal name="clicked" handler="on_ResetCurrentSequence_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
               </packing>
             </child>
           </object>

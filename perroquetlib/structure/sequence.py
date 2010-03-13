@@ -243,10 +243,10 @@ class Sequence(object):
         for w in self.getWords():
             w.complete()
             
-    def erase(self):
+    def reset(self):
         "RAZ the current seq"
         for w in self.getWords():
-            w.erase()
+            w.reset()
 
     def updateAfterWrite(self):
         "update after a modification of the text"

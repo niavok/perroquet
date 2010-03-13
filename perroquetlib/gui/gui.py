@@ -776,7 +776,7 @@ class Gui:
         self.builder.get_object("aboutdialog").hide()
         return True
         
-    def on_EraseCurrentSequence_clicked(self, widget, data=None):
+    def on_ResetCurrentSequence_clicked(self, widget, data=None):
         dialogExerciseProperties = GuiResetExercise(self.core, self.window)
         dialogExerciseProperties.Run()
         return True

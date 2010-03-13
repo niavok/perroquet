@@ -83,7 +83,7 @@ class Word:
         "Reveal the correction"
         self.setText(self.getValid())
     
-    def erase(self):
+    def reset(self):
         "RAZ the current word"
         self.setText("")
     
