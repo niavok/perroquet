@@ -704,7 +704,6 @@ class Gui:
         if checkmenuitemTranslation.props.active != self.translationVisible:
             self.toggleTranslation()
 
-
     def toggleLateralPanel(self):
         scrolledwindowTranslation = self.builder.get_object("vbox2")
         if self.config.Get("showlateralpanel"):
@@ -775,13 +774,13 @@ class Gui:
     def on_aboutdialog_response(self,widget,data=None):
         self.builder.get_object("aboutdialog").hide()
         return True
-        
-    def on_ResetCurrentSequence_clicked(self, widget, data=None):
+
+    def on_ResetExerciseContent_clicked(self, widget, data=None):
         dialogExerciseProperties = GuiResetExercise(self.core, self.window)
         dialogExerciseProperties.Run()
         return True
-        
-        
+
+
 EVENT_FILTER = None
 
 

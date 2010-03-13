@@ -77,6 +77,10 @@ class Exercise(object):
         for subExo in self.subExercisesList:
             subExo.LoadSubtitles()
 
+    # Reset the work done in the exercise
+    def reset(self):
+        for sequence in self.GetSequenceList():
+            sequence.reset()
 
     def ExtractWordList(self):
         wordList = []
@@ -271,3 +275,4 @@ class Exercise(object):
 
     def setPlayMarginAfter(self, margin):
         self.playMarginAfter = margin
+

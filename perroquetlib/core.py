@@ -188,11 +188,11 @@ class Core(object):
         else:
             repeatRate = float(self.exercise.GetRepeatCount()) / float(wordFound)
         self.gui.SetStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
-    
+
     def update(self):
         self.gui.SetSequence(self.exercise.getCurrentSequence())
         self.ValidateSequence()
-    
+
     #Verify if the sequence is complete
     def ValidateSequence(self):
         if self.exercise.getCurrentSequence().isValid():
@@ -283,16 +283,15 @@ class Core(object):
         self.exercise.getCurrentSequence().nextChar()
         self.update()
         self.SetCanSave(True)
-    
-    #reset the current sequence
-    def resetCurrentSequence(self):
-        for sequence in self.exercise.GetSequenceList():
-            sequence.reset()
+
+    #reset whole exercise
+    def resetExerciseContent(self):
+        self.exercise.reset()
         self.exercise.GotoSequence(0) #FIXME
         self.update()
         self.SetCanSave(True)
         print "need to stop the current sequence" #FIXME
-        
+
     #Pause or play media
     def togglePause(self):
         if self.player.IsPaused() and self.paused:
