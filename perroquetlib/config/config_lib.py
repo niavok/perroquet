@@ -46,6 +46,7 @@ class WritableParser(Parser):
         
     def save(self):
         #TODO create the dir .config/perroquet if not existant
+        #need to create all the recursive dirs, not only the final path
         self.write(open(self.path, "w"))
         
     def set_if_existant_key(self, key, value):
@@ -111,7 +112,6 @@ class Config:
             
     def Save(self):
         """Save the properties that have changed"""
-        #FIXME: need to create all the recursive dirs, not only the final path
         for writableParser in self._writableParsers:
             writableParser.save()
     

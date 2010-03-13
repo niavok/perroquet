@@ -288,9 +288,12 @@ class Core(object):
     
     #Erase the current sequence
     def eraseCurrentSequence(self):
-        self.exercise.getCurrentSequence().erase()
+        for sequence in self.exercise.GetSequenceList():
+            sequence.erase()
+        self.exercise.GotoSequence(0) #FIXME
         self.update()
         self.SetCanSave(True)
+        print "need to stop the current sequence" #FIXME
         
     #Pause or play media
     def togglePause(self):

@@ -412,7 +412,7 @@
                 <property name="tooltip_text" translatable="yes">Erase the current sequence</property>
                 <property name="label" translatable="yes">Erase</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-delete</property>
+                <property name="stock_id">gtk-clear</property>
                 <signal name="clicked" handler="on_EraseCurrentSequence_clicked"/>
               </object>
               <packing>
