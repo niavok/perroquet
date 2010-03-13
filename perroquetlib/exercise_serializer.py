@@ -25,163 +25,6 @@ from sub_exercise import SubExercise
 from perroquetlib.config import config
 from languages_manager import LanguagesManager
 
-class ExerciseLoader(object):
-
-    def getText(self, nodelist):
-        rc = ""
-        for node in nodelist:
-            if node.nodeType == node.TEXT_NODE:
-                rc = rc + node.data
-        rc = rc.strip()
-        return rc
-
-
-    def Load(self, path):
-        self.exercise = Exercise()
-
-        dom = parse(path)
-
-        #Name
-        if len(dom.getElementsByTagName("name")) > 0:
-            self.exercise.setName(self.getText(dom.getElementsByTagName("name")[0].childNodes))
-
-        #Language
-        if len(dom.getElementsByTagName("language")) > 0:
-            self.exercise.setLanguageId(self.getText(dom.getElementsByTagName("language")[0].childNodes))
-        else:
-            languageManager = LanguagesManager()
-            (langId, langName, langChars) = languageManager.getDefaultLanguage()
-            self.exercise.setLanguageId(langId)
-
-        #Template
-        if len(dom.getElementsByTagName("template")) > 0:
-            self.exercise.setTemplate(self.getText(dom.getElementsByTagName("template")[0].childNodes) == "True")
-
-        #Random order
-        if len(dom.getElementsByTagName("random_order")) > 0:
-            self.exercise.setRandomOrder(self.getText(dom.getElementsByTagName("random_order")[0].childNodes) == "True")
-
-
-        #Exercise
-        xml_exercise = dom.getElementsByTagName("exercise")[0]
-
-        #Exercise - CurrentWord
-        currentWord = int(self.getText(xml_exercise.getElementsByTagName("current_word")[0].childNodes))
-        #Exercise - CurrentSequence
-        currentSequence = int(self.getText(xml_exercise.getElementsByTagName("current_sequence")[0].childNodes))
-
-        # Stats
-        xml_stats = dom.getElementsByTagName("stats")[0]
-        self.exercise.SetRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
-
-        # Properties
-        if len(dom.getElementsByTagName("properties")) > 0:
-            xml_properties = dom.getElementsByTagName("properties")[0]
-            if len(xml_properties.getElementsByTagName("repeat_after_complete")) > 0:
-                self.exercise.SetRepeatAfterCompleted(self.getText(xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes) == "True")
-            if len(xml_properties.getElementsByTagName("time_between_sequence")) > 0:
-                self.exercise.SetTimeBetweenSequence(float(self.getText(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
-            if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
-                self.exercise.SetMaxSequenceLength(float(self.getText(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
-            if len(xml_properties.getElementsByTagName("play_margin_before")) > 0:
-                self.exercise.setPlayMarginBefore(int(self.getText(xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
-            if len(xml_properties.getElementsByTagName("play_margin_after")) > 0:
-                self.exercise.setPlayMarginAfter(int(self.getText(xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
-
-
-        #Subexercises
-        self.subExo = []
-        for xml_subExercise in xml_exercise.getElementsByTagName("sub_exercise"):
-            subExercise = SubExercise(self.exercise)
-
-            #Sequences
-            xml_sequences = xml_subExercise.getElementsByTagName("sequences")[0]
-
-            self.progress = []
-
-            for xml_sequence in xml_sequences.getElementsByTagName("sequence"):
-                id = int(self.getText(xml_sequence.getElementsByTagName("id")[0].childNodes))
-                state = self.getText(xml_sequence.getElementsByTagName("state")[0].childNodes)
-                words = []
-
-                if state == "in_progress":
-                    xml_words = xml_sequence.getElementsByTagName("words")[0]
-                    for xml_world in xml_words.getElementsByTagName("word"):
-                        words.append(self.getText(xml_world.childNodes))
-
-                self.progress.append((id, state, words))
-
-            #Paths
-            xml_paths = xml_subExercise.getElementsByTagName("paths")[0]
-            subExercise.SetVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
-            subExercise.SetExercisePath(self.getText(xml_paths.getElementsByTagName("exercise")[0].childNodes))
-            subExercise.SetTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
-
-            self.exercise.subExercisesList.append(subExercise)
-
-            self.subExo.append(self.progress)
-
-
-
-        #Convert relative path
-        for subExo in self.exercise.subExercisesList:
-            if not os.path.isfile(subExo.GetExercisePath()):
-                absPath = os.path.join(os.path.dirname(path), subExo.GetExercisePath())
-                if not os.path.isfile(absPath):
-                    subExo.SetExercisePath("")
-                else:
-                    subExo.SetExercisePath(absPath)
-
-            if not os.path.isfile(subExo.GetVideoPath()):
-                absPath = os.path.join(os.path.dirname(path), subExo.GetVideoPath())
-                if not os.path.isfile(absPath):
-                    subExo.SetVideoPath("")
-                else:
-                    subExo.SetVideoPath(absPath)
-
-            if not os.path.isfile(subExo.GetTranslationPath()):
-                absPath = os.path.join(os.path.dirname(path), subExo.GetTranslationPath())
-                if not os.path.isfile(absPath):
-                    subExo.SetTranslationPath("")
-                else:
-                    subExo.SetTranslationPath(absPath)
-
-
-        self.exercise.Initialize()
-
-        self.UpdateSequenceList()
-
-        self.exercise.GotoSequence(currentSequence)
-
-        self.exercise.getCurrentSequence().setActiveWordIndex(currentWord)
-
-        if not self.exercise.isTemplate():
-            self.exercise.setOutputSavePath(path)
-
-
-        dom.unlink()
-
-        return self.exercise
-
-
-    def UpdateSequenceList(self ):
-        for subExo,self.progress in zip(self.exercise.subExercisesList,self.subExo):
-            sequenceList = subExo.GetSequenceList()
-
-            for (id, state, words) in self.progress:
-                if id >= len(sequenceList):
-                    break
-                sequence = sequenceList[id]
-                if state == "done":
-                    sequence.completeAll()
-                elif state == "in_progress":
-                    i = 0
-                    for word in words:
-                        if id >= sequence.getWordCount():
-                            break
-                        sequence.getWords()[i].setText(word)
-                        i = i+1
-
 class ExerciseSaver(object):
 
     def Save(self,exercise, outputPath):
@@ -328,3 +171,298 @@ class ExerciseSaver(object):
         f = open(self.outputPath, 'w')
         f.write(xml_string)
         f.close()
+
+
+
+
+
+
+
+
+
+
+
+
+class ExerciseLoader(object):
+
+    def Load(self, path):
+        self.exercise = Exercise()
+
+        dom = parse(path)
+        if len(dom.getElementsByTagName("version")) > 0:
+            version = self.getText(dom.getElementsByTagName("version")[0].childNodes)
+
+            if version >= "1.1.0":
+                self._load_v1_1_0(dom, path)
+            elif version >= "1.0.0":
+                self._load_v1_0_0(dom, path)
+            else:
+                print "Unknown file version: "+version
+                self.exercise = None
+        else:
+            print "Invalid perroquet file"
+            self.exercise = None
+
+        dom.unlink()
+
+        return self.exercise
+
+    def getText(self, nodelist):
+        rc = ""
+        for node in nodelist:
+            if node.nodeType == node.TEXT_NODE:
+                rc = rc + node.data
+        rc = rc.strip()
+        return rc
+
+
+    def UpdateSequenceList(self ):
+        for subExo,self.progress in zip(self.exercise.subExercisesList,self.subExo):
+            sequenceList = subExo.GetSequenceList()
+
+            for (id, state, words) in self.progress:
+                if id >= len(sequenceList):
+                    break
+                sequence = sequenceList[id]
+                if state == "done":
+                    sequence.completeAll()
+                elif state == "in_progress":
+                    i = 0
+                    for word in words:
+                        if id >= sequence.getWordCount():
+                            break
+                        sequence.getWords()[i].setText(word)
+                        i = i+1
+
+    def _load_v1_1_0(self,dom, path):
+        #Name
+        if len(dom.getElementsByTagName("name")) > 0:
+            self.exercise.setName(self.getText(dom.getElementsByTagName("name")[0].childNodes))
+
+        #Language
+        if len(dom.getElementsByTagName("language")) > 0:
+            self.exercise.setLanguageId(self.getText(dom.getElementsByTagName("language")[0].childNodes))
+        else:
+            languageManager = LanguagesManager()
+            (langId, langName, langChars) = languageManager.getDefaultLanguage()
+            self.exercise.setLanguageId(langId)
+
+        #Template
+        if len(dom.getElementsByTagName("template")) > 0:
+            self.exercise.setTemplate(self.getText(dom.getElementsByTagName("template")[0].childNodes) == "True")
+
+        #Random order
+        if len(dom.getElementsByTagName("random_order")) > 0:
+            self.exercise.setRandomOrder(self.getText(dom.getElementsByTagName("random_order")[0].childNodes) == "True")
+
+
+        #Exercise
+        xml_exercise = dom.getElementsByTagName("exercise")[0]
+
+        #Exercise - CurrentWord
+        currentWord = int(self.getText(xml_exercise.getElementsByTagName("current_word")[0].childNodes))
+        #Exercise - CurrentSequence
+        currentSequence = int(self.getText(xml_exercise.getElementsByTagName("current_sequence")[0].childNodes))
+
+        # Stats
+        xml_stats = dom.getElementsByTagName("stats")[0]
+        self.exercise.SetRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
+
+        # Properties
+        if len(dom.getElementsByTagName("properties")) > 0:
+            xml_properties = dom.getElementsByTagName("properties")[0]
+            if len(xml_properties.getElementsByTagName("repeat_after_complete")) > 0:
+                self.exercise.SetRepeatAfterCompleted(self.getText(xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes) == "True")
+            if len(xml_properties.getElementsByTagName("time_between_sequence")) > 0:
+                self.exercise.SetTimeBetweenSequence(float(self.getText(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
+            if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
+                self.exercise.SetMaxSequenceLength(float(self.getText(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
+            if len(xml_properties.getElementsByTagName("play_margin_before")) > 0:
+                self.exercise.setPlayMarginBefore(int(self.getText(xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
+            if len(xml_properties.getElementsByTagName("play_margin_after")) > 0:
+                self.exercise.setPlayMarginAfter(int(self.getText(xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
+
+
+        #Subexercises
+        self.subExo = []
+        for xml_subExercise in xml_exercise.getElementsByTagName("sub_exercise"):
+            subExercise = SubExercise(self.exercise)
+
+            #Sequences
+            xml_sequences = xml_subExercise.getElementsByTagName("sequences")[0]
+
+            self.progress = []
+
+            for xml_sequence in xml_sequences.getElementsByTagName("sequence"):
+                id = int(self.getText(xml_sequence.getElementsByTagName("id")[0].childNodes))
+                state = self.getText(xml_sequence.getElementsByTagName("state")[0].childNodes)
+                words = []
+
+                if state == "in_progress":
+                    xml_words = xml_sequence.getElementsByTagName("words")[0]
+                    for xml_world in xml_words.getElementsByTagName("word"):
+                        words.append(self.getText(xml_world.childNodes))
+
+                self.progress.append((id, state, words))
+
+            #Paths
+            xml_paths = xml_subExercise.getElementsByTagName("paths")[0]
+            subExercise.SetVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
+            subExercise.SetExercisePath(self.getText(xml_paths.getElementsByTagName("exercise")[0].childNodes))
+            subExercise.SetTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
+
+            self.exercise.subExercisesList.append(subExercise)
+
+            self.subExo.append(self.progress)
+
+
+
+        #Convert relative path
+        for subExo in self.exercise.subExercisesList:
+            if not os.path.isfile(subExo.GetExercisePath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.GetExercisePath())
+                if not os.path.isfile(absPath):
+                    subExo.SetExercisePath("")
+                else:
+                    subExo.SetExercisePath(absPath)
+
+            if not os.path.isfile(subExo.GetVideoPath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.GetVideoPath())
+                if not os.path.isfile(absPath):
+                    subExo.SetVideoPath("")
+                else:
+                    subExo.SetVideoPath(absPath)
+
+            if not os.path.isfile(subExo.GetTranslationPath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.GetTranslationPath())
+                if not os.path.isfile(absPath):
+                    subExo.SetTranslationPath("")
+                else:
+                    subExo.SetTranslationPath(absPath)
+
+
+        self.exercise.Initialize()
+
+        self.UpdateSequenceList()
+
+        self.exercise.GotoSequence(currentSequence)
+
+        self.exercise.getCurrentSequence().setActiveWordIndex(currentWord)
+
+        if not self.exercise.isTemplate():
+            self.exercise.setOutputSavePath(path)
+
+        return self.exercise
+
+    def _load_v1_0_0(self,dom, path):
+
+        #Name
+        self.exercise.setName(None)
+
+        #Language
+        languageManager = LanguagesManager()
+        (langId, langName, langChars) = languageManager.getDefaultLanguage()
+        self.exercise.setLanguageId(langId)
+
+        #Template
+        self.exercise.setTemplate(False)
+
+        #Random order
+        self.exercise.setRandomOrder(False)
+
+        xml_progress = dom.getElementsByTagName("progress")[0]
+        currentSequence = int(self.getText(xml_progress.getElementsByTagName("current_sequence")[0].childNodes))
+        currentWord = int(self.getText(xml_progress.getElementsByTagName("current_word")[0].childNodes))
+
+        xml_sequences = xml_progress.getElementsByTagName("sequences")[0]
+
+        self.progress = []
+
+        for xml_sequence in xml_sequences.getElementsByTagName("sequence"):
+            id = int(self.getText(xml_sequence.getElementsByTagName("id")[0].childNodes))
+            state = self.getText(xml_sequence.getElementsByTagName("state")[0].childNodes)
+            words = []
+
+            if state == "in_progress":
+                xml_words = xml_sequence.getElementsByTagName("words")[0]
+                for xml_world in xml_words.getElementsByTagName("word"):
+                    words.append(self.getText(xml_world.childNodes))
+
+            self.progress.append((id, state, words))
+
+
+        # Stats
+        xml_stats = dom.getElementsByTagName("stats")[0]
+        self.exercise.SetRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
+
+        #Subexercises
+        self.subExo = []
+
+        subExercise = SubExercise(self.exercise)
+
+        #Sequences
+        self.progress = []
+
+        xml_progress = dom.getElementsByTagName("progress")[0]
+        xml_sequences = xml_progress.getElementsByTagName("sequences")[0]
+        for xml_sequence in xml_sequences.getElementsByTagName("sequence"):
+            id = int(self.getText(xml_sequence.getElementsByTagName("id")[0].childNodes))
+            state = self.getText(xml_sequence.getElementsByTagName("state")[0].childNodes)
+            words = []
+
+            if state == "in_progress":
+                xml_words = xml_sequence.getElementsByTagName("words")[0]
+                for xml_world in xml_words.getElementsByTagName("word"):
+                    words.append(self.getText(xml_world.childNodes))
+
+            self.progress.append((id, state, words))
+
+        #Paths
+        xml_paths = dom.getElementsByTagName("paths")[0]
+        subExercise.SetVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
+        subExercise.SetExercisePath(self.getText(xml_paths.getElementsByTagName("exercice")[0].childNodes))
+        subExercise.SetTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
+
+        self.exercise.subExercisesList.append(subExercise)
+
+        self.subExo.append(self.progress)
+
+        #Convert relative path
+        for subExo in self.exercise.subExercisesList:
+            if not os.path.isfile(subExo.GetExercisePath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.GetExercisePath())
+                if not os.path.isfile(absPath):
+                    subExo.SetExercisePath("")
+                else:
+                    subExo.SetExercisePath(absPath)
+
+            if not os.path.isfile(subExo.GetVideoPath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.GetVideoPath())
+                if not os.path.isfile(absPath):
+                    subExo.SetVideoPath("")
+                else:
+                    subExo.SetVideoPath(absPath)
+
+            if not os.path.isfile(subExo.GetTranslationPath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.GetTranslationPath())
+                if not os.path.isfile(absPath):
+                    subExo.SetTranslationPath("")
+                else:
+                    subExo.SetTranslationPath(absPath)
+
+
+        self.exercise.Initialize()
+
+        self.UpdateSequenceList()
+
+        self.exercise.GotoSequence(currentSequence)
+
+        self.exercise.getCurrentSequence().setActiveWordIndex(currentWord)
+
+        if not self.exercise.isTemplate():
+            self.exercise.setOutputSavePath(path)
+
+        return self.exercise
+
+
+
