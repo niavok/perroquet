@@ -45,8 +45,13 @@ class WritableParser(Parser):
         self._options = Parser.getOptions(self)
         
     def save(self):
-        #TODO create the dir .config/perroquet if not existant
-        #need to create all the recursive dirs, not only the final path
+        def mkpath(path):
+            "Create the directeries components of a path"
+            path2=os.path.dirname(path)
+            if not os.path.isdir(path2):
+                mkpath(path2)
+                os.mkdir(path2)
+        mkpath(self.path)
         self.write(open(self.path, "w"))
         
     def set_if_existant_key(self, key, value):

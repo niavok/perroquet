@@ -330,7 +330,9 @@ class Core(object):
 
     #Save current exercice
     def Save(self, saveAs = False):
-
+        if not self.exercise:
+            return 
+            
         if saveAs or self.exercise.getOutputSavePath() == None:
             outputSavePath = self.gui.AskSavePath()
             if outputSavePath == None:
