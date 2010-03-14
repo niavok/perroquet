@@ -311,11 +311,26 @@ class Gui:
                 (150+score250*100/250)*256,
                 (210-score250*210/250/2)*256,
                 (250-score250/2)*256)
+            (red, green, blue) = computeColorBetween(
+                (150, 210, 250),
+                (255, 100, 100),
+                float(score250) /250.0)
+            return self.window.get_colormap().alloc_color(red*256,green*256,blue*256)
+
         def get_bcolor_near(score250):
-            return self.window.get_colormap().alloc_color(
-                150*256,
-                250*256,
-                (250-score250)*256)
+            (red, green, blue) = computeColorBetween(
+                (150, 210, 250),
+                (150, 255, 100),
+                float(score250) /250.0)
+            return self.window.get_colormap().alloc_color(red*256,green*256,blue*256)
+
+        def computeColorBetween(colorFrom, colorTo, coeff):
+            (redFrom, greenFrom, blueFrom)  =  colorFrom
+            (redTo, greenTo, blueTo)  =  colorTo
+            red = int((1-coeff)*redFrom + coeff*redTo)
+            green = int((1-coeff)*greenFrom + coeff*greenTo)
+            blue = int((1-coeff)*blueFrom + coeff*blueTo)
+            return (red, green, blue)
 
         buffer.create_tag("symbol",
             size_points=18.0)
@@ -335,7 +350,7 @@ class Gui:
             buffer.create_tag("word_near"+str(score250),
                 background=get_bcolor_near(score250),
                 foreground=color_not_found,
-                size_points=18.0+score250/50.)
+                size_points=18.0)
 
     def AskSavePath(self):
         saver = SaveFileSelector(self.window)
