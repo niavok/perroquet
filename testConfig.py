@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+import os, shutil
 
 import unittest
 from perroquetlib.config import Config
@@ -27,6 +27,7 @@ from perroquetlib.config import Config
 pathRef = "./testConfigReference.ini"
 pathWritable = "./testConfigWritable.ini"
 pathTemp = "./testConfigTemp.ini"
+pathTemp2 = "./a/b/c/testConfigTemp.ini"
 
 class testConfig(unittest.TestCase):
     def testLoad(self):
@@ -40,22 +41,24 @@ class testConfig(unittest.TestCase):
         self.assertEqual(c.Get("newyear"), "champagne")
         
     def testSave(self):
-        fW = open(pathWritable, "r")
-        fT = open(pathTemp, "w")
-        fT.write(fW.read())
-        fT.close()
-        fW.close()
-        
+        shutil.copy(pathWritable, pathTemp)
         c=Config()
         c.loadWritableConfigFile(pathTemp, pathRef)
         c.Set("firstint", 666)
         c.Save()
-        
         c=Config()
         c.loadWritableConfigFile(pathTemp, pathRef)
         self.assertEqual(c.Get("firstint"), 666)
-       
         os.remove(pathTemp)
+        
+        c=Config()
+        c.loadWritableConfigFile(pathTemp2, pathRef)
+        c.Set("firstint", 666)
+        c.Save()
+        c.loadWritableConfigFile(pathTemp2, pathRef)
+        self.assertEqual(c.Get("firstint"), 666)
+        shutil.rmtree("./a")
+        
     
     def testError(self):
         c=Config()
