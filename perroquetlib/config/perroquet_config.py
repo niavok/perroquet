@@ -69,6 +69,13 @@ if os.path.isfile(os.path.join(config.Get("script"), 'data/perroquet.png')):
 else:
     config.Set("logo_path", os.path.join(config.Get("script"), '../share/perroquet/perroquet.png'))
 
+if os.path.isfile(os.path.join(config.Get("script"), 'data/audio_icon.png')):
+    config.Set("audio_icon", os.path.join(config.Get("script"), 'data/audio_icon.png'))
+else:
+    config.Set("audio_icon", os.path.join(config.Get("script"), '../share/perroquet/audio_icon.png'))
+
+
+
 #gettext
 config.Set("gettext_package", "perroquet")
 gettext.install (config.Get("gettext_package"),config.Get("localedir"))

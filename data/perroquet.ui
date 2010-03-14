@@ -464,11 +464,28 @@
                 <property name="can_focus">True</property>
                 <property name="position">522</property>
                 <child>
-                  <object class="GtkDrawingArea" id="videoArea">
+                  <object class="GtkHBox" id="hbox6">
                     <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImage" id="imageAudio">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-close</property>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkDrawingArea" id="videoArea">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
-                    <property name="resize">True</property>
+                    <property name="resize">False</property>
                     <property name="shrink">True</property>
                   </packing>
                 </child>

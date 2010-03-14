@@ -53,6 +53,10 @@ class Gui:
         self.aboutDialog.set_logo(icon)
         self.aboutDialog.set_version(self.config.Get("version"))
 
+        # Sound icon
+        print config.Get("audio_icon")
+        self.builder.get_object("imageAudio").set_from_file(config.Get("audio_icon"))
+
         self.typeLabel = self.builder.get_object("typeView")
 
         self.initTypeLabel()
@@ -60,6 +64,8 @@ class Gui:
         self.translationVisible = False
         self.disableChangedTextEvent = False
         self.mode = "closed"
+
+        self.activateVideo(False)
 
         if not self.config.Get("showlateralpanel"):
             self.builder.get_object("vbox2").hide()
@@ -83,6 +89,15 @@ class Gui:
 
     def GetVideoWindowId(self):
         return self.builder.get_object("videoArea").window.xid
+
+    def activateVideo(self,state):
+        if state:
+            self.builder.get_object("videoArea").show()
+            self.builder.get_object("imageAudio").hide()
+        else:
+            self.builder.get_object("videoArea").hide()
+            self.builder.get_object("imageAudio").show()
+
 
     def SetSpeed(self, speed):
         self.settedSpeed = int(speed*100)

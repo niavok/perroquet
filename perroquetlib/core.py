@@ -68,9 +68,11 @@ class Core(object):
 
         self.player = VideoPlayer()
         self.player.SetWindowId(self.gui.GetVideoWindowId())
+        self.player.ActivateVideoCallback(self.gui.activateVideo)
         self.player.Open(self.exercise.GetVideoPath())
         self.player.SetCallback(self.TimeCallback)
         self.paused = False
+        self.gui.activateVideo(False)
         self.gui.Activate("loaded")
         self.UpdateWordList()
         self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())

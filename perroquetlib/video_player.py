@@ -73,11 +73,13 @@ class VideoPlayer(object):
             return
         message_name = message.structure.get_name()
         if message_name == "prepare-xwindow-id":
+            print "prepare-xwindow-id"
             gtk.gdk.threads_enter()
             gtk.gdk.display_get_default().sync()
             imagesink = message.src
             imagesink.set_property("force-aspect-ratio", True)
             imagesink.set_xwindow_id(self.windowId)
+            self.activateVideo(True)
             gtk.gdk.threads_leave()
 
     def Open(self,path):
@@ -119,6 +121,9 @@ class VideoPlayer(object):
 
     def SetWindowId(self, windowId):
         self.windowId = windowId
+
+    def ActivateVideoCallback(self, activateVideo):
+        self.activateVideo = activateVideo
 
     def GetCurrentTime(self):
         pos_int = -1
