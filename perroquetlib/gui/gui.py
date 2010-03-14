@@ -379,7 +379,11 @@ class Gui:
             self.builder.get_object("imagemenuitemSave").set_sensitive(True)
             self.builder.get_object("checkmenuitemTranslation").set_sensitive(True)
             self.builder.get_object("imagemenuitemHint").set_sensitive(True)
-            self.builder.get_object("hscaleSpeed").set_sensitive(True)
+            #Disable speed change slider if the media player not support it
+            if self.core.getPlayer().isSpeedChangeable():
+                self.builder.get_object("hscaleSpeed").set_sensitive(True)
+            else:
+                self.builder.get_object("hscaleSpeed").set_sensitive(False)
             self.builder.get_object("imagemenuitemProperties").set_sensitive(True)
             self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(True)
             self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(True)

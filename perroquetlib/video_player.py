@@ -32,21 +32,25 @@ class VideoPlayer(object):
         audiobin = gst.Bin("audio-speed-bin")
         try:
             self.audiospeedchanger = gst.element_factory_make("pitch")
+            self.canChangeSpeed = True
         except gst.ElementNotFoundError:
-            print (_(u"You need to install the gstreamer soundtouch elements for "
-                    "play it slowly to."))
-            raise SystemExit()
-        audiobin.add(self.audiospeedchanger)
+            print (_(u"You need to install the gstreamer soundtouch elements to "
+                    "use slowly play feature."))
+            self.canChangeSpeed = False
 
-        self.audiosink = gst.element_factory_make("autoaudiosink")
+        #Try to use the pitch element only if it is available
+        if self.canChangeSpeed:
+            audiobin.add(self.audiospeedchanger)
 
-        audiobin.add(self.audiosink)
-        convert = gst.element_factory_make("audioconvert")
-        audiobin.add(convert)
-        gst.element_link_many(self.audiospeedchanger, convert, self.audiosink)
-        sink_pad = gst.GhostPad("sink", self.audiospeedchanger.get_pad("sink"))
-        audiobin.add_pad(sink_pad)
-        self.playbin.set_property("audio-sink", audiobin)
+            self.audiosink = gst.element_factory_make("autoaudiosink")
+
+            audiobin.add(self.audiosink)
+            convert = gst.element_factory_make("audioconvert")
+            audiobin.add(convert)
+            gst.element_link_many(self.audiospeedchanger, convert, self.audiosink)
+            sink_pad = gst.GhostPad("sink", self.audiospeedchanger.get_pad("sink"))
+            audiobin.add_pad(sink_pad)
+            self.playbin.set_property("audio-sink", audiobin)
 
         bus = self.player.get_bus()
         bus.add_signal_watch()
@@ -73,7 +77,6 @@ class VideoPlayer(object):
             return
         message_name = message.structure.get_name()
         if message_name == "prepare-xwindow-id":
-            print "prepare-xwindow-id"
             gtk.gdk.threads_enter()
             gtk.gdk.display_get_default().sync()
             imagesink = message.src
@@ -92,11 +95,11 @@ class VideoPlayer(object):
         self.playing = True
 
     def SetSpeed(self,speed):
-
-        self.audiospeedchanger.set_property("tempo", speed)
-        if self.nextCallbackTime != -1:
-            self.nextCallbackTime = self.nextCallbackTime * speed/self.speed
-        self.speed = speed
+        if self.canChangeSpeed:
+            self.audiospeedchanger.set_property("tempo", speed)
+            if self.nextCallbackTime != -1:
+                self.nextCallbackTime = self.nextCallbackTime * speed/self.speed
+            self.speed = speed
 
 
     def Pause(self):
@@ -105,6 +108,9 @@ class VideoPlayer(object):
 
     def IsPaused(self):
         return not self.playing
+
+    def isSpeedChangeable(self):
+        return self.canChangeSpeed
 
     def Seek(self, time):
         value = int(time * 1000000 )

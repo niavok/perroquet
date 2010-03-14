@@ -68,6 +68,10 @@ To use Perroquet, you need these dependancies
     Debian/Ubuntu: python-gst0.10
     Archlinux: gstreamer0.10-python
 
+* Gstreamer 0.10 plugins bad (Optional, need for play speed change)
+    Debian/Ubuntu: gstreamer0.10-plugins-bad
+    Archlinux: gstreamer0.10-bas
+
 * Gtk2 2.16+
     Debian/Ubuntu: libgtk2.0-0
     Archlinux: gtk2
@@ -75,6 +79,7 @@ To use Perroquet, you need these dependancies
 * Pygtk 2.16+
 Debian/Ubuntu: python-gtk2
     Archlinux: pygtk
+
 
 
 Without install, run:

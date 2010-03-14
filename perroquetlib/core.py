@@ -331,8 +331,8 @@ class Core(object):
     #Save current exercice
     def Save(self, saveAs = False):
         if not self.exercise:
-            return 
-            
+            return
+
         if saveAs or self.exercise.getOutputSavePath() == None:
             outputSavePath = self.gui.AskSavePath()
             if outputSavePath == None:
@@ -442,6 +442,9 @@ class Core(object):
 
     def GetExercise(self):
         return self.exercise
+
+    def getPlayer(self):
+        return self.player
 
     def mediaChangeCallBack(self):
         print "new media : "+self.exercise.GetVideoPath()
