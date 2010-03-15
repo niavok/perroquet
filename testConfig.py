@@ -41,6 +41,7 @@ class testConfig(unittest.TestCase):
         self.assertEqual(c.Get("sndint"), 8)
         
         self.assertEqual(c.Get("liststr"), ["one", "two"])
+        self.assertEqual(c.Get("listint"), [1, 2, 3])
         
     def testSave(self):
         shutil.copy(pathWritable, pathTemp)
@@ -48,11 +49,13 @@ class testConfig(unittest.TestCase):
         c.loadWritableConfigFile(pathTemp, pathRef)
         c.Set("firstint", 666)
         c.Set("liststr", ["1", "2", "3"])
+        c.Set("listint", [666,666])
         c.Save()
         c=Config()
         c.loadWritableConfigFile(pathTemp, pathRef)
         self.assertEqual(c.Get("firstint"), 666)
         self.assertEqual(c.Get("liststr"), ["1", "2", "3"])
+        self.assertEqual(c.Get("listint"), [666, 666])
         os.remove(pathTemp)
         
         c=Config()

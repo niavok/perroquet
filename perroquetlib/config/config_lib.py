@@ -30,11 +30,13 @@ class Parser(ConfigParser):
     str2object = {
         "int": int,
         "string": lambda x: x  ,
-        "stringlist" : lambda s: s.split("\n") ,}
+        "stringlist" : lambda s: s.split("\n") ,
+        "intlist" : lambda s: [int(x) for x in s.split("\n")] ,}
     object2str = {
         "int": str,
         "string": lambda x: x  ,
-        "stringlist" : lambda l: ("\n").join(l) ,}
+        "stringlist" : lambda l: ("\n").join(l) ,
+        "intlist" : lambda l: ("\n").join(str(i) for i in l) ,}
     def __init__(self):
         ConfigParser.__init__(self)
         
