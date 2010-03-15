@@ -20,8 +20,7 @@
 
 """Library used to create easily configuration"""
 
-import os, sys
-import gettext
+import os
 from ConfigParser import ConfigParser
 
         
@@ -37,6 +36,7 @@ class Parser(ConfigParser):
         "string": lambda x: x  ,
         "stringlist" : lambda l: ("\n").join(l) ,
         "intlist" : lambda l: ("\n").join(str(i) for i in l) ,}
+        
     def __init__(self):
         ConfigParser.__init__(self)
         
@@ -47,11 +47,23 @@ class Parser(ConfigParser):
                 for option in self.options(section) ])
     
     def set(self, section, option, value):
+        "Set an option."
         string = self.object2str[section](value)
         ConfigParser.set(self, section, option, string)        
     
     def get(self, section, option):
+        "Get an option value for a given section."
         return self.str2object[section](ConfigParser.get(self, section, option))
+    
+    def items(self, section):
+        """Return a list of tuples with (name, value) for each option
+        in the section."""
+        return [(option, self.get(section, option)) for option in self.options(section)]
+    
+    def __str__(self):
+        return "<Parser "+"\n".join(section+"->"+option+": "+value
+            for section in self.sections()
+            for option, value in ConfigParser.items(self, section))+">"
     
 class WritableParser(Parser):
     """A class that deal with writable parsers"""
@@ -62,6 +74,7 @@ class WritableParser(Parser):
         self._options = Parser.getOptions(self)
         
     def save(self):
+        "Only save the options that have changed"
         def mkpath(path):
             "Create the directeries components of a path"
             path2=os.path.dirname(path)
@@ -72,8 +85,8 @@ class WritableParser(Parser):
         self.write(open(self.path, "w"))
         
     def set_if_existant_key(self, key, value):
-        if key in self._options.keys():
-            section = self._options[key]
+        if key in self.getOptions().keys():
+            section = self.getOptions()[key]
             if not self.has_section(section):
                 self.add_section(section)
             self.set(section, key, value)
@@ -112,7 +125,7 @@ class Config:
         
         #Remember
         localParser = WritableParser(writablePath)
-        localParser.setOptions( writableOptions )
+        localParser.setOptions(writableOptions)
         self._writableParsers.append(localParser)
 
     def Get(self, key):

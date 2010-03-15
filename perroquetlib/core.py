@@ -25,6 +25,7 @@ from exercise_serializer import ExerciseSaver
 from exercise_serializer import ExerciseLoader
 from exercise import Exercise
 from structure import NoCharPossible, ValidWordError
+from config import config
 
 # The Core make the link between the GUI, the vidéo player, the current
 # open exercise and all others part of the application
@@ -36,6 +37,7 @@ class Core(object):
         self.player = None
         self.last_save = False
         self.exercise = None
+        self.config = config
 
     #Call by the main, give an handler to the main gui
     def SetGui(self, gui):
@@ -342,8 +344,8 @@ class Core(object):
         saver = ExerciseSaver()
         saver.Save(self.exercise, self.exercise.getOutputSavePath())
 
-        self.gui.config.Set("lastopenfile", self.exercise.getOutputSavePath())
-
+        self.config.Set("lastopenfile", self.exercise.getOutputSavePath())
+        
         self.SetCanSave(False)
 
     #Load the exercice at path
