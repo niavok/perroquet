@@ -34,21 +34,25 @@ class testConfig(unittest.TestCase):
         c=Config()
         c.loadWritableConfigFile(pathWritable, pathRef)
         
+        self.assertEqual(c.Get("christmas"), "merry Christmas\nand happy new year")
+        self.assertEqual(c.Get("newyear"), "champagne")
+        
         self.assertEqual(c.Get("firstint"), 5)
         self.assertEqual(c.Get("sndint"), 8)
         
-        self.assertEqual(c.Get("christmas"), "merry Christmas\nand happy new year")
-        self.assertEqual(c.Get("newyear"), "champagne")
+        self.assertEqual(c.Get("liststr"), ["one", "two"])
         
     def testSave(self):
         shutil.copy(pathWritable, pathTemp)
         c=Config()
         c.loadWritableConfigFile(pathTemp, pathRef)
         c.Set("firstint", 666)
+        c.Set("liststr", ["1", "2", "3"])
         c.Save()
         c=Config()
         c.loadWritableConfigFile(pathTemp, pathRef)
         self.assertEqual(c.Get("firstint"), 666)
+        self.assertEqual(c.Get("liststr"), ["1", "2", "3"])
         os.remove(pathTemp)
         
         c=Config()
@@ -58,7 +62,6 @@ class testConfig(unittest.TestCase):
         c.loadWritableConfigFile(pathTemp2, pathRef)
         self.assertEqual(c.Get("firstint"), 666)
         shutil.rmtree("./a")
-        
     
     def testError(self):
         c=Config()

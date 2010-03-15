@@ -22,20 +22,35 @@
 
 import os, sys
 import gettext
-import ConfigParser
+from ConfigParser import ConfigParser
 
-class Parser(ConfigParser.ConfigParser):
+        
+class Parser(ConfigParser):
     """A general class to make parsers"""
+    str2object = {
+        "int": int,
+        "string": lambda x: x  ,
+        "stringlist" : lambda s: s.split("\n") ,}
+    object2str = {
+        "int": str,
+        "string": lambda x: x  ,
+        "stringlist" : lambda l: ("\n").join(l) ,}
     def __init__(self):
-        ConfigParser.ConfigParser.__init__(self)
+        ConfigParser.__init__(self)
         
     def getOptions(self):
         "return {option1: section1, ...}"
         return dict([(option, section)
                 for section in self.sections()
                 for option in self.options(section) ])
-
-
+    
+    def set(self, section, option, value):
+        string = self.object2str[section](value)
+        ConfigParser.set(self, section, option, string)        
+    
+    def get(self, section, option):
+        return self.str2object[section](ConfigParser.get(self, section, option))
+    
 class WritableParser(Parser):
     """A class that deal with writable parsers"""
     def __init__(self, path):
@@ -71,9 +86,6 @@ class WritableParser(Parser):
 class Config:
     """Usage: config = Config()
     Warning: all keys must be lowercase"""
-    functionsOfSection = {
-        "int": int,
-        "string": lambda x: x  ,}
     
     def __init__(self):
         self._properties = {}
@@ -94,10 +106,10 @@ class Config:
         
         #Write
         for (option, section) in writableOptions.items():
-            self.Set(option, self.functionsOfSection[section](parser.get(section, option)))
+            self.Set(option, parser.get(section, option))
         
         #Remember
-        localParser = WritableParser( writablePath)
+        localParser = WritableParser(writablePath)
         localParser.setOptions( writableOptions )
         self._writableParsers.append(localParser)
 
