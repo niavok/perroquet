@@ -50,21 +50,21 @@ class Core(object):
         self.exercise.setMediaChangeCallback(self.mediaChangeCallBack)
         self.exercise.new()
         self.exercise.setLanguageId(langId)
-        self.SetPaths(videoPath, exercisePath, translationPath)
+        self._SetPaths(videoPath, exercisePath, translationPath)
         self.exercise.Initialize()
-        self.Reload(True);
-        self.ActivateSequence()
+        self._Reload(True);
+        self._ActivateSequence()
         self.gui.SetTitle("", True)
 
     #Configure the paths for the current exercice. Reload subtitles list.
-    def SetPaths(self, videoPath, exercisePath, translationPath):
+    def _SetPaths(self, videoPath, exercisePath, translationPath):
         self.exercise.SetVideoPath(videoPath)
         self.exercise.SetExercisePath(exercisePath)
         self.exercise.SetTranslationPath(translationPath)
         self.exercise.Initialize()
 
     #Reload media player and begin to play (if the params is True)
-    def Reload(self, load):
+    def _Reload(self, load):
         if self.player != None:
             self.player.Close()
 
@@ -72,11 +72,11 @@ class Core(object):
         self.player.SetWindowId(self.gui.GetVideoWindowId())
         self.player.ActivateVideoCallback(self.gui.activateVideo)
         self.player.Open(self.exercise.GetVideoPath())
-        self.player.SetCallback(self.TimeCallback)
+        self.player.SetCallback(self._TimeCallback)
         self.paused = False
         self.gui.activateVideo(False)
         self.gui.Activate("loaded")
-        self.UpdateWordList()
+        self._updateWordList()
         self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
 
         if load:
@@ -103,7 +103,7 @@ class Core(object):
 
     #Callback call by video player to notify change of media position.
     #Stop the media at the end of uncompleted sequences
-    def TimeCallback(self):
+    def _TimeCallback(self):
         if self.state == Core.WAIT_BEGIN:
             self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + self.exercise.getPlayMarginAfter())
             self.state = Core.WAIT_END
@@ -126,7 +126,7 @@ class Core(object):
         if self.exercise.getCurrentSequenceId() == num:
             return
         self.exercise.GotoSequence(num)
-        self.ActivateSequence()
+        self._ActivateSequence()
         if load:
             self.RepeatSequence()
         self.SetCanSave(True)
@@ -135,7 +135,7 @@ class Core(object):
     def NextSequence(self, load = True):
         if self.exercise.GotoNextSequence():
             self.SetCanSave(True)
-        self.ActivateSequence()
+        self._ActivateSequence()
         if load:
             self.RepeatSequence()
 
@@ -143,23 +143,23 @@ class Core(object):
     def PreviousSequence(self, load = True):
         if self.exercise.GotoPreviousSequence():
             self.SetCanSave(True)
-        self.ActivateSequence()
+        self._ActivateSequence()
         if load:
             self.RepeatSequence()
 
     #Update interface with new sequence. Configure stop media callback
-    def ActivateSequence(self):
+    def _ActivateSequence(self):
         self.state = Core.WAIT_BEGIN
         self.SetSpeed(1)
         self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeBegin())
 
         self.gui.SetSequenceNumber(self.exercise.getCurrentSequenceId(), self.exercise.GetSequenceCount())
         self.gui.SetSequence(self.exercise.getCurrentSequence())
-        self.ActivateTranslation()
-        self.UpdateStats()
+        self._ActivateTranslation()
+        self._updateStats()
 
-    #Update displayed translation on new active sequence
-    def ActivateTranslation(self):
+    #_update displayed translation on new active sequence
+    def _ActivateTranslation(self):
         if not self.exercise.GetTranslationList():
             self.gui.SetTranslation("")
         else:
@@ -175,7 +175,7 @@ class Core(object):
             self.gui.SetTranslation(translation)
 
     #Update displayed stats on new active sequence
-    def UpdateStats(self):
+    def _updateStats(self):
         sequenceCount = self.exercise.GetSequenceCount()
         sequenceFound = 0
         wordCount = 0
@@ -193,12 +193,12 @@ class Core(object):
             repeatRate = float(self.exercise.GetRepeatCount()) / float(wordFound)
         self.gui.SetStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
 
-    def update(self):
+    def _update(self):
         self.gui.SetSequence(self.exercise.getCurrentSequence())
-        self.ValidateSequence()
+        self._ValidateSequence()
 
     #Verify if the sequence is complete
-    def ValidateSequence(self):
+    def _ValidateSequence(self):
         if self.exercise.getCurrentSequence().isValid():
             if self.exercise.GetRepeatAfterCompleted():
                 self.RepeatSequence()
@@ -224,7 +224,7 @@ class Core(object):
     def WriteChar(self, char):
         if self.exercise.isCharacterMatch(char):
             self.exercise.getCurrentSequence().writeChar(char)
-            self.update()
+            self._update()
             self.SetCanSave(True)
         else:
             pass
@@ -232,67 +232,67 @@ class Core(object):
     #Goto next word in current sequence
     def NextWord(self):
         self.exercise.getCurrentSequence().nextWord()
-        self.update()
+        self._update()
 
     #Goto previous word in current sequence
     def PreviousWord(self):
         self.exercise.getCurrentSequence().previousWord()
-        self.update()
+        self._update()
 
     #Choose current word in current sequence
-    def SelectSequenceWord(self, wordIndex,wordIndexPos):
+    def SelectSequenceWord(self, wordIndex, wordIndexPos):
         try:
             self.exercise.getCurrentSequence().selectSequenceWord(wordIndex,wordIndexPos)
         except NoCharPossible:
             self.exercise.getCurrentSequence().selectSequenceWord(wordIndex,-1)
-        self.update()
+        self._update()
 
     #Goto first word in current sequence
     def FirstWord(self):
         self.exercise.getCurrentSequence().firstFalseWord()
-        self.update()
+        self._update()
 
     #Goto last word in current sequence
     def LastWord(self):
         self.exercise.getCurrentSequence().lastFalseWord()
-        self.update()
+        self._update()
 
     #Delete a char before the cursor in current sequence
     def DeletePreviousChar(self):
         self.exercise.getCurrentSequence().deletePreviousChar()
-        self.update()
+        self._update()
         self.SetCanSave(True)
 
     #Delete a char after the cursor in current sequence
     def DeleteNextChar(self):
         self.exercise.getCurrentSequence().deleteNextChar()
-        self.update()
+        self._update()
         self.SetCanSave(True)
 
     #Goto previous char in current sequence
     def PreviousChar(self):
         self.exercise.getCurrentSequence().previousChar()
         #The sequence don't change but the cursor position is no more up to date
-        self.update()
+        self._update()
 
     #Goto next char in current sequence
     def NextChar(self):
         self.exercise.getCurrentSequence().nextChar()
         #The sequence don't change but the cursor position is no more up to date
-        self.update()
+        self._update()
 
     #Reveal correction for word at cursor in current sequence
     def CompleteWord(self):
         self.exercise.getCurrentSequence().showHint()
         self.exercise.getCurrentSequence().nextChar()
-        self.update()
+        self._update()
         self.SetCanSave(True)
 
     #reset whole exercise
     def resetExerciseContent(self):
         self.exercise.reset()
         self.exercise.GotoSequence(0) #FIXME
-        self.update()
+        self._update()
         self.SetCanSave(True)
         print "need to stop the current sequence" #FIXME
 
@@ -372,17 +372,17 @@ class Core(object):
             self.gui.AskProperties()
             return
 
-        self.Reload(False)
+        self._Reload(False)
         if self.exercise.getOutputSavePath() == None:
             self.SetCanSave(True)
         else:
             self.SetCanSave(False)
-        self.ActivateSequence()
+        self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
 
     #Change paths of current exercice and reload subtitles and video
-    def UpdatePaths(self, videoPath, exercisePath, translationPath):
+    def _updatePaths(self, videoPath, exercisePath, translationPath):
         self.exercise.SetVideoPath(videoPath)
         self.exercise.SetExercisePath(exercisePath)
         self.exercise.SetTranslationPath(translationPath)
@@ -395,18 +395,18 @@ class Core(object):
             self.SetCanSave(False)
             return
 
-        self.SetPaths( videoPath, exercisePath, translationPath)
-        self.Reload(True)
+        self._SetPaths( videoPath, exercisePath, translationPath)
+        self._Reload(True)
         self.SetCanSave(True)
-        self.ActivateSequence()
+        self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
 
-    def UpdateProperties(self):
+    def _updateProperties(self):
         self.exercise.Initialize()
-        self.Reload(True)
+        self._Reload(True)
         self.SetCanSave(True)
-        self.ActivateSequence()
+        self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
 
@@ -415,7 +415,7 @@ class Core(object):
         return (self.exercise.GetVideoPath(), self.exercise.GetExercisePath(), self.exercise.GetTranslationPath())
 
     #Udpates vocabulary list in interface
-    def UpdateWordList(self):
+    def _updateWordList(self):
         self.gui.SetWordList(self.exercise.ExtractWordList())
 
     #Notify the user use the repeat command (for stats)
@@ -453,7 +453,7 @@ class Core(object):
         """self.Pause()
         self.player.Open(self.exercise.GetVideoPath())
         """
-        self.Reload(True)
-        self.ActivateSequence()
+        self._Reload(True)
+        self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
