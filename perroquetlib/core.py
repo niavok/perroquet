@@ -333,6 +333,7 @@ class Core(object):
     #Save current exercice
     def Save(self, saveAs = False):
         if not self.exercise:
+            print "Error core.save called but no exercise load"
             return
 
         if saveAs or self.exercise.getOutputSavePath() == None:
@@ -352,6 +353,8 @@ class Core(object):
     def LoadExercise(self, path):
         self.gui.Activate("closed")
         loader = ExerciseLoader()
+        if self.exercise:
+            self.Save()
         try:
             self.exercise = loader.Load(path)
             self.exercise.setMediaChangeCallback(self.mediaChangeCallBack)
