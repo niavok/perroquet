@@ -68,11 +68,36 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitemExportAsTemplate">
-                        <property name="label" translatable="yes">Export as template...</property>
+                      <object class="GtkMenuItem" id="menuitemExport">
                         <property name="visible">True</property>
-                        <property name="image">image4</property>
-                        <property name="use_stock">False</property>
+                        <property name="label" translatable="yes">Export</property>
+                        <property name="use_underline">True</property>
+                        <child type="submenu">
+                          <object class="GtkMenu" id="menu5">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitemExportAsTemplate">
+                                <property name="label" translatable="yes">Export as template...</property>
+                                <property name="visible">True</property>
+                                <property name="image">image4</property>
+                                <property name="use_stock">False</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitemExportAsPackage">
+                                <property name="label" translatable="yes">Export as package...</property>
+                                <property name="visible">True</property>
+                                <property name="image">image6</property>
+                                <property name="use_stock">False</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="separatormenuitem4">
+                        <property name="visible">True</property>
                       </object>
                     </child>
                     <child>
@@ -950,10 +975,6 @@ Zarmakuizz</property>
     <property name="page_increment">1</property>
     <signal name="value_changed" handler="on_adjustmentSpeed_value_changed"/>
   </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="stock">gtk-missing-image</property>
-  </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="stock">gtk-missing-image</property>
@@ -965,5 +986,13 @@ Zarmakuizz</property>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="stock">gtk-missing-image</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="stock">gtk-convert</property>
+  </object>
+  <object class="GtkImage" id="image6">
+    <property name="visible">True</property>
+    <property name="stock">gtk-convert</property>
   </object>
 </interface>
