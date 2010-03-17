@@ -603,9 +603,17 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label2">
+                      <object class="GtkScrolledWindow" id="scrolledwindow2">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">TODO last open files</property>
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">automatic</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <child>
+                          <object class="GtkTreeView" id="lastopenfilesTreeView">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">1</property>

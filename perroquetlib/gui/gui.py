@@ -74,6 +74,8 @@ class Gui:
             self.builder.get_object("checkmenuitemLateralPanel").set_active(True)
             self.builder.get_object("vbox2").show()
             self.config.Set("showlateralpanel", 1)
+        
+        self._updateLastOpenFilesTab()
 
     def SignalExerciseBadPath(self, path):
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
@@ -473,8 +475,22 @@ class Gui:
         gtk.main()
 
 
-
-
+    def _updateLastOpenFilesTab(self):
+        print "updateLastOpenFilesTab"
+        gtkTree = self.builder.get_object("lastopenfilesTreeView")
+        
+        if not gtkTree.get_columns() == []:
+            raise Exception
+        treeViewColumn = gtk.TreeViewColumn(_("Path"))
+        gtkTree.append_column(treeViewColumn) 
+        print gtkTree.get_columns()
+        
+        treeStore = gtk.TreeStore(str)
+        for file in self.config.Get("lastopenfiles"):
+            print file
+            treeStore.append(None, [file])
+        
+        gtkTree.set_model(treeStore)
 
     #---------------------- Now the functions called directly by the gui--------
 
