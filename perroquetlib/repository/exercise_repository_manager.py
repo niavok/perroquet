@@ -20,7 +20,7 @@
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
 from xml.dom.minidom import getDOMImplementation, parse
-import urllib2, os
+import urllib2, os, tempfile, tarfile, errno, shutil
 
 from perroquetlib.config import config
 from perroquetlib.repository.exercise_repository import ExerciseRepository
@@ -180,3 +180,62 @@ class ExerciseRepositoryManager:
         rc = rc.strip()
         return rc
 
+    def exportAsPackage(self, exercise, outPath):
+        tempPath = tempfile.mkdtemp("","perroquet-");
+
+        exercisePackage = exercise
+
+        #Make data directory
+        dataPath = os.path.join(tempPath, "data")
+
+        if not os.path.isdir(dataPath):
+            try:
+                os.makedirs(dataPath)
+            except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
+                if ErrorNumber == errno.EEXIST:
+                    pass
+                else: raise
+
+        #Exercise - SubExercises
+        for i,subExo in enumerate(exercisePackage.subExercisesList):
+
+            localPath = os.path.join("data", "sequence_"+str(i))
+            #Make sequence directory
+            sequencePath = os.path.join(tempPath,localPath)
+
+            if not os.path.isdir(sequencePath):
+                try:
+                    os.makedirs(sequencePath)
+                except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
+                    if ErrorNumber == errno.EEXIST:
+                        pass
+                    else: raise
+
+            #Copy resources locally
+            videoPath = os.path.join(sequencePath,os.path.basename(subExo.GetVideoPath()))
+            exercisePath = os.path.join(sequencePath,os.path.basename(subExo.GetExercisePath()))
+            translationPath = os.path.join(sequencePath,os.path.basename(subExo.GetTranslationPath()))
+
+            shutil.copyfile(subExo.GetVideoPath(), videoPath)
+            shutil.copyfile(subExo.GetExercisePath(), exercisePath)
+            shutil.copyfile(subExo.GetTranslationPath(), translationPath)
+
+
+            #subExo.SetVideoPath(videoPath)
+            #subExo.SetExercisePath(exercisePath)
+            #subExo.SetTranslationPath(translationPath)
+
+        templatePath = os.path.join(tempPath, "template.perroquet")
+
+        exercisePackage.setOutputSavePath(templatePath)
+        saver = ExerciseSaver()
+        self.exercisePackage.setTemplate(True)
+        saver.Save(self.exercisePackage, self.exercisePackage.getOutputSavePath())
+
+        # Create the tar
+        tar = tarfile.open(outPath, 'w')
+        tar.add(templatePath)
+        tar.add(dataPath)
+        tar.close()
+
+        #TODO : remove temp path

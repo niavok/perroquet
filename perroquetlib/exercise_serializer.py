@@ -27,6 +27,7 @@ from languages_manager import LanguagesManager
 
 class ExerciseSaver(object):
 
+
     def Save(self,exercise, outputPath):
         self.outputPath = outputPath
         self.config = config
@@ -171,8 +172,6 @@ class ExerciseSaver(object):
         f = open(self.outputPath, 'w')
         f.write(xml_string)
         f.close()
-
-
 
 
 

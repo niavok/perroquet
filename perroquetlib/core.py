@@ -26,6 +26,7 @@ from exercise_serializer import ExerciseLoader
 from exercise import Exercise
 from structure import NoCharPossible, ValidWordError
 from config import config
+from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 
 # The Core make the link between the GUI, the vidéo player, the current
 # open exercise and all others part of the application
@@ -464,9 +465,16 @@ class Core(object):
     def exportAsTemplate(self):
         self.gui.AskPropertiesAdvanced()
         path = self.gui.AskExportAsTemplatePath()
-        print path
+        if path:
+            saver = ExerciseSaver()
+            self.exercise.setTemplate(True)
+            saver.Save(self.exercise, path)
+            self.exercise.setTemplate(False)
 
     def exportAsPackage(self):
         self.gui.AskPropertiesAdvanced()
         path = self.gui.AskExportAsPackagePath()
-        print path
+        if path:
+            repoManager = ExerciseRepositoryManager()
+            repoManager.exportAsPackage(self.exercise,path)
+        print "Export done"
