@@ -23,9 +23,11 @@ from xml.dom.minidom import getDOMImplementation, parse
 import urllib2, os, tempfile, tarfile, errno, shutil
 
 from perroquetlib.config import config
+from perroquetlib.exercise_serializer import ExerciseSaver
 from perroquetlib.repository.exercise_repository import ExerciseRepository
 from perroquetlib.repository.exercise_repository_group import ExerciseRepositoryGroup
 from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
+
 
 class ExerciseRepositoryManager:
 
@@ -221,21 +223,21 @@ class ExerciseRepositoryManager:
             shutil.copyfile(subExo.GetTranslationPath(), translationPath)
 
 
-            #subExo.SetVideoPath(videoPath)
-            #subExo.SetExercisePath(exercisePath)
-            #subExo.SetTranslationPath(translationPath)
+            subExo.SetVideoExportPath(videoPath)
+            subExo.SetExerciseExportPath(exercisePath)
+            subExo.SetTranslationExportPath(translationPath)
 
         templatePath = os.path.join(tempPath, "template.perroquet")
 
         exercisePackage.setOutputSavePath(templatePath)
         saver = ExerciseSaver()
-        self.exercisePackage.setTemplate(True)
-        saver.Save(self.exercisePackage, self.exercisePackage.getOutputSavePath())
+        exercisePackage.setTemplate(True)
+        saver.Save(exercisePackage, exercisePackage.getOutputSavePath(),useRelativePath=True)
 
         # Create the tar
         tar = tarfile.open(outPath, 'w')
-        tar.add(templatePath)
-        tar.add(dataPath)
+        tar.add(templatePath,"template.perroquet")
+        tar.add(dataPath,"data")
         tar.close()
 
         #TODO : remove temp path

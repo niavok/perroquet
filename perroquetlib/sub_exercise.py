@@ -29,6 +29,9 @@ class SubExercise(object):
         self.currentSequenceId = 0
         self.sequenceList = []
         self.parent = parent
+        self.videoExportPath = None
+        self.exerciseExportPath = None
+        self.translationExportPath = None
 
     def LoadSubtitles(self):
 
@@ -144,6 +147,18 @@ class SubExercise(object):
     def SetTranslationPath(self, translationPath):
         self.translationPath = translationPath
 
+    #Define path to use when the parent file is exported
+    def SetVideoExportPath(self, videoPath):
+        self.videoExportPath = videoPath
+
+    #Define path to use when the parent file is exported
+    def SetExerciseExportPath(self, exercisePath):
+        self.exerciseExportPath = exercisePath
+
+    #Define path to use when the parent file is exported
+    def SetTranslationExportPath(self, translationPath):
+        self.translationExportPath = translationPath
+
     def SetCurrentSequence(self, id):
         if id >= len(self.sequenceList):
             self.currentSequenceId = len(self.sequenceList)-1
@@ -170,6 +185,30 @@ class SubExercise(object):
 
     def GetTranslationPath(self):
         return self.translationPath
+
+    #Get path to use when the parent file is exported. If no specila
+    #path is set, the absolute path is used
+    def GetVideoExportPath(self):
+        if self.videoExportPath:
+            return self.videoExportPath
+        else:
+            return self.videoPath
+
+    #Get path to use when the parent file is exported. If no specila
+    #path is set, the absolute path is used
+    def GetExerciseExportPath(self):
+        if self.videoExportPath:
+            return self.exerciseExportPath
+        else:
+            return self.exercisePath
+
+    #Get path to use when the parent file is exported. If no specila
+    #path is set, the absolute path is used
+    def GetTranslationExportPath(self):
+        if self.videoExportPath:
+            return self.translationExportPath
+        else:
+            return self.translationPath
 
     def GetTranslationList(self):
         return self.translationList
