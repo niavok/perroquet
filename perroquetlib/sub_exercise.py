@@ -197,7 +197,7 @@ class SubExercise(object):
     #Get path to use when the parent file is exported. If no specila
     #path is set, the absolute path is used
     def GetExerciseExportPath(self):
-        if self.videoExportPath:
+        if self.exerciseExportPath:
             return self.exerciseExportPath
         else:
             return self.exercisePath
@@ -205,7 +205,7 @@ class SubExercise(object):
     #Get path to use when the parent file is exported. If no specila
     #path is set, the absolute path is used
     def GetTranslationExportPath(self):
-        if self.videoExportPath:
+        if self.translationExportPath:
             return self.translationExportPath
         else:
             return self.translationPath

@@ -218,21 +218,27 @@ class ExerciseRepositoryManager:
             exercisePath = os.path.join(sequencePath,os.path.basename(subExo.GetExercisePath()))
             translationPath = os.path.join(sequencePath,os.path.basename(subExo.GetTranslationPath()))
 
+            videoRelPath = os.path.join(localPath,os.path.basename(subExo.GetVideoPath()))
+            exerciseRelPath = os.path.join(localPath,os.path.basename(subExo.GetExercisePath()))
+            translationRelPath = os.path.join(localPath,os.path.basename(subExo.GetTranslationPath()))
+
             shutil.copyfile(subExo.GetVideoPath(), videoPath)
             shutil.copyfile(subExo.GetExercisePath(), exercisePath)
-            shutil.copyfile(subExo.GetTranslationPath(), translationPath)
+            if subExo.GetTranslationPath() != '':
+                shutil.copyfile(subExo.GetTranslationPath(), translationPath)
 
 
-            subExo.SetVideoExportPath(videoPath)
-            subExo.SetExerciseExportPath(exercisePath)
-            subExo.SetTranslationExportPath(translationPath)
+            subExo.SetVideoExportPath(videoRelPath)
+            subExo.SetExerciseExportPath(exerciseRelPath)
+            if subExo.GetTranslationPath() != '':
+                subExo.SetTranslationExportPath(translationRelPath)
 
         templatePath = os.path.join(tempPath, "template.perroquet")
 
         exercisePackage.setOutputSavePath(templatePath)
         saver = ExerciseSaver()
         exercisePackage.setTemplate(True)
-        saver.Save(exercisePackage, exercisePackage.getOutputSavePath(),useRelativePath=True)
+        saver.Save(exercisePackage, exercisePackage.getOutputSavePath())
 
         # Create the tar
         tar = tarfile.open(outPath, 'w')
