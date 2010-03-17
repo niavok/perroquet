@@ -1,10 +1,12 @@
 [encoding: UTF-8]
 perroquetlib/perroquet.py
-perroquetlib/gui.py
 perroquetlib/core.py
 perroquetlib/video_player.py
-perroquetlib/gui_exercise_manager.py
-perroquetlib/gui_sequence_properties_advanced.py
+perroquetlib/gui/gui.py
+perroquetlib/gui/gui_exercise_manager.py
+perroquetlib/gui/gui_sequence_properties.py
+perroquetlib/gui/gui_sequence_properties_advanced.py
+perroquetlib/gui/gui_reset_exercise.py
 data/perroquet.desktop.in
 [type: gettext/glade]data/perroquet.ui
 [type: gettext/glade]data/properties.ui
