@@ -346,7 +346,7 @@ class Core(object):
         saver.Save(self.exercise, self.exercise.getOutputSavePath())
 
         self.config.Set("lastopenfile", self.exercise.getOutputSavePath())
-        
+
         self.SetCanSave(False)
 
     #Load the exercice at path
@@ -460,3 +460,13 @@ class Core(object):
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
+
+    def exportAsTemplate(self):
+        self.gui.AskPropertiesAdvanced()
+        path = self.gui.AskExportAsTemplatePath()
+        print path
+
+    def exportAsPackage(self):
+        self.gui.AskPropertiesAdvanced()
+        path = self.gui.AskExportAsPackagePath()
+        print path

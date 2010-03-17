@@ -81,6 +81,7 @@
                                 <property name="visible">True</property>
                                 <property name="image">image4</property>
                                 <property name="use_stock">False</property>
+                                <signal name="activate" handler="on_imagemenuitemExportAsTemplate_activate"/>
                               </object>
                             </child>
                             <child>
@@ -89,6 +90,7 @@
                                 <property name="visible">True</property>
                                 <property name="image">image6</property>
                                 <property name="use_stock">False</property>
+                                <signal name="activate" handler="on_imagemenuitemExportAsPackage_activate"/>
                               </object>
                             </child>
                           </object>

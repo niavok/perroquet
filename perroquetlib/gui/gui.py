@@ -364,6 +364,30 @@ class Gui:
             path = path +".perroquet"
         return path
 
+    def AskExportAsTemplatePath(self):
+        saver = ExportAsTemplateFileSelector(self.window)
+        path =saver.run()
+        if path == None:
+            return
+
+        if path == "None" or path == None :
+            path = ""
+        elif not path.endswith(".perroquet"):
+            path = path +".perroquet"
+        return path
+
+    def AskExportAsPackagePath(self):
+        saver = ExportAsPackageFileSelector(self.window)
+        path =saver.run()
+        if path == None:
+            return
+
+        if path == "None" or path == None :
+            path = ""
+        elif not path.endswith(".tar"):
+            path = path +".tar"
+        return path
+
     def AskProperties(self):
         dialogExerciseProperties = GuiSequenceProperties(self.core, self.window)
         dialogExerciseProperties.Run()
@@ -546,6 +570,12 @@ class Gui:
 
     def on_buttonNewExerciseCancel_clicked(self,widget,data=None):
         self.newExerciseDialog.hide()
+
+    def on_imagemenuitemExportAsTemplate_activate(self,widget,data=None):
+        self.core.exportAsTemplate()
+
+    def on_imagemenuitemExportAsPackage_activate(self,widget,data=None):
+        self.core.exportAsPackage()
 
     def on_textbufferView_changed(self,widget):
         if self.mode != "loaded":
@@ -909,9 +939,6 @@ class OpenFileSelector(FileSelector):
                 filter.add_pattern("*")
                 self.add_filter(filter)
 
-
-
-
 class SaveFileSelector(FileSelector):
         "A file selector for saving files"
 
@@ -933,5 +960,46 @@ class SaveFileSelector(FileSelector):
 
                 self.set_do_overwrite_confirmation(True)
 
+class ExportAsTemplateFileSelector(FileSelector):
+        "A file selector for saving files"
+
+        def __init__(self, parent):
+                FileSelector.__init__(
+                        self, parent, _('Select File to Export to'),
+                        gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
+                )
+
+                filter = gtk.FileFilter()
+                filter.set_name(_('Perroquet template files'))
+                filter.add_pattern("*.perroquet")
+                self.add_filter(filter)
+
+                filter = gtk.FileFilter()
+                filter.set_name(_('All files'))
+                filter.add_pattern("*")
+                self.add_filter(filter)
+
+                self.set_do_overwrite_confirmation(True)
+
+class ExportAsPackageFileSelector(FileSelector):
+        "A file selector for saving files"
+
+        def __init__(self, parent):
+                FileSelector.__init__(
+                        self, parent, _('Select File to Export to'),
+                        gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
+                )
+
+                filter = gtk.FileFilter()
+                filter.set_name(_('Perroquet package files'))
+                filter.add_pattern("*.tar")
+                self.add_filter(filter)
+
+                filter = gtk.FileFilter()
+                filter.set_name(_('All files'))
+                filter.add_pattern("*")
+                self.add_filter(filter)
+
+                self.set_do_overwrite_confirmation(True)
 
 
