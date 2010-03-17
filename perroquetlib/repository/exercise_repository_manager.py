@@ -246,4 +246,4 @@ class ExerciseRepositoryManager:
         tar.add(dataPath,"data")
         tar.close()
 
-        #TODO : remove temp path
+        shutil.rmtree(tempPath)
