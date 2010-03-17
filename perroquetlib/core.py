@@ -348,6 +348,11 @@ class Core(object):
 
         self.config.Set("lastopenfile", self.exercise.getOutputSavePath())
         
+        #lastopenfileS
+        l=self.config.Get("lastopenfiles")
+        path = self.exercise.getOutputSavePath()
+        self.config.Set("lastopenfiles", [path]+[p for p in l if p!=path])
+        
         self.SetCanSave(False)
 
     #Load the exercice at path
