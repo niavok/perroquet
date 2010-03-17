@@ -347,7 +347,7 @@ class Core(object):
         saver.Save(self.exercise, self.exercise.getOutputSavePath())
 
         self.config.Set("lastopenfile", self.exercise.getOutputSavePath())
-
+        
         self.SetCanSave(False)
 
     #Load the exercice at path
@@ -406,7 +406,7 @@ class Core(object):
         self.GotoSequenceBegin(True)
         self.Play()
 
-    def _updateProperties(self):
+    def UpdateProperties(self):
         self.exercise.Initialize()
         self._Reload(True)
         self.SetCanSave(True)
