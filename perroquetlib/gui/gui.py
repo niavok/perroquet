@@ -476,7 +476,6 @@ class Gui:
 
 
     def _updateLastOpenFilesTab(self):
-        print "updateLastOpenFilesTab"
         gtkTree = self.builder.get_object("lastopenfilesTreeView")
 
         if not gtkTree.get_columns() == []:
@@ -492,11 +491,9 @@ class Gui:
         treeViewColumn.set_expand(False)
         gtkTree.append_column(treeViewColumn)
 
-        print gtkTree.get_columns()
 
         treeStore = gtk.TreeStore(str)
         for file in self.config.Get("lastopenfiles"):
-            print file
             treeStore.append(None, [file])
 
         gtkTree.set_model(treeStore)

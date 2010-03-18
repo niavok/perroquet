@@ -24,9 +24,9 @@ import os, shutil
 import unittest
 from perroquetlib.config import Config
 
-pathRef = "./testConfigReference.ini"
-pathWritable = "./testConfigWritable.ini"
-pathTemp = "./testConfigTemp.ini"
+pathRef = "./test/testConfigReference.ini"
+pathWritable = "./test/testConfigWritable.ini"
+pathTemp = "./test/testConfigTemp.ini"
 pathTemp2 = "./a/b/c/testConfigTemp.ini"
 
 class testConfig(unittest.TestCase):

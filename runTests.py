@@ -19,9 +19,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from testConfig import *
-from testSequence import *
-from testWord import *
+from test.testConfig import *
+from test.testSequence import *
+from test.testWord import *
 
 import unittest
 
