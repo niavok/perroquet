@@ -46,7 +46,7 @@ class LanguagesManager:
         return self.languageList[0]
 
     def _load(self):
-        path = self.config.Get("languages_list_path");
+        path = self.config.get("languages_list_path");
         self._parseLanguageFile(path)
 
     def _parseLanguageFile(self,path):

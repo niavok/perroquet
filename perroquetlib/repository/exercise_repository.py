@@ -101,7 +101,7 @@ class ExerciseRepository:
         return orphanGroupList
 
     def getLocalPath(self):
-        return os.path.join(self.config.Get("local_repo_root_dir"), self.id)
+        return os.path.join(self.config.get("local_repo_root_dir"), self.id)
 
     def generateDescription(self):
         self._generateDescription()

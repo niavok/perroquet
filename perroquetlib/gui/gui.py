@@ -29,7 +29,7 @@ from perroquetlib.structure import Word
 from gui_sequence_properties import GuiSequenceProperties
 from gui_sequence_properties_advanced import GuiSequencePropertiesAdvanced
 from gui_reset_exercise import GuiResetExercise
-from gui_settings import GuiSettings
+from gui_settings import Guisettings
 from gui_exercise_manager import GuiExerciseManager
 
 _ = gettext.gettext
@@ -38,24 +38,24 @@ class Gui:
     def __init__(self):
         self.config = config
 
-        locale.bindtextdomain(self.config.Get("gettext_package"),self.config.Get("localedir"))
+        locale.bindtextdomain(self.config.get("gettext_package"),self.config.get("localedir"))
 
 
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
-        self.builder.add_from_file(self.config.Get("ui_path"))
+        self.builder.add_from_file(self.config.get("ui_path"))
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("MainWindow")
-        self.window.set_icon_from_file(self.config.Get("logo_path"))
+        self.window.set_icon_from_file(self.config.get("logo_path"))
 
         self.aboutDialog = self.builder.get_object("aboutdialog")
-        icon = gtk.gdk.pixbuf_new_from_file(self.config.Get("logo_path"))
+        icon = gtk.gdk.pixbuf_new_from_file(self.config.get("logo_path"))
         self.aboutDialog.set_logo(icon)
-        self.aboutDialog.set_version(self.config.Get("version"))
+        self.aboutDialog.set_version(self.config.get("version"))
 
         # Sound icon
-        print config.Get("audio_icon")
-        self.builder.get_object("imageAudio").set_from_file(config.Get("audio_icon"))
+        print config.get("audio_icon")
+        self.builder.get_object("imageAudio").set_from_file(config.get("audio_icon"))
 
         self.typeLabel = self.builder.get_object("typeView")
 
@@ -67,13 +67,13 @@ class Gui:
 
         self.activateVideo(False)
 
-        if not self.config.Get("showlateralpanel"):
+        if not self.config.get("showlateralpanel"):
             self.builder.get_object("vbox2").hide()
         else:
             #ugly but needed (?)
             self.builder.get_object("checkmenuitemLateralPanel").set_active(True)
             self.builder.get_object("vbox2").show()
-            self.config.Set("showlateralpanel", 1)
+            self.config.set("showlateralpanel", 1)
 
         self._updateLastOpenFilesTab()
 
@@ -86,10 +86,10 @@ class Gui:
         response = dialog.run()
         dialog.destroy()
 
-    def SetCore(self, core):
+    def setCore(self, core):
         self.core = core
 
-    def GetVideoWindowId(self):
+    def getVideoWindowId(self):
         return self.builder.get_object("videoArea").window.xid
 
     def activateVideo(self,state):
@@ -101,12 +101,12 @@ class Gui:
             self.builder.get_object("imageAudio").show()
 
 
-    def SetSpeed(self, speed):
+    def setSpeed(self, speed):
         self.settedSpeed = int(speed*100)
         ajustement = self.builder.get_object("adjustmentSpeed")
         ajustement.configure (self.settedSpeed, 75, 100, 1, 10, 0)
 
-    def SetSequenceNumber(self, sequenceNumber, sequenceCount):
+    def setSequenceNumber(self, sequenceNumber, sequenceCount):
         ajustement = self.builder.get_object("adjustmentSequenceNum")
         sequenceNumber = sequenceNumber + 1
         self.settedSeq = sequenceNumber
@@ -125,7 +125,7 @@ class Gui:
         else:
             toolbuttonNextSequence.set_sensitive(True)
 
-    def SetSequenceTime(self, sequencePos, sequenceTime):
+    def setSequenceTime(self, sequencePos, sequenceTime):
         if sequencePos > sequenceTime:
             sequencePos = sequenceTime
         if sequencePos < 0:
@@ -137,15 +137,15 @@ class Gui:
         textDuration = round(float(sequenceTime)/1000,1)
         self.builder.get_object("labelSequenceTime").set_text(str(textTime) + "/" + str(textDuration) + " s")
 
-    def SetPlaying(self, state):
+    def setPlaying(self, state):
         self.builder.get_object("toolbuttonPlay").set_sensitive(not state)
         self.builder.get_object("toolbuttonPause").set_sensitive(state)
 
-    def SetCanSave(self, state):
+    def setCanSave(self, state):
         self.builder.get_object("saveButton").set_sensitive(state)
         self.builder.get_object("imagemenuitemSave").set_sensitive(state)
 
-    def SetWordList(self, wordList):
+    def setWordList(self, wordList):
         self.wordList = wordList
         self.UpdateWordList()
 
@@ -175,11 +175,11 @@ class Gui:
         iter = buffer.get_end_iter()
         buffer.insert(iter,formattedWordList)
 
-    def SetTranslation(self, translation):
+    def setTranslation(self, translation):
         textviewTranslation = self.builder.get_object("textviewTranslation").get_buffer()
         textviewTranslation.set_text(translation)
 
-    def SetStats(self, sequenceCount,sequenceFound, wordCount, wordFound, repeatRate):
+    def setStats(self, sequenceCount,sequenceFound, wordCount, wordFound, repeatRate):
         labelProgress = self.builder.get_object("labelProgress")
         text = ""
         text = text + _("- Sequences: %(found)s/%(count)s (%(percent)s %%)\n") % {'found' : str(sequenceFound), 'count' : str(sequenceCount), 'percent' : str(round(100*sequenceFound/sequenceCount,1)) }
@@ -187,7 +187,7 @@ class Gui:
         text = text + _("- Repeat ratio: %s per words") % str(round(repeatRate,1))
         labelProgress.set_label(text)
 
-    def SetTitle(self, title, save):
+    def setTitle(self, title, save):
 
         newTitle = _("Perroquet")
 
@@ -199,7 +199,7 @@ class Gui:
 
         self.window.set_title(newTitle)
 
-    def SetSequence(self, sequence):
+    def setSequence(self, sequence):
         self.disableChangedTextEvent = True
         self.ClearBuffer()
         pos = 1
@@ -398,9 +398,9 @@ class Gui:
         dialogExerciseProperties = GuiSequencePropertiesAdvanced(self.core, self.window)
         dialogExerciseProperties.Run()
 
-    def AskSettings(self):
-        dialogSettings = GuiSettings(self.window)
-        dialogSettings.Run()
+    def Asksettings(self):
+        dialogsettings = Guisettings(self.window)
+        dialogsettings.Run()
         self.Refresh()
 
     def Activate(self, mode):
@@ -462,7 +462,7 @@ class Gui:
             self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(False)
             self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(False)
 
-        if config.Get("interface_show_play_pause_buttons") == 1:
+        if config.get("interface_show_play_pause_buttons") == 1:
             self.builder.get_object("toolbuttonPlay").show()
             self.builder.get_object("toolbuttonPause").show()
         else:
@@ -493,7 +493,7 @@ class Gui:
 
 
         treeStore = gtk.TreeStore(str)
-        for file in self.config.Get("lastopenfiles"):
+        for file in self.config.get("lastopenfiles"):
             treeStore.append(None, [file])
 
         gtkTree.set_model(treeStore)
@@ -501,8 +501,8 @@ class Gui:
     #---------------------- Now the functions called directly by the gui--------
 
     def on_MainWindow_delete_event(self,widget,data=None):
-        if not self.config.Get("autosave"):
-            if not self.core.GetCanSave():
+        if not self.config.get("autosave"):
+            if not self.core.getCanSave():
                 gtk.main_quit()
                 return False
 
@@ -545,7 +545,7 @@ class Gui:
         for language in languagesList:
             (langId,langName,chars) = language
             iter = self.liststoreLanguage.append([langName,langId])
-            if langId == config.Get("default_exercise_language"):
+            if langId == config.get("default_exercise_language"):
                 currentIter = iter
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
@@ -659,14 +659,14 @@ class Gui:
             self.core.togglePause()
         elif keyname == "KP_Add":
             if self.settedSpeed > 90:
-                self.core.SetSpeed(1.0)
+                self.core.setSpeed(1.0)
             else:
-                self.core.SetSpeed(float(self.settedSpeed+10)/100)
+                self.core.setSpeed(float(self.settedSpeed+10)/100)
         elif keyname == "KP_Subtract":
             if self.settedSpeed < 85:
-                self.core.SetSpeed(0.75)
+                self.core.setSpeed(0.75)
             else:
-                self.core.SetSpeed(float(self.settedSpeed-10)/100)
+                self.core.setSpeed(float(self.settedSpeed-10)/100)
         else:
             return False
 
@@ -697,7 +697,7 @@ class Gui:
     def on_adjustmentSpeed_value_changed(self,widget,data=None):
         value = int(self.builder.get_object("adjustmentSpeed").get_value())
         if value != self.settedSpeed:
-            self.core.SetSpeed(float(value)/100)
+            self.core.setSpeed(float(value)/100)
 
     def on_toolbuttonHint_clicked(self,widget,data=None):
         self.core.CompleteWord()
@@ -792,12 +792,12 @@ class Gui:
 
     def toggleLateralPanel(self):
         scrolledwindowTranslation = self.builder.get_object("vbox2")
-        if self.config.Get("showlateralpanel"):
+        if self.config.get("showlateralpanel"):
             scrolledwindowTranslation.hide()
-            self.config.Set("showlateralpanel", 0)
+            self.config.set("showlateralpanel", 0)
         else:
             scrolledwindowTranslation.show()
-            self.config.Set("showlateralpanel", 1)
+            self.config.set("showlateralpanel", 1)
 
     def toggleTranslation(self):
         scrolledwindowTranslation = self.builder.get_object("scrolledwindowTranslation")
@@ -820,8 +820,8 @@ class Gui:
     def on_imagemenuitemAdvancedProperties_activate(self,widget,data=None):
         self.AskPropertiesAdvanced()
 
-    def on_imagemenuitemSettings_activate(self,widget,data=None):
-        self.AskSettings()
+    def on_imagemenuitemsettings_activate(self,widget,data=None):
+        self.Asksettings()
 
 
     def on_imagemenuitemQuit_activate(self,widget,data=None):

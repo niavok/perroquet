@@ -47,7 +47,7 @@ class SubtitlesLoader(object):
         print("Error: failed to convert '" + fileName + "'.")
 
 
-    def GetSubtitleList(self, path):
+    def getSubtitleList(self, path):
         outputList = []
         f = self.convertFile(path)
         #f = open(path, 'r')
@@ -64,7 +64,7 @@ class SubtitlesLoader(object):
                 if len(line) > 0:
                     current = Subtitle()
                     try:
-                        current.SetId(int(line))
+                        current.setId(int(line))
                         state = SubtitlesLoader.LOOK_FOR_TIME
                     except:
                         pass
@@ -93,21 +93,21 @@ class SubtitlesLoader(object):
                         endTime += int(m.group(7))*1000
                         endTime += int(endMili)
 
-                        current.SetTimeBegin(beginTime)
-                        current.SetTimeEnd(endTime)
-                        current.SetText('')
+                        current.setTimeBegin(beginTime)
+                        current.setTimeEnd(endTime)
+                        current.setText('')
                         state = SubtitlesLoader.LOOK_FOR_TEXT
             elif state == SubtitlesLoader.LOOK_FOR_TEXT:
                 if len(line) > 0:
-                    if len(current.GetText()) == 0:
-                        current.SetText(line)
+                    if len(current.getText()) == 0:
+                        current.setText(line)
                     else:
-                        current.SetText(current.GetText() + " " + line)
+                        current.setText(current.getText() + " " + line)
                 else:
                     state = SubtitlesLoader.LOOK_FOR_ID
                     outputList.append(current)
 
-        if len(current.GetText()) > 0:
+        if len(current.getText()) > 0:
             outputList.append(current)
 
         return outputList
@@ -117,18 +117,18 @@ class SubtitlesLoader(object):
         id = 0
         current = None
         for sub in list:
-            if id == 0 or (sub.GetTimeBegin() - current.GetTimeEnd() > int(timeToMerge*1000)) or (sub.GetTimeEnd() - current.GetTimeBegin() > int(maxTime*1000)):
+            if id == 0 or (sub.getTimeBegin() - current.getTimeEnd() > int(timeToMerge*1000)) or (sub.getTimeEnd() - current.getTimeBegin() > int(maxTime*1000)):
                 if id > 0:
                     outputList.append(current)
                 id += 1
                 current = Subtitle()
-                current.SetId(id)
-                current.SetText(sub.GetText())
-                current.SetTimeBegin(sub.GetTimeBegin())
-                current.SetTimeEnd(sub.GetTimeEnd())
+                current.setId(id)
+                current.setText(sub.getText())
+                current.setTimeBegin(sub.getTimeBegin())
+                current.setTimeEnd(sub.getTimeEnd())
             else:
-                current.SetText(current.GetText() + " " + sub.GetText())
-                current.SetTimeEnd(sub.GetTimeEnd())
+                current.setText(current.getText() + " " + sub.getText())
+                current.setTimeEnd(sub.getTimeEnd())
         if current:
             outputList.append(current)
         return outputList
@@ -139,19 +139,19 @@ class Subtitle(object):
     def __init__(self):
         self.text = ""
 
-    def GetText(self):
+    def getText(self):
         return self.text
 
-    def GetTimeBegin(self):
+    def getTimeBegin(self):
         return self.timeBegin
 
-    def GetTimeEnd(self):
+    def getTimeEnd(self):
         return self.timeEnd
 
-    def GetId(self):
+    def getId(self):
         return self.id
 
-    def SetText(self,text):
+    def setText(self,text):
         # | mean new line in some srt files
         text = text.replace("|","\n")
         #Some subs have <i>...</i> or {]@^\`}. We need to delete them.
@@ -162,12 +162,12 @@ class Subtitle(object):
         self.text = text
 
 
-    def SetTimeBegin(self,timeBegin):
+    def setTimeBegin(self,timeBegin):
         self.timeBegin = timeBegin
 
-    def SetTimeEnd(self,timeEnd):
+    def setTimeEnd(self,timeEnd):
         self.timeEnd = timeEnd
 
-    def SetId(self,id):
+    def setId(self,id):
         self.id = id
 

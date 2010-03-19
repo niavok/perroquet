@@ -107,7 +107,7 @@ class Sequence(object):
     def getActiveWord(self):
         return self.getWords()[self.getActiveWordIndex()]
 
-    def GetWordFound(self):
+    def getWordFound(self):
         return len([w for w in self.getWords() if w.isValid()])
 
     def nextWord(self, loop=False):

@@ -24,7 +24,7 @@ from perroquetlib.exercise_repository_manager import *
 
 if __name__=="__main__":
     manager = ExerciseRepositoryManager()
-    print "Get repository list"
+    print "get repository list"
     list = manager.getExerciseRepositoryList()
     print str(len(list)) +" repository found:"
     for repo in list:

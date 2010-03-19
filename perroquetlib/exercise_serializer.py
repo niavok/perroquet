@@ -39,7 +39,7 @@ class ExerciseSaver(object):
 
         # Version
         xml_version = newdoc.createElement("version")
-        xml_version.appendChild(newdoc.createTextNode(self.config.Get("version")))
+        xml_version.appendChild(newdoc.createTextNode(self.config.get("version")))
         root_element.appendChild(xml_version)
 
         #Name
@@ -87,20 +87,20 @@ class ExerciseSaver(object):
             xml_subExo.appendChild(xml_paths)
 
             xml_video_paths = newdoc.createElement("video")
-            xml_video_paths.appendChild(newdoc.createTextNode(subExo.GetVideoExportPath()))
+            xml_video_paths.appendChild(newdoc.createTextNode(subExo.getVideoExportPath()))
             xml_paths.appendChild(xml_video_paths)
 
             xml_exercice_paths = newdoc.createElement("exercise")
-            xml_exercice_paths.appendChild(newdoc.createTextNode(subExo.GetExerciseExportPath()))
+            xml_exercice_paths.appendChild(newdoc.createTextNode(subExo.getExerciseExportPath()))
             xml_paths.appendChild(xml_exercice_paths)
 
             xml_translation_paths = newdoc.createElement("translation")
-            xml_translation_paths.appendChild(newdoc.createTextNode(subExo.GetTranslationExportPath()))
+            xml_translation_paths.appendChild(newdoc.createTextNode(subExo.getTranslationExportPath()))
             xml_paths.appendChild(xml_translation_paths)
 
             xml_sequences = newdoc.createElement("sequences")
             xml_subExo.appendChild(xml_sequences)
-            for id, sequence in enumerate(subExo.GetSequenceList()):
+            for id, sequence in enumerate(subExo.getSequenceList()):
                 if sequence.isValid():
                     xml_sequence = newdoc.createElement("sequence")
                     xml_sequence_id = newdoc.createElement("id")
@@ -136,7 +136,7 @@ class ExerciseSaver(object):
         xml_stats = newdoc.createElement("stats")
 
         xml_repeatCount = newdoc.createElement("repeat_count")
-        xml_repeatCount.appendChild(newdoc.createTextNode(str(exercise.GetRepeatCount())))
+        xml_repeatCount.appendChild(newdoc.createTextNode(str(exercise.getRepeatCount())))
         xml_stats.appendChild(xml_repeatCount)
 
         root_element.appendChild(xml_stats)
@@ -145,15 +145,15 @@ class ExerciseSaver(object):
         xml_properties = newdoc.createElement("properties")
 
         xml_repeatAfterComplete = newdoc.createElement("repeat_after_complete")
-        xml_repeatAfterComplete.appendChild(newdoc.createTextNode(str(exercise.GetRepeatAfterCompleted())))
+        xml_repeatAfterComplete.appendChild(newdoc.createTextNode(str(exercise.getRepeatAfterCompleted())))
         xml_properties.appendChild(xml_repeatAfterComplete)
 
         xml_maxSequenceLength = newdoc.createElement("max_sequence_length")
-        xml_maxSequenceLength.appendChild(newdoc.createTextNode(str(exercise.GetMaxSequenceLength())))
+        xml_maxSequenceLength.appendChild(newdoc.createTextNode(str(exercise.getMaxSequenceLength())))
         xml_properties.appendChild(xml_maxSequenceLength)
 
         xml_timeBetweenSequences = newdoc.createElement("time_between_sequence")
-        xml_timeBetweenSequences.appendChild(newdoc.createTextNode(str(exercise.GetTimeBetweenSequence())))
+        xml_timeBetweenSequences.appendChild(newdoc.createTextNode(str(exercise.getTimeBetweenSequence())))
         xml_properties.appendChild(xml_timeBetweenSequences)
 
         xml_playMarginBefore = newdoc.createElement("play_margin_before")
@@ -218,7 +218,7 @@ class ExerciseLoader(object):
 
     def UpdateSequenceList(self ):
         for subExo,self.progress in zip(self.exercise.subExercisesList,self.subExo):
-            sequenceList = subExo.GetSequenceList()
+            sequenceList = subExo.getSequenceList()
 
             for (id, state, words) in self.progress:
                 if id >= len(sequenceList):
@@ -266,17 +266,17 @@ class ExerciseLoader(object):
 
         # Stats
         xml_stats = dom.getElementsByTagName("stats")[0]
-        self.exercise.SetRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
+        self.exercise.setRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
 
         # Properties
         if len(dom.getElementsByTagName("properties")) > 0:
             xml_properties = dom.getElementsByTagName("properties")[0]
             if len(xml_properties.getElementsByTagName("repeat_after_complete")) > 0:
-                self.exercise.SetRepeatAfterCompleted(self.getText(xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes) == "True")
+                self.exercise.setRepeatAfterCompleted(self.getText(xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes) == "True")
             if len(xml_properties.getElementsByTagName("time_between_sequence")) > 0:
-                self.exercise.SetTimeBetweenSequence(float(self.getText(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
+                self.exercise.setTimeBetweenSequence(float(self.getText(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
             if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
-                self.exercise.SetMaxSequenceLength(float(self.getText(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
+                self.exercise.setMaxSequenceLength(float(self.getText(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
             if len(xml_properties.getElementsByTagName("play_margin_before")) > 0:
                 self.exercise.setPlayMarginBefore(int(self.getText(xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
             if len(xml_properties.getElementsByTagName("play_margin_after")) > 0:
@@ -307,9 +307,9 @@ class ExerciseLoader(object):
 
             #Paths
             xml_paths = xml_subExercise.getElementsByTagName("paths")[0]
-            subExercise.SetVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
-            subExercise.SetExercisePath(self.getText(xml_paths.getElementsByTagName("exercise")[0].childNodes))
-            subExercise.SetTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
+            subExercise.setVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
+            subExercise.setExercisePath(self.getText(xml_paths.getElementsByTagName("exercise")[0].childNodes))
+            subExercise.setTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
 
             self.exercise.subExercisesList.append(subExercise)
 
@@ -319,26 +319,26 @@ class ExerciseLoader(object):
 
         #Convert relative path
         for subExo in self.exercise.subExercisesList:
-            if not os.path.isfile(subExo.GetExercisePath()):
-                absPath = os.path.join(os.path.dirname(path), subExo.GetExercisePath())
+            if not os.path.isfile(subExo.getExercisePath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.getExercisePath())
                 if not os.path.isfile(absPath):
-                    subExo.SetExercisePath("")
+                    subExo.setExercisePath("")
                 else:
-                    subExo.SetExercisePath(absPath)
+                    subExo.setExercisePath(absPath)
 
-            if not os.path.isfile(subExo.GetVideoPath()):
-                absPath = os.path.join(os.path.dirname(path), subExo.GetVideoPath())
+            if not os.path.isfile(subExo.getVideoPath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.getVideoPath())
                 if not os.path.isfile(absPath):
-                    subExo.SetVideoPath("")
+                    subExo.setVideoPath("")
                 else:
-                    subExo.SetVideoPath(absPath)
+                    subExo.setVideoPath(absPath)
 
-            if not os.path.isfile(subExo.GetTranslationPath()):
-                absPath = os.path.join(os.path.dirname(path), subExo.GetTranslationPath())
+            if not os.path.isfile(subExo.getTranslationPath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.getTranslationPath())
                 if not os.path.isfile(absPath):
-                    subExo.SetTranslationPath("")
+                    subExo.setTranslationPath("")
                 else:
-                    subExo.SetTranslationPath(absPath)
+                    subExo.setTranslationPath(absPath)
 
 
         self.exercise.Initialize()
@@ -393,7 +393,7 @@ class ExerciseLoader(object):
 
         # Stats
         xml_stats = dom.getElementsByTagName("stats")[0]
-        self.exercise.SetRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
+        self.exercise.setRepeatCount(int(self.getText(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
 
         #Subexercises
         self.subExo = []
@@ -419,9 +419,9 @@ class ExerciseLoader(object):
 
         #Paths
         xml_paths = dom.getElementsByTagName("paths")[0]
-        subExercise.SetVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
-        subExercise.SetExercisePath(self.getText(xml_paths.getElementsByTagName("exercice")[0].childNodes))
-        subExercise.SetTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
+        subExercise.setVideoPath(self.getText(xml_paths.getElementsByTagName("video")[0].childNodes))
+        subExercise.setExercisePath(self.getText(xml_paths.getElementsByTagName("exercice")[0].childNodes))
+        subExercise.setTranslationPath(self.getText(xml_paths.getElementsByTagName("translation")[0].childNodes))
 
         self.exercise.subExercisesList.append(subExercise)
 
@@ -429,26 +429,26 @@ class ExerciseLoader(object):
 
         #Convert relative path
         for subExo in self.exercise.subExercisesList:
-            if not os.path.isfile(subExo.GetExercisePath()):
-                absPath = os.path.join(os.path.dirname(path), subExo.GetExercisePath())
+            if not os.path.isfile(subExo.getExercisePath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.getExercisePath())
                 if not os.path.isfile(absPath):
-                    subExo.SetExercisePath("")
+                    subExo.setExercisePath("")
                 else:
-                    subExo.SetExercisePath(absPath)
+                    subExo.setExercisePath(absPath)
 
-            if not os.path.isfile(subExo.GetVideoPath()):
-                absPath = os.path.join(os.path.dirname(path), subExo.GetVideoPath())
+            if not os.path.isfile(subExo.getVideoPath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.getVideoPath())
                 if not os.path.isfile(absPath):
-                    subExo.SetVideoPath("")
+                    subExo.setVideoPath("")
                 else:
-                    subExo.SetVideoPath(absPath)
+                    subExo.setVideoPath(absPath)
 
-            if not os.path.isfile(subExo.GetTranslationPath()):
-                absPath = os.path.join(os.path.dirname(path), subExo.GetTranslationPath())
+            if not os.path.isfile(subExo.getTranslationPath()):
+                absPath = os.path.join(os.path.dirname(path), subExo.getTranslationPath())
                 if not os.path.isfile(absPath):
-                    subExo.SetTranslationPath("")
+                    subExo.setTranslationPath("")
                 else:
-                    subExo.SetTranslationPath(absPath)
+                    subExo.setTranslationPath(absPath)
 
 
         self.exercise.Initialize()

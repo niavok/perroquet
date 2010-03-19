@@ -35,12 +35,12 @@ class SubExercise(object):
 
     def LoadSubtitles(self):
 
-        self.subList = self.subtitles.GetSubtitleList(self.exercisePath)
+        self.subList = self.subtitles.getSubtitleList(self.exercisePath)
         self.subList = self.subtitles.CompactSubtitlesList(self.subList, self.parent.timeBetweenSequence, self.parent.maxSequenceLength)
 
         self.translationList = None
         if self.translationPath != "":
-            self.translationList = self.subtitles.GetSubtitleList(self.translationPath)
+            self.translationList = self.subtitles.getSubtitleList(self.translationPath)
 
         oldSequenceList = self.sequenceList
 
@@ -50,9 +50,9 @@ class SubExercise(object):
 
         for sub in self.subList:
             self.sequence = Sequence(charToFind)
-            self.sequence.load(sub.GetText())
-            self.sequence.setTimeBegin(sub.GetTimeBegin())
-            self.sequence.setTimeEnd(sub.GetTimeEnd())
+            self.sequence.load(sub.getText())
+            self.sequence.setTimeBegin(sub.getTimeBegin())
+            self.sequence.setTimeEnd(sub.getTimeEnd())
             self.sequenceList.append(self.sequence)
 
         #Restore found words
@@ -138,34 +138,34 @@ class SubExercise(object):
     def IncrementRepeatCount(self):
         self.repeatCount += 1
 
-    def SetVideoPath(self, videoPath):
+    def setVideoPath(self, videoPath):
         self.videoPath = videoPath
 
-    def SetExercisePath(self, exercisePath):
+    def setExercisePath(self, exercisePath):
         self.exercisePath = exercisePath
 
-    def SetTranslationPath(self, translationPath):
+    def setTranslationPath(self, translationPath):
         self.translationPath = translationPath
 
     #Define path to use when the parent file is exported
-    def SetVideoExportPath(self, videoPath):
+    def setVideoExportPath(self, videoPath):
         self.videoExportPath = videoPath
 
     #Define path to use when the parent file is exported
-    def SetExerciseExportPath(self, exercisePath):
+    def setExerciseExportPath(self, exercisePath):
         self.exerciseExportPath = exercisePath
 
     #Define path to use when the parent file is exported
-    def SetTranslationExportPath(self, translationPath):
+    def setTranslationExportPath(self, translationPath):
         self.translationExportPath = translationPath
 
-    def SetCurrentSequence(self, id):
+    def setCurrentSequence(self, id):
         if id >= len(self.sequenceList):
             self.currentSequenceId = len(self.sequenceList)-1
         else:
             self.currentSequenceId = id
 
-    def GetSequenceList(self):
+    def getSequenceList(self):
         return self.sequenceList
 
     def getCurrentSequence(self):
@@ -174,41 +174,41 @@ class SubExercise(object):
     def getCurrentSequenceId(self):
         return self.currentSequenceId
 
-    def GetSequenceCount(self):
+    def getSequenceCount(self):
         return len(self.sequenceList)
 
-    def GetVideoPath(self):
+    def getVideoPath(self):
         return self.videoPath
 
-    def GetExercisePath(self):
+    def getExercisePath(self):
         return self.exercisePath
 
-    def GetTranslationPath(self):
+    def getTranslationPath(self):
         return self.translationPath
 
-    #Get path to use when the parent file is exported. If no specila
+    #get path to use when the parent file is exported. If no specila
     #path is set, the absolute path is used
-    def GetVideoExportPath(self):
+    def getVideoExportPath(self):
         if self.videoExportPath:
             return self.videoExportPath
         else:
             return self.videoPath
 
-    #Get path to use when the parent file is exported. If no specila
+    #get path to use when the parent file is exported. If no specila
     #path is set, the absolute path is used
-    def GetExerciseExportPath(self):
+    def getExerciseExportPath(self):
         if self.exerciseExportPath:
             return self.exerciseExportPath
         else:
             return self.exercisePath
 
-    #Get path to use when the parent file is exported. If no specila
+    #get path to use when the parent file is exported. If no specila
     #path is set, the absolute path is used
-    def GetTranslationExportPath(self):
+    def getTranslationExportPath(self):
         if self.translationExportPath:
             return self.translationExportPath
         else:
             return self.translationPath
 
-    def GetTranslationList(self):
+    def getTranslationList(self):
         return self.translationList

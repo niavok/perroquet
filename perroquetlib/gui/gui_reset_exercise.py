@@ -32,7 +32,7 @@ class GuiResetExercise:
 
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
-        self.builder.add_from_file(self.config.Get("ui_reset_path"))
+        self.builder.add_from_file(self.config.get("ui_reset_path"))
         self.builder.connect_signals(self)
         self.dialog = self.builder.get_object("dialogReset")
 

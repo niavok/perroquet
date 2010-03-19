@@ -47,12 +47,12 @@ class Parser(ConfigParser):
                 for option in self.options(section) ])
     
     def set(self, section, option, value):
-        "Set an option."
+        "set an option."
         string = self.object2str[section](value)
         ConfigParser.set(self, section, option, string)        
     
     def get(self, section, option):
-        "Get an option value for a given section."
+        "get an option value for a given section."
         return self.str2object[section](ConfigParser.get(self, section, option))
     
     def items(self, section):
@@ -121,21 +121,21 @@ class Config:
         
         #Write
         for (option, section) in writableOptions.items():
-            self.Set(option, parser.get(section, option))
+            self.set(option, parser.get(section, option))
         
         #Remember
         localParser = WritableParser(writablePath)
         localParser.setOptions(writableOptions)
         self._writableParsers.append(localParser)
 
-    def Get(self, key):
-        """Get a propertie"""
+    def get(self, key):
+        """get a propertie"""
         if not key.islower():
             raise KeyError, key+" is not lowercase"
         return self._properties[key]
 
-    def Set(self, key, value):
-        """Set a propertie"""
+    def set(self, key, value):
+        """set a propertie"""
         if not key.islower():
             raise KeyError, key+" is not lowercase"
         self._properties[key] = value

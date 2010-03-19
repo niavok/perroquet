@@ -47,7 +47,7 @@ class Exercise(object):
     def Initialize(self):
         self._LoadSubtitles()
         if self.randomOrder:
-            self.order = [x for x in range(self.GetSequenceCount())]
+            self.order = [x for x in range(self.getSequenceCount())]
             random.shuffle(self.order)
             self.reverseOrder = copy.copy(self.order)
             for i,j in enumerate(self.order):
@@ -62,15 +62,15 @@ class Exercise(object):
             languageManager = LanguagesManager()
             self.language = languageManager.getDefaultLanguage()
 
-            self.maxSequenceLength = float(config.Get("default_exercise_max_sequence_length"))/1000
-            self.timeBetweenSequence = float(config.Get("default_exercise_time_between_sequences"))/1000
-            self.playMarginAfter = config.Get("default_exercise_play_margin_before")
-            self.playMarginBefore = config.Get("default_exercise_play_margin_after")
+            self.maxSequenceLength = float(config.get("default_exercise_max_sequence_length"))/1000
+            self.timeBetweenSequence = float(config.get("default_exercise_time_between_sequences"))/1000
+            self.playMarginAfter = config.get("default_exercise_play_margin_before")
+            self.playMarginBefore = config.get("default_exercise_play_margin_after")
 
-            self.repeatAfterCompeted = (config.Get("default_exercise_repeat_after_competed") == 1)
-            self.randomOrder = (config.Get("default_exercise_random_order") == 1)
+            self.repeatAfterCompeted = (config.get("default_exercise_repeat_after_competed") == 1)
+            self.randomOrder = (config.get("default_exercise_random_order") == 1)
 
-            self.setLanguageId(config.Get("default_exercise_language"))
+            self.setLanguageId(config.get("default_exercise_language"))
 
     def _LoadSubtitles(self):
 
@@ -79,7 +79,7 @@ class Exercise(object):
 
     # Reset the work done in the exercise
     def reset(self):
-        for sequence in self.GetSequenceList():
+        for sequence in self.getSequenceList():
             sequence.reset()
 
     def ExtractWordList(self):
@@ -99,17 +99,17 @@ class Exercise(object):
         localId = id
 
         for subExo in self.subExercisesList:
-            if localId < len(subExo.GetSequenceList()):
-                subExo.SetCurrentSequence(localId)
+            if localId < len(subExo.getSequenceList()):
+                subExo.setCurrentSequence(localId)
                 if self.currentSubExercise != subExo:
                     self.currentSubExercise = subExo
                     self.notifyMediaChange()
                 return True
             else:
-                localId -= len(subExo.GetSequenceList())
+                localId -= len(subExo.getSequenceList())
 
 
-        self.GotoSequence(self.GetSequenceCount()-1)
+        self.GotoSequence(self.getSequenceCount()-1)
         return False
 
 
@@ -156,14 +156,14 @@ class Exercise(object):
     def IncrementRepeatCount(self):
         self.repeatCount += 1
 
-    def SetVideoPath(self, videoPath):
-        self.currentSubExercise.SetVideoPath(videoPath)
+    def setVideoPath(self, videoPath):
+        self.currentSubExercise.setVideoPath(videoPath)
 
-    def SetExercisePath(self, exercisePath):
-        self.currentSubExercise.SetExercisePath(exercisePath)
+    def setExercisePath(self, exercisePath):
+        self.currentSubExercise.setExercisePath(exercisePath)
 
-    def SetTranslationPath(self, translationPath):
-        self.currentSubExercise.SetTranslationPath(translationPath)
+    def setTranslationPath(self, translationPath):
+        self.currentSubExercise.setTranslationPath(translationPath)
 
     def getCurrentSequence(self):
         return self.currentSubExercise.getCurrentSequence()
@@ -171,52 +171,52 @@ class Exercise(object):
     def getCurrentSequenceId(self):
         return self.currentSequenceId
 
-    def GetSequenceList(self):
+    def getSequenceList(self):
         list = []
         for subExo in self.subExercisesList:
-            list += subExo.GetSequenceList()
+            list += subExo.getSequenceList()
         return list
 
-    def GetSequenceCount(self):
+    def getSequenceCount(self):
         count = 0
         for subExo in self.subExercisesList:
-            count += subExo.GetSequenceCount()
+            count += subExo.getSequenceCount()
         return count
 
-    def SetRepeatCount(self, count):
+    def setRepeatCount(self, count):
         self.repeatCount = count
 
-    def GetRepeatCount(self):
+    def getRepeatCount(self):
         return self.repeatCount
 
-    def GetVideoPath(self):
-        return self.currentSubExercise.GetVideoPath()
+    def getVideoPath(self):
+        return self.currentSubExercise.getVideoPath()
 
-    def GetExercisePath(self):
-        return self.currentSubExercise.GetExercisePath()
+    def getExercisePath(self):
+        return self.currentSubExercise.getExercisePath()
 
-    def GetTranslationPath(self):
-        return self.currentSubExercise.GetTranslationPath()
+    def getTranslationPath(self):
+        return self.currentSubExercise.getTranslationPath()
 
-    def GetTranslationList(self):
-        return self.currentSubExercise.GetTranslationList()
+    def getTranslationList(self):
+        return self.currentSubExercise.getTranslationList()
 
-    def SetRepeatAfterCompleted(self, state):
+    def setRepeatAfterCompleted(self, state):
         self.repeatAfterCompeted = state
 
-    def GetRepeatAfterCompleted(self):
+    def getRepeatAfterCompleted(self):
         return self.repeatAfterCompeted
 
-    def SetTimeBetweenSequence(self, time):
+    def setTimeBetweenSequence(self, time):
         self.timeBetweenSequence = time
 
-    def GetTimeBetweenSequence(self):
+    def getTimeBetweenSequence(self):
         return self.timeBetweenSequence
 
-    def SetMaxSequenceLength(self, time):
+    def setMaxSequenceLength(self, time):
         self.maxSequenceLength = time
 
-    def GetMaxSequenceLength(self):
+    def getMaxSequenceLength(self):
         return self.maxSequenceLength
 
     def getOutputSavePath(self):

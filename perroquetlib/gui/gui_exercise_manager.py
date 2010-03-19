@@ -35,7 +35,7 @@ class GuiExerciseManager:
 
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
-        self.builder.add_from_file(self.config.Get("ui_exercise_manager_path"))
+        self.builder.add_from_file(self.config.get("ui_exercise_manager_path"))
         self.builder.connect_signals(self)
         self.dialog = self.builder.get_object("dialogExerciseManager")
         self.dialogDetails = self.builder.get_object("dialogDetails")
@@ -49,7 +49,7 @@ class GuiExerciseManager:
         #self.dialog.set_functions (gtk.gdk.FUNC_RESIZE | gtk.gdk.FUNC_MOVE | gtk.gdk.FUNC_MINIMIZE |gtk.gdk.FUNC_MAXIMIZE)
 
         checkbuttonTreeViewMode = self.builder.get_object("checkbuttonTreeViewMode")
-        checkbuttonTreeViewMode.props.active = (self.config.Get("repositorymanager.displayonlyexercises") != 1)
+        checkbuttonTreeViewMode.props.active = (self.config.get("repositorymanager.displayonlyexercises") != 1)
 
         self.treeviewDetails = self.builder.get_object("treeviewDetails")
 
@@ -80,7 +80,7 @@ class GuiExerciseManager:
     def _updateExerciseTreeView(self):
         self.treeStoreExercices = gtk.TreeStore(str,str, str, str, bool, object, str)
 
-        displayOnlyExercises = (self.config.Get("repositorymanager.displayonlyexercises") == 1)
+        displayOnlyExercises = (self.config.get("repositorymanager.displayonlyexercises") == 1)
 
         self.availableExoCount = 0
         self.installedExoCount = 0
@@ -453,9 +453,9 @@ class GuiExerciseManager:
     def on_checkbuttonTreeViewMode_toggled(self, widget, data=None):
         checkbuttonTreeViewMode = self.builder.get_object("checkbuttonTreeViewMode")
         if checkbuttonTreeViewMode.props.active:
-            self.config.Set("repositorymanager.displayonlyexercises",0)
+            self.config.set("repositorymanager.displayonlyexercises",0)
         else:
-            self.config.Set("repositorymanager.displayonlyexercises",1)
+            self.config.set("repositorymanager.displayonlyexercises",1)
         self._updateExerciseTreeView()
 
 

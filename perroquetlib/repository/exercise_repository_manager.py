@@ -35,7 +35,7 @@ class ExerciseRepositoryManager:
         self.config = config
 
     def getExerciseRepositoryList(self):
-        repositoryPathList = self.config.Get("repository_source_list")
+        repositoryPathList = self.config.get("repository_source_list")
         repositoryList = []
 
         repositoryList += self._getLocalExerciseRepositoryList();
@@ -47,7 +47,7 @@ class ExerciseRepositoryManager:
 
     def _getLocalExerciseRepositoryList(self):
         repositoryList = []
-        localRepoPath = os.path.join(self.config.Get("local_repo_root_dir"),"local")
+        localRepoPath = os.path.join(self.config.get("local_repo_root_dir"),"local")
 
         if os.path.isdir(localRepoPath):
             repository = ExerciseRepository()
@@ -61,7 +61,7 @@ class ExerciseRepositoryManager:
 
 
     def _getDistantExerciseRepositoryList(self):
-        repositoryPathList = self.config.Get("repository_source_list")
+        repositoryPathList = self.config.get("repository_source_list")
         repositoryList = []
         offlineRepoList = []
 
@@ -91,10 +91,10 @@ class ExerciseRepositoryManager:
                     repository.generateDescription()
 
         if len(offlineRepoList) > 0:
-            repoPathList = os.listdir(self.config.Get("local_repo_root_dir"))
+            repoPathList = os.listdir(self.config.get("local_repo_root_dir"))
             for repoPath in repoPathList:
                 repository = ExerciseRepository()
-                repoDescriptionPath = os.path.join(self.config.Get("local_repo_root_dir"),repoPath,"repository.xml")
+                repoDescriptionPath = os.path.join(self.config.get("local_repo_root_dir"),repoPath,"repository.xml")
                 if not os.path.isfile(repoDescriptionPath):
                     continue
                 f = open(repoDescriptionPath, 'r')
@@ -104,7 +104,7 @@ class ExerciseRepositoryManager:
                 if repository.getUrl() in offlineRepoList:
                     print "add url : " +repository.getUrl()
                     repository = ExerciseRepository()
-                    repository.initFromPath(os.path.join(self.config.Get("local_repo_root_dir"),repoPath))
+                    repository.initFromPath(os.path.join(self.config.get("local_repo_root_dir"),repoPath))
                     repository.setType("offline")
                     repositoryList.append(repository)
 
@@ -113,7 +113,7 @@ class ExerciseRepositoryManager:
 
 
     def getPersonalExerciseRepositoryList(self):
-        repositoryPath = self.config.Get("personal_repository_source_path")
+        repositoryPath = self.config.get("personal_repository_source_path")
         repositoryList = []
 
         if os.path.isfile(repositoryPath):
@@ -132,7 +132,7 @@ class ExerciseRepositoryManager:
         #The goal of this methods is to make an inteligent write of config file
         #Line biginning with # are comment and must be keep in place
 
-        repositoryPath = self.config.Get("personal_repository_source_path")
+        repositoryPath = self.config.get("personal_repository_source_path")
         repositoryList = []
 
         if os.path.isfile(repositoryPath):
@@ -158,14 +158,14 @@ class ExerciseRepositoryManager:
         f.close()
 
     def _getOrphanExerciseRepositoryList(self,repositoryListIn):
-        repoPathList = os.listdir(self.config.Get("local_repo_root_dir"))
+        repoPathList = os.listdir(self.config.get("local_repo_root_dir"))
         repoUsedPath = []
         repositoryList = []
         for repo in repositoryListIn:
             repoUsedPath.append(repo.getLocalPath())
 
         for repoPath in repoPathList:
-            path = os.path.join(self.config.Get("local_repo_root_dir"), repoPath)
+            path = os.path.join(self.config.get("local_repo_root_dir"), repoPath)
             if path not in repoUsedPath:
                 repository = ExerciseRepository()
                 repository.initFromPath(path)
@@ -214,24 +214,24 @@ class ExerciseRepositoryManager:
                     else: raise
 
             #Copy resources locally
-            videoPath = os.path.join(sequencePath,os.path.basename(subExo.GetVideoPath()))
-            exercisePath = os.path.join(sequencePath,os.path.basename(subExo.GetExercisePath()))
-            translationPath = os.path.join(sequencePath,os.path.basename(subExo.GetTranslationPath()))
+            videoPath = os.path.join(sequencePath,os.path.basename(subExo.getVideoPath()))
+            exercisePath = os.path.join(sequencePath,os.path.basename(subExo.getExercisePath()))
+            translationPath = os.path.join(sequencePath,os.path.basename(subExo.getTranslationPath()))
 
-            videoRelPath = os.path.join(localPath,os.path.basename(subExo.GetVideoPath()))
-            exerciseRelPath = os.path.join(localPath,os.path.basename(subExo.GetExercisePath()))
-            translationRelPath = os.path.join(localPath,os.path.basename(subExo.GetTranslationPath()))
+            videoRelPath = os.path.join(localPath,os.path.basename(subExo.getVideoPath()))
+            exerciseRelPath = os.path.join(localPath,os.path.basename(subExo.getExercisePath()))
+            translationRelPath = os.path.join(localPath,os.path.basename(subExo.getTranslationPath()))
 
-            shutil.copyfile(subExo.GetVideoPath(), videoPath)
-            shutil.copyfile(subExo.GetExercisePath(), exercisePath)
-            if subExo.GetTranslationPath() != '':
-                shutil.copyfile(subExo.GetTranslationPath(), translationPath)
+            shutil.copyfile(subExo.getVideoPath(), videoPath)
+            shutil.copyfile(subExo.getExercisePath(), exercisePath)
+            if subExo.getTranslationPath() != '':
+                shutil.copyfile(subExo.getTranslationPath(), translationPath)
 
 
-            subExo.SetVideoExportPath(videoRelPath)
-            subExo.SetExerciseExportPath(exerciseRelPath)
-            if subExo.GetTranslationPath() != '':
-                subExo.SetTranslationExportPath(translationRelPath)
+            subExo.setVideoExportPath(videoRelPath)
+            subExo.setExerciseExportPath(exerciseRelPath)
+            if subExo.getTranslationPath() != '':
+                subExo.setTranslationExportPath(translationRelPath)
 
         templatePath = os.path.join(tempPath, "template.perroquet")
 

@@ -31,17 +31,17 @@ class Perroquet(object):
         self.core = Core()
         self.gui = Gui()
 
-        self.core.SetGui(self.gui)
-        self.gui.SetCore(self.core)
+        self.core.setGui(self.gui)
+        self.gui.setCore(self.core)
         self.gui.Activate("closed")
 
     def run(self):
         if len(sys.argv) > 1:
             path = os.path.abspath(sys.argv[1])
             self.core.LoadExercise( path )
-        elif self.gui.config.Get("lastopenfile"):
-            print "last open file : " + self.gui.config.Get("lastopenfile")
-            self.core.LoadExercise(self.gui.config.Get("lastopenfile"))
+        elif self.gui.config.get("lastopenfile"):
+            print "last open file : " + self.gui.config.get("lastopenfile")
+            self.core.LoadExercise(self.gui.config.get("lastopenfile"))
 
         self.gui.Run()
 

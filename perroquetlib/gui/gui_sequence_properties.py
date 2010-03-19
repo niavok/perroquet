@@ -32,7 +32,7 @@ class GuiSequenceProperties:
 
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
-        self.builder.add_from_file(self.config.Get("ui_sequence_properties_path"))
+        self.builder.add_from_file(self.config.get("ui_sequence_properties_path"))
         self.builder.connect_signals(self)
         self.dialog = self.builder.get_object("dialogExerciseProperties")
 
@@ -50,7 +50,7 @@ class GuiSequenceProperties:
         self.dialog.destroy()
 
     def Load(self):
-        (videoPath,exercisePath,translationPath)  = self.core.GetPaths()
+        (videoPath,exercisePath,translationPath)  = self.core.getPaths()
 
         if videoPath == "":
             videoPath = "None"
@@ -71,14 +71,14 @@ class GuiSequenceProperties:
         translationChooser.set_filename(translationPath)
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        checkbuttonRepeatAfterComplete.set_active(self.core.GetExercise().GetRepeatAfterCompleted())
+        checkbuttonRepeatAfterComplete.set_active(self.core.getExercise().getRepeatAfterCompleted())
 
         self.liststoreLanguage = gtk.ListStore(str,str)
 
         languageManager = LanguagesManager()
         languagesList =languageManager.getLanguagesList()
 
-        currentLangId = self.core.GetExercise().getLanguageId()
+        currentLangId = self.core.getExercise().getLanguageId()
 
         for language in languagesList:
             (langId,langName,chars) = language
@@ -116,19 +116,19 @@ class GuiSequenceProperties:
 
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        self.core.GetExercise().SetRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
+        self.core.getExercise().setRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
         iter = comboboxLanguage.get_active_iter()
         langId = self.liststoreLanguage.get_value(iter,1)
 
-        self.core.GetExercise().setLanguageId(langId)
+        self.core.getExercise().setLanguageId(langId)
 
 
         self.core.UpdatePaths(videoPath,exercisePath, translationPath)
 
-        self.core.SetCanSave(True)
+        self.core.setCanSave(True)
 
         self.dialog.response(gtk.RESPONSE_OK)
 

@@ -41,7 +41,7 @@ class Core(object):
         self.config = config
 
     #Call by the main, give an handler to the main gui
-    def SetGui(self, gui):
+    def setGui(self, gui):
         self.gui = gui
 
     #Create a new exercice based on paths. Load the new exercise and
@@ -51,17 +51,17 @@ class Core(object):
         self.exercise.setMediaChangeCallback(self.mediaChangeCallBack)
         self.exercise.new()
         self.exercise.setLanguageId(langId)
-        self._SetPaths(videoPath, exercisePath, translationPath)
+        self._setPaths(videoPath, exercisePath, translationPath)
         self.exercise.Initialize()
         self._Reload(True);
         self._ActivateSequence()
-        self.gui.SetTitle("", True)
+        self.gui.setTitle("", True)
 
     #Configure the paths for the current exercice. Reload subtitles list.
-    def _SetPaths(self, videoPath, exercisePath, translationPath):
-        self.exercise.SetVideoPath(videoPath)
-        self.exercise.SetExercisePath(exercisePath)
-        self.exercise.SetTranslationPath(translationPath)
+    def _setPaths(self, videoPath, exercisePath, translationPath):
+        self.exercise.setVideoPath(videoPath)
+        self.exercise.setExercisePath(exercisePath)
+        self.exercise.setTranslationPath(translationPath)
         self.exercise.Initialize()
 
     #Reload media player and begin to play (if the params is True)
@@ -70,10 +70,10 @@ class Core(object):
             self.player.Close()
 
         self.player = VideoPlayer()
-        self.player.SetWindowId(self.gui.GetVideoWindowId())
+        self.player.setWindowId(self.gui.getVideoWindowId())
         self.player.ActivateVideoCallback(self.gui.activateVideo)
-        self.player.Open(self.exercise.GetVideoPath())
-        self.player.SetCallback(self._TimeCallback)
+        self.player.Open(self.exercise.getVideoPath())
+        self.player.setCallback(self._TimeCallback)
         self.paused = False
         self.gui.activateVideo(False)
         self.gui.Activate("loaded")
@@ -87,26 +87,26 @@ class Core(object):
 
     #Play the media
     def Play(self):
-        self.gui.SetPlaying(True)
+        self.gui.setPlaying(True)
         self.player.Play()
         self.paused = False
 
     #Pause the media
     def Pause(self):
-        self.gui.SetPlaying(False)
+        self.gui.setPlaying(False)
         self.player.Pause()
         self.paused = True
 
     #Modify media speed
-    def SetSpeed(self, speed):
-        self.gui.SetSpeed(speed)
-        self.player.SetSpeed(speed)
+    def setSpeed(self, speed):
+        self.gui.setSpeed(speed)
+        self.player.setSpeed(speed)
 
     #Callback call by video player to notify change of media position.
     #Stop the media at the end of uncompleted sequences
     def _TimeCallback(self):
         if self.state == Core.WAIT_BEGIN:
-            self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + self.exercise.getPlayMarginAfter())
+            self.player.setNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + self.exercise.getPlayMarginAfter())
             self.state = Core.WAIT_END
         elif self.state == Core.WAIT_END:
             self.state = Core.WAIT_BEGIN
@@ -130,12 +130,12 @@ class Core(object):
         self._ActivateSequence()
         if load:
             self.RepeatSequence()
-        self.SetCanSave(True)
+        self.setCanSave(True)
 
     #Goto next sequence
     def NextSequence(self, load = True):
         if self.exercise.GotoNextSequence():
-            self.SetCanSave(True)
+            self.setCanSave(True)
         self._ActivateSequence()
         if load:
             self.RepeatSequence()
@@ -143,7 +143,7 @@ class Core(object):
     #Goto previous sequence
     def PreviousSequence(self, load = True):
         if self.exercise.GotoPreviousSequence():
-            self.SetCanSave(True)
+            self.setCanSave(True)
         self._ActivateSequence()
         if load:
             self.RepeatSequence()
@@ -151,57 +151,57 @@ class Core(object):
     #Update interface with new sequence. Configure stop media callback
     def _ActivateSequence(self):
         self.state = Core.WAIT_BEGIN
-        self.SetSpeed(1)
-        self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeBegin())
+        self.setSpeed(1)
+        self.player.setNextCallbackTime(self.exercise.getCurrentSequence().getTimeBegin())
 
-        self.gui.SetSequenceNumber(self.exercise.getCurrentSequenceId(), self.exercise.GetSequenceCount())
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.gui.setSequenceNumber(self.exercise.getCurrentSequenceId(), self.exercise.getSequenceCount())
+        self.gui.setSequence(self.exercise.getCurrentSequence())
         self._ActivateTranslation()
         self._updateStats()
 
     #_update displayed translation on new active sequence
     def _ActivateTranslation(self):
-        if not self.exercise.GetTranslationList():
-            self.gui.SetTranslation("")
+        if not self.exercise.getTranslationList():
+            self.gui.setTranslation("")
         else:
             translation = ""
             currentBegin = self.exercise.getCurrentSequence().getTimeBegin()
             currentEnd = self.exercise.getCurrentSequence().getTimeEnd()
-            for sub in self.exercise.GetTranslationList():
-                begin = sub.GetTimeBegin()
-                end = sub.GetTimeEnd()
+            for sub in self.exercise.getTranslationList():
+                begin = sub.getTimeBegin()
+                end = sub.getTimeEnd()
                 if (begin >= currentBegin and begin <= currentEnd) or (end >= currentBegin and end <= currentEnd) or (begin <= currentBegin and end >= currentEnd):
-                    translation += sub.GetText() + " "
+                    translation += sub.getText() + " "
 
-            self.gui.SetTranslation(translation)
+            self.gui.setTranslation(translation)
 
     #Update displayed stats on new active sequence
     def _updateStats(self):
-        sequenceCount = self.exercise.GetSequenceCount()
+        sequenceCount = self.exercise.getSequenceCount()
         sequenceFound = 0
         wordCount = 0
         wordFound = 0
-        for sequence in self.exercise.GetSequenceList():
+        for sequence in self.exercise.getSequenceList():
             wordCount = wordCount + sequence.getWordCount()
             if sequence.isValid():
                 sequenceFound += 1
                 wordFound += sequence.getWordCount()
             else :
-                wordFound += sequence.GetWordFound()
+                wordFound += sequence.getWordFound()
         if wordFound == 0:
             repeatRate = float(0)
         else:
-            repeatRate = float(self.exercise.GetRepeatCount()) / float(wordFound)
-        self.gui.SetStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
+            repeatRate = float(self.exercise.getRepeatCount()) / float(wordFound)
+        self.gui.setStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
 
     def _update(self):
-        self.gui.SetSequence(self.exercise.getCurrentSequence())
+        self.gui.setSequence(self.exercise.getCurrentSequence())
         self._ValidateSequence()
 
     #Verify if the sequence is complete
     def _ValidateSequence(self):
         if self.exercise.getCurrentSequence().isValid():
-            if self.exercise.GetRepeatAfterCompleted():
+            if self.exercise.getRepeatAfterCompleted():
                 self.RepeatSequence()
             else:
                 self.NextSequence(False)
@@ -218,7 +218,7 @@ class Core(object):
             self.player.SeekAsSoonAsReady(begin_time)
         else:
             self.player.Seek(begin_time)
-        self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd())
+        self.player.setNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd())
 
 
     #Write a char in current sequence at cursor position
@@ -226,7 +226,7 @@ class Core(object):
         if self.exercise.isCharacterMatch(char):
             self.exercise.getCurrentSequence().writeChar(char)
             self._update()
-            self.SetCanSave(True)
+            self.setCanSave(True)
         else:
             pass
 
@@ -262,13 +262,13 @@ class Core(object):
     def DeletePreviousChar(self):
         self.exercise.getCurrentSequence().deletePreviousChar()
         self._update()
-        self.SetCanSave(True)
+        self.setCanSave(True)
 
     #Delete a char after the cursor in current sequence
     def DeleteNextChar(self):
         self.exercise.getCurrentSequence().deleteNextChar()
         self._update()
-        self.SetCanSave(True)
+        self.setCanSave(True)
 
     #Goto previous char in current sequence
     def PreviousChar(self):
@@ -287,14 +287,14 @@ class Core(object):
         self.exercise.getCurrentSequence().showHint()
         self.exercise.getCurrentSequence().nextChar()
         self._update()
-        self.SetCanSave(True)
+        self.setCanSave(True)
 
     #reset whole exercise
     def resetExerciseContent(self):
         self.exercise.reset()
         self.exercise.GotoSequence(0) #FIXME
         self._update()
-        self.SetCanSave(True)
+        self.setCanSave(True)
         print "need to stop the current sequence" #FIXME
 
     #Pause or play media
@@ -312,7 +312,7 @@ class Core(object):
 
         pos = begin_time + time
         self.player.Seek(pos)
-        self.player.SetNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + self.exercise.getPlayMarginAfter())
+        self.player.setNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + self.exercise.getPlayMarginAfter())
         self.state = Core.WAIT_END
         self.Play()
 
@@ -321,7 +321,7 @@ class Core(object):
         timeUpdateThreadId = self.timeUpdateThreadId
         while timeUpdateThreadId == self.timeUpdateThreadId:
             time.sleep(0.5)
-            pos_int = self.player.GetCurrentTime()
+            pos_int = self.player.getCurrentTime()
             if pos_int != None:
                 end_time = self.exercise.getCurrentSequence().getTimeEnd()
                 begin_time = self.exercise.getCurrentSequence().getTimeBegin() - self.exercise.getPlayMarginBefore()
@@ -329,7 +329,7 @@ class Core(object):
                     begin_time = 0
                 duration = end_time - begin_time
                 pos = pos_int -begin_time
-                self.gui.SetSequenceTime(pos, duration)
+                self.gui.setSequenceTime(pos, duration)
 
     #Save current exercice
     def Save(self, saveAs = False):
@@ -346,14 +346,14 @@ class Core(object):
         saver = ExerciseSaver()
         saver.Save(self.exercise, self.exercise.getOutputSavePath())
 
-        self.config.Set("lastopenfile", self.exercise.getOutputSavePath())
+        self.config.set("lastopenfile", self.exercise.getOutputSavePath())
         
         #lastopenfileS
-        l=self.config.Get("lastopenfiles")
+        l=self.config.get("lastopenfiles")
         path = self.exercise.getOutputSavePath()
-        self.config.Set("lastopenfiles", [path]+[p for p in l if p!=path])
+        self.config.set("lastopenfiles", [path]+[p for p in l if p!=path])
         
-        self.SetCanSave(False)
+        self.setCanSave(False)
 
     #Load the exercice at path
     def LoadExercise(self, path):
@@ -376,37 +376,37 @@ class Core(object):
             for error in errorList:
                 self.gui.SignalExerciseBadPath(error)
 
-            self.SetCanSave(False)
+            self.setCanSave(False)
             self.gui.Activate("load_failed")
             self.gui.AskProperties()
             return
 
         self._Reload(False)
         if self.exercise.getOutputSavePath() == None:
-            self.SetCanSave(True)
+            self.setCanSave(True)
         else:
-            self.SetCanSave(False)
+            self.setCanSave(False)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
 
     #Change paths of current exercice and reload subtitles and video
     def _updatePaths(self, videoPath, exercisePath, translationPath):
-        self.exercise.SetVideoPath(videoPath)
-        self.exercise.SetExercisePath(exercisePath)
-        self.exercise.SetTranslationPath(translationPath)
+        self.exercise.setVideoPath(videoPath)
+        self.exercise.setExercisePath(exercisePath)
+        self.exercise.setTranslationPath(translationPath)
 
         validPaths, errorList = self.exercise.IsPathsValid()
         if not validPaths:
             for error in errorList:
                 self.gui.SignalExerciseBadPath(error)
             self.gui.Activate("load_failed")
-            self.SetCanSave(False)
+            self.setCanSave(False)
             return
 
-        self._SetPaths( videoPath, exercisePath, translationPath)
+        self._setPaths( videoPath, exercisePath, translationPath)
         self._Reload(True)
-        self.SetCanSave(True)
+        self.setCanSave(True)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
@@ -414,27 +414,27 @@ class Core(object):
     def UpdateProperties(self):
         self.exercise.Initialize()
         self._Reload(True)
-        self.SetCanSave(True)
+        self.setCanSave(True)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.Play()
 
-    #Get paths of current exercise
-    def GetPaths(self):
-        return (self.exercise.GetVideoPath(), self.exercise.GetExercisePath(), self.exercise.GetTranslationPath())
+    #get paths of current exercise
+    def getPaths(self):
+        return (self.exercise.getVideoPath(), self.exercise.getExercisePath(), self.exercise.getTranslationPath())
 
     #Udpates vocabulary list in interface
     def _updateWordList(self):
-        self.gui.SetWordList(self.exercise.ExtractWordList())
+        self.gui.setWordList(self.exercise.ExtractWordList())
 
     #Notify the user use the repeat command (for stats)
     def UserRepeat(self):
         self.exercise.IncrementRepeatCount()
-        self.SetCanSave(True)
+        self.setCanSave(True)
 
     #Signal to the gui that the exercise has unsaved changes
-    def SetCanSave(self, save):
-        self.gui.SetCanSave(save)
+    def setCanSave(self, save):
+        self.gui.setCanSave(save)
 
         if self.exercise == None:
             title = ""
@@ -446,21 +446,21 @@ class Core(object):
             title = _("Untitled exercise")
 
         self.last_save = save
-        self.gui.SetTitle(title, save)
+        self.gui.setTitle(title, save)
 
-    def GetCanSave(self):
+    def getCanSave(self):
         return self.last_save
 
-    def GetExercise(self):
+    def getExercise(self):
         return self.exercise
 
     def getPlayer(self):
         return self.player
 
     def mediaChangeCallBack(self):
-        print "new media : "+self.exercise.GetVideoPath()
+        print "new media : "+self.exercise.getVideoPath()
         """self.Pause()
-        self.player.Open(self.exercise.GetVideoPath())
+        self.player.Open(self.exercise.getVideoPath())
         """
         self._Reload(True)
         self._ActivateSequence()

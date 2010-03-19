@@ -94,7 +94,7 @@ class VideoPlayer(object):
         self.player.set_state(gst.STATE_PLAYING)
         self.playing = True
 
-    def SetSpeed(self,speed):
+    def setSpeed(self,speed):
         if self.canChangeSpeed:
             self.audiospeedchanger.set_property("tempo", speed)
             if self.nextCallbackTime != -1:
@@ -119,19 +119,19 @@ class VideoPlayer(object):
     def SeekAsSoonAsReady(self, time):
         self.timeToSeek = time
 
-    def SetCallback(self, callback):
+    def setCallback(self, callback):
         self.callback = callback
 
-    def SetNextCallbackTime(self, nextCallbackTime):
+    def setNextCallbackTime(self, nextCallbackTime):
         self.nextCallbackTime = nextCallbackTime
 
-    def SetWindowId(self, windowId):
+    def setWindowId(self, windowId):
         self.windowId = windowId
 
     def ActivateVideoCallback(self, activateVideo):
         self.activateVideo = activateVideo
 
-    def GetCurrentTime(self):
+    def getCurrentTime(self):
         pos_int = -1
         try:
             pos_int = self.playbin.query_position(self.time_format, None)[0]

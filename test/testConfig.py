@@ -34,45 +34,45 @@ class testConfig(unittest.TestCase):
         c=Config()
         c.loadWritableConfigFile(pathWritable, pathRef)
         
-        self.assertEqual(c.Get("christmas"), "merry Christmas\nand happy new year")
-        self.assertEqual(c.Get("newyear"), "champagne")
+        self.assertEqual(c.get("christmas"), "merry Christmas\nand happy new year")
+        self.assertEqual(c.get("newyear"), "champagne")
         
-        self.assertEqual(c.Get("firstint"), 5)
-        self.assertEqual(c.Get("sndint"), 8)
+        self.assertEqual(c.get("firstint"), 5)
+        self.assertEqual(c.get("sndint"), 8)
         
-        self.assertEqual(c.Get("liststr"), ["one", "two"])
-        self.assertEqual(c.Get("listint"), [1, 2, 3])
+        self.assertEqual(c.get("liststr"), ["one", "two"])
+        self.assertEqual(c.get("listint"), [1, 2, 3])
         
     def testSave(self):
         shutil.copy(pathWritable, pathTemp)
         c=Config()
         c.loadWritableConfigFile(pathTemp, pathRef)
-        c.Set("firstint", 666)
-        c.Set("liststr", ["1", "2", "3"])
-        c.Set("listint", [666,666])
+        c.set("firstint", 666)
+        c.set("liststr", ["1", "2", "3"])
+        c.set("listint", [666,666])
         c.Save()
         c=Config()
         c.loadWritableConfigFile(pathTemp, pathRef)
-        self.assertEqual(c.Get("firstint"), 666)
-        self.assertEqual(c.Get("liststr"), ["1", "2", "3"])
-        self.assertEqual(c.Get("listint"), [666, 666])
+        self.assertEqual(c.get("firstint"), 666)
+        self.assertEqual(c.get("liststr"), ["1", "2", "3"])
+        self.assertEqual(c.get("listint"), [666, 666])
         os.remove(pathTemp)
         
         c=Config()
         c.loadWritableConfigFile(pathTemp2, pathRef)
-        c.Set("firstint", 666)
+        c.set("firstint", 666)
         c.Save()
         c.loadWritableConfigFile(pathTemp2, pathRef)
-        self.assertEqual(c.Get("firstint"), 666)
+        self.assertEqual(c.get("firstint"), 666)
         shutil.rmtree("./a")
     
     def testError(self):
         c=Config()
-        self.failUnlessRaises(KeyError, lambda :c.Set("MAJ", 3))
-        self.failUnlessRaises(KeyError, lambda :c.Get("MAJ"))
+        self.failUnlessRaises(KeyError, lambda :c.set("MAJ", 3))
+        self.failUnlessRaises(KeyError, lambda :c.get("MAJ"))
 
         c.loadWritableConfigFile(pathWritable, pathRef)
-        self.failUnlessRaises(KeyError, lambda :c.Get("easter"))
+        self.failUnlessRaises(KeyError, lambda :c.get("easter"))
 
 
 if __name__=="__main__":
