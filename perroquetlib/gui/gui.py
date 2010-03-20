@@ -59,7 +59,7 @@ class Gui:
 
         self.typeLabel = self.builder.get_object("typeView")
 
-        self.initTypeLabel()
+        self.init_type_label()
 
         self.translationVisible = False
         self.disableChangedTextEvent = False
@@ -77,7 +77,7 @@ class Gui:
 
         self._updateLastOpenFilesTab()
 
-    def SignalExerciseBadPath(self, path):
+    def signal_exercise_bad_path(self, path):
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
                                    gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
                                    _("The file '%s' doesn't exist. Please modify exercise paths") % path)
@@ -292,7 +292,7 @@ class Gui:
             self.currentPosIndex += 1
         self.currentIndex += len(word)
 
-    def initTypeLabel(self):
+    def init_type_label(self):
         """creates the labels used for the coloration of the text"""
         buffer = self.typeLabel.get_buffer()
 
@@ -354,7 +354,7 @@ class Gui:
                 foreground=color_not_found,
                 size_points=18.0)
 
-    def AskSavePath(self):
+    def ask_save_path(self):
         saver = SaveFileSelector(self.window)
         path =saver.run()
         if path == None:
@@ -397,11 +397,11 @@ class Gui:
         result =loader.run()
         return result
 
-    def AskProperties(self):
+    def ask_properties(self):
         dialogExerciseProperties = GuiSequenceProperties(self.core, self.window)
         dialogExerciseProperties.Run()
 
-    def AskPropertiesAdvanced(self):
+    def ask_properties_advanced(self):
         dialogExerciseProperties = GuiSequencePropertiesAdvanced(self.core, self.window)
         dialogExerciseProperties.Run()
 
@@ -410,7 +410,7 @@ class Gui:
         dialogsettings.Run()
         self.Refresh()
 
-    def Activate(self, mode):
+    def activate(self, mode):
         self.mode = mode
         self.Refresh()
 
@@ -777,7 +777,7 @@ class Gui:
         self.core.SelectSequenceWord(wordIndex,wordIndexPos)
 
     def on_toolbuttonProperties_clicked(self, widget, data=None):
-        self.AskProperties()
+        self.ask_properties()
 
     def on_imagemenuitemExerciceManager_activate(self, widget, data=None):
         self.DisplayExerciceManager()
@@ -828,7 +828,7 @@ class Gui:
         return self.on_toolbuttonProperties_clicked(widget, data)
 
     def on_imagemenuitemAdvancedProperties_activate(self,widget,data=None):
-        self.AskPropertiesAdvanced()
+        self.ask_properties_advanced()
 
     def on_imagemenuitemsettings_activate(self,widget,data=None):
         self.Asksettings()

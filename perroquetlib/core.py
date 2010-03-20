@@ -78,7 +78,7 @@ class Core(object):
         self.player.setCallback(self._TimeCallback)
         self.paused = False
         self.gui.activateVideo(False)
-        self.gui.Activate("loaded")
+        self.gui.activate("loaded")
         self._updateWordList()
         self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
 
@@ -340,7 +340,7 @@ class Core(object):
             return
 
         if saveAs or self.exercise.getOutputSavePath() == None:
-            outputSavePath = self.gui.AskSavePath()
+            outputSavePath = self.gui.ask_save_path()
             if outputSavePath == None:
                 return
             self.exercise.setOutputSavePath(outputSavePath)
@@ -359,7 +359,7 @@ class Core(object):
 
     #Load the exercice at path
     def LoadExercise(self, path):
-        self.gui.Activate("closed")
+        self.gui.activate("closed")
         loader = ExerciseLoader()
         if self.exercise:
             self.save()
@@ -376,11 +376,11 @@ class Core(object):
         validPaths, errorList = self.exercise.IsPathsValid()
         if not validPaths:
             for error in errorList:
-                self.gui.SignalExerciseBadPath(error)
+                self.gui.signal_exercise_bad_path(error)
 
             self.setCanSave(False)
-            self.gui.Activate("load_failed")
-            self.gui.AskProperties()
+            self.gui.activate("load_failed")
+            self.gui.ask_properties()
             return
 
         self._Reload(False)
@@ -401,8 +401,8 @@ class Core(object):
         validPaths, errorList = self.exercise.IsPathsValid()
         if not validPaths:
             for error in errorList:
-                self.gui.SignalExerciseBadPath(error)
-            self.gui.Activate("load_failed")
+                self.gui.signal_exercise_bad_path(error)
+            self.gui.activate("load_failed")
             self.setCanSave(False)
             return
 
@@ -470,7 +470,7 @@ class Core(object):
         self.Play()
 
     def exportAsTemplate(self):
-        self.gui.AskPropertiesAdvanced()
+        self.gui.ask_properties_advanced()
         path = self.gui.AskExportAsTemplatePath()
         if path:
             saver = ExerciseSaver()
@@ -479,7 +479,7 @@ class Core(object):
             self.exercise.setTemplate(False)
 
     def exportAsPackage(self):
-        self.gui.AskPropertiesAdvanced()
+        self.gui.ask_properties_advanced()
         path = self.gui.AskExportAsPackagePath()
         if path:
             repoManager = ExerciseRepositoryManager()

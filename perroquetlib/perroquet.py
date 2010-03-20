@@ -34,7 +34,7 @@ class Perroquet(object):
 
         self.core.setGui(self.gui)
         self.gui.setCore(self.core)
-        self.gui.Activate("closed")
+        self.gui.activate("closed")
 
     def run(self):
         if len(sys.argv) > 1:
