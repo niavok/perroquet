@@ -90,11 +90,11 @@ class VideoPlayer(object):
         self.play_thread_id = thread.start_new_thread(self.play_thread, ())
         self.player.set_state(gst.STATE_PAUSED)
         self.playing = False
-    def Play(self):
+    def play(self):
         self.player.set_state(gst.STATE_PLAYING)
         self.playing = True
 
-    def setSpeed(self,speed):
+    def set_speed(self,speed):
         if self.canChangeSpeed:
             self.audiospeedchanger.set_property("tempo", speed)
             if self.nextCallbackTime != -1:
@@ -102,7 +102,7 @@ class VideoPlayer(object):
             self.speed = speed
 
 
-    def Pause(self):
+    def pause(self):
         self.player.set_state(gst.STATE_PAUSED)
         self.playing = False
 

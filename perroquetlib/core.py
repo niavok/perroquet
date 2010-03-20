@@ -42,31 +42,31 @@ class Core(object):
         self.config = config
 
     #Call by the main, give an handler to the main gui
-    def setGui(self, gui):
+    def set_gui(self, gui):
         self.gui = gui
 
     #Create a new exercice based on paths. Load the new exercise and
     #begin to play
-    def NewExercise(self, videoPath, exercisePath, translationPath, langId):
+    def new_exercise(self, videoPath, exercisePath, translationPath, langId):
         self.exercise = Exercise()
         self.exercise.setMediaChangeCallback(self.mediaChangeCallBack)
         self.exercise.new()
         self.exercise.setLanguageId(langId)
-        self._setPaths(videoPath, exercisePath, translationPath)
+        self._set_paths(videoPath, exercisePath, translationPath)
         self.exercise.Initialize()
-        self._Reload(True);
+        self._reload(True);
         self._ActivateSequence()
         self.gui.setTitle("", True)
 
     #Configure the paths for the current exercice. Reload subtitles list.
-    def _setPaths(self, videoPath, exercisePath, translationPath):
+    def _set_paths(self, videoPath, exercisePath, translationPath):
         self.exercise.setVideoPath(videoPath)
         self.exercise.setExercisePath(exercisePath)
         self.exercise.setTranslationPath(translationPath)
         self.exercise.Initialize()
 
     #Reload media player and begin to play (if the params is True)
-    def _Reload(self, load):
+    def _reload(self, load):
         if self.player != None:
             self.player.Close()
 
@@ -82,30 +82,30 @@ class Core(object):
         self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
 
         if load:
-            self.Play()
+            self.play()
         else:
-            self.Pause()
+            self.pause()
 
-    #Play the media
-    def Play(self):
+    #play the media
+    def play(self):
         self.gui.set_playing(True)
-        self.player.Play()
+        self.player.play()
         self.paused = False
 
-    #Pause the media
-    def Pause(self):
+    #pause the media
+    def pause(self):
         self.gui.set_playing(False)
-        self.player.Pause()
+        self.player.pause()
         self.paused = True
 
     #Modify media speed
-    def setSpeed(self, speed):
-        self.gui.setSpeed(speed)
-        self.player.setSpeed(speed)
+    def set_speed(self, speed):
+        self.gui.set_speed(speed)
+        self.player.set_speed(speed)
 
     #Callback call by video player to notify change of media position.
     #Stop the media at the end of uncompleted sequences
-    def _TimeCallback(self):
+    def _time_callback(self):
         if self.state == Core.WAIT_BEGIN:
             self.player.setNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + self.exercise.getPlayMarginAfter())
             self.state = Core.WAIT_END
@@ -113,33 +113,33 @@ class Core(object):
             self.state = Core.WAIT_BEGIN
             if self.exercise.getCurrentSequence().isValid():
                 gtk.gdk.threads_enter()
-                self.NextSequence(False)
+                self.next_sequence(False)
                 gtk.gdk.threads_leave()
             else:
-                self.Pause()
+                self.pause()
 
     #Repeat the currence sequence
-    def RepeatSequence(self):
+    def repeat_sequence(self):
         self.GotoSequenceBegin()
-        self.Play()
+        self.play()
 
     #Change the active sequence
-    def SelectSequence(self, num, load = True):
+    def select_sequence(self, num, load = True):
         if self.exercise.getCurrentSequenceId() == num:
             return
         self.exercise.GotoSequence(num)
         self._ActivateSequence()
         if load:
-            self.RepeatSequence()
+            self.repeat_sequence()
         self.setCanSave(True)
 
     #Goto next sequence
-    def NextSequence(self, load = True):
+    def next_sequence(self, load = True):
         if self.exercise.GotoNextSequence():
             self.setCanSave(True)
         self._ActivateSequence()
         if load:
-            self.RepeatSequence()
+            self.repeat_sequence()
 
     #Goto previous sequence
     def PreviousSequence(self, load = True):
@@ -147,12 +147,12 @@ class Core(object):
             self.setCanSave(True)
         self._ActivateSequence()
         if load:
-            self.RepeatSequence()
+            self.repeat_sequence()
 
     #Update interface with new sequence. Configure stop media callback
     def _ActivateSequence(self):
         self.state = Core.WAIT_BEGIN
-        self.setSpeed(1)
+        self.set_speed(1)
         self.player.setNextCallbackTime(self.exercise.getCurrentSequence().getTimeBegin())
 
         self.gui.setSequenceNumber(self.exercise.getCurrentSequenceId(), self.exercise.getSequenceCount())
@@ -203,10 +203,10 @@ class Core(object):
     def _ValidateSequence(self):
         if self.exercise.getCurrentSequence().isValid():
             if self.exercise.getRepeatAfterCompleted():
-                self.RepeatSequence()
+                self.repeat_sequence()
             else:
-                self.NextSequence(False)
-                self.Play()
+                self.next_sequence(False)
+                self.play()
 
     #Goto beginning of the current sequence. Can start to play as soon
     #as the media player is ready
@@ -298,12 +298,12 @@ class Core(object):
         self.setCanSave(True)
         print "need to stop the current sequence" #FIXME
 
-    #Pause or play media
+    #pause or play media
     def togglePause(self):
         if self.player.IsPaused() and self.paused:
-            self.Play()
+            self.play()
         elif not self.player.IsPaused() and not self.paused:
-            self.Pause()
+            self.pause()
 
     #Change position in media and play it
     def SeekSequence(self, time):
@@ -315,7 +315,7 @@ class Core(object):
         self.player.Seek(pos)
         self.player.setNextCallbackTime(self.exercise.getCurrentSequence().getTimeEnd() + self.exercise.getPlayMarginAfter())
         self.state = Core.WAIT_END
-        self.Play()
+        self.play()
 
     #Thread to update slider position in gui
     def timeUpdateThread(self):
@@ -382,14 +382,14 @@ class Core(object):
             self.gui.ask_properties()
             return
 
-        self._Reload(False)
+        self._reload(False)
         if self.exercise.getOutputSavePath() == None:
             self.setCanSave(True)
         else:
             self.setCanSave(False)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
-        self.Play()
+        self.play()
 
     #Change paths of current exercice and reload subtitles and video
     def _updatePaths(self, videoPath, exercisePath, translationPath):
@@ -405,20 +405,20 @@ class Core(object):
             self.setCanSave(False)
             return
 
-        self._setPaths( videoPath, exercisePath, translationPath)
-        self._Reload(True)
+        self._set_paths( videoPath, exercisePath, translationPath)
+        self._reload(True)
         self.setCanSave(True)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
-        self.Play()
+        self.play()
 
     def UpdateProperties(self):
         self.exercise.Initialize()
-        self._Reload(True)
+        self._reload(True)
         self.setCanSave(True)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
-        self.Play()
+        self.play()
 
     #get paths of current exercise
     def getPaths(self):
@@ -463,10 +463,10 @@ class Core(object):
         """self.Pause()
         self.player.Open(self.exercise.getVideoPath())
         """
-        self._Reload(True)
+        self._reload(True)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
-        self.Play()
+        self.play()
 
     def exportAsTemplate(self):
         self.gui.ask_properties_advanced()

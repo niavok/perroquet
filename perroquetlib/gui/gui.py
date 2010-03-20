@@ -101,7 +101,7 @@ class Gui:
             self.builder.get_object("videoArea").hide()
             self.builder.get_object("imageAudio").show()
 
-    def setSpeed(self, speed):
+    def set_speed(self, speed):
         self.settedSpeed = int(speed*100)
         ajustement = self.builder.get_object("adjustmentSpeed")
         ajustement.configure (self.settedSpeed, 75, 100, 1, 10, 0)
@@ -518,7 +518,7 @@ class Gui:
         iter = comboboxLanguage.get_active_iter()
         langId = self.liststoreLanguage.get_value(iter,1)
 
-        self.core.NewExercise(videoPath,exercisePath, translationPath, langId)
+        self.core.new_exercise(videoPath,exercisePath, translationPath, langId)
         self.newExerciseDialog.hide()
 
     def on_buttonNewExerciseCancel_clicked(self,widget,data=None):
@@ -565,7 +565,7 @@ class Gui:
         keyname = gtk.gdk.keyval_name(event.keyval)
         if keyname == "Return" or keyname == "KP_Enter":
             self.core.UserRepeat()
-            self.core.RepeatSequence()
+            self.core.repeat_sequence()
         elif keyname == "BackSpace":
             self.core.DeletePreviousChar()
         elif keyname == "Delete":
@@ -573,11 +573,11 @@ class Gui:
         elif keyname == "Page_Down":
             self.core.PreviousSequence()
         elif keyname == "Page_Up":
-            self.core.NextSequence()
+            self.core.next_sequence()
         elif keyname == "Down":
            self.core.PreviousSequence()
         elif keyname == "Up":
-           self.core.NextSequence()
+           self.core.next_sequence()
         elif keyname == "Tab":
             self.core.NextWord()
         elif keyname == "ISO_Left_Tab":
@@ -593,35 +593,35 @@ class Gui:
             self.core.togglePause()
         elif keyname == "KP_Add":
             if self.settedSpeed > 90:
-                self.core.setSpeed(1.0)
+                self.core.set_speed(1.0)
             else:
-                self.core.setSpeed(float(self.settedSpeed+10)/100)
+                self.core.set_speed(float(self.settedSpeed+10)/100)
         elif keyname == "KP_Subtract":
             if self.settedSpeed < 85:
-                self.core.setSpeed(0.75)
+                self.core.set_speed(0.75)
             else:
-                self.core.setSpeed(float(self.settedSpeed-10)/100)
+                self.core.set_speed(float(self.settedSpeed-10)/100)
         else:
             return False
 
         return True;
 
     def on_toolbuttonNextSequence_clicked(self,widget,data=None):
-        self.core.NextSequence()
+        self.core.next_sequence()
 
     def on_toolbuttonPreviousSequence_clicked(self,widget,data=None):
         self.core.PreviousSequence()
 
     def on_toolbuttonReplaySequence_clicked(self,widget,data=None):
         self.core.UserRepeat()
-        self.core.RepeatSequence()
+        self.core.repeat_sequence()
 
     def on_adjustmentSequenceNum_value_changed(self,widget,data=None):
 
         value = int(self.builder.get_object("adjustmentSequenceNum").get_value())
 
         if value != self.settedSeq:
-            self.core.SelectSequence(value - 1)
+            self.core.select_sequence(value - 1)
 
     def on_adjustmentSequenceTime_value_changed(self,widget,data=None):
         value = int(self.builder.get_object("adjustmentSequenceTime").get_value())
@@ -631,16 +631,16 @@ class Gui:
     def on_adjustmentSpeed_value_changed(self,widget,data=None):
         value = int(self.builder.get_object("adjustmentSpeed").get_value())
         if value != self.settedSpeed:
-            self.core.setSpeed(float(value)/100)
+            self.core.set_speed(float(value)/100)
 
     def on_toolbuttonHint_clicked(self,widget,data=None):
         self.core.CompleteWord()
 
     def on_toolbuttonPlay_clicked(self,widget,data=None):
-        self.core.Play()
+        self.core.play()
 
     def on_toolbuttonPause_clicked(self,widget,data=None):
-        self.core.Pause()
+        self.core.pause()
 
     def on_saveButton_clicked(self, widget, data=None):
         self.core.save()

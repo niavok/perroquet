@@ -34,7 +34,7 @@ class Perroquet(object):
         self.core = Core()
         self.gui = GuiController()
 
-        self.core.setGui(self.gui)
+        self.core.set_gui(self.gui)
         self.gui.set_core(self.core)
         self.gui.activate("closed")
 

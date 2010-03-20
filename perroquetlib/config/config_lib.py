@@ -40,7 +40,7 @@ class Parser(ConfigParser):
     def __init__(self):
         ConfigParser.__init__(self)
         
-    def getOptions(self):
+    def get_options(self):
         "return {option1: section1, ...}"
         return dict([(option, section)
                 for section in self.sections()
@@ -71,7 +71,7 @@ class WritableParser(Parser):
         Parser.__init__(self)
         self.path = path
         self.read(self.path)
-        self._options = Parser.getOptions(self)
+        self._options = Parser.get_options(self)
         
     def save(self):
         "Only save the options that have changed"
@@ -85,16 +85,16 @@ class WritableParser(Parser):
         self.write(open(self.path, "w"))
         
     def set_if_existant_key(self, key, value):
-        if key in self.getOptions().keys():
-            section = self.getOptions()[key]
+        if key in self.get_options().keys():
+            section = self.get_options()[key]
             if not self.has_section(section):
                 self.add_section(section)
             self.set(section, key, value)
     
-    def setOptions(self, dictionnary):
+    def set_options(self, dictionnary):
         self._options = dictionnary
     
-    def getOptions(self):
+    def get_options(self):
         return self._options
     
     
@@ -116,7 +116,7 @@ class Config:
         if not os.path.isfile(referencePath):
             raise IOError, referencePath
         parser.read(referencePath)
-        writableOptions = parser.getOptions()
+        writableOptions = parser.get_options()
         parser.read(writablePath)
         
         #Write
@@ -125,7 +125,7 @@ class Config:
         
         #Remember
         localParser = WritableParser(writablePath)
-        localParser.setOptions(writableOptions)
+        localParser.set_options(writableOptions)
         self._writableParsers.append(localParser)
 
     def get(self, key):
