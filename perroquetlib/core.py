@@ -71,12 +71,12 @@ class Core(object):
             self.player.Close()
 
         self.player = VideoPlayer()
-        self.player.setWindowId(self.gui.getVideoWindowId())
-        self.player.ActivateVideoCallback(self.gui.activateVideo)
+        self.player.setWindowId(self.gui.get_video_window_id())
+        self.player.ActivateVideoCallback(self.gui.activate_video_area)
         self.player.Open(self.exercise.getVideoPath())
         self.player.setCallback(self._TimeCallback)
         self.paused = False
-        self.gui.activateVideo(False)
+        self.gui.activate_video_area(False)
         self.gui.activate("loaded")
         self._updateWordList()
         self.timeUpdateThreadId = thread.start_new_thread(self.timeUpdateThread, ())
@@ -88,13 +88,13 @@ class Core(object):
 
     #Play the media
     def Play(self):
-        self.gui.setPlaying(True)
+        self.gui.set_playing(True)
         self.player.Play()
         self.paused = False
 
     #Pause the media
     def Pause(self):
-        self.gui.setPlaying(False)
+        self.gui.set_playing(False)
         self.player.Pause()
         self.paused = True
 
@@ -426,7 +426,7 @@ class Core(object):
 
     #Udpates vocabulary list in interface
     def _updateWordList(self):
-        self.gui.setWordList(self.exercise.ExtractWordList())
+        self.gui.set_word_list(self.exercise.ExtractWordList())
 
     #Notify the user use the repeat command (for stats)
     def UserRepeat(self):

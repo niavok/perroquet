@@ -82,7 +82,7 @@ class VideoPlayer(object):
             imagesink = message.src
             imagesink.set_property("force-aspect-ratio", True)
             imagesink.set_xwindow_id(self.windowId)
-            self.activateVideo(True)
+            self.activate_video_area(True)
             gtk.gdk.threads_leave()
 
     def Open(self,path):

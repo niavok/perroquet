@@ -19,30 +19,32 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import sys
 import os
 
 from perroquetlib.core import Core
-from perroquetlib.gui.gui import Gui
+from perroquetlib.gui.gui_controller import GuiController
+from perroquetlib.config.perroquet_config import config
 
 class Perroquet(object):
 
     def __init__(self):
 
         self.core = Core()
-        self.gui = Gui()
+        self.gui = GuiController()
 
         self.core.setGui(self.gui)
-        self.gui.setCore(self.core)
+        self.gui.set_core(self.core)
         self.gui.activate("closed")
 
     def run(self):
         if len(sys.argv) > 1:
             path = os.path.abspath(sys.argv[1])
             self.core.LoadExercise( path )
-        elif self.gui.config.get("lastopenfile"):
-            print "last open file : " + self.gui.config.get("lastopenfile")
-            self.core.LoadExercise(self.gui.config.get("lastopenfile"))
+        elif config.get("lastopenfile"):
+            print "last open file : " + config.get("lastopenfile")
+            self.core.LoadExercise(config.get("lastopenfile"))
 
         self.gui.Run()
 

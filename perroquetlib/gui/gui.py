@@ -19,11 +19,15 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 
-import gtk, time, urllib, re, os, gettext
+import gtk
+import re
+import os
+import gettext
 import locale
 
 from perroquetlib.config import config
 from perroquetlib.model.languages_manager import LanguagesManager
+
 
 from gui_sequence_properties import GuiSequenceProperties
 from gui_sequence_properties_advanced import GuiSequencePropertiesAdvanced
@@ -35,22 +39,21 @@ _ = gettext.gettext
 
 class Gui:
     def __init__(self):
-        self.config = config
 
-        locale.bindtextdomain(self.config.get("gettext_package"),self.config.get("localedir"))
+        locale.bindtextdomain(config.get("gettext_package"),config.get("localedir"))
 
 
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
-        self.builder.add_from_file(self.config.get("ui_path"))
+        self.builder.add_from_file(config.get("ui_path"))
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("MainWindow")
-        self.window.set_icon_from_file(self.config.get("logo_path"))
+        self.window.set_icon_from_file(config.get("logo_path"))
 
         self.aboutDialog = self.builder.get_object("aboutdialog")
-        icon = gtk.gdk.pixbuf_new_from_file(self.config.get("logo_path"))
+        icon = gtk.gdk.pixbuf_new_from_file(config.get("logo_path"))
         self.aboutDialog.set_logo(icon)
-        self.aboutDialog.set_version(self.config.get("version"))
+        self.aboutDialog.set_version(config.get("version"))
 
         # Sound icon
         print config.get("audio_icon")
@@ -64,15 +67,15 @@ class Gui:
         self.disableChangedTextEvent = False
         self.mode = "closed"
 
-        self.activateVideo(False)
+        self.activate_video_area(False)
 
-        if not self.config.get("showlateralpanel"):
+        if not config.get("showlateralpanel"):
             self.builder.get_object("vbox2").hide()
         else:
             #ugly but needed (?)
             self.builder.get_object("checkmenuitemLateralPanel").set_active(True)
             self.builder.get_object("vbox2").show()
-            self.config.set("showlateralpanel", 1)
+            config.set("showlateralpanel", 1)
 
         self._updateLastOpenFilesTab()
 
@@ -85,20 +88,18 @@ class Gui:
         response = dialog.run()
         dialog.destroy()
 
-    def setCore(self, core):
-        self.core = core
+    
 
-    def getVideoWindowId(self):
+    def get_video_window_id(self):
         return self.builder.get_object("videoArea").window.xid
 
-    def activateVideo(self,state):
+    def activate_video_area(self,state):
         if state:
             self.builder.get_object("videoArea").show()
             self.builder.get_object("imageAudio").hide()
         else:
             self.builder.get_object("videoArea").hide()
             self.builder.get_object("imageAudio").show()
-
 
     def setSpeed(self, speed):
         self.settedSpeed = int(speed*100)
@@ -136,43 +137,31 @@ class Gui:
         textDuration = round(float(sequenceTime)/1000,1)
         self.builder.get_object("labelSequenceTime").set_text(str(textTime) + "/" + str(textDuration) + " s")
 
-    def setPlaying(self, state):
-        self.builder.get_object("toolbuttonPlay").set_sensitive(not state)
-        self.builder.get_object("toolbuttonPause").set_sensitive(state)
+    
 
     def setCanSave(self, state):
         self.builder.get_object("saveButton").set_sensitive(state)
         self.builder.get_object("imagemenuitemSave").set_sensitive(state)
 
-    def setWordList(self, wordList):
-        self.wordList = wordList
-        self.UpdateWordList()
 
-    def UpdateWordList(self):
+    def set_word_list(self, word_list):
+        """Create a string compose by word separated with \n and update the text field"""
         buffer = self.builder.get_object("textviewWordList").get_buffer()
-        entry = self.builder.get_object("entryFilter")
 
         iter1 = buffer.get_start_iter()
         iter2 = buffer.get_end_iter()
         buffer.delete(iter1, iter2)
 
-
         formattedWordList = ""
 
-        regexp = entry.get_text()
-
-        try:
-            re.search(regexp,"")
-        except re.error:
-            regexp = ""
-            pass
-
-        for word in self.wordList:
-            if re.search(regexp,word):
-                formattedWordList = formattedWordList + word + "\n"
+        for word in word_list:
+            formattedWordList = formattedWordList + word + "\n"
 
         iter = buffer.get_end_iter()
         buffer.insert(iter,formattedWordList)
+
+    def get_words_filter(self):
+        return self.builder.get_object("entryFilter").get_text()
 
     def setTranslation(self, translation):
         textviewTranslation = self.builder.get_object("textviewTranslation").get_buffer()
@@ -407,73 +396,9 @@ class Gui:
     def Asksettings(self):
         dialogsettings = Guisettings(self.window)
         dialogsettings.Run()
-        self.Refresh()
+        self.refresh()
 
-    def activate(self, mode):
-        self.mode = mode
-        self.Refresh()
-
-    def Refresh(self):
-
-        if self.mode == "loaded":
-            self.builder.get_object("hscaleSequenceNum").set_sensitive(True)
-            self.builder.get_object("hscaleSequenceTime").set_sensitive(True)
-            self.builder.get_object("toolbuttonHint").set_sensitive(True)
-            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(True)
-            self.builder.get_object("toolbuttonProperties").set_sensitive(True)
-            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(True)
-            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(True)
-            self.builder.get_object("imagemenuitemSave").set_sensitive(True)
-            self.builder.get_object("checkmenuitemTranslation").set_sensitive(True)
-            self.builder.get_object("imagemenuitemHint").set_sensitive(True)
-            #Disable speed change slider if the media player not support it
-            if self.core.getPlayer().isSpeedChangeable():
-                self.builder.get_object("hscaleSpeed").set_sensitive(True)
-            else:
-                self.builder.get_object("hscaleSpeed").set_sensitive(False)
-            self.builder.get_object("imagemenuitemProperties").set_sensitive(True)
-            self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(True)
-            self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(True)
-
-
-        if self.mode == "load_failed":
-            self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
-            self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
-            self.builder.get_object("toolbuttonHint").set_sensitive(False)
-            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(False)
-            self.builder.get_object("toolbuttonProperties").set_sensitive(True)
-            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
-            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
-            self.builder.get_object("imagemenuitemSave").set_sensitive(False)
-            self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
-            self.builder.get_object("imagemenuitemHint").set_sensitive(False)
-            self.builder.get_object("hscaleSpeed").set_sensitive(False)
-            self.builder.get_object("imagemenuitemProperties").set_sensitive(True)
-            self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(True)
-            self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(True)
-
-        if self.mode == "closed":
-            self.builder.get_object("hscaleSequenceNum").set_sensitive(False)
-            self.builder.get_object("hscaleSequenceTime").set_sensitive(False)
-            self.builder.get_object("toolbuttonHint").set_sensitive(False)
-            self.builder.get_object("toolbuttonReplaySequence").set_sensitive(False)
-            self.builder.get_object("toolbuttonProperties").set_sensitive(False)
-            self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(False)
-            self.builder.get_object("imagemenuitemSaveAs").set_sensitive(False)
-            self.builder.get_object("imagemenuitemSave").set_sensitive(False)
-            self.builder.get_object("checkmenuitemTranslation").set_sensitive(False)
-            self.builder.get_object("imagemenuitemHint").set_sensitive(False)
-            self.builder.get_object("hscaleSpeed").set_sensitive(False)
-            self.builder.get_object("imagemenuitemProperties").set_sensitive(False)
-            self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(False)
-            self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(False)
-
-        if config.get("interface_show_play_pause_buttons") == 1:
-            self.builder.get_object("toolbuttonPlay").show()
-            self.builder.get_object("toolbuttonPause").show()
-        else:
-            self.builder.get_object("toolbuttonPlay").hide()
-            self.builder.get_object("toolbuttonPause").hide()
+    
 
     def Run(self):
         gtk.gdk.threads_init()
@@ -499,7 +424,7 @@ class Gui:
 
 
         treeStore = gtk.TreeStore(str)
-        for file in self.config.get("lastopenfiles"):
+        for file in config.get("lastopenfiles"):
             treeStore.append(None, [file])
 
         gtkTree.set_model(treeStore)
@@ -507,7 +432,7 @@ class Gui:
     #---------------------- Now the functions called directly by the gui--------
 
     def on_MainWindow_delete_event(self,widget,data=None):
-        if not self.config.get("autosave"):
+        if not config.get("autosave"):
             if not self.core.getCanSave():
                 gtk.main_quit()
                 return False
@@ -521,7 +446,7 @@ class Gui:
             dialog.destroy()
             if response == gtk.RESPONSE_YES:
                 gtk.main_quit()
-                self.config.save()
+                config.save()
                 return False # returning False makes "destroy-event" be signalled
                              # for the window.
             else:
@@ -529,7 +454,7 @@ class Gui:
         else:
             self.core.save()
             gtk.main_quit()
-            self.config.save()
+            config.save()
             return True
 
 
@@ -734,7 +659,7 @@ class Gui:
         saveChooser.hide()
 
     def on_entryFilter_changed(self, widget, data=None):
-        self.UpdateWordList()
+        self.update_word_list()
 
     def on_toggletoolbuttonShowTranslation_toggled(self, widget, data=None):
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
@@ -884,6 +809,64 @@ class Gui:
     def display_message(self, message):
         #TODO implemernt message box
         print message
+
+    def set_enable_sequence_index_selection(self, state):
+        self.builder.get_object("hscaleSequenceNum").set_sensitive(state)
+
+    def set_enable_sequence_time_selection(self, state):
+        self.builder.get_object("hscaleSequenceTime").set_sensitive(state)
+
+    def set_enable_hint(self, state):
+        self.builder.get_object("toolbuttonHint").set_sensitive(state)
+        self.builder.get_object("imagemenuitemHint").set_sensitive(state)
+
+    def set_enable_replay_sequence(self, state):
+        self.builder.get_object("toolbuttonReplaySequence").set_sensitive(state)
+
+    def set_enable_properties(self, state):
+        self.builder.get_object("toolbuttonProperties").set_sensitive(state)
+        self.builder.get_object("imagemenuitemProperties").set_sensitive(state)
+
+    def set_enable_advanced_properties(self, state):
+        self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(state)
+
+    def set_enable_translation(self, state):
+        self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(state)
+        self.builder.get_object("checkmenuitemTranslation").set_sensitive(state)
+
+    def set_enable_save_as(self, state):
+        self.builder.get_object("imagemenuitemSaveAs").set_sensitive(state)
+
+    def set_enable_save(self, state):
+        self.builder.get_object("imagemenuitemSave").set_sensitive(state)
+
+    def set_enable_export_as_template(self, state):
+        self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(state)
+
+    def set_enable_export_as_package(self, state):
+        self.builder.get_object("imagemenuitemExportAsPackage").set_sensitive(state)
+
+    def set_enable_speed_selection(self, state):
+        self.builder.get_object("hscaleSpeed").set_sensitive(state)
+
+    def set_enable_play(self, state):
+        self.builder.get_object("toolbuttonPlay").set_sensitive(state)
+
+    def set_enable_pause(self, state):
+        self.builder.get_object("toolbuttonPause").set_sensitive(state)
+       
+
+    def set_visible_play(self, state):
+        if state:
+            self.builder.get_object("toolbuttonPlay").show()
+        else:
+            self.builder.get_object("toolbuttonPlay").shide()
+
+    def set_visible_pause(self, state):
+        if state:
+            self.builder.get_object("toolbuttonPause").show()
+        else:
+            self.builder.get_object("toolbuttonPause").shide()
 
 
 EVENT_FILTER = None
