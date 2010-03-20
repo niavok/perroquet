@@ -7,6 +7,8 @@ perroquetlib/gui/gui_exercise_manager.py
 perroquetlib/gui/gui_sequence_properties.py
 perroquetlib/gui/gui_sequence_properties_advanced.py
 perroquetlib/gui/gui_reset_exercise.py
+perroquetlib/repository/exercise_repository_manager.py
+perroquetlib/repository/exercise_repository_exercise.py
 data/perroquet.desktop.in
 [type: gettext/glade]data/perroquet.ui
 [type: gettext/glade]data/properties.ui

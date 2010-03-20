@@ -366,6 +366,8 @@ class Gui:
             path = path +".perroquet"
         return path
 
+
+
     def AskExportAsTemplatePath(self):
         saver = ExportAsTemplateFileSelector(self.window)
         path =saver.run()
@@ -389,6 +391,11 @@ class Gui:
         elif not path.endswith(".tar"):
             path = path +".tar"
         return path
+
+    def ask_import_package(self):
+        loader = ImportFileSelector(self.window)
+        result =loader.run()
+        return result
 
     def AskProperties(self):
         dialogExerciseProperties = GuiSequenceProperties(self.core, self.window)
@@ -598,6 +605,9 @@ class Gui:
 
     def on_imagemenuitemExportAsPackage_activate(self,widget,data=None):
         self.core.exportAsPackage()
+
+    def on_imagemenuitemImport_activate(self,widget,data=None):
+        self.core.import_package()
 
     def on_textbufferView_changed(self,widget):
         if self.mode != "loaded":
@@ -872,6 +882,10 @@ class Gui:
         dialogExerciseProperties.Run()
         return True
 
+    def display_message(self, message):
+        #TODO implemernt message box
+        print message
+
 
 EVENT_FILTER = None
 
@@ -954,6 +968,25 @@ class OpenFileSelector(FileSelector):
                 filter = gtk.FileFilter()
                 filter.set_name(_('Perroquet files'))
                 filter.add_pattern("*.perroquet")
+                self.add_filter(filter)
+
+                filter = gtk.FileFilter()
+                filter.set_name(_('All files'))
+                filter.add_pattern("*")
+                self.add_filter(filter)
+
+class ImportFileSelector(FileSelector):
+        "A file selector for import files"
+
+        def __init__(self, parent):
+                FileSelector.__init__(
+                        self, parent, _('Select package to import'),
+                        gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
+                )
+
+                filter = gtk.FileFilter()
+                filter.set_name(_('Perroquet package files'))
+                filter.add_pattern("*.tar")
                 self.add_filter(filter)
 
                 filter = gtk.FileFilter()

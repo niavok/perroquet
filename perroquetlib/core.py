@@ -347,12 +347,12 @@ class Core(object):
         saver.Save(self.exercise, self.exercise.getOutputSavePath())
 
         self.config.set("lastopenfile", self.exercise.getOutputSavePath())
-        
+
         #lastopenfileS
         l=self.config.get("lastopenfiles")
         path = self.exercise.getOutputSavePath()
         self.config.set("lastopenfiles", [path]+[p for p in l if p!=path])
-        
+
         self.setCanSave(False)
 
     #Load the exercice at path
@@ -483,3 +483,14 @@ class Core(object):
             repoManager = ExerciseRepositoryManager()
             repoManager.exportAsPackage(self.exercise,path)
         print "Export done"
+
+    def import_package(self):
+        import_path = self.gui.ask_import_package()
+
+        if import_path is not None:
+            repo_manager = ExerciseRepositoryManager()
+            error = repo_manager.import_package(import_path)
+            if error is None:
+                self.gui.display_message(_("Import finish succesfully. Use the exercises manager to use the newly installed exercise."))
+            else:
+                self.gui.display_message(_("Import failed."+ " " + error ))

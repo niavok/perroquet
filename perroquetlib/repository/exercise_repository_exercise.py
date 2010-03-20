@@ -33,6 +33,7 @@ class ExerciseRepositoryExercise:
         self.state = "none"
         self.wordsCount = 0
         self.translationList = []
+        self.version = None
 
     def isInstalled(self):
         return os.path.isfile(self.getTemplatePath())
@@ -251,7 +252,10 @@ class ExerciseRepositoryExercise:
         self.parent = parent
 
     def getLocalPath(self):
-        return os.path.join(self.parent.getLocalPath(), self.id+"_"+self.version)
+        if self.version is not None:
+            return os.path.join(self.parent.getLocalPath(), self.id+"_"+self.version)
+        else:
+            return os.path.join(self.parent.getLocalPath(), self.id)
 
     def parseDescription(self,xml_exercise):
         self.setName(self._getText(xml_exercise.getElementsByTagName("name")[0].childNodes))
@@ -391,15 +395,13 @@ class ExerciseRepositoryExercise:
     def initFromPath(self, exercisePath):
         exerciseDescriptionPath = os.path.join(exercisePath,"exercise.xml")
         if os.path.isfile(exerciseDescriptionPath):
-            exercise = ExerciseRepositoryExercise()
             f = open(exerciseDescriptionPath, 'r')
             dom = parse(f)
             self.parseDescription(dom)
-
-
-
-
-
+        else:
+            self.id = os.path.basename(exercisePath)
+            self.name = self.id
+            self.description = _("Imported exercise")
 
     def _getText(self, nodelist):
         rc = ""

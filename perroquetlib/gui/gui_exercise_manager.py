@@ -61,6 +61,7 @@ class GuiExerciseManager:
         self.dialog.destroy()
     def Load(self):
         self.play_thread_id = thread.start_new_thread(self.UpdateExerciseListThread, ())
+        #Use the following line to debug crash in the thread
         #self.UpdateExerciseListThread()
 
     def UpdateExerciseListThread(self):

@@ -68,6 +68,15 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkImageMenuItem" id="imagemenuitemImport">
+                        <property name="label" translatable="yes">Import a package</property>
+                        <property name="visible">True</property>
+                        <property name="image">image7</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_imagemenuitemImport_activate"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="menuitemExport">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Export</property>
@@ -1041,5 +1050,9 @@ Zarmakuizz</property>
   <object class="GtkImage" id="image6">
     <property name="visible">True</property>
     <property name="stock">gtk-convert</property>
+  </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="stock">gtk-missing-image</property>
   </object>
 </interface>

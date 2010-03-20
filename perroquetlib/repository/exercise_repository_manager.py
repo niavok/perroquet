@@ -27,7 +27,7 @@ from perroquetlib.exercise_serializer import ExerciseSaver
 from perroquetlib.repository.exercise_repository import ExerciseRepository
 from perroquetlib.repository.exercise_repository_group import ExerciseRepositoryGroup
 from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
-
+from perroquetlib.exercise_serializer import ExerciseLoader
 
 class ExerciseRepositoryManager:
 
@@ -247,3 +247,54 @@ class ExerciseRepositoryManager:
         tar.close()
 
         shutil.rmtree(tempPath)
+
+    def import_package(self, import_path):
+
+        #Verify file existence
+        if not os.path.isfile(import_path):
+            return _("File not found: ")+import_path + "."
+
+        #Create temporary directory to extract the tar before install it
+        tempPath = tempfile.mkdtemp("","perroquet-");
+
+        #Extract tar in temp directory
+        tar = tarfile.open(import_path)
+        tar.extractall(tempPath)
+        tar.close()
+
+        #Check package integrity
+        template_path = os.path.join(tempPath,"template.perroquet")
+        if not os.path.isfile(template_path):
+            shutil.rmtree(tempPath)
+            return _("Invalid package, missing template.perroquet.")
+
+
+        #Find install path
+        loader =  ExerciseLoader()
+        exercise = loader.Load(template_path)
+        if exercise.getName() != '':
+            name = exercise.getName()
+        else:
+            name = exercise.GetVideoPath()
+
+
+        localRepoPath = os.path.join(self.config.get("local_repo_root_dir"),"local")
+        group_path = os.path.join(localRepoPath,"Imported")
+        install_path = os.path.join(group_path,name)
+
+        #Copy files
+        if not os.path.isdir(group_path):
+            try:
+                os.makedirs(group_path)
+            except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
+                if ErrorNumber == errno.EEXIST:
+                    pass
+                else: raise
+
+        if os.path.isdir(install_path):
+            shutil.rmtree(tempPath)
+            return _("Exercise already exist.")
+
+        shutil.move(tempPath,install_path )
+
+        return None
