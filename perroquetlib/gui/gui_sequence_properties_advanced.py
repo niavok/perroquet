@@ -21,8 +21,8 @@ import gtk, time, urllib, re, os, gettext
 import locale
 
 from perroquetlib.config import config
-from perroquetlib.languages_manager import LanguagesManager
-from perroquetlib.exercise import Exercise
+from perroquetlib.model.languages_manager import LanguagesManager
+from perroquetlib.model.exercise import Exercise
 
 _ = gettext.gettext
 

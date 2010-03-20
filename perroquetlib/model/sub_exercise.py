@@ -20,7 +20,7 @@
 import os
 
 from subtitles_loader import SubtitlesLoader
-from structure import Sequence
+from sequence import Sequence
 
 class SubExercise(object):
 

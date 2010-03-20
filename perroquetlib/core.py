@@ -23,10 +23,9 @@ import time
 import gtk
 
 from video_player import VideoPlayer
-from exercise_serializer import ExerciseSaver
-from exercise_serializer import ExerciseLoader
-from exercise import Exercise
-from structure import NoCharPossible
+from model.exercise_serializer import ExerciseLoader, ExerciseSaver
+from model.exercise import Exercise
+from model.sequence import NoCharPossible
 from config import config
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 

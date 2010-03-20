@@ -20,7 +20,7 @@
 from xml.dom.minidom import getDOMImplementation, parse
 import os
 
-from perroquetlib.exercise import Exercise
+from exercise import Exercise
 from sub_exercise import SubExercise
 from perroquetlib.config import config
 from languages_manager import LanguagesManager

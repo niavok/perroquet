@@ -23,11 +23,11 @@ from xml.dom.minidom import getDOMImplementation, parse
 import urllib2, os, tempfile, tarfile, errno, shutil
 
 from perroquetlib.config import config
-from perroquetlib.exercise_serializer import ExerciseSaver
+from perroquetlib.model.exercise_serializer import ExerciseLoader, ExerciseSaver
+
 from perroquetlib.repository.exercise_repository import ExerciseRepository
 from perroquetlib.repository.exercise_repository_group import ExerciseRepositoryGroup
 from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
-from perroquetlib.exercise_serializer import ExerciseLoader
 
 class ExerciseRepositoryManager:
 
