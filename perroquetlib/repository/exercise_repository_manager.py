@@ -238,7 +238,7 @@ class ExerciseRepositoryManager:
         exercisePackage.setOutputSavePath(templatePath)
         saver = ExerciseSaver()
         exercisePackage.setTemplate(True)
-        saver.Save(exercisePackage, exercisePackage.getOutputSavePath())
+        saver.save(exercisePackage, exercisePackage.getOutputSavePath())
 
         # Create the tar
         tar = tarfile.open(outPath, 'w')

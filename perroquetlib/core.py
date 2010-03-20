@@ -18,13 +18,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-import thread, time, gtk, os
+import thread
+import time
+import gtk
 
 from video_player import VideoPlayer
 from exercise_serializer import ExerciseSaver
 from exercise_serializer import ExerciseLoader
 from exercise import Exercise
-from structure import NoCharPossible, ValidWordError
+from structure import NoCharPossible
 from config import config
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 
@@ -332,7 +334,7 @@ class Core(object):
                 self.gui.setSequenceTime(pos, duration)
 
     #Save current exercice
-    def Save(self, saveAs = False):
+    def save(self, saveAs = False):
         if not self.exercise:
             print "Error core.save called but no exercise load"
             return
@@ -344,7 +346,7 @@ class Core(object):
             self.exercise.setOutputSavePath(outputSavePath)
 
         saver = ExerciseSaver()
-        saver.Save(self.exercise, self.exercise.getOutputSavePath())
+        saver.save(self.exercise, self.exercise.getOutputSavePath())
 
         self.config.set("lastopenfile", self.exercise.getOutputSavePath())
 
@@ -360,7 +362,7 @@ class Core(object):
         self.gui.Activate("closed")
         loader = ExerciseLoader()
         if self.exercise:
-            self.Save()
+            self.save()
         try:
             self.exercise = loader.Load(path)
             self.exercise.setMediaChangeCallback(self.mediaChangeCallBack)
@@ -473,7 +475,7 @@ class Core(object):
         if path:
             saver = ExerciseSaver()
             self.exercise.setTemplate(True)
-            saver.Save(self.exercise, path)
+            saver.save(self.exercise, path)
             self.exercise.setTemplate(False)
 
     def exportAsPackage(self):

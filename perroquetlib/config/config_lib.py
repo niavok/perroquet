@@ -106,7 +106,7 @@ class Config:
         self._properties = {}
         self._writableParsers = []
         
-    def loadWritableConfigFile(self, writablePath, referencePath):
+    def load_writable_config_file(self, writablePath, referencePath):
         """Load an ini config file that can be modified."""
         #localParser exists because we din't want to copy referencePath to
         # the wirtablePath in case the config change
@@ -142,7 +142,7 @@ class Config:
         for writableParser in self._writableParsers:
             writableParser.set_if_existant_key(key, value)
             
-    def Save(self):
+    def save(self):
         """Save the properties that have changed"""
         for writableParser in self._writableParsers:
             writableParser.save()

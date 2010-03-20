@@ -387,7 +387,7 @@ class GuiExerciseManager:
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
         self.core.LoadExercise(exo.getTemplatePath())
         self.core.exercise.setOutputSavePath(exo.getInstancePath())
-        self.core.Save()
+        self.core.save()
         self.dialog.response(gtk.RESPONSE_OK)
 
 

@@ -151,5 +151,5 @@ else:
 localPath = os.path.join( config.get("localconfigdir"), "config.ini")
 if not os.path.isfile(localPath):
     print "No local conf file found"
-config.loadWritableConfigFile(localPath, globalPath)
+config.load_writable_config_file(localPath, globalPath)
 

@@ -522,15 +522,15 @@ class Gui:
             dialog.destroy()
             if response == gtk.RESPONSE_YES:
                 gtk.main_quit()
-                self.config.Save()
+                self.config.save()
                 return False # returning False makes "destroy-event" be signalled
                              # for the window.
             else:
                 return True # returning True avoids it to signal "destroy-event"
         else:
-            self.core.Save()
+            self.core.save()
             gtk.main_quit()
-            self.config.Save()
+            self.config.save()
             return True
 
 
@@ -719,7 +719,7 @@ class Gui:
         self.core.Pause()
 
     def on_saveButton_clicked(self, widget, data=None):
-        self.core.Save()
+        self.core.save()
 
     def on_loadButton_clicked(self, widget, data=None):
 
@@ -838,7 +838,7 @@ class Gui:
         return self.on_MainWindow_delete_event(widget, data)
 
     def on_imagemenuitemSaveAs_activate(self,widget,data=None):
-        self.core.Save(True)
+        self.core.save(True)
 
     def on_imagemenuitemSave_activate(self,widget,data=None):
         return self.on_saveButton_clicked(widget, data)

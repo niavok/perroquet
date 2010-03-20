@@ -19,10 +19,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys, os
+import sys
+import os
 
-from core import Core
-from gui.gui import Gui
+from perroquetlib.core import Core
+from perroquetlib.gui.gui import Gui
 
 class Perroquet(object):
 

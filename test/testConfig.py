@@ -32,7 +32,7 @@ pathTemp2 = "./a/b/c/testConfigTemp.ini"
 class testConfig(unittest.TestCase):
     def testLoad(self):
         c=Config()
-        c.loadWritableConfigFile(pathWritable, pathRef)
+        c.load_writable_config_file(pathWritable, pathRef)
         
         self.assertEqual(c.get("christmas"), "merry Christmas\nand happy new year")
         self.assertEqual(c.get("newyear"), "champagne")
@@ -46,23 +46,23 @@ class testConfig(unittest.TestCase):
     def testSave(self):
         shutil.copy(pathWritable, pathTemp)
         c=Config()
-        c.loadWritableConfigFile(pathTemp, pathRef)
+        c.load_writable_config_file(pathTemp, pathRef)
         c.set("firstint", 666)
         c.set("liststr", ["1", "2", "3"])
         c.set("listint", [666,666])
-        c.Save()
+        c.save()
         c=Config()
-        c.loadWritableConfigFile(pathTemp, pathRef)
+        c.load_writable_config_file(pathTemp, pathRef)
         self.assertEqual(c.get("firstint"), 666)
         self.assertEqual(c.get("liststr"), ["1", "2", "3"])
         self.assertEqual(c.get("listint"), [666, 666])
         os.remove(pathTemp)
         
         c=Config()
-        c.loadWritableConfigFile(pathTemp2, pathRef)
+        c.load_writable_config_file(pathTemp2, pathRef)
         c.set("firstint", 666)
-        c.Save()
-        c.loadWritableConfigFile(pathTemp2, pathRef)
+        c.save()
+        c.load_writable_config_file(pathTemp2, pathRef)
         self.assertEqual(c.get("firstint"), 666)
         shutil.rmtree("./a")
     
@@ -71,7 +71,7 @@ class testConfig(unittest.TestCase):
         self.failUnlessRaises(KeyError, lambda :c.set("MAJ", 3))
         self.failUnlessRaises(KeyError, lambda :c.get("MAJ"))
 
-        c.loadWritableConfigFile(pathWritable, pathRef)
+        c.load_writable_config_file(pathWritable, pathRef)
         self.failUnlessRaises(KeyError, lambda :c.get("easter"))
 
 
