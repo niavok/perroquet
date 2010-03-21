@@ -307,7 +307,7 @@ class GuiController:
         self.ask_properties()
 
     def ask_properties_advanced(self):
-        self.gui.ask_properties_advanced()
+        self.gui.ask_properties_advanced(self.core)
 
     def ask_properties(self):
         self.gui.ask_properties()

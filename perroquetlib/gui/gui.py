@@ -416,7 +416,7 @@ class Gui:
         languagesList =languageManager.getLanguagesList()
 
         for language in languagesList:
-            (langId,langName) = language
+            (langId,langName,chars) = language
             iter = self.liststoreLanguage.append([langName,langId])
             if langId == config.get("default_exercise_language"):
                 currentIter = iter
@@ -622,7 +622,7 @@ class Gui:
     def on_imagemenuitemAdvancedProperties_activate(self,widget,data=None):
         self.controller.notify_properties_advanced()
 
-    def on_imagemenuitemsettings_activate(self,widget,data=None):
+    def on_imagemenuitemSettings_activate(self,widget,data=None):
         self.notify_settings()
 
     def on_imagemenuitemQuit_activate(self,widget,data=None):
