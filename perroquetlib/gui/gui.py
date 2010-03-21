@@ -302,34 +302,26 @@ class Gui:
 
         gtkTree.set_model(treeStore)
 
+
+    def quit(self):
+        gtk.main_quit()
+
+    def ask_confirm_quit_without_save(self):
+        dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
+                                       gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
+                                       _("Do you really quit without save ?"))
+        dialog.set_title(_("Confirm quit"))
+
+        response = dialog.run()
+        dialog.destroy()
+        return response == gtk.RESPONSE_YES
+
     #---------------------- Now the functions called directly by the gui--------
 
     def on_MainWindow_delete_event(self,widget,data=None):
-        if not config.get("autosave"):
-            if not self.core.getCanSave():
-                gtk.main_quit()
-                return False
-
-            dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
-                                       gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
-                                       _("Do you really quit without save ?"))
-            dialog.set_title(_("Confirm quit"))
-
-            response = dialog.run()
-            dialog.destroy()
-            if response == gtk.RESPONSE_YES:
-                gtk.main_quit()
-                config.save()
-                return False # returning False makes "destroy-event" be signalled
-                             # for the window.
-            else:
-                return True # returning True avoids it to signal "destroy-event"
-        else:
-            self.core.save()
-            gtk.main_quit()
-            config.save()
-            return True
-
+        # returning True avoids it to signal "destroy-event"
+        # returning False makes "destroy-event" be signalled for the window.
+        return self.controller.notify_quit()
 
     def on_newExerciseButton_clicked(self,widget,data=None):
         self.newExerciseDialog = self.builder.get_object("newExerciseDialog")

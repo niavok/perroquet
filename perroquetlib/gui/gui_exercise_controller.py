@@ -39,7 +39,6 @@ class GuiExerciseController:
         self._generate_formatted_exercise_text(sequence)
 
         self.gui.set_typing_area_text(self.formatted_text)
-        print self.cursor_position
         self.gui.set_typing_area_cursor_position(self.cursor_position)
         self.gui.set_focus_typing_area()
       
@@ -48,7 +47,7 @@ class GuiExerciseController:
 
         self._clear()
         
-        pos = 1
+        pos = 0
 
         for i, symbol in enumerate(sequence.getSymbols()):
             pos += len(symbol)

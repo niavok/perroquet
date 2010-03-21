@@ -274,3 +274,21 @@ class GuiController:
             return False
 
         return True;
+
+
+    def notify_quit(self):
+        if not config.get("autosave"):
+            if not self.core.getCanSave():
+                self.gui.quit()
+                return False #True for quit
+            if self.gui.ask_confirm_quit_without_save():
+                config.save()
+                self.gui.quit()
+                return False #True for quit
+            else:
+                return True #True for not quit
+        else:
+            self.core.save()
+            config.save()
+            self.gui.quit()
+            return True #True for quit
