@@ -20,8 +20,9 @@
 
 class GuiExerciseController:
     
-    def __init__(self, gui):
+    def __init__(self, core, gui):
         self.gui = gui
+        self.core = core
         
         self.current_index = 0
         self.current_word_index = -1
@@ -38,6 +39,7 @@ class GuiExerciseController:
         self._generate_formatted_exercise_text(sequence)
 
         self.gui.set_typing_area_text(self.formatted_text)
+        print self.cursor_position
         self.gui.set_typing_area_cursor_position(self.cursor_position)
         self.gui.set_focus_typing_area()
       
@@ -156,3 +158,24 @@ class GuiExerciseController:
             get_bcolor_near(score250)))
 
         self.gui.set_typing_area_style_list(self.style_tag_list)
+
+    def notify_move_cursor(self,movement):
+        """Documentation"""
+        if movement =="previous_char" :
+            self.core.PreviousChar()
+        elif movement =="next_char" :
+            self.core.NextChar()
+        elif movement =="first_word" :
+            self.core.FirstWord()
+        elif movement =="last_word" :
+            self.core.LastWord()
+        elif movement =="previous_word" :
+            self.core.PreviousWord()()
+        elif movement =="next_word" :
+            self.core.NextWord()
+        else:
+            word_index = self.word_index_map[movement]
+            word_index_position = self.word_pos_map[movement]
+            if word_index == -1:
+                wordIndex = 0
+            self.core.SelectSequenceWord(word_index,word_index_position)

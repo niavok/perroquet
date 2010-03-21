@@ -66,6 +66,7 @@ class Gui:
         self.mode = "closed"
         self.setted_speed = 100
         self.setted_sequence_number = 0
+        self.setted_typing_area_text = ""
 
         self.activate_video_area(False)
 
@@ -165,6 +166,8 @@ class Gui:
             iter1 = buffer.get_iter_at_offset(size)
             iter2 = buffer.get_end_iter()
             buffer.apply_tag_by_name(style, iter1, iter2)
+
+        self.setted_typing_area_text = buffer.get_text(buffer.get_start_iter(),buffer.get_end_iter())
 
         self.disable_changed_text_event = False
 
@@ -408,14 +411,15 @@ class Gui:
         if self.disable_changed_text_event:
            return False;
 
-        if self.mode != "loaded":
+
+        # TODO: reimplement
+        """if self.mode != "loaded":
             self.ClearBuffer();
             return False;
-
-        
+        """
 
         buffer = self.typeLabel.get_buffer()
-        oldText = self.sequenceText
+        oldText = self.setted_typing_area_text
         newText = buffer.get_text(buffer.get_start_iter(),buffer.get_end_iter())
         index = self.typeLabel.get_buffer().props.cursor_position
 
@@ -425,59 +429,16 @@ class Gui:
         newLength = len(newText) - len(oldText)
         newString = newText[index-newLength:index]
 
-        for char in newString:
-            if char == " ":
-                 self.core.NextWord()
-            else:
-                self.core.WriteChar(char)
-
+        self.controller.notify_typing(newString)
+        
         return True
+        
 
     def on_typeView_key_press_event(self,widget, event):
 
         keyname = gtk.gdk.keyval_name(event.keyval)
-        if keyname == "Return" or keyname == "KP_Enter":
-            self.core.UserRepeat()
-            self.core.repeat_sequence()
-        elif keyname == "BackSpace":
-            self.core.DeletePreviousChar()
-        elif keyname == "Delete":
-            self.core.DeleteNextChar()
-        elif keyname == "Page_Down":
-            self.core.PreviousSequence()
-        elif keyname == "Page_Up":
-            self.core.next_sequence()
-        elif keyname == "Down":
-           self.core.PreviousSequence()
-        elif keyname == "Up":
-           self.core.next_sequence()
-        elif keyname == "Tab":
-            self.core.NextWord()
-        elif keyname == "ISO_Left_Tab":
-            self.core.PreviousWord()
-        elif keyname == "F1":
-            self.core.CompleteWord()
-        elif keyname == "F2":
-            toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
-            toggletoolbuttonShowTranslation.set_active(not toggletoolbuttonShowTranslation.get_active())
-        elif keyname == "F9":
-            self.toggle_lateral_panel()
-        elif keyname == "Pause":
-            self.core.togglePause()
-        elif keyname == "KP_Add":
-            if self.settedSpeed > 90:
-                self.core.set_speed(1.0)
-            else:
-                self.core.set_speed(float(self.settedSpeed+10)/100)
-        elif keyname == "KP_Subtract":
-            if self.settedSpeed < 85:
-                self.core.set_speed(0.75)
-            else:
-                self.core.set_speed(float(self.settedSpeed-10)/100)
-        else:
-            return False
-
-        return True;
+        return self.controller.notify_key_press(keyname)
+        
 
     def on_toolbuttonNextSequence_clicked(self,widget,data=None):
         self.core.next_sequence()
@@ -541,37 +502,31 @@ class Gui:
 
     def on_typeView_move_cursor(self, textview, step_size, count, extend_selection):
 
-
         if step_size == gtk.MOVEMENT_VISUAL_POSITIONS:
             if count == -1:
-                self.core.PreviousChar()
+                self.controller.notify_move_cursor("previous_char")
             elif count == 1:
-                self.core.NextChar()
+                self.controller.notify_move_cursor("next_char")
         elif step_size == gtk.MOVEMENT_DISPLAY_LINE_ENDS:
             if count == -1:
-                self.core.FirstWord()
+                self.controller.notify_move_cursor("first_word")
             elif count == 1:
-                self.core.LastWord()
+                self.controller.notify_move_cursor("last_word")
         elif step_size == gtk.MOVEMENT_WORDS:
             if count == -1:
-                self.core.PreviousWord()
+                self.controller.notify_move_cursor("previous_word")
             elif count == 1:
-                self.core.NextWord()
+                self.controller.notify_move_cursor("next_word")
 
         return True
 
     def on_typeView_button_release_event(self, widget, data=None):
 
-        if self.mode != "loaded":
-            return True
+        # TODO: reimplement
+        """if self.mode != "loaded":
+            return True"""
         index = self.typeLabel.get_buffer().props.cursor_position
-
-
-        wordIndex = self.wordIndexMap[index]
-        wordIndexPos = self.wordPosMap[index]
-        if wordIndex == -1:
-            wordIndex = 0
-        self.core.SelectSequenceWord(wordIndex,wordIndexPos)
+        self.controller.notify_move_cursor(index)
 
     def on_toolbuttonProperties_clicked(self, widget, data=None):
         self.ask_properties()

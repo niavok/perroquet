@@ -39,6 +39,7 @@ class GuiController:
         self.gui = Gui(self)
         self.gui_exercise_controller = None
         self.translation_visible = False
+        self.current_speed = 1.0
 
         if not config.get("showlateralpanel"):
             self.gui.set_visible_lateral_panel(False)
@@ -50,7 +51,7 @@ class GuiController:
     def set_core(self, core):
         """Define perroquet core to use"""
         self.core = core
-        self.gui_exercise_controller = GuiExerciseController(self.gui)
+        self.gui_exercise_controller = GuiExerciseController(self.core, self.gui)
 
 
 
@@ -168,6 +169,7 @@ class GuiController:
         self.gui.set_title(newTitle)
 
     def set_speed(self, speed):
+        self.current_speed = speed
         self.gui.set_speed(speed)
 
     def set_sequence_number(self, sequenceNumber, sequenceCount):
@@ -217,3 +219,58 @@ class GuiController:
             self.gui.set_visible_translation_panel(False)
             self.gui.set_enable_translation(False)
             self.translation_visible = False
+
+    def notify_typing(self, new_text):
+
+        for char in new_text:
+            if char == " ":
+                self.core.NextWord()
+            else:
+                self.core.WriteChar(char)
+
+    def notify_move_cursor(self,movement):
+        self.gui_exercise_controller.notify_move_cursor(movement)
+        
+
+    def notify_key_press(self,keyname):
+        if keyname == "Return" or keyname == "KP_Enter":
+            self.core.UserRepeat()
+            self.core.repeat_sequence()
+        elif keyname == "BackSpace":
+            self.core.DeletePreviousChar()
+        elif keyname == "Delete":
+            self.core.DeleteNextChar()
+        elif keyname == "Page_Down":
+            self.core.PreviousSequence()
+        elif keyname == "Page_Up":
+            self.core.next_sequence()
+        elif keyname == "Down":
+           self.core.PreviousSequence()
+        elif keyname == "Up":
+           self.core.next_sequence()
+        elif keyname == "Tab":
+            self.core.NextWord()
+        elif keyname == "ISO_Left_Tab":
+            self.core.PreviousWord()
+        elif keyname == "F1":
+            self.core.CompleteWord()
+        elif keyname == "F2":
+            self.toggle_translation()
+        elif keyname == "F9":
+            self.toggle_lateral_panel()
+        elif keyname == "Pause":
+            self.core.togglePause()
+        elif keyname == "KP_Add":
+            if self.current_speed > 0.9:
+                self.core.set_speed(1.0)
+            else:
+                self.core.set_speed(self.current_speed+0.1)
+        elif keyname == "KP_Subtract":
+            if self.current_speed < 0.85:
+                self.core.set_speed(0.75)
+            else:
+                self.core.set_speed(self.current_speed-0.1)
+        else:
+            return False
+
+        return True;
