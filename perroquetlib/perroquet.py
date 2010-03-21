@@ -46,6 +46,6 @@ class Perroquet(object):
             print "last open file : " + config.get("lastopenfile")
             self.core.LoadExercise(config.get("lastopenfile"))
 
-        self.gui.Run()
+        self.gui.run()
 
 

@@ -42,7 +42,7 @@ class GuiResetExercise:
         self.dialog.set_modal(True)
         self.dialog.set_transient_for(self.parent)
 
-    def Run(self):
+    def run(self):
         self.dialog.run()
         self.dialog.destroy()
 

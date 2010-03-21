@@ -29,14 +29,23 @@ _ = gettext.gettext
 class GuiController:
 
     def __init__(self):
-        """GuiControlle constructor"""
+        """GuiController constructor"""
         self.core = None
         self.word_list = None
 
         # Mode can be closed, loaded or load_failed
         self.mode = "closed"
-        self.gui = Gui()
+        
+        self.gui = Gui(self)
         self.gui_exercise_controller = None
+        self.translation_visible = False
+
+        if not config.get("showlateralpanel"):
+            self.gui.set_visible_lateral_panel(False)
+        else:
+            self.gui.set_checked_lateral_panel(True)
+            self.gui.set_visible_lateral_panel(True)
+            config.set("showlateralpanel", 1)
   
     def set_core(self, core):
         """Define perroquet core to use"""
@@ -167,6 +176,44 @@ class GuiController:
 
         self.gui.set_enable_next_sequence(sequenceNumber != sequenceCount)
         self.gui.set_enable_previous_sequence(sequenceNumber != 1)
+ 
+    def set_sequence_time(self, sequence_position, sequence_time):
+        if sequence_position > sequence_time:
+            sequence_position = sequence_time
+        if sequence_position < 0:
+            sequence_position = 0
+        self.gui.set_sequence_time_selection(sequence_position, sequence_time)
 
     def set_sequence(self, sequence):
        self.gui_exercise_controller.set_sequence(sequence)
+
+    def set_translation(self, translation):
+        self.gui.set_translation(translation)
+
+    def set_statitics(self, sequenceCount,sequenceFound, wordCount, wordFound, repeatRate):
+        text = ""
+        text = text + _("- Sequences: %(found)s/%(count)s (%(percent)s %%)\n") % {'found' : str(sequenceFound), 'count' : str(sequenceCount), 'percent' : str(round(100*sequenceFound/sequenceCount,1)) }
+        text = text + _("- Words: %(found)s/%(count)s (%(percent)s %%)\n") % {'found' : str(wordFound), 'count' : str(wordCount), 'percent' : str(round(100*wordFound/wordCount,1))}
+        text = text + _("- Repeat ratio: %s per words") % str(round(repeatRate,1))
+        self.gui.set_statitics(text)
+
+    def run(self):
+        self.gui.run()
+
+    def toggle_lateral_panel(self):
+        if config.get("showlateralpanel"):
+            self.gui.set_visible_lateral_panel(False)
+            config.set("showlateralpanel", 0)
+        else:
+            self.gui.set_visible_lateral_panel(True)
+            config.set("showlateralpanel", 1)
+
+    def toggle_translation(self):
+        if not self.translation_visible:
+            self.gui.set_visible_translation_panel(True)
+            self.gui.set_enable_translation(True)
+            self.translation_visible = True
+        else:
+            self.gui.set_visible_translation_panel(False)
+            self.gui.set_enable_translation(False)
+            self.translation_visible = False

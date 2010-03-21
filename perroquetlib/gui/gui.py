@@ -38,11 +38,12 @@ from gui_exercise_manager import GuiExerciseManager
 _ = gettext.gettext
 
 class Gui:
-    def __init__(self):
+    def __init__(self, controller):
 
         locale.bindtextdomain(config.get("gettext_package"),config.get("localedir"))
 
-
+        self.controller = controller
+    
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
         self.builder.add_from_file(config.get("ui_path"))
@@ -61,22 +62,14 @@ class Gui:
 
         self.typeLabel = self.builder.get_object("typeView")
 
-
-        self.translationVisible = False
-        self.disableChangedTextEvent = False
+        self.disable_changed_text_event = False
         self.mode = "closed"
         self.setted_speed = 100
         self.setted_sequence_number = 0
 
         self.activate_video_area(False)
 
-        if not config.get("showlateralpanel"):
-            self.builder.get_object("vbox2").hide()
-        else:
-            #ugly but needed (?)
-            self.builder.get_object("checkmenuitemLateralPanel").set_active(True)
-            self.builder.get_object("vbox2").show()
-            config.set("showlateralpanel", 1)
+       
 
         self._updateLastOpenFilesTab()
 
@@ -113,24 +106,16 @@ class Gui:
         ajustement.configure (sequenceNumber, 1, sequenceCount, 1, 10, 0)
         self.builder.get_object("labelSequenceNumber").set_text(str(sequenceNumber) + "/" + str(sequenceCount))
 
-
-
-    def setSequenceTime(self, sequencePos, sequenceTime):
-        if sequencePos > sequenceTime:
-            sequencePos = sequenceTime
-        if sequencePos < 0:
-            sequencePos = 0
-        self.settedPos = sequencePos /100
+    def set_sequence_time_selection(self, sequence_position, sequence_time):
+        """Documentation"""
+        self.settedPos = sequence_position /100
         ajustement = self.builder.get_object("adjustmentSequenceTime")
-        ajustement.configure (self.settedPos, 0, sequenceTime/100, 1, 10, 0)
-        textTime = round(float(sequencePos)/1000,1)
-        textDuration = round(float(sequenceTime)/1000,1)
+        ajustement.configure (self.settedPos, 0, sequence_time/100, 1, 10, 0)
+        textTime = round(float(sequence_position)/1000,1)
+        textDuration = round(float(sequence_time)/1000,1)
         self.builder.get_object("labelSequenceTime").set_text(str(textTime) + "/" + str(textDuration) + " s")
 
-    
-
-    
-
+   
 
     def set_word_list(self, word_list):
         """Create a string compose by word separated with \n and update the text field"""
@@ -151,16 +136,12 @@ class Gui:
     def get_words_filter(self):
         return self.builder.get_object("entryFilter").get_text()
 
-    def setTranslation(self, translation):
+    def set_translation(self, translation):
         textviewTranslation = self.builder.get_object("textviewTranslation").get_buffer()
         textviewTranslation.set_text(translation)
 
-    def setStats(self, sequenceCount,sequenceFound, wordCount, wordFound, repeatRate):
+    def set_statitics(self, text):
         labelProgress = self.builder.get_object("labelProgress")
-        text = ""
-        text = text + _("- Sequences: %(found)s/%(count)s (%(percent)s %%)\n") % {'found' : str(sequenceFound), 'count' : str(sequenceCount), 'percent' : str(round(100*sequenceFound/sequenceCount,1)) }
-        text = text + _("- Words: %(found)s/%(count)s (%(percent)s %%)\n") % {'found' : str(wordFound), 'count' : str(wordCount), 'percent' : str(round(100*wordFound/wordCount,1))}
-        text = text + _("- Repeat ratio: %s per words") % str(round(repeatRate,1))
         labelProgress.set_label(text)
 
     def set_title(self, title):
@@ -173,7 +154,7 @@ class Gui:
         buffer.delete(iter1, iter2)
 
     def set_typing_area_text(self, formatted_text):
-        self.disableChangedTextEvent = True
+        self.disable_changed_text_event = True
         self._clear_typing_area()
         buffer = self.typeLabel.get_buffer()
 
@@ -185,7 +166,7 @@ class Gui:
             iter2 = buffer.get_end_iter()
             buffer.apply_tag_by_name(style, iter1, iter2)
 
-        self.disableChangedTextEvent = False
+        self.disable_changed_text_event = False
 
     def set_typing_area_cursor_position(self, cursor_position):
         buffer = self.typeLabel.get_buffer()
@@ -195,89 +176,6 @@ class Gui:
     def set_focus_typing_area(self):
         self.window.set_focus(self.typeLabel)
 
-    """def set_sequence(self, sequence):
-        self.disableChangedTextEvent = True
-        self.ClearBuffer()
-        pos = 1
-        cursor_pos = 0
-
-        text = ""
-        buffer = self.typeLabel.get_buffer()
-        self.AddSymbol(" ")
-
-
-        for i, symbol in enumerate(sequence.getSymbols()):
-            pos += len(symbol)
-            self.AddSymbol(symbol)
-            if i < len(sequence.getWords()):
-                if sequence.getActiveWordIndex() == i:
-                    cursor_pos = pos
-                if sequence.getWords()[i].isEmpty():
-                    self.update_word(" ", 0, isEmpty=True)
-                    pos += 1
-                elif sequence.getWords()[i].isValid():
-                    self.update_word(sequence.getWords()[i].getValid(lower=False), 0, isFound=True)
-                    pos += len(sequence.getWords()[i].getText())
-                else:
-                    self.update_word(sequence.getWords()[i].getText(), sequence.getWords()[i].getScore())
-                    pos += len(sequence.getWords()[i].getText())
-
-        self.wordIndexMap.append(self.currentWordIndex)
-        self.wordPosMap.append(self.currentPosIndex)
-
-        self.window.set_focus(self.typeLabel)
-        newCurPos = cursor_pos + sequence.getActiveWord().getPos()
-        iter = buffer.get_iter_at_offset(newCurPos)
-        buffer.place_cursor(iter)
-        self.disableChangedTextEvent = False
-        self.sequenceText = buffer.get_text(buffer.get_start_iter(),buffer.get_end_iter())
-
-    
-
-    def AddSymbol(self, symbol):
-        if len(symbol) == 0:
-            return
-        buffer = self.typeLabel.get_buffer()
-        size = buffer.get_char_count()
-        iter1 = buffer.get_end_iter()
-        buffer.insert(iter1,symbol)
-        iter1 = buffer.get_iter_at_offset(size)
-        iter2 = buffer.get_end_iter()
-        buffer.apply_tag_by_name("symbol", iter1, iter2)
-
-        for i in range(self.currentIndex, self.currentIndex + len(symbol)):
-            self.wordIndexMap.append(self.currentWordIndex)
-            self.wordPosMap.append(self.currentPosIndex)
-        self.currentIndex += len(symbol)
-
-    def update_word(self, word, score, isFound=False, isEmpty=False):
-        buffer = self.typeLabel.get_buffer()
-        iter1 = buffer.get_end_iter()
-        size = buffer.get_char_count()
-        buffer.insert(iter1,word)
-        iter1 = buffer.get_iter_at_offset(size)
-        iter2 = buffer.get_end_iter()
-
-        score250 = int(score*250) #score between -250 and 250
-        if isEmpty:
-            tagName = "word_empty"
-        elif isFound:
-            tagName = "word_found"
-        elif score > 0 :
-            tagName = "word_near"+str(score250)
-        else:
-            tagName = "word_to_found"+str(score250)
-
-        buffer.apply_tag_by_name(tagName, iter1, iter2)
-        self.currentWordIndex += 1
-        self.currentPosIndex = 0
-
-        for i in range(self.currentIndex, self.currentIndex + len(word)):
-            self.wordIndexMap.append(self.currentWordIndex)
-            self.wordPosMap.append(self.currentPosIndex)
-            self.currentPosIndex += 1
-        self.currentIndex += len(word)"""
-
     def set_typing_area_style_list(self,style_list):
         """creates the labels used for the coloration of the text"""
         buffer = self.typeLabel.get_buffer()
@@ -286,11 +184,28 @@ class Gui:
         tag_table = buffer.get_tag_table()
         tag_table.foreach(self._destroy_tag, tag_table)
 
-
         for (tag_name,size, foreground_color ,background_color) in style_list:
+            if foreground_color:
+                (red, green, bleu) = foreground_color
+                gtk_foreground_color = self.window.get_colormap().alloc_color(
+                    red*256,
+                    green*256,
+                    bleu*256)
+            else:
+                gtk_foreground_color = None
+
+            if background_color:
+                (red, green, bleu) = background_color
+                gtk_background_color = self.window.get_colormap().alloc_color(
+                    red*256,
+                    green*256,
+                    bleu*256)
+            else:
+                gtk_background_color = None
+
             buffer.create_tag(tag_name,
-            background=background_color,
-            foreground=foreground_color,
+            background=gtk_background_color,
+            foreground=gtk_foreground_color,
             size_points=size)
       
 
@@ -342,20 +257,20 @@ class Gui:
 
     def ask_properties(self):
         dialogExerciseProperties = GuiSequenceProperties(self.core, self.window)
-        dialogExerciseProperties.Run()
+        dialogExerciseProperties.run()
 
     def ask_properties_advanced(self):
         dialogExerciseProperties = GuiSequencePropertiesAdvanced(self.core, self.window)
-        dialogExerciseProperties.Run()
+        dialogExerciseProperties.run()
 
     def Asksettings(self):
         dialogsettings = Guisettings(self.window)
-        dialogsettings.Run()
+        dialogsettings.run()
         self.refresh()
 
     
 
-    def Run(self):
+    def run(self):
         gtk.gdk.threads_init()
         self.window.show()
         gtk.main()
@@ -489,12 +404,15 @@ class Gui:
         self.core.import_package()
 
     def on_textbufferView_changed(self,widget):
+
+        if self.disable_changed_text_event:
+           return False;
+
         if self.mode != "loaded":
             self.ClearBuffer();
             return False;
 
-        if self.disableChangedTextEvent:
-           return False;
+        
 
         buffer = self.typeLabel.get_buffer()
         oldText = self.sequenceText
@@ -543,7 +461,7 @@ class Gui:
             toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
             toggletoolbuttonShowTranslation.set_active(not toggletoolbuttonShowTranslation.get_active())
         elif keyname == "F9":
-            self.toggleLateralPanel()
+            self.toggle_lateral_panel()
         elif keyname == "Pause":
             self.core.togglePause()
         elif keyname == "KP_Add":
@@ -575,7 +493,7 @@ class Gui:
 
         value = int(self.builder.get_object("adjustmentSequenceNum").get_value())
 
-        if value != self.settedSeq:
+        if value != self.setted_sequence_number:
             self.core.select_sequence(value - 1)
 
     def on_adjustmentSequenceTime_value_changed(self,widget,data=None):
@@ -585,7 +503,7 @@ class Gui:
 
     def on_adjustmentSpeed_value_changed(self,widget,data=None):
         value = int(self.builder.get_object("adjustmentSpeed").get_value())
-        if value != self.settedSpeed:
+        if value != self.setted_speed:
             self.core.set_speed(float(value)/100)
 
     def on_toolbuttonHint_clicked(self,widget,data=None):
@@ -619,7 +537,7 @@ class Gui:
     def on_toggletoolbuttonShowTranslation_toggled(self, widget, data=None):
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
         if toggletoolbuttonShowTranslation.props.active != self.translationVisible:
-            self.toggleTranslation()
+            self.toggle_translation()
 
     def on_typeView_move_cursor(self, textview, step_size, count, extend_selection):
 
@@ -663,7 +581,7 @@ class Gui:
 
     def DisplayExerciceManager(self):
         dialogExerciseManager = GuiExerciseManager(self.core, self.window)
-        dialogExerciseManager.Run()
+        dialogExerciseManager.run()
 
     def on_imagemenuitemAbout_activate(self,widget,data=None):
         self.builder.get_object("aboutdialog").show()
@@ -672,36 +590,14 @@ class Gui:
         return self.on_toolbuttonHint_clicked(widget, data)
 
     def on_checkmenuitemLateralPanel_toggled(self,widget,data=None):
-        self.toggleLateralPanel()
+        self.controller.toggle_lateral_panel()
 
     def on_checkmenuitemTranslation_toggled(self,widget,data=None):
         checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
         if checkmenuitemTranslation.props.active != self.translationVisible:
-            self.toggleTranslation()
+            self.toggle_translation()
 
-    def toggleLateralPanel(self):
-        scrolledwindowTranslation = self.builder.get_object("vbox2")
-        if self.config.get("showlateralpanel"):
-            scrolledwindowTranslation.hide()
-            self.config.set("showlateralpanel", 0)
-        else:
-            scrolledwindowTranslation.show()
-            self.config.set("showlateralpanel", 1)
-
-    def toggleTranslation(self):
-        scrolledwindowTranslation = self.builder.get_object("scrolledwindowTranslation")
-        toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
-        checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
-        if not self.translationVisible:
-            scrolledwindowTranslation.show()
-            toggletoolbuttonShowTranslation.set_active(True)
-            checkmenuitemTranslation.set_active(True)
-            self.translationVisible = True
-        else:
-            scrolledwindowTranslation.hide()
-            toggletoolbuttonShowTranslation.set_active(False)
-            checkmenuitemTranslation.set_active(False)
-            self.translationVisible = False
+    
 
     def on_imagemenuitemProperties_activate(self,widget,data=None):
         return self.on_toolbuttonProperties_clicked(widget, data)
@@ -758,7 +654,7 @@ class Gui:
 
     def resetExerciseContent(self):
         dialogExerciseProperties = GuiResetExercise(self.core, self.window)
-        dialogExerciseProperties.Run()
+        dialogExerciseProperties.run()
         return True
 
     def display_message(self, message):
@@ -829,6 +725,23 @@ class Gui:
             self.builder.get_object("toolbuttonPause").show()
         else:
             self.builder.get_object("toolbuttonPause").shide()
+
+    def set_visible_lateral_panel(self, state):
+        if state:
+            self.builder.get_object("vbox2").show()
+        else:
+            self.builder.get_object("vbox2").hide()
+
+    def set_visible_translation_panel(self, state):
+        if state:
+            self.builder.get_object("scrolledwindowTranslation").show()
+        else:
+            self.builder.get_object("scrolledwindowTranslation").shide()
+
+
+
+    def set_checked_lateral_panel(self, checked):
+        self.builder.get_object("checkmenuitemLateralPanel").set_active(checked)
 
 
 EVENT_FILTER = None

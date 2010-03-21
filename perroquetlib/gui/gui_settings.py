@@ -42,7 +42,7 @@ class Guisettings:
         self.iterPath = None
 
 
-    def Run(self):
+    def run(self):
         self.Load()
         self.dialog.run()
         self.dialog.destroy()

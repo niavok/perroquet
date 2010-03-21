@@ -163,7 +163,7 @@ class Core(object):
     #_update displayed translation on new active sequence
     def _ActivateTranslation(self):
         if not self.exercise.getTranslationList():
-            self.gui.setTranslation("")
+            self.gui.set_translation("")
         else:
             translation = ""
             currentBegin = self.exercise.getCurrentSequence().getTimeBegin()
@@ -174,7 +174,7 @@ class Core(object):
                 if (begin >= currentBegin and begin <= currentEnd) or (end >= currentBegin and end <= currentEnd) or (begin <= currentBegin and end >= currentEnd):
                     translation += sub.getText() + " "
 
-            self.gui.setTranslation(translation)
+            self.gui.set_translation(translation)
 
     #Update displayed stats on new active sequence
     def _updateStats(self):
@@ -193,7 +193,7 @@ class Core(object):
             repeatRate = float(0)
         else:
             repeatRate = float(self.exercise.getRepeatCount()) / float(wordFound)
-        self.gui.setStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
+        self.gui.set_statitics(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
 
     def _update(self):
         self.gui.set_sequence(self.exercise.getCurrentSequence())
@@ -330,7 +330,7 @@ class Core(object):
                     begin_time = 0
                 duration = end_time - begin_time
                 pos = pos_int -begin_time
-                self.gui.setSequenceTime(pos, duration)
+                self.gui.set_sequence_time(pos, duration)
 
     #Save current exercice
     def save(self, saveAs = False):
