@@ -1,4 +1,3 @@
-import re
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2009-2010 Frédéric Bertolus.
@@ -19,8 +18,13 @@ import re
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
+
+import gettext
+import re
 from perroquetlib.config.perroquet_config import config
 from perroquetlib.gui.gui import Gui
+from perroquetlib.gui.gui_exercise_controller import GuiExerciseController
+_ = gettext.gettext
 
 class GuiController:
 
@@ -32,10 +36,12 @@ class GuiController:
         # Mode can be closed, loaded or load_failed
         self.mode = "closed"
         self.gui = Gui()
+        self.gui_exercise_controller = None
   
     def set_core(self, core):
         """Define perroquet core to use"""
         self.core = core
+        self.gui_exercise_controller = GuiExerciseController(self.gui)
 
 
 
@@ -151,3 +157,16 @@ class GuiController:
             newTitle += " - " + title
 
         self.gui.set_title(newTitle)
+
+    def set_speed(self, speed):
+        self.gui.set_speed(speed)
+
+    def set_sequence_number(self, sequenceNumber, sequenceCount):
+        sequenceNumber = sequenceNumber + 1
+        self.gui.set_sequence_index_selection(sequenceNumber,sequenceCount)
+
+        self.gui.set_enable_next_sequence(sequenceNumber != sequenceCount)
+        self.gui.set_enable_previous_sequence(sequenceNumber != 1)
+
+    def set_sequence(self, sequence):
+       self.gui_exercise_controller.set_sequence(sequence)

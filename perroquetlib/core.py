@@ -55,7 +55,7 @@ class Core(object):
         self._set_paths(videoPath, exercisePath, translationPath)
         self.exercise.Initialize()
         self._reload(True);
-        self._ActivateSequence()
+        self._activate_sequence()
         self.gui.set_title("", True)
 
     #Configure the paths for the current exercice. Reload subtitles list.
@@ -128,7 +128,7 @@ class Core(object):
         if self.exercise.getCurrentSequenceId() == num:
             return
         self.exercise.GotoSequence(num)
-        self._ActivateSequence()
+        self._activate_sequence()
         if load:
             self.repeat_sequence()
         self.set_can_save(True)
@@ -137,7 +137,7 @@ class Core(object):
     def next_sequence(self, load = True):
         if self.exercise.GotoNextSequence():
             self.set_can_save(True)
-        self._ActivateSequence()
+        self._activate_sequence()
         if load:
             self.repeat_sequence()
 
@@ -145,18 +145,18 @@ class Core(object):
     def PreviousSequence(self, load = True):
         if self.exercise.GotoPreviousSequence():
             self.set_can_save(True)
-        self._ActivateSequence()
+        self._activate_sequence()
         if load:
             self.repeat_sequence()
 
     #Update interface with new sequence. Configure stop media callback
-    def _ActivateSequence(self):
+    def _activate_sequence(self):
         self.state = Core.WAIT_BEGIN
         self.set_speed(1)
         self.player.setNextCallbackTime(self.exercise.getCurrentSequence().getTimeBegin())
 
-        self.gui.setSequenceNumber(self.exercise.getCurrentSequenceId(), self.exercise.getSequenceCount())
-        self.gui.setSequence(self.exercise.getCurrentSequence())
+        self.gui.set_sequence_number(self.exercise.getCurrentSequenceId(), self.exercise.getSequenceCount())
+        self.gui.set_sequence(self.exercise.getCurrentSequence())
         self._ActivateTranslation()
         self._updateStats()
 
@@ -196,7 +196,7 @@ class Core(object):
         self.gui.setStats(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
 
     def _update(self):
-        self.gui.setSequence(self.exercise.getCurrentSequence())
+        self.gui.set_sequence(self.exercise.getCurrentSequence())
         self._ValidateSequence()
 
     #Verify if the sequence is complete
@@ -387,7 +387,7 @@ class Core(object):
             self.set_can_save(True)
         else:
             self.set_can_save(False)
-        self._ActivateSequence()
+        self._activate_sequence()
         self.GotoSequenceBegin(True)
         self.play()
 
@@ -408,7 +408,7 @@ class Core(object):
         self._set_paths( videoPath, exercisePath, translationPath)
         self._reload(True)
         self.set_can_save(True)
-        self._ActivateSequence()
+        self._activate_sequence()
         self.GotoSequenceBegin(True)
         self.play()
 
@@ -416,7 +416,7 @@ class Core(object):
         self.exercise.Initialize()
         self._reload(True)
         self.set_can_save(True)
-        self._ActivateSequence()
+        self._activate_sequence()
         self.GotoSequenceBegin(True)
         self.play()
 
@@ -464,7 +464,7 @@ class Core(object):
         self.player.Open(self.exercise.getVideoPath())
         """
         self._reload(True)
-        self._ActivateSequence()
+        self._activate_sequence()
         self.GotoSequenceBegin(True)
         self.play()
 

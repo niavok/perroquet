@@ -61,11 +61,12 @@ class Gui:
 
         self.typeLabel = self.builder.get_object("typeView")
 
-        self.init_type_label()
 
         self.translationVisible = False
         self.disableChangedTextEvent = False
         self.mode = "closed"
+        self.setted_speed = 100
+        self.setted_sequence_number = 0
 
         self.activate_video_area(False)
 
@@ -102,28 +103,17 @@ class Gui:
             self.builder.get_object("imageAudio").show()
 
     def set_speed(self, speed):
-        self.settedSpeed = int(speed*100)
+        self.setted_speed = int(speed*100)
         ajustement = self.builder.get_object("adjustmentSpeed")
-        ajustement.configure (self.settedSpeed, 75, 100, 1, 10, 0)
+        ajustement.configure (self.setted_speed, 75, 100, 1, 10, 0)
 
-    def setSequenceNumber(self, sequenceNumber, sequenceCount):
+    def set_sequence_index_selection(self, sequenceNumber, sequenceCount):
         ajustement = self.builder.get_object("adjustmentSequenceNum")
-        sequenceNumber = sequenceNumber + 1
-        self.settedSeq = sequenceNumber
+        self.setted_sequence_number = sequenceNumber
         ajustement.configure (sequenceNumber, 1, sequenceCount, 1, 10, 0)
         self.builder.get_object("labelSequenceNumber").set_text(str(sequenceNumber) + "/" + str(sequenceCount))
 
-        toolbuttonNextSequence = self.builder.get_object("toolbuttonNextSequence")
-        toolbuttonPreviousSequence = self.builder.get_object("toolbuttonPreviousSequence")
-        if sequenceNumber == 1:
-            toolbuttonPreviousSequence.set_sensitive(False)
-        else:
-            toolbuttonPreviousSequence.set_sensitive(True)
 
-        if sequenceNumber == sequenceCount :
-            toolbuttonNextSequence.set_sensitive(False)
-        else:
-            toolbuttonNextSequence.set_sensitive(True)
 
     def setSequenceTime(self, sequencePos, sequenceTime):
         if sequencePos > sequenceTime:
@@ -176,7 +166,36 @@ class Gui:
     def set_title(self, title):
         self.window.set_title(title)
 
-    def setSequence(self, sequence):
+    def _clear_typing_area(self):
+        buffer = self.typeLabel.get_buffer()
+        iter1 = buffer.get_start_iter()
+        iter2 = buffer.get_end_iter()
+        buffer.delete(iter1, iter2)
+
+    def set_typing_area_text(self, formatted_text):
+        self.disableChangedTextEvent = True
+        self._clear_typing_area()
+        buffer = self.typeLabel.get_buffer()
+
+        for (text, style) in formatted_text:
+            size = buffer.get_char_count()
+            iter1 = buffer.get_end_iter()
+            buffer.insert(iter1,text)
+            iter1 = buffer.get_iter_at_offset(size)
+            iter2 = buffer.get_end_iter()
+            buffer.apply_tag_by_name(style, iter1, iter2)
+
+        self.disableChangedTextEvent = False
+
+    def set_typing_area_cursor_position(self, cursor_position):
+        buffer = self.typeLabel.get_buffer()
+        iter = buffer.get_iter_at_offset(cursor_position)
+        buffer.place_cursor(iter)
+
+    def set_focus_typing_area(self):
+        self.window.set_focus(self.typeLabel)
+
+    """def set_sequence(self, sequence):
         self.disableChangedTextEvent = True
         self.ClearBuffer()
         pos = 1
@@ -194,13 +213,13 @@ class Gui:
                 if sequence.getActiveWordIndex() == i:
                     cursor_pos = pos
                 if sequence.getWords()[i].isEmpty():
-                    self.UpdateWord(" ", 0, isEmpty=True)
+                    self.update_word(" ", 0, isEmpty=True)
                     pos += 1
                 elif sequence.getWords()[i].isValid():
-                    self.UpdateWord(sequence.getWords()[i].getValid(lower=False), 0, isFound=True)
+                    self.update_word(sequence.getWords()[i].getValid(lower=False), 0, isFound=True)
                     pos += len(sequence.getWords()[i].getText())
                 else:
-                    self.UpdateWord(sequence.getWords()[i].getText(), sequence.getWords()[i].getScore())
+                    self.update_word(sequence.getWords()[i].getText(), sequence.getWords()[i].getScore())
                     pos += len(sequence.getWords()[i].getText())
 
         self.wordIndexMap.append(self.currentWordIndex)
@@ -213,17 +232,7 @@ class Gui:
         self.disableChangedTextEvent = False
         self.sequenceText = buffer.get_text(buffer.get_start_iter(),buffer.get_end_iter())
 
-    def ClearBuffer(self):
-        buffer = self.typeLabel.get_buffer()
-        iter1 = buffer.get_start_iter()
-        iter2 = buffer.get_end_iter()
-        buffer.delete(iter1, iter2)
-
-        self.currentIndex = 0
-        self.currentWordIndex = -1
-        self.currentPosIndex = 0
-        self.wordIndexMap = []
-        self.wordPosMap = []
+    
 
     def AddSymbol(self, symbol):
         if len(symbol) == 0:
@@ -241,7 +250,7 @@ class Gui:
             self.wordPosMap.append(self.currentPosIndex)
         self.currentIndex += len(symbol)
 
-    def UpdateWord(self, word, score, isFound=False, isEmpty=False):
+    def update_word(self, word, score, isFound=False, isEmpty=False):
         buffer = self.typeLabel.get_buffer()
         iter1 = buffer.get_end_iter()
         size = buffer.get_char_count()
@@ -267,69 +276,26 @@ class Gui:
             self.wordIndexMap.append(self.currentWordIndex)
             self.wordPosMap.append(self.currentPosIndex)
             self.currentPosIndex += 1
-        self.currentIndex += len(word)
+        self.currentIndex += len(word)"""
 
-    def init_type_label(self):
+    def set_typing_area_style_list(self,style_list):
         """creates the labels used for the coloration of the text"""
         buffer = self.typeLabel.get_buffer()
 
-        color_not_found = self.window.get_colormap().alloc_color(
-            0*256,
-            0*256,
-            80*256)
-        bcolor_not_found_bad = self.window.get_colormap().alloc_color(
-            250*256,
-            218*256,
-            200*256)
-        color_found = self.window.get_colormap().alloc_color(
-            10*256,
-            150*256,
-            10*256)
-        def get_bcolor_not_found(score250):
-            return self.window.get_colormap().alloc_color(
-                (150+score250*100/250)*256,
-                (210-score250*210/250/2)*256,
-                (250-score250/2)*256)
-            (red, green, blue) = computeColorBetween(
-                (150, 210, 250),
-                (255, 100, 100),
-                float(score250) /250.0)
-            return self.window.get_colormap().alloc_color(red*256,green*256,blue*256)
+        # Remove existing tags
+        tag_table = buffer.get_tag_table()
+        tag_table.foreach(self._destroy_tag, tag_table)
 
-        def get_bcolor_near(score250):
-            (red, green, blue) = computeColorBetween(
-                (150, 210, 250),
-                (150, 255, 100),
-                float(score250) /250.0)
-            return self.window.get_colormap().alloc_color(red*256,green*256,blue*256)
 
-        def computeColorBetween(colorFrom, colorTo, coeff):
-            (redFrom, greenFrom, blueFrom)  =  colorFrom
-            (redTo, greenTo, blueTo)  =  colorTo
-            red = int((1-coeff)*redFrom + coeff*redTo)
-            green = int((1-coeff)*greenFrom + coeff*greenTo)
-            blue = int((1-coeff)*blueFrom + coeff*blueTo)
-            return (red, green, blue)
+        for (tag_name,size, foreground_color ,background_color) in style_list:
+            buffer.create_tag(tag_name,
+            background=background_color,
+            foreground=foreground_color,
+            size_points=size)
+      
 
-        buffer.create_tag("symbol",
-            size_points=18.0)
-        buffer.create_tag("word_empty",
-            background=get_bcolor_not_found(0),
-            foreground=color_not_found,
-            size_points=18.0)
-        for score250 in xrange(251):
-            buffer.create_tag("word_to_found"+str(-score250),
-                background=get_bcolor_not_found(score250),
-                foreground=color_not_found,
-                size_points=18.0)
-        buffer.create_tag("word_found",
-            foreground=color_found,
-            size_points=18.0)
-        for score250 in xrange(251):
-            buffer.create_tag("word_near"+str(score250),
-                background=get_bcolor_near(score250),
-                foreground=color_not_found,
-                size_points=18.0)
+    def _destroy_tag(text_tag, tag_table):
+        tag_table.remove(text_tag)
 
     def ask_save_path(self):
         saver = SaveFileSelector(self.window)
@@ -843,7 +809,14 @@ class Gui:
 
     def set_enable_pause(self, state):
         self.builder.get_object("toolbuttonPause").set_sensitive(state)
-       
+
+    def set_enable_next_sequence(self, state):
+        self.builder.get_object("toolbuttonNextSequence").set_sensitive(state)
+
+    def set_enable_previous_sequence(self, state):
+        self.builder.get_object("toolbuttonPreviousSequence").set_sensitive(state)
+
+
 
     def set_visible_play(self, state):
         if state:
