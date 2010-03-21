@@ -13,17 +13,17 @@ class Pep8FunctionsTestCase(unittest.TestCase):
     
     def test_find_functions_names(self):
         text="""
-        def test_affd():
+        def testAffd():
             pass
             
-        def test_bddr():
+        def testBddr():
             pass
         
         def test_ee():
             pass
         """
         self.assertEqual(pep8.find_function_names(text),
-                        ["test_affd", "test_bddr"])
+                        ["testAffd", "testBddr"])
         
     def test_replace_word(self):
         text = "test a.test test.b a.test.a rrtestrr r_test_a"
