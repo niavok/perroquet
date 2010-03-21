@@ -8,7 +8,7 @@
     <property name="visible">True</property>
     <property name="has_focus">True</property>
     <property name="title" translatable="yes">Perroquet</property>
-    <signal name="delete_event" handler="on_MainWindow_delete_event"/>
+    <signal name="delete_event" handler="on_main_window_delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -30,7 +30,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_imagemenuitemNew_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_new_activate"/>
                       </object>
                     </child>
                     <child>
@@ -39,7 +39,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_imagemenuitemOpen_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_open_activate"/>
                       </object>
                     </child>
                     <child>
@@ -49,7 +49,7 @@
                         <property name="sensitive">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_imagemenuitemSave_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_save_activate"/>
                       </object>
                     </child>
                     <child>
@@ -59,7 +59,7 @@
                         <property name="sensitive">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_imagemenuitemSaveAs_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_save_as_activate"/>
                       </object>
                     </child>
                     <child>
@@ -73,7 +73,7 @@
                         <property name="visible">True</property>
                         <property name="image">image7</property>
                         <property name="use_stock">False</property>
-                        <signal name="activate" handler="on_imagemenuitemImport_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_import_activate"/>
                       </object>
                     </child>
                     <child>
@@ -90,7 +90,7 @@
                                 <property name="visible">True</property>
                                 <property name="image">image4</property>
                                 <property name="use_stock">False</property>
-                                <signal name="activate" handler="on_imagemenuitemExportAsTemplate_activate"/>
+                                <signal name="activate" handler="on_imagemenuitem_export_as_template_activate"/>
                               </object>
                             </child>
                             <child>
@@ -99,7 +99,7 @@
                                 <property name="visible">True</property>
                                 <property name="image">image6</property>
                                 <property name="use_stock">False</property>
-                                <signal name="activate" handler="on_imagemenuitemExportAsPackage_activate"/>
+                                <signal name="activate" handler="on_imagemenuitem_export_as_package_activate"/>
                               </object>
                             </child>
                           </object>
@@ -117,7 +117,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_imagemenuitemQuit_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_quit_activate"/>
                       </object>
                     </child>
                   </object>
@@ -139,7 +139,7 @@
                         <property name="use_underline">True</property>
                         <property name="image">image2</property>
                         <property name="use_stock">False</property>
-                        <signal name="activate" handler="on_imagemenuitemExerciceManager_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_exercice_manager_activate"/>
                       </object>
                     </child>
                     <child>
@@ -148,7 +148,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_imagemenuitemSettings_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_settings_activate"/>
                       </object>
                     </child>
                   </object>
@@ -169,7 +169,7 @@
                         <property name="visible">True</property>
                         <property name="image">image5</property>
                         <property name="use_stock">False</property>
-                        <signal name="activate" handler="on_menuitemResetProgress_activate"/>
+                        <signal name="activate" handler="on_menuitem_reset_progress_activate"/>
                       </object>
                     </child>
                     <child>
@@ -183,7 +183,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_imagemenuitemProperties_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_properties_activate"/>
                       </object>
                     </child>
                     <child>
@@ -193,7 +193,7 @@
                         <property name="use_underline">True</property>
                         <property name="image">image3</property>
                         <property name="use_stock">False</property>
-                        <signal name="activate" handler="on_imagemenuitemAdvancedProperties_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_advanced_properties_activate"/>
                       </object>
                     </child>
                   </object>
@@ -213,7 +213,7 @@
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Lateral panel</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="on_checkmenuitemLateralPanel_toggled"/>
+                        <signal name="toggled" handler="on_checkmenuitem_lateral_panel_toggled"/>
                       </object>
                     </child>
                     <child>
@@ -222,7 +222,7 @@
                         <property name="sensitive">False</property>
                         <property name="label" translatable="yes">Translation</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="on_checkmenuitemTranslation_toggled"/>
+                        <signal name="toggled" handler="on_checkmenuitem_translation_toggled"/>
                       </object>
                     </child>
                     <child>
@@ -232,7 +232,7 @@
                         <property name="sensitive">False</property>
                         <property name="image">image1</property>
                         <property name="use_stock">False</property>
-                        <signal name="activate" handler="on_imagemenuitemHint_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_hint_activate"/>
                       </object>
                     </child>
                     <child>
@@ -246,7 +246,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_imagemenuitemAbout_activate"/>
+                        <signal name="activate" handler="on_imagemenuitem_about_activate"/>
                       </object>
                     </child>
                   </object>
@@ -269,7 +269,7 @@
                 <property name="label" translatable="yes">New exercise</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-new</property>
-                <signal name="clicked" handler="on_newExerciseButton_clicked"/>
+                <signal name="clicked" handler="on_new_exercise_button_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -279,11 +279,11 @@
             <child>
               <object class="GtkToolButton" id="loadButton">
                 <property name="visible">True</property>
-                <property name="tooltip_text" translatable="yes">Open exercise</property>
-                <property name="label" translatable="yes">Open saved exercise</property>
+                <property name="tooltip_text" translatable="yes">open exercise</property>
+                <property name="label" translatable="yes">open saved exercise</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
-                <signal name="clicked" handler="on_loadButton_clicked"/>
+                <signal name="clicked" handler="on_load_button_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -298,7 +298,7 @@
                 <property name="label" translatable="yes">Save exercise</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save</property>
-                <signal name="clicked" handler="on_saveButton_clicked"/>
+                <signal name="clicked" handler="on_save_button_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -322,7 +322,7 @@
                 <property name="label" translatable="yes">Previous sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-back</property>
-                <signal name="clicked" handler="on_toolbuttonPreviousSequence_clicked"/>
+                <signal name="clicked" handler="on_toolbutton_previous_sequence_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -337,7 +337,7 @@
                 <property name="label" translatable="yes">Next Sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-forward</property>
-                <signal name="clicked" handler="on_toolbuttonNextSequence_clicked"/>
+                <signal name="clicked" handler="on_toolbutton_next_sequence_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -352,7 +352,7 @@
                 <property name="label" translatable="yes">Replay sequence</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-refresh</property>
-                <signal name="clicked" handler="on_toolbuttonReplaySequence_clicked"/>
+                <signal name="clicked" handler="on_toolbutton_replay_sequence_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -366,7 +366,7 @@
                 <property name="label" translatable="yes">Pause</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-pause</property>
-                <signal name="clicked" handler="on_toolbuttonPause_clicked"/>
+                <signal name="clicked" handler="on_toolbutton_pause_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -380,7 +380,7 @@
                 <property name="label" translatable="yes">Play</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
-                <signal name="clicked" handler="on_toolbuttonPlay_clicked"/>
+                <signal name="clicked" handler="on_toolbutton_play_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -404,7 +404,7 @@
                 <property name="label" translatable="yes">Hint</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-dialog-question</property>
-                <signal name="clicked" handler="on_toolbuttonHint_clicked"/>
+                <signal name="clicked" handler="on_toolbutton_hint_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -419,7 +419,7 @@
                 <property name="label" translatable="yes">Display translation</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-spell-check</property>
-                <signal name="toggled" handler="on_toggletoolbuttonShowTranslation_toggled"/>
+                <signal name="toggled" handler="on_toggletoolbutton_show_translation_toggled"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -461,7 +461,7 @@
                 <property name="label" translatable="yes">Properties</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-properties</property>
-                <signal name="clicked" handler="on_toolbuttonProperties_clicked"/>
+                <signal name="clicked" handler="on_toolbutton_properties_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -475,7 +475,7 @@
                 <property name="label" translatable="yes">Erase</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-clear</property>
-                <signal name="clicked" handler="on_ResetExerciseContent_clicked"/>
+                <signal name="clicked" handler="on_reset_exercise_content_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -570,7 +570,7 @@
 
     For more information on regular expressions: http://en.wikipedia.org/wiki/Regular_expression</property>
                             <property name="invisible_char">&#x2022;</property>
-                            <signal name="changed" handler="on_entryFilter_changed"/>
+                            <signal name="changed" handler="on_entry_filter_changed"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -664,9 +664,9 @@
                     <property name="wrap_mode">word</property>
                     <property name="justification">center</property>
                     <property name="buffer">textbufferView</property>
-                    <signal name="key_press_event" handler="on_typeView_key_press_event"/>
-                    <signal name="move_cursor" handler="on_typeView_move_cursor" after="yes"/>
-                    <signal name="button_release_event" handler="on_typeView_button_release_event"/>
+                    <signal name="key_press_event" handler="on_type_view_key_press_event"/>
+                    <signal name="move_cursor" handler="on_type_view_move_cursor" after="yes"/>
+                    <signal name="button_release_event" handler="on_type_view_button_release_event"/>
                   </object>
                 </child>
               </object>
@@ -809,7 +809,7 @@
                 <property name="tooltip_text" translatable="yes">The audio track should be in the exercise language</property>
                 <property name="create_folders">False</property>
                 <property name="title" translatable="yes">Select a video file</property>
-                <signal name="file_set" handler="on_filechooserbuttonVideo_file_set"/>
+                <signal name="file_set" handler="on_filechooserbutton_video_file_set"/>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -919,7 +919,7 @@ Supported format: srt</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_buttonNewExerciseCancel_clicked"/>
+                <signal name="clicked" handler="on_button_new_exercise_cancel_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -934,7 +934,7 @@ Supported format: srt</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_buttonNewExerciseOk_clicked"/>
+                <signal name="clicked" handler="on_button_new_exercise_ok_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -961,14 +961,14 @@ Supported format: srt</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
     <property name="page_size">10</property>
-    <signal name="value_changed" handler="on_adjustmentSequenceTime_value_changed"/>
+    <signal name="value_changed" handler="on_adjustment_sequence_time_value_changed"/>
   </object>
   <object class="GtkAdjustment" id="adjustmentSequenceNum">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
     <property name="page_size">10</property>
-    <signal name="value_changed" handler="on_adjustmentSequenceNum_value_changed"/>
+    <signal name="value_changed" handler="on_adjustment_sequence_num_value_changed"/>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
@@ -1021,7 +1021,7 @@ Zarmakuizz</property>
     </child>
   </object>
   <object class="GtkTextBuffer" id="textbufferView">
-    <signal name="changed" handler="on_textbufferView_changed"/>
+    <signal name="changed" handler="on_textbuffer_view_changed"/>
   </object>
   <object class="GtkAdjustment" id="adjustmentSpeed">
     <property name="value">100</property>
@@ -1029,7 +1029,7 @@ Zarmakuizz</property>
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
-    <signal name="value_changed" handler="on_adjustmentSpeed_value_changed"/>
+    <signal name="value_changed" handler="on_adjustment_speed_value_changed"/>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>

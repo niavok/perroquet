@@ -44,8 +44,8 @@ class GuiResetExercise:
         self.dialog.run()
         self.dialog.destroy()
 
-    def on_buttonResetOk_clicked(self, widget, data=None):
+    def on_button_reset_ok_clicked(self, widget, data=None):
         self.dialog.response(gtk.RESPONSE_OK)
 
-    def on_buttonResetCancel_clicked(self, widget, data=None):
+    def on_button_reset_cancel_clicked(self, widget, data=None):
         self.dialog.response(gtk.RESPONSE_CANCEL)

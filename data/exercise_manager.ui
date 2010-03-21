@@ -38,7 +38,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="level_indentation">1</property>
-                            <signal name="cursor_changed" handler="on_treeviewExercises_cursor_changed"/>
+                            <signal name="cursor_changed" handler="on_treeview_exercises_cursor_changed"/>
                           </object>
                         </child>
                       </object>
@@ -65,7 +65,7 @@
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="clicked" handler="on_buttonAction_clicked"/>
+                            <signal name="clicked" handler="on_button_action_clicked"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -90,7 +90,7 @@
                   <object class="GtkExpander" id="expanderDetails">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <signal name="activate" handler="on_expanderDetails_activate"/>
+                    <signal name="activate" handler="on_expander_details_activate"/>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow2">
                         <property name="visible">True</property>
@@ -137,7 +137,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">liststoreRepositories</property>
-                    <signal name="cursor_changed" handler="on_treeviewRepositories_cursor_changed"/>
+                    <signal name="cursor_changed" handler="on_treeview_repositories_cursor_changed"/>
                   </object>
                   <packing>
                     <property name="position">0</property>
@@ -173,7 +173,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_buttonAddRepo_clicked"/>
+                        <signal name="clicked" handler="on_button_add_repo_clicked"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -188,7 +188,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_buttonDeleteRepo_clicked"/>
+                        <signal name="clicked" handler="on_button_delete_repo_clicked"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -227,7 +227,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_checkbuttonTreeViewMode_toggled"/>
+                    <signal name="toggled" handler="on_checkbutton_tree_view_mode_toggled"/>
                   </object>
                   <packing>
                     <property name="position">0</property>

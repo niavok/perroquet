@@ -76,7 +76,7 @@ class Gui:
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
                                    gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
                                    _("The file '%s' doesn't exist. Please modify exercise paths") % path)
-        dialog.set_title(_("Load error"))
+        dialog.set_title(_("load error"))
 
         dialog.run()
         dialog.destroy()
@@ -413,7 +413,7 @@ class Gui:
         self.liststoreLanguage = gtk.ListStore(str,str)
 
         languageManager = LanguagesManager()
-        languagesList =languageManager.getLanguagesList()
+        languagesList =languageManager.get_languages_list()
 
         for language in languagesList:
             (langId,langName,chars) = language
@@ -452,16 +452,16 @@ class Gui:
 
     #---------------------- Now the functions called directly by the gui--------
 
-    def on_MainWindow_delete_event(self,widget,data=None):
+    def on_main_window_delete_event(self,widget,data=None):
         # returning True avoids it to signal "destroy-event"
         # returning False makes "destroy-event" be signalled for the window.
         return self.controller.notify_quit()
 
-    def on_newExerciseButton_clicked(self,widget,data=None):
+    def on_new_exercise_button_clicked(self,widget,data=None):
         return self.controller.notify_new_exercise()
 
 
-    def on_buttonNewExerciseOk_clicked(self,widget,data=None):
+    def on_button_new_exercise_ok_clicked(self,widget,data=None):
 
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         videoPath = videoChooser.get_filename()
@@ -484,19 +484,19 @@ class Gui:
         self.controller.notify_new_exercise_cancel(videoPath,exercisePath, translationPath, langId)
         
 
-    def on_buttonNewExerciseCancel_clicked(self,widget,data=None):
+    def on_button_new_exercise_cancel_clicked(self,widget,data=None):
         self.controller.notify_new_exercise_cancel()
 
-    def on_imagemenuitemExportAsTemplate_activate(self,widget,data=None):
+    def on_imagemenuitem_export_as_template_activate(self,widget,data=None):
         self.controller.notify_export_as_template()
 
-    def on_imagemenuitemExportAsPackage_activate(self,widget,data=None):
+    def on_imagemenuitem_export_as_package_activate(self,widget,data=None):
         self.controller.notify_export_as_package()
 
-    def on_imagemenuitemImport_activate(self,widget,data=None):
+    def on_imagemenuitem_import_activate(self,widget,data=None):
         self.controller.notify_import_package()
 
-    def on_textbufferView_changed(self,widget):
+    def on_textbuffer_view_changed(self,widget):
 
         if self.disable_changed_text_event:
            return False;
@@ -516,64 +516,64 @@ class Gui:
         
         
 
-    def on_typeView_key_press_event(self,widget, event):
+    def on_type_view_key_press_event(self,widget, event):
         keyname = gtk.gdk.keyval_name(event.keyval)
         return self.controller.notify_key_press(keyname)
         
-    def on_toolbuttonNextSequence_clicked(self,widget,data=None):
+    def on_toolbutton_next_sequence_clicked(self,widget,data=None):
         self.controller.notify_next_sequence()
 
-    def on_toolbuttonPreviousSequence_clicked(self,widget,data=None):
+    def on_toolbutton_previous_sequence_clicked(self,widget,data=None):
         self.controller.notify_previous_sequence()
 
-    def on_toolbuttonReplaySequence_clicked(self,widget,data=None):
+    def on_toolbutton_replay_sequence_clicked(self,widget,data=None):
         self.controller.notify_repeat_sequence()
 
-    def on_adjustmentSequenceNum_value_changed(self,widget,data=None):
+    def on_adjustment_sequence_num_value_changed(self,widget,data=None):
 
         value = int(self.builder.get_object("adjustmentSequenceNum").get_value())
 
         if value != self.setted_sequence_number:
             self.controller.notify_select_sequence_number(value - 1)
 
-    def on_adjustmentSequenceTime_value_changed(self,widget,data=None):
+    def on_adjustment_sequence_time_value_changed(self,widget,data=None):
         value = int(self.builder.get_object("adjustmentSequenceTime").get_value())
         if value != self.setted_position:
             self.controller.notify_select_sequence_time(value*100)
 
-    def on_adjustmentSpeed_value_changed(self,widget,data=None):
+    def on_adjustment_speed_value_changed(self,widget,data=None):
         value = int(self.builder.get_object("adjustmentSpeed").get_value())
         if value != self.setted_speed:
             self.controller.notify_select_speed(float(value)/100)
 
-    def on_toolbuttonHint_clicked(self,widget,data=None):
+    def on_toolbutton_hint_clicked(self,widget,data=None):
         self.controller.notify_hint()
 
-    def on_toolbuttonPlay_clicked(self,widget,data=None):
+    def on_toolbutton_play_clicked(self,widget,data=None):
         self.controller.notify_play()
 
-    def on_toolbuttonPause_clicked(self,widget,data=None):
+    def on_toolbutton_pause_clicked(self,widget,data=None):
         self.controller.notify_pause()
 
-    def on_saveButton_clicked(self, widget, data=None):
+    def on_save_button_clicked(self, widget, data=None):
         self.controller.notify_save()
 
-    def on_loadButton_clicked(self, widget, data=None):
+    def on_load_button_clicked(self, widget, data=None):
         self.controller.notify_load()
         
-    def on_buttonSaveExerciseOk_clicked(self, widget, data=None):
+    def on_button_save_exercise_ok_clicked(self, widget, data=None):
         #TODO : use controller
         saveChooser = self.builder.get_object("filechooserdialogSave")
         saveChooser.hide()
 
-    def on_entryFilter_changed(self, widget, data=None):
+    def on_entry_filter_changed(self, widget, data=None):
         self.controller.notify_filter_change()
 
-    def on_toggletoolbuttonShowTranslation_toggled(self, widget, data=None):
+    def on_toggletoolbutton_show_translation_toggled(self, widget, data=None):
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
         self.controllernotify_toogle_translation(toggletoolbuttonShowTranslation.props.active)
 
-    def on_typeView_move_cursor(self, textview, step_size, count, extend_selection):
+    def on_type_view_move_cursor(self, textview, step_size, count, extend_selection):
 
         if step_size == gtk.MOVEMENT_VISUAL_POSITIONS:
             if count == -1:
@@ -593,54 +593,54 @@ class Gui:
 
         return True
 
-    def on_typeView_button_release_event(self, widget, data=None):
+    def on_type_view_button_release_event(self, widget, data=None):
         index = self.typeLabel.get_buffer().props.cursor_position
         return self.controller.notify_move_cursor(index)
 
-    def on_toolbuttonProperties_clicked(self, widget, data=None):
+    def on_toolbutton_properties_clicked(self, widget, data=None):
         self.controller.notify_properties()
 
-    def on_imagemenuitemExerciceManager_activate(self, widget, data=None):
+    def on_imagemenuitem_exercice_manager_activate(self, widget, data=None):
         self.controller.notify_exercise_manager()
 
-    def on_imagemenuitemAbout_activate(self,widget,data=None):
+    def on_imagemenuitem_about_activate(self,widget,data=None):
         self.builder.get_object("aboutdialog").show()
 
-    def on_imagemenuitemHint_activate(self,widget,data=None):
+    def on_imagemenuitem_hint_activate(self,widget,data=None):
         self.controller.notify_hint()
 
-    def on_checkmenuitemLateralPanel_toggled(self,widget,data=None):
+    def on_checkmenuitem_lateral_panel_toggled(self,widget,data=None):
         self.controller.toggle_lateral_panel()
 
-    def on_checkmenuitemTranslation_toggled(self,widget,data=None):
+    def on_checkmenuitem_translation_toggled(self,widget,data=None):
         checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
         self.controllernotify_toogle_translation(checkmenuitemTranslation.props.active)
         
-    def on_imagemenuitemProperties_activate(self,widget,data=None):
+    def on_imagemenuitem_properties_activate(self,widget,data=None):
         self.controller.notify_properties()
 
-    def on_imagemenuitemAdvancedProperties_activate(self,widget,data=None):
+    def on_imagemenuitem_advanced_properties_activate(self,widget,data=None):
         self.controller.notify_properties_advanced()
 
-    def on_imagemenuitemSettings_activate(self,widget,data=None):
+    def on_imagemenuitem_settings_activate(self,widget,data=None):
         self.notify_settings()
 
-    def on_imagemenuitemQuit_activate(self,widget,data=None):
+    def on_imagemenuitem_quit_activate(self,widget,data=None):
         return self.controller.notify_quit()
 
-    def on_imagemenuitemSaveAs_activate(self,widget,data=None):
+    def on_imagemenuitem_save_as_activate(self,widget,data=None):
         self.controller.notify_save_as()
 
-    def on_imagemenuitemSave_activate(self,widget,data=None):
+    def on_imagemenuitem_save_activate(self,widget,data=None):
         self.controller.notify_save()
 
-    def on_imagemenuitemOpen_activate(self,widget,data=None):
+    def on_imagemenuitem_open_activate(self,widget,data=None):
         self.controller.notify_load()
 
-    def on_imagemenuitemNew_activate(self,widget,data=None):
+    def on_imagemenuitem_new_activate(self,widget,data=None):
         self.controller.notify_new_exercise()
 
-    def on_filechooserbuttonVideo_file_set(self,widget,data=None):
+    def on_filechooserbutton_video_file_set(self,widget,data=None):
 
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
@@ -662,10 +662,10 @@ class Gui:
         self.builder.get_object("aboutdialog").hide()
         return True
 
-    def on_menuitemResetProgress_activate(self, widget, data=None):
+    def on_menuitem_reset_progress_activate(self, widget, data=None):
         self.controller.notify_reset_exercise_content()
 
-    def on_ResetExerciseContent_clicked(self, widget, data=None):
+    def on_reset_exercise_content_clicked(self, widget, data=None):
         self.controller.notify_reset_exercise_content()
     
 EVENT_FILTER = None
@@ -742,7 +742,7 @@ class OpenFileSelector(FileSelector):
 
         def __init__(self, parent):
                 FileSelector.__init__(
-                        self, parent, _('Select File to Open'),
+                        self, parent, _('Select File to open'),
                         gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
                 )
 

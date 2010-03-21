@@ -30,7 +30,7 @@ class Sequence(object):
         #        -levenshtein between it and the normal word otherwise
         #
         # self._activeWordIndex = the word that is currently being edited
-        # self.getActiveWord().getPos() = the position in that word
+        # self.get_active_word().get_pos() = the position in that word
         #
         # self._helpChar = the char printed when you want a hint
         #
@@ -80,212 +80,212 @@ class Sequence(object):
                     self._symbolList.append(textToParse)
                 break
 
-    def getSymbols(self):
+    def get_symbols(self):
         return self._symbolList
 
-    def getWords(self):
+    def get_words(self):
         return self._wordList
 
-    def getWordCount(self):
+    def get_word_count(self):
         return len(self._wordList)
 
-    def getActiveWordIndex(self):
+    def get_active_word_index(self):
         return self._activeWordIndex
 
-    def setActiveWordIndex(self, index):
+    def set_active_word_index(self, index):
         if index==-1:
-            index=self.getWordCount()
+            index=self.get_word_count()
 
-        if index<0 or index>self.getWordCount():
+        if index<0 or index>self.get_word_count():
             raise AttributeError, str(index)
 
         self._activeWordIndex = index
 
-    def getLastIndex(self):
+    def get_last_index(self):
         return len(self._wordList) - 1
 
-    def getActiveWord(self):
-        return self.getWords()[self.getActiveWordIndex()]
+    def get_active_word(self):
+        return self.get_words()[self.get_active_word_index()]
 
-    def getWordFound(self):
-        return len([w for w in self.getWords() if w.isValid()])
+    def get_word_found(self):
+        return len([w for w in self.get_words() if w.is_valid()])
 
-    def nextWord(self, loop=False):
+    def next_word(self, loop=False):
         "go to the next word"
-        if self.getActiveWordIndex() < self.getLastIndex():
+        if self.get_active_word_index() < self.get_last_index():
             self._activeWordIndex +=1
-            self.getActiveWord().setPos(0)
+            self.get_active_word().set_pos(0)
         else:
             if not loop:
                 pass
             else:
                 raise NotImplemented
 
-    def nextFalseWord(self, loop=False):
+    def next_false_word(self, loop=False):
         "go to the next non valid word"
         if loop:
             raise NotImplemented
-        if self.getActiveWord().isValid():
-            if self.isValid() or self.getActiveWordIndex() == self.getLastIndex():
+        if self.get_active_word().is_valid():
+            if self.is_valid() or self.get_active_word_index() == self.get_last_index():
                 return
-            self.nextWord()
-            self.nextFalseWord()
+            self.next_word()
+            self.next_false_word()
 
-    def previousWord(self, loop=False):
+    def previous_word(self, loop=False):
         "go to the previous word"
-        if self.getActiveWordIndex() > 0:
+        if self.get_active_word_index() > 0:
             self._activeWordIndex -= 1
-            self.getActiveWord().setPos(self.getActiveWord().getLastPos())
+            self.get_active_word().set_pos(self.get_active_word().get_last_pos())
         else:
             if not loop:
                 pass
             else:
                 raise NotImplemented
 
-    def previousFalseWord(self, loop=False):
+    def previous_false_word(self, loop=False):
         "go to the previous non valid word"
         if loop:
             raise NotImplemented
-        if self.getActiveWord().isValid():
-            if self.isValid() or self.getActiveWordIndex() == 0:
+        if self.get_active_word().is_valid():
+            if self.is_valid() or self.get_active_word_index() == 0:
                 return
-            self.previousWord()
-            self.previousFalseWord()
+            self.previous_word()
+            self.previous_false_word()
 
-    def selectSequenceWord(self, wordIndex,wordIndexPos):
-        self.getActiveWord().setPos(wordIndexPos)
-        self.setActiveWordIndex(wordIndex)
+    def select_sequence_word(self, wordIndex,wordIndexPos):
+        self.get_active_word().set_pos(wordIndexPos)
+        self.set_active_word_index(wordIndex)
 
-        self.nextFalseWord()
+        self.next_false_word()
 
-    def writeChar(self, char):
+    def write_char(self, char):
         try:
-            self.getActiveWord().writeChar(char)
-            if self.getActiveWord().isValid():
-                self.nextChar()
+            self.get_active_word().write_char(char)
+            if self.get_active_word().is_valid():
+                self.next_char()
         except ValidWordError:
-            self.nextWord()
-            self.nextFalseWord()
-            self.writeChar(char)
-        self.updateAfterWrite()
+            self.next_word()
+            self.next_false_word()
+            self.write_char(char)
+        self.update_after_write()
 
-    def _writeSentence(self, sentence):
+    def _write_sentence(self, sentence):
         """write many chars. a ' ' mean next word.
         Only for tests"""
         for char in sentence:
             if char==" ":
                 pass
             elif char=="+":
-                self.nextWord()
-                self.nextFalseWord()
+                self.next_word()
+                self.next_false_word()
             else:
-                self.writeChar(char)
+                self.write_char(char)
 
-    def deleteNextChar(self):
-        self.previousFalseWord()
+    def delete_next_char(self):
+        self.previous_false_word()
         try:
-            self.getActiveWord().deleteNextChar()
+            self.get_active_word().delete_next_char()
         except NoCharPossible:
-            if self.getActiveWordIndex() < self.getWordCount():
-                self.previousWord()
-                self.deleteNextChar()
-        self.updateAfterWrite()
+            if self.get_active_word_index() < self.get_word_count():
+                self.previous_word()
+                self.delete_next_char()
+        self.update_after_write()
 
-    def deletePreviousChar(self):
-        self.previousFalseWord()
+    def delete_previous_char(self):
+        self.previous_false_word()
         try:
-            self.getActiveWord().deletePreviousChar()
+            self.get_active_word().delete_previous_char()
         except NoCharPossible:
-            if self.getActiveWordIndex() > 0:
-                self.previousWord()
-                self.deletePreviousChar()
+            if self.get_active_word_index() > 0:
+                self.previous_word()
+                self.delete_previous_char()
         except ValidWordError:
-            if self.getActiveWordIndex() > 0:
-                self.previousWord()
-                self.deletePreviousChar()
+            if self.get_active_word_index() > 0:
+                self.previous_word()
+                self.delete_previous_char()
 
-        self.updateAfterWrite()
+        self.update_after_write()
 
-    def firstFalseWord(self):
+    def first_false_word(self):
         self._activeWordIndex = 0
-        self.getActiveWord().setPos(0)
-        self.nextFalseWord()
+        self.get_active_word().set_pos(0)
+        self.next_false_word()
 
-    def lastFalseWord(self):
-        self._activeWordIndex = self.getLastIndex()
-        self.getActiveWord().setPos(self.getActiveWord().getLastPos())
-        self.previousFalseWord()
+    def last_false_word(self):
+        self._activeWordIndex = self.get_last_index()
+        self.get_active_word().set_pos(self.get_active_word().get_last_pos())
+        self.previous_false_word()
 
-    def nextChar(self):
+    def next_char(self):
         try:
-            self.getActiveWord().nextChar()
+            self.get_active_word().next_char()
         except NoCharPossible:
-            self.nextWord()
-            self.nextFalseWord()
-            self.getActiveWord().setPos(0)
+            self.next_word()
+            self.next_false_word()
+            self.get_active_word().set_pos(0)
 
-    def previousChar(self):
+    def previous_char(self):
         try:
-            self.getActiveWord().previousChar()
+            self.get_active_word().previous_char()
         except NoCharPossible:
-            self.previousWord()
-            self.previousFalseWord()
-            self.getActiveWord().setPos(-1)
+            self.previous_word()
+            self.previous_false_word()
+            self.get_active_word().set_pos(-1)
 
-    def isValid(self):
-        return all(w.isValid() for w in self.getWords())
+    def is_valid(self):
+        return all(w.is_valid() for w in self.get_words())
 
-    def isEmpty(self):
-        return all(w.isEmpty() for w in self.getWords())
+    def is_empty(self):
+        return all(w.is_empty() for w in self.get_words())
 
-    def completeAll(self):
+    def complete_all(self):
         """Reveal all words"""
-        for w in self.getWords():
+        for w in self.get_words():
             w.complete()
             
     def reset(self):
         "RAZ the current seq"
-        for w in self.getWords():
+        for w in self.get_words():
             w.reset()
 
-    def updateAfterWrite(self):
+    def update_after_write(self):
         "update after a modification of the text"
-        self._checkLocation()
+        self._check_location()
 
-    def _checkLocation(self):
+    def _check_location(self):
         """Check if a word is correct but at a wrong place."""
-        for w1 in self.getWords():
-            for j, w2 in enumerate(self.getWords()):
-                if w1.getScore()<=0 and w1.getText()==w2.getValid() and not w2.isValid():
-                    w2.setText(w1.getText())
-                    w1.setText("")
-                    self.setActiveWordIndex(j)
-                    self.nextFalseWord()
+        for w1 in self.get_words():
+            for j, w2 in enumerate(self.get_words()):
+                if w1.get_score()<=0 and w1.get_text()==w2.get_valid() and not w2.is_valid():
+                    w2.set_text(w1.get_text())
+                    w1.set_text("")
+                    self.set_active_word_index(j)
+                    self.next_false_word()
 
-    def getTimeBegin(self):
+    def get_time_begin(self):
         return self.beginTime
 
-    def getTimeEnd(self):
+    def get_time_end(self):
         return self.endTime
 
-    def setTimeBegin(self, time):
+    def set_time_begin(self, time):
         self.beginTime = time
 
-    def setTimeEnd(self, time):
+    def set_time_end(self, time):
         self.endTime = time
 
-    def showHint(self):
+    def show_hint(self):
         try:
-            self.getActiveWord().showHint()
+            self.get_active_word().show_hint()
         except ValidWordError:
-            if self.getActiveWordIndex()==self.getWordCount()-1:
+            if self.get_active_word_index()==self.get_word_count()-1:
                 return
             else:
-                self.nextWord()
-                self.showHint()
+                self.next_word()
+                self.show_hint()
 
     def __print__(self):
-        return "-".join(w.getText() for w in self.getWords())+" VS "+"-".join(w.getValid() for w in self.getWords())
+        return "-".join(w.get_text() for w in self.get_words())+" VS "+"-".join(w.get_valid() for w in self.get_words())
 
     def __repr__(self):
         return self.__print__()

@@ -33,14 +33,14 @@ class SubExercise(object):
         self.exerciseExportPath = None
         self.translationExportPath = None
 
-    def LoadSubtitles(self):
+    def load_subtitles(self):
 
-        self.subList = self.subtitles.getSubtitleList(self.exercisePath)
-        self.subList = self.subtitles.CompactSubtitlesList(self.subList, self.parent.timeBetweenSequence, self.parent.maxSequenceLength)
+        self.subList = self.subtitles.get_subtitle_list(self.exercisePath)
+        self.subList = self.subtitles.compact_subtitles_list(self.subList, self.parent.timeBetweenSequence, self.parent.maxSequenceLength)
 
         self.translationList = None
         if self.translationPath != "":
-            self.translationList = self.subtitles.getSubtitleList(self.translationPath)
+            self.translationList = self.subtitles.get_subtitle_list(self.translationPath)
 
         oldSequenceList = self.sequenceList
 
@@ -50,9 +50,9 @@ class SubExercise(object):
 
         for sub in self.subList:
             self.sequence = Sequence(charToFind)
-            self.sequence.load(sub.getText())
-            self.sequence.setTimeBegin(sub.getTimeBegin())
-            self.sequence.setTimeEnd(sub.getTimeEnd())
+            self.sequence.load(sub.get_text())
+            self.sequence.set_time_begin(sub.get_time_begin())
+            self.sequence.set_time_end(sub.get_time_end())
             self.sequenceList.append(self.sequence)
 
         #Restore found words
@@ -65,60 +65,60 @@ class SubExercise(object):
 
             while oldSequenceIndex < len( oldSequenceList) and newSequenceIndex < len(self.sequenceList):
 
-                if oldWordIndex >= oldSequenceList[oldSequenceIndex].getWordCount():
+                if oldWordIndex >= oldSequenceList[oldSequenceIndex].get_word_count():
                     oldSequenceIndex += 1
                     oldWordIndex = 0
 
                     if oldSequenceIndex >= len(oldSequenceList):
                         break
 
-                if newWordIndex >= len(self.sequenceList[newSequenceIndex].getWords()):
+                if newWordIndex >= len(self.sequenceList[newSequenceIndex].get_words()):
                     newSequenceIndex += 1
                     newWordIndex = 0
 
                     if newSequenceIndex >= len(self.sequenceList):
                         break
 
-                self.sequenceList[newSequenceIndex].getWords()[newWordIndex].setText(oldSequenceList[oldSequenceIndex].getWords()[oldWordIndex].getText())
+                self.sequenceList[newSequenceIndex].get_words()[newWordIndex].set_text(oldSequenceList[oldSequenceIndex].get_words()[oldWordIndex].get_text())
                 oldWordIndex += 1
                 newWordIndex += 1
 
 
 
-    def ExtractWordList(self):
+    def extract_word_list(self):
         wordList = []
 
         for sequence in self.sequenceList:
-            for word in sequence.getWords():
-                wordList.append(word.getValid())
+            for word in sequence.get_words():
+                wordList.append(word.get_valid())
 
         return wordList
 
-    def GotoSequence(self, id):
+    def goto_sequence(self, id):
         self.currentSequenceId = id
-        self.UpdateCurrentInfos()
+        self.update_current_infos()
 
-    def GotoNextSequence(self):
+    def goto_next_sequence(self):
         if self.currentSequenceId < len(self.sequenceList)-1:
             self.currentSequenceId += 1
-            self.UpdateCurrentInfos()
+            self.update_current_infos()
             return True
         else:
             return False
 
-    def GotoPreviousSequence(self):
+    def goto_previous_sequence(self):
         if self.currentSequenceId > 0:
             self.currentSequenceId -= 1
-            self.UpdateCurrentInfos()
+            self.update_current_infos()
             return True
         else:
             return False
 
-    def UpdateCurrentInfos(self):
+    def update_current_infos(self):
         self.currentSequence = self.sequenceList[self.currentSequenceId]
-        self.currentSequenceValid = self.currentSequence.isValid()
+        self.currentSequenceValid = self.currentSequence.is_valid()
 
-    def IsPathsValid(self):
+    def is_paths_valid(self):
         error = False
         errorList = []
         if not os.path.exists(self.videoPath):
@@ -135,60 +135,60 @@ class SubExercise(object):
 
         return (not error), errorList
 
-    def IncrementRepeatCount(self):
+    def increment_repeat_count(self):
         self.repeatCount += 1
 
-    def setVideoPath(self, videoPath):
+    def set_video_path(self, videoPath):
         self.videoPath = videoPath
 
-    def setExercisePath(self, exercisePath):
+    def set_exercise_path(self, exercisePath):
         self.exercisePath = exercisePath
 
-    def setTranslationPath(self, translationPath):
+    def set_translation_path(self, translationPath):
         self.translationPath = translationPath
 
     #Define path to use when the parent file is exported
-    def setVideoExportPath(self, videoPath):
+    def set_video_export_path(self, videoPath):
         self.videoExportPath = videoPath
 
     #Define path to use when the parent file is exported
-    def setExerciseExportPath(self, exercisePath):
+    def set_exercise_export_path(self, exercisePath):
         self.exerciseExportPath = exercisePath
 
     #Define path to use when the parent file is exported
-    def setTranslationExportPath(self, translationPath):
+    def set_translation_export_path(self, translationPath):
         self.translationExportPath = translationPath
 
-    def setCurrentSequence(self, id):
+    def set_current_sequence(self, id):
         if id >= len(self.sequenceList):
             self.currentSequenceId = len(self.sequenceList)-1
         else:
             self.currentSequenceId = id
 
-    def getSequenceList(self):
+    def get_sequence_list(self):
         return self.sequenceList
 
-    def getCurrentSequence(self):
+    def get_current_sequence(self):
         return self.sequenceList[self.currentSequenceId]
 
-    def getCurrentSequenceId(self):
+    def get_current_sequence_id(self):
         return self.currentSequenceId
 
-    def getSequenceCount(self):
+    def get_sequence_count(self):
         return len(self.sequenceList)
 
-    def getVideoPath(self):
+    def get_video_path(self):
         return self.videoPath
 
-    def getExercisePath(self):
+    def get_exercise_path(self):
         return self.exercisePath
 
-    def getTranslationPath(self):
+    def get_translation_path(self):
         return self.translationPath
 
     #get path to use when the parent file is exported. If no specila
     #path is set, the absolute path is used
-    def getVideoExportPath(self):
+    def get_video_export_path(self):
         if self.videoExportPath:
             return self.videoExportPath
         else:
@@ -196,7 +196,7 @@ class SubExercise(object):
 
     #get path to use when the parent file is exported. If no specila
     #path is set, the absolute path is used
-    def getExerciseExportPath(self):
+    def get_exercise_export_path(self):
         if self.exerciseExportPath:
             return self.exerciseExportPath
         else:
@@ -204,11 +204,11 @@ class SubExercise(object):
 
     #get path to use when the parent file is exported. If no specila
     #path is set, the absolute path is used
-    def getTranslationExportPath(self):
+    def get_translation_export_path(self):
         if self.translationExportPath:
             return self.translationExportPath
         else:
             return self.translationPath
 
-    def getTranslationList(self):
+    def get_translation_list(self):
         return self.translationList

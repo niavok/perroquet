@@ -39,59 +39,59 @@ class ExerciseRepository:
 
 
 
-    def setName(self, name):
+    def set_name(self, name):
         self.name = name
 
-    def setDescription(self, description):
+    def set_description(self, description):
         self.description = description
 
-    def setVersion(self, version):
+    def set_version(self, version):
         self.version = version
 
-    def setName(self, name):
+    def set_name(self, name):
         self.name = name
 
-    def getName(self):
+    def get_name(self):
         return self.name
 
-    def setType(self, type):
+    def set_type(self, type):
         self.type = type
 
-    def getType(self):
+    def get_type(self):
         return self.type
 
-    def setId(self, id):
+    def set_id(self, id):
         self.id = id
 
-    def getId(self):
+    def get_id(self):
         return self.id
 
-    def setUrl(self, url):
+    def set_url(self, url):
         self.url = url
 
-    def getUrl(self):
+    def get_url(self):
         return self.url
 
-    def getDescription(self):
+    def get_description(self):
         return self.description
 
-    def getVersion(self):
+    def get_version(self):
         return self.version
 
-    def addGroup(self, group):
+    def add_group(self, group):
         self.exercisesGroupList.append(group)
-        group.setParent(self)
+        group.set_parent(self)
 
-    def getGroups(self):
+    def get_groups(self):
         return self.exercisesGroupList
 
-    def getOrphanGroups(self):
-        groupPathList = os.listDir(self.getLocalPath())
+    def get_orphan_groups(self):
+        groupPathList = os.listDir(self.get_local_path())
 
         groupUsedPath = []
         orphanGroupList = []
-        for group in self.getGroups():
-            groupUsedPath.append(group.getLocalPath())
+        for group in self.get_groups():
+            groupUsedPath.append(group.get_local_path())
 
         for groupPath in groupPathList:
             if groupPath not in groupUsedPath:
@@ -100,19 +100,19 @@ class ExerciseRepository:
 
         return orphanGroupList
 
-    def getLocalPath(self):
+    def get_local_path(self):
         return os.path.join(self.config.get("local_repo_root_dir"), self.id)
 
-    def generateDescription(self):
-        self._generateDescription()
-        for group in self.getGroups():
-            group.generateDescription()
+    def generate_description(self):
+        self._generate_description()
+        for group in self.get_groups():
+            group.generate_description()
 
-    def _generateDescription(self):
+    def _generate_description(self):
 
-        if not os.path.isdir(self.getLocalPath()):
+        if not os.path.isdir(self.get_local_path()):
             try:
-                os.makedirs(self.getLocalPath())
+                os.makedirs(self.get_local_path())
             except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
                 if ErrorNumber == errno.EEXIST:
                     pass
@@ -125,86 +125,86 @@ class ExerciseRepository:
 
         # Name
         xml_name = newdoc.createElement("name")
-        xml_name.appendChild(newdoc.createTextNode(self.getName()))
+        xml_name.appendChild(newdoc.createTextNode(self.get_name()))
         root_element.appendChild(xml_name)
 
         # Id
         xml_id = newdoc.createElement("id")
-        xml_id.appendChild(newdoc.createTextNode(self.getId()))
+        xml_id.appendChild(newdoc.createTextNode(self.get_id()))
         root_element.appendChild(xml_id)
 
         # Description
         xml_description = newdoc.createElement("description")
-        xml_description.appendChild(newdoc.createTextNode(self.getDescription()))
+        xml_description.appendChild(newdoc.createTextNode(self.get_description()))
         root_element.appendChild(xml_description)
 
         # Version
         xml_version = newdoc.createElement("version")
-        xml_version.appendChild(newdoc.createTextNode(self.getVersion()))
+        xml_version.appendChild(newdoc.createTextNode(self.get_version()))
         root_element.appendChild(xml_version)
 
         # Url
         xml_url = newdoc.createElement("url")
-        xml_url.appendChild(newdoc.createTextNode(self.getUrl()))
+        xml_url.appendChild(newdoc.createTextNode(self.get_url()))
         root_element.appendChild(xml_url)
 
 
         xml_string = newdoc.toprettyxml()
         xml_string = xml_string.encode('utf8')
-        repoDescriptionPath = os.path.join(self.getLocalPath(),"repository.xml")
+        repoDescriptionPath = os.path.join(self.get_local_path(),"repository.xml")
         f = open(repoDescriptionPath, 'w')
         f.write(xml_string)
         f.close()
 
-    def initFromPath(self,path):
+    def init_from_path(self,path):
 
         repoDescriptionPath = os.path.join(path,"repository.xml")
         if os.path.isfile(repoDescriptionPath):
             f = open(repoDescriptionPath, 'r')
             dom = parse(f)
-            self.parseDescription(dom)
+            self.parse_description(dom)
         else:
-            self.setId(os.path.basename(path))
-            self.setName(os.path.basename(path))
+            self.set_id(os.path.basename(path))
+            self.set_name(os.path.basename(path))
 
-        groupPathList = os.listdir(self.getLocalPath())
+        groupPathList = os.listdir(self.get_local_path())
 
         for groupPath in groupPathList:
-            path = os.path.join(self.getLocalPath(), groupPath)
+            path = os.path.join(self.get_local_path(), groupPath)
             if os.path.isdir(path):
                 group = ExerciseRepositoryGroup()
-                group.initFromPath(path)
-                self.addGroup(group)
+                group.init_from_path(path)
+                self.add_group(group)
 
-    def parseDescription(self,dom):
-        self.setName(self._getText(dom.getElementsByTagName("name")[0].childNodes))
-        self.setDescription(self._getText(dom.getElementsByTagName("description")[0].childNodes))
-        self.setId(self._getText(dom.getElementsByTagName("id")[0].childNodes))
-        self.setVersion(self._getText(dom.getElementsByTagName("version")[0].childNodes))
+    def parse_description(self,dom):
+        self.set_name(self._get_text(dom.getElementsByTagName("name")[0].childNodes))
+        self.set_description(self._get_text(dom.getElementsByTagName("description")[0].childNodes))
+        self.set_id(self._get_text(dom.getElementsByTagName("id")[0].childNodes))
+        self.set_version(self._get_text(dom.getElementsByTagName("version")[0].childNodes))
         if len(dom.getElementsByTagName("url")) > 0:
-            self.setUrl(self._getText(dom.getElementsByTagName("url")[0].childNodes))
+            self.set_url(self._get_text(dom.getElementsByTagName("url")[0].childNodes))
 
-    def parseDistantRepositoryFile(self, handle):
+    def parse_distant_repository_file(self, handle):
         dom = parse(handle)
 
-        self.parseDescription(dom)
-        self.setType("distant")
+        self.parse_description(dom)
+        self.set_type("distant")
 
         xml_groups = dom.getElementsByTagName("exercises_groups")[0]
 
         for xml_group in xml_groups.getElementsByTagName("exercises_group"):
             group = ExerciseRepositoryGroup()
-            group.parseDescription(xml_group)
-            self.addGroup(group)
+            group.parse_description(xml_group)
+            self.add_group(group)
 
             xml_exercises = xml_group.getElementsByTagName("exercises")[0]
             for xml_exercise in xml_exercises.getElementsByTagName("exercise"):
                 exercise = ExerciseRepositoryExercise()
-                exercise.parseDescription(xml_exercise)
-                group.addExercise(exercise)
+                exercise.parse_description(xml_exercise)
+                group.add_exercise(exercise)
 
 
-    def _getText(self, nodelist):
+    def _get_text(self, nodelist):
         rc = ""
         for node in nodelist:
             if node.nodeType == node.TEXT_NODE:

@@ -46,25 +46,25 @@ class GuiSequencePropertiesAdvanced:
 
 
     def run(self):
-        self.Load()
+        self.load()
         self.dialog.run()
         self.dialog.destroy()
 
-    def Load(self):
+    def load(self):
 
 
-        exercise = self.core.getExercise()
+        exercise = self.core.get_exercise()
 
         if len(exercise.subExercisesList) > 0:
-            self._LoadPath(exercise.subExercisesList[0].getVideoPath(), exercise.subExercisesList[0].getExercisePath(), exercise.subExercisesList[0].getTranslationPath())
+            self.__load_path(exercise.subExercisesList[0].get_video_path(), exercise.subExercisesList[0].get_exercise_path(), exercise.subExercisesList[0].get_translation_path())
         else:
             self._Load("","","")
 
         self.pathListStore = gtk.ListStore(str,str,str,str)
 
         for subExercise in exercise.subExercisesList:
-            name = os.path.basename(subExercise.getVideoPath())
-            self.pathListStore.append([name, subExercise.getVideoPath(), subExercise.getExercisePath(), subExercise.getTranslationPath()])
+            name = os.path.basename(subExercise.get_video_path())
+            self.pathListStore.append([name, subExercise.get_video_path(), subExercise.get_exercise_path(), subExercise.get_translation_path()])
 
         cell = gtk.CellRendererText()
         treeviewcolumnPath = gtk.TreeViewColumn(_("Path"))
@@ -84,10 +84,10 @@ class GuiSequencePropertiesAdvanced:
         self.treeviewSelectionPathsList.select_iter(self.iterPath)
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        checkbuttonRepeatAfterComplete.set_active(self.core.getExercise().getRepeatAfterCompleted())
+        checkbuttonRepeatAfterComplete.set_active(self.core.get_exercise().get_repeat_after_completed())
 
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
-        checkbuttonRandomOrder.set_active(self.core.getExercise().isRandomOrder())
+        checkbuttonRandomOrder.set_active(self.core.get_exercise().is_random_order())
 
 
 
@@ -95,9 +95,9 @@ class GuiSequencePropertiesAdvanced:
         self.liststoreLanguage = gtk.ListStore(str,str)
 
         languageManager = LanguagesManager()
-        languagesList =languageManager.getLanguagesList()
+        languagesList =languageManager.get_languages_list()
 
-        currentLangId = self.core.getExercise().getLanguageId()
+        currentLangId = self.core.get_exercise().get_language_id()
 
         for language in languagesList:
             (langId,langName,chars) = language
@@ -116,27 +116,27 @@ class GuiSequencePropertiesAdvanced:
         comboboxLanguage.set_active_iter(currentIter)
 
         adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        adjustmentTimeBetweenSequence.set_value(self.core.getExercise().getTimeBetweenSequence())
+        adjustmentTimeBetweenSequence.set_value(self.core.get_exercise().get_time_between_sequence())
 
         adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        adjustmentMaximumSequenceTime.set_value(self.core.getExercise().getMaxSequenceLength())
+        adjustmentMaximumSequenceTime.set_value(self.core.get_exercise().get_max_sequence_length())
 
         adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
-        adjustmentTimeBeforeSequence.set_value(self.core.getExercise().getPlayMarginBefore())
+        adjustmentTimeBeforeSequence.set_value(self.core.get_exercise().get_play_margin_before())
 
         adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
-        adjustmentTimeAfterSequence.set_value(self.core.getExercise().getPlayMarginAfter())
+        adjustmentTimeAfterSequence.set_value(self.core.get_exercise().get_play_margin_after())
 
         entryExerciseName = self.builder.get_object("entryExerciseName")
-        if self.core.getExercise().getName():
-            entryExerciseName.set_text(self.core.getExercise().getName())
+        if self.core.get_exercise().get_name():
+            entryExerciseName.set_text(self.core.get_exercise().get_name())
         else:
             entryExerciseName.set_text("")
 
 
-        self._updatePathButtons()
+        self._update_path_buttons()
 
-    def _LoadPath(self, videoPath, exercisePath, translationPath):
+    def __load_path(self, videoPath, exercisePath, translationPath):
 
         if videoPath == "":
             videoPath = "None"
@@ -163,21 +163,21 @@ class GuiSequencePropertiesAdvanced:
                 translationChooser.set_current_folder(filePath)
 
 
-    def on_treeviewPathsList_cursor_changed(self,widget,data=None):
+    def on_treeview_paths_list_cursor_changed(self,widget,data=None):
         (modele, iter) =  self.treeviewSelectionPathsList.get_selected()
 
-        self._StorePathChanges()
+        self.__store_path_changes()
 
         self.iterPath = iter
-        self._updatePathButtons()
+        self._update_path_buttons()
         if iter == None:
             return
 
         videoPath, exercisePath, translationPath = modele.get(iter, 1, 2, 3)
 
-        self._LoadPath(videoPath,exercisePath,translationPath)
+        self.__load_path(videoPath,exercisePath,translationPath)
 
-    def _updatePathButtons(self):
+    def _update_path_buttons(self):
         if self.iterPath == None:
             buttonRemovePath = self.builder.get_object("buttonRemovePath")
             buttonRemovePath.set_sensitive(False)
@@ -203,61 +203,61 @@ class GuiSequencePropertiesAdvanced:
                 buttonDownPath.set_sensitive(True)
 
 
-    def on_buttonExercisePropOk_clicked(self,widget,data=None):
+    def on_button_exercise_prop_ok_clicked(self,widget,data=None):
         dialogExerciseProperties = self.builder.get_object("dialogExercisePropertiesAdvanced")
 
-        self._StorePathChanges()
+        self.__store_path_changes()
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        self.core.getExercise().setRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
+        self.core.get_exercise().set_repeat_after_completed(checkbuttonRepeatAfterComplete.get_active())
 
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
-        self.core.getExercise().setRandomOrder(checkbuttonRandomOrder.get_active())
+        self.core.get_exercise().set_random_order(checkbuttonRandomOrder.get_active())
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
         iter = comboboxLanguage.get_active_iter()
         langId = self.liststoreLanguage.get_value(iter,1)
 
-        self.core.getExercise().setLanguageId(langId)
+        self.core.get_exercise().set_language_id(langId)
 
         adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
-        self.core.getExercise().setTimeBetweenSequence(adjustmentTimeBetweenSequence.get_value())
+        self.core.get_exercise().set_time_between_sequence(adjustmentTimeBetweenSequence.get_value())
 
         adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
-        self.core.getExercise().setMaxSequenceLength(adjustmentMaximumSequenceTime.get_value())
+        self.core.get_exercise().set_max_sequence_length(adjustmentMaximumSequenceTime.get_value())
 
         adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
-        self.core.getExercise().setPlayMarginBefore(int(adjustmentTimeBeforeSequence.get_value()))
+        self.core.get_exercise().set_play_margin_before(int(adjustmentTimeBeforeSequence.get_value()))
 
         adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
-        self.core.getExercise().setPlayMarginAfter(int(adjustmentTimeAfterSequence.get_value()))
+        self.core.get_exercise().set_play_margin_after(int(adjustmentTimeAfterSequence.get_value()))
 
         entryExerciseName = self.builder.get_object("entryExerciseName")
-        self.core.getExercise().setName(entryExerciseName.get_text())
+        self.core.get_exercise().set_name(entryExerciseName.get_text())
 
 
 
         # Update paths
-        if len(self.pathListStore) != len(self.core.getExercise().subExercisesList):
-            self.core.getExercise().subExercisesList = []
+        if len(self.pathListStore) != len(self.core.get_exercise().subExercisesList):
+            self.core.get_exercise().subExercisesList = []
             for subPath in self.pathListStore:
-                self.core.getExercise().subExercisesList.append(SubExercise(self.exercise))
+                self.core.get_exercise().subExercisesList.append(SubExercise(self.exercise))
 
         for i,subPath in enumerate(self.pathListStore):
-            self.core.getExercise().subExercisesList[i].setVideoPath(subPath[1])
-            self.core.getExercise().subExercisesList[i].setExercisePath(subPath[2])
-            self.core.getExercise().subExercisesList[i].setTranslationPath(subPath[3])
+            self.core.get_exercise().subExercisesList[i].set_video_path(subPath[1])
+            self.core.get_exercise().subExercisesList[i].set_exercise_path(subPath[2])
+            self.core.get_exercise().subExercisesList[i].set_translation_path(subPath[3])
 
-        self.core.UpdateProperties()
+        self.core.update_properties()
         self.core.set_can_save(True)
 
         self.dialog.response(gtk.RESPONSE_OK)
 
-    def on_buttonExercisePropCancel_clicked(self,widget,data=None):
+    def on_button_exercise_prop_cancel_clicked(self,widget,data=None):
         self.dialog.response(gtk.RESPONSE_CANCEL)
 
-    def _StorePathChanges(self):
+    def __store_path_changes(self):
 
         if self.iterPath == None:
             return
@@ -285,7 +285,7 @@ class GuiSequencePropertiesAdvanced:
         self.pathListStore.set_value(self.iterPath,2, exercisePath)
         self.pathListStore.set_value(self.iterPath,3, translationPath)
 
-    def on_filechooserbuttonVideoProp_file_set(self,widget,data=None):
+    def on_filechooserbutton_video_prop_file_set(self,widget,data=None):
         videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
         exerciseChooser = self.builder.get_object("filechooserbuttonExerciseProp")
         translationChooser = self.builder.get_object("filechooserbuttonTranslationProp")
@@ -310,46 +310,46 @@ class GuiSequencePropertiesAdvanced:
         prev = model.get_iter_from_string("%d" % prow)
         return prev
 
-    def on_buttonDownPath_clicked(self,widget,data=None):
+    def on_button_down_path_clicked(self,widget,data=None):
         self.pathListStore.move_after(self.iterPath, self.pathListStore.iter_next(self.iterPath))
-        self._updatePathButtons()
+        self._update_path_buttons()
 
 
-    def on_buttonUpPath_clicked(self,widget,data=None):
+    def on_button_up_path_clicked(self,widget,data=None):
         self.pathListStore.move_before(self.iterPath, self.previous_iter(self.pathListStore, self.iterPath))
-        self._updatePathButtons()
+        self._update_path_buttons()
 
-    def on_buttonAddPath_clicked(self,widget,data=None):
-        self._StorePathChanges()
+    def on_button_add_path_clicked(self,widget,data=None):
+        self.__store_path_changes()
         iter = self.pathListStore.insert_after(self.iterPath, [self.pathListStore.get_value(self.iterPath,0), self.pathListStore.get_value(self.iterPath,1), self.pathListStore.get_value(self.iterPath,2), self.pathListStore.get_value(self.iterPath,3) ])
         self.iterPath = None
         self.treeviewSelectionPathsList.select_iter(iter)
 
-    def on_buttonRemovePath_clicked(self,widget,data=None):
+    def on_button_remove_path_clicked(self,widget,data=None):
         self.pathListStore.remove(self.iterPath)
         self.iterPath = None
-        self._updatePathButtons()
+        self._update_path_buttons()
 
 
-    def on_buttonDefautTimeBetweenSequences_clicked(self,widget,data=None):
+    def on_button_defaut_time_between_sequences_clicked(self,widget,data=None):
         adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
         exercice = Exercise()
-        adjustmentTimeBetweenSequence.set_value(exercice.getTimeBetweenSequence())
+        adjustmentTimeBetweenSequence.set_value(exercice.get_time_between_sequence())
 
-    def on_buttonDefautMaximumSequenceTime_clicked(self,widget,data=None):
+    def on_button_defaut_maximum_sequence_time_clicked(self,widget,data=None):
         adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
         exercice = Exercise()
-        adjustmentMaximumSequenceTime.set_value(exercice.getMaxSequenceLength())
+        adjustmentMaximumSequenceTime.set_value(exercice.get_max_sequence_length())
 
-    def on_buttonDefautTimeBeforeSequence_clicked(self,widget,data=None):
+    def on_button_defaut_time_before_sequence_clicked(self,widget,data=None):
         adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
         exercice = Exercise()
-        adjustmentTimeBeforeSequence.set_value(exercice.getPlayMarginBefore())
+        adjustmentTimeBeforeSequence.set_value(exercice.get_play_margin_before())
 
-    def on_buttonDefautTimeAfterSequence_clicked(self,widget,data=None):
+    def on_button_defaut_time_after_sequence_clicked(self,widget,data=None):
         adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
         exercice = Exercise()
-        adjustmentTimeAfterSequence.set_value(exercice.getPlayMarginAfter())
+        adjustmentTimeAfterSequence.set_value(exercice.get_play_margin_after())
 
 
 

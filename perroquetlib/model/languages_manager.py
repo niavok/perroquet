@@ -32,24 +32,24 @@ class LanguagesManager:
         self.languageList = []
         self._load()
 
-    def getLanguagesList(self):
+    def get_languages_list(self):
         return self.languageList
 
-    def getLanguageById(self,idToFind):
+    def get_language_by_id(self,idToFind):
         for language in self.languageList:
             (id,name,charList) = language
             if id == idToFind:
                 return language
         return None
 
-    def getDefaultLanguage(self):
+    def get_default_language(self):
         return self.languageList[0]
 
     def _load(self):
         path = self.config.get("languages_list_path");
-        self._parseLanguageFile(path)
+        self._parse_language_file(path)
 
-    def _parseLanguageFile(self,path):
+    def _parse_language_file(self,path):
         self.languageList = []
         f = open(path, 'r')
         state = LanguagesManager.LOOK_FOR_ID

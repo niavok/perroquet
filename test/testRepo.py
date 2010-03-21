@@ -25,38 +25,38 @@ from perroquetlib.exercise_repository_manager import *
 if __name__=="__main__":
     manager = ExerciseRepositoryManager()
     print "get repository list"
-    list = manager.getExerciseRepositoryList()
+    list = manager.get_exercise_repository_list()
     print str(len(list)) +" repository found:"
     for repo in list:
         print "/////////////////////////"
-        print repo.getId()
-        print repo.getName()
-        print repo.getLocalPath()
-        print repo.getVersion()
-        print repo.getDescription()
-        print repo.getType()
-        print repo.getUrl()
+        print repo.get_id()
+        print repo.get_name()
+        print repo.get_local_path()
+        print repo.get_version()
+        print repo.get_description()
+        print repo.get_type()
+        print repo.get_url()
 
-        for group in repo.getGroups():
-            print "  "+group.getName()
-            print "  "+group.getDescription()
-            for exo in group.getExercises():
-                print "    "+exo.getLicence()
-                print "    "+exo.getLanguage()
-                print "    "+exo.getMediaType()
-                print "    "+exo.getVersion()
-                print "    "+exo.getAuthor()
-                print "    "+exo.getAuthorWebsite()
-                print "    "+exo.getAuthorContact()
-                print "    "+exo.getPackager()
-                print "    "+exo.getPackagerWebsite()
-                print "    "+exo.getPackagerContact()
-                print "    "+exo.getFilePath()
-                if not exo.isInstalled():
+        for group in repo.get_groups():
+            print "  "+group.get_name()
+            print "  "+group.get_description()
+            for exo in group.get_exercises():
+                print "    "+exo.get_licence()
+                print "    "+exo.get_language()
+                print "    "+exo.get_media_type()
+                print "    "+exo.get_version()
+                print "    "+exo.get_author()
+                print "    "+exo.get_author_website()
+                print "    "+exo.get_author_contact()
+                print "    "+exo.get_packager()
+                print "    "+exo.get_packager_website()
+                print "    "+exo.get_packager_contact()
+                print "    "+exo.get_file_path()
+                if not exo.is_installed():
                     print "    "+"Not installed"
-                    """exo.startInstall()
+                    """exo.start_install()
                     print "    "+"Install started"
-                    exo.waitInstallEnd()
+                    exo.wait_install_end()
                     print "    "+"Install ended"""
                 else:
                     print "    "+"Already installed"

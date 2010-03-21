@@ -43,11 +43,11 @@ class Guisettings:
 
 
     def run(self):
-        self.Load()
+        self.load()
         self.dialog.run()
         self.dialog.destroy()
 
-    def Load(self):
+    def load(self):
 
         adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
         adjustmentTimeBetweenSequence.set_value(float(config.get("default_exercise_time_between_sequences"))/1000)
@@ -75,7 +75,7 @@ class Guisettings:
         self.liststoreLanguage = gtk.ListStore(str,str)
 
         languageManager = LanguagesManager()
-        languagesList =languageManager.getLanguagesList()
+        languagesList =languageManager.get_languages_list()
 
         currentLangId = config.get("default_exercise_language")
 
@@ -95,7 +95,7 @@ class Guisettings:
 
         comboboxLanguage.set_active_iter(currentIter)
 
-    def on_buttonExercisePropOk_clicked(self,widget,data=None):
+    def on_button_exercise_prop_ok_clicked(self,widget,data=None):
 
         adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
         config.set("default_exercise_time_between_sequences",int(1000*adjustmentTimeBetweenSequence.get_value()))
@@ -140,31 +140,31 @@ class Guisettings:
 
         self.dialog.response(gtk.RESPONSE_OK)
 
-    def on_buttonExercisePropCancel_clicked(self,widget,data=None):
+    def on_button_exercise_prop_cancel_clicked(self,widget,data=None):
         self.dialog.response(gtk.RESPONSE_CANCEL)
 
-    def on_buttonDefautTimeBetweenSequences_clicked(self,widget,data=None):
+    def on_button_defaut_time_between_sequences_clicked(self,widget,data=None):
         """adjustmentTimeBetweenSequence = self.builder.get_object("adjustmentTimeBetweenSequence")
         exercice = Exercise()
-        adjustmentTimeBetweenSequence.set_value(exercice.getTimeBetweenSequence())"""
+        adjustmentTimeBetweenSequence.set_value(exercice.get_time_between_sequence())"""
         print "TODO"
 
-    def on_buttonDefautMaximumSequenceTime_clicked(self,widget,data=None):
+    def on_button_defaut_maximum_sequence_time_clicked(self,widget,data=None):
         """adjustmentMaximumSequenceTime = self.builder.get_object("adjustmentMaximumSequenceTime")
         exercice = Exercise()
-        adjustmentMaximumSequenceTime.set_value(exercice.getMaxSequenceLength())"""
+        adjustmentMaximumSequenceTime.set_value(exercice.get_max_sequence_length())"""
         print "TODO"
 
-    def on_buttonDefautTimeBeforeSequence_clicked(self,widget,data=None):
+    def on_button_defaut_time_before_sequence_clicked(self,widget,data=None):
         """adjustmentTimeBeforeSequence = self.builder.get_object("adjustmentTimeBeforeSequence")
         exercice = Exercise()
-        adjustmentTimeBeforeSequence.set_value(exercice.getPlayMarginBefore())"""
+        adjustmentTimeBeforeSequence.set_value(exercice.get_play_margin_before())"""
         print "TODO"
 
-    def on_buttonDefautTimeAfterSequence_clicked(self,widget,data=None):
+    def on_button_defaut_time_after_sequence_clicked(self,widget,data=None):
         """adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
         exercice = Exercise()
-        adjustmentTimeAfterSequence.set_value(exercice.getPlayMarginAfter())"""
+        adjustmentTimeAfterSequence.set_value(exercice.get_play_margin_after())"""
         print "TODO"
 
 

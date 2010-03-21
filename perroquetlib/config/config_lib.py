@@ -107,11 +107,11 @@ class Config:
         self._writableParsers = []
         
     def load_writable_config_file(self, writablePath, referencePath):
-        """Load an ini config file that can be modified."""
+        """load an ini config file that can be modified."""
         #localParser exists because we din't want to copy referencePath to
         # the wirtablePath in case the config change
      
-        #Load
+        #load
         parser = Parser()
         if not os.path.isfile(referencePath):
             raise IOError, referencePath

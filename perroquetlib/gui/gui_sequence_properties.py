@@ -45,12 +45,12 @@ class GuiSequenceProperties:
 
 
     def run(self):
-        self.Load()
+        self.load()
         self.dialog.run()
         self.dialog.destroy()
 
-    def Load(self):
-        (videoPath,exercisePath,translationPath)  = self.core.getPaths()
+    def load(self):
+        (videoPath,exercisePath,translationPath)  = self.core.get_paths()
 
         if videoPath == "":
             videoPath = "None"
@@ -71,14 +71,14 @@ class GuiSequenceProperties:
         translationChooser.set_filename(translationPath)
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        checkbuttonRepeatAfterComplete.set_active(self.core.getExercise().getRepeatAfterCompleted())
+        checkbuttonRepeatAfterComplete.set_active(self.core.get_exercise().get_repeat_after_completed())
 
         self.liststoreLanguage = gtk.ListStore(str,str)
 
         languageManager = LanguagesManager()
-        languagesList =languageManager.getLanguagesList()
+        languagesList =languageManager.get_languages_list()
 
-        currentLangId = self.core.getExercise().getLanguageId()
+        currentLangId = self.core.get_exercise().get_language_id()
 
         for language in languagesList:
             (langId,langName,chars) = language
@@ -98,7 +98,7 @@ class GuiSequenceProperties:
 
 
 
-    def on_buttonExercisePropOk_clicked(self,widget,data=None):
+    def on_button_exercise_prop_ok_clicked(self,widget,data=None):
         dialogExerciseProperties = self.builder.get_object("dialogExerciseProperties")
 
         videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
@@ -116,14 +116,14 @@ class GuiSequenceProperties:
 
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        self.core.getExercise().setRepeatAfterCompleted(checkbuttonRepeatAfterComplete.get_active())
+        self.core.get_exercise().set_repeat_after_completed(checkbuttonRepeatAfterComplete.get_active())
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
         iter = comboboxLanguage.get_active_iter()
         langId = self.liststoreLanguage.get_value(iter,1)
 
-        self.core.getExercise().setLanguageId(langId)
+        self.core.get_exercise().set_language_id(langId)
 
 
         self.core.UpdatePaths(videoPath,exercisePath, translationPath)
@@ -132,6 +132,6 @@ class GuiSequenceProperties:
 
         self.dialog.response(gtk.RESPONSE_OK)
 
-    def on_buttonExercisePropCancel_clicked(self,widget,data=None):
+    def on_button_exercise_prop_cancel_clicked(self,widget,data=None):
         self.dialog.response(gtk.RESPONSE_CANCEL)
 

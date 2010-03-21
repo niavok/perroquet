@@ -49,33 +49,33 @@ class GuiExerciseController:
         
         pos = 0
 
-        for i, symbol in enumerate(sequence.getSymbols()):
+        for i, symbol in enumerate(sequence.get_symbols()):
             pos += len(symbol)
             self._add_symbol(symbol)
-            if i < len(sequence.getWords()):
-                if sequence.getActiveWordIndex() == i:
+            if i < len(sequence.get_words()):
+                if sequence.get_active_word_index() == i:
                     self.cursor_position = pos
-                if sequence.getWords()[i].isEmpty():
-                    self._add_word(" ", 0, isEmpty=True)
+                if sequence.get_words()[i].is_empty():
+                    self._add_word(" ", 0, is_empty=True)
                     pos += 1
-                elif sequence.getWords()[i].isValid():
-                    self._add_word(sequence.getWords()[i].getValid(lower=False), 0, isFound=True)
-                    pos += len(sequence.getWords()[i].getText())
+                elif sequence.get_words()[i].is_valid():
+                    self._add_word(sequence.get_words()[i].get_valid(lower=False), 0, isFound=True)
+                    pos += len(sequence.get_words()[i].get_text())
                 else:
-                    self._add_word(sequence.getWords()[i].getText(), sequence.getWords()[i].getScore())
-                    pos += len(sequence.getWords()[i].getText())
+                    self._add_word(sequence.get_words()[i].get_text(), sequence.get_words()[i].get_score())
+                    pos += len(sequence.get_words()[i].get_text())
 
 
         self.word_index_map.append(self.current_word_index)
         self.word_pos_map.append(self.current_pos_index)
 
-        self.cursor_position = self.cursor_position + sequence.getActiveWord().getPos()
+        self.cursor_position = self.cursor_position + sequence.get_active_word().get_pos()
         
 
-    def _add_word(self, word, score, isFound=False, isEmpty=False):
+    def _add_word(self, word, score, isFound=False, is_empty=False):
 
         score250 = int(score*250) #score between -250 and 250
-        if isEmpty:
+        if is_empty:
             tagName = "word_empty"
         elif isFound:
             tagName = "word_found"
@@ -161,20 +161,20 @@ class GuiExerciseController:
     def notify_move_cursor(self,movement):
         """Documentation"""
         if movement =="previous_char" :
-            self.core.PreviousChar()
+            self.core.previous_char()
         elif movement =="next_char" :
-            self.core.NextChar()
+            self.core.next_char()
         elif movement =="first_word" :
-            self.core.FirstWord()
+            self.core.first_word()
         elif movement =="last_word" :
-            self.core.LastWord()
+            self.core.last_word()
         elif movement =="previous_word" :
-            self.core.PreviousWord()()
+            self.core.previous_word()()
         elif movement =="next_word" :
-            self.core.NextWord()
+            self.core.next_word()
         else:
             word_index = self.word_index_map[movement]
             word_index_position = self.word_pos_map[movement]
             if word_index == -1:
                 wordIndex = 0
-            self.core.SelectSequenceWord(word_index,word_index_position)
+            self.core.select_sequence_word(word_index,word_index_position)

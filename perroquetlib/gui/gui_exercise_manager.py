@@ -56,29 +56,29 @@ class GuiExerciseManager:
         self.selectedExo = None
 
     def run(self):
-        self.Load()
+        self.load()
         self.dialog.run()
         self.dialog.destroy()
-    def Load(self):
-        self.play_thread_id = thread.start_new_thread(self.UpdateExerciseListThread, ())
+    def load(self):
+        self.play_thread_id = thread.start_new_thread(self.update_exercise_list_thread, ())
         #Use the following line to debug crash in the thread
-        #self.UpdateExerciseListThread()
+        #self.update_exercise_list_thread()
 
-    def UpdateExerciseListThread(self):
+    def update_exercise_list_thread(self):
 
 
         self.labelStatus.set_text(_("Updating repositories..."))
         self.repositoryManager = ExerciseRepositoryManager()
-        self._updateRepositoryTreeView()
+        self._update_repository_tree_view()
 
 
-        self.repositoryList = self.repositoryManager.getExerciseRepositoryList()
-        self._updateExerciseTreeView()
+        self.repositoryList = self.repositoryManager.get_exercise_repository_list()
+        self._update_exercise_tree_view()
 
-        self._updateDetailsTreeView()
+        self._update_details_tree_view()
 
 
-    def _updateExerciseTreeView(self):
+    def _update_exercise_tree_view(self):
         self.treeStoreExercices = gtk.TreeStore(str,str, str, str, bool, object, str)
 
         displayOnlyExercises = (self.config.get("repositorymanager.displayonlyexercises") == 1)
@@ -89,37 +89,37 @@ class GuiExerciseManager:
         for repo in self.repositoryList:
 
             if not displayOnlyExercises:
-                if repo.getType() == "local":
+                if repo.get_type() == "local":
                     type = _("Local repository")
-                elif repo.getType() == "distant":
+                elif repo.get_type() == "distant":
                     type = _("Distant repository")
-                elif repo.getType() == "offline":
+                elif repo.get_type() == "offline":
                     type = _("Offline repository")
-                elif repo.getType() == "orphan":
+                elif repo.get_type() == "orphan":
                     type = _("Orphan repository")
                 else:
                     type = _("")
 
-                desc = repo.getDescription()
+                desc = repo.get_description()
                 desc = "<small>"+desc+"</small>"
                 type = "<small>"+type+"</small>"
-                name = "<b>"+ repo.getName()+"</b>"
+                name = "<b>"+ repo.get_name()+"</b>"
                 iterRepo = self.treeStoreExercices.append(None,[name, type, desc , "", False, None,""])
             else:
                 iterRepo = None
 
-            for group in repo.getGroups():
+            for group in repo.get_groups():
                 if not displayOnlyExercises:
 
-                    desc = group.getDescription()
+                    desc = group.get_description()
                     desc = "<small>"+desc+"</small>"
-                    name = "<b>"+ group.getName()+"</b>"
+                    name = "<b>"+ group.get_name()+"</b>"
                     iterGroup = self.treeStoreExercices.append(iterRepo,[name, _("<small>Group</small>"), desc , "", False, None,""])
                 else:
                     iterGroup = None
 
-                for exo in group.getExercises():
-                    descList = textwrap.wrap(exo.getDescription(), 40)
+                for exo in group.get_exercises():
+                    descList = textwrap.wrap(exo.get_description(), 40)
                     desc = ""
                     for i, line in enumerate(descList):
 
@@ -129,29 +129,29 @@ class GuiExerciseManager:
 
                     desc = "<small>"+desc+"</small>"
 
-                    if exo.getState() == "installed":
+                    if exo.get_state() == "installed":
                         installStatus = _("Installed")
                         self.installedExoCount += 1
-                    elif exo.getState() == "available":
+                    elif exo.get_state() == "available":
                         installStatus = _("Available")
                         self.availableExoCount += 1
-                    elif exo.getState() == "used":
+                    elif exo.get_state() == "used":
                         installStatus = _("Used")
                         self.installedExoCount += 1
-                    elif exo.getState() == "done":
+                    elif exo.get_state() == "done":
                         installStatus = _("Done")
                         self.installedExoCount += 1
 
 
-                    name = "<b>"+ exo.getName()+"</b>"
+                    name = "<b>"+ exo.get_name()+"</b>"
 
-                    if exo.getWordsCount() == 0:
+                    if exo.get_words_count() == 0:
                         words = "-"
                     else:
-                        words = str(exo.getWordsCount())
+                        words = str(exo.get_words_count())
 
                     iter = self.treeStoreExercices.append(iterGroup,[name, _("<small>Exercise</small>"), desc, installStatus, True, exo, words])
-                    exo.setStateChangeCallback(self.exerciceStateChangeListener, iter)
+                    exo.set_state_change_callback(self.exercice_state_change_listener, iter)
 
 
         cell = gtk.CellRendererText()
@@ -205,12 +205,12 @@ class GuiExerciseManager:
 
 
 
-        self._updateStatus()
+        self._update_status()
 
-    def _updateRepositoryTreeView(self):
+    def _update_repository_tree_view(self):
         self.treeStoreRepository = gtk.TreeStore(str,str)
 
-        personnalRepoList = self.repositoryManager.getPersonalExerciseRepositoryList()
+        personnalRepoList = self.repositoryManager.get_personal_exercise_repository_list()
 
         for repo in personnalRepoList:
             #self.treeStoreRepository.append(None,["<small>"+repo+"</small>", repo])
@@ -235,8 +235,8 @@ class GuiExerciseManager:
         self.treeviewRepositories.set_model(self.treeStoreRepository)
         self.treeselectionRepositories = self.treeviewRepositories.get_selection()
 
-    def _updateDetailsTreeView(self):
-        print "_updateDetailsTreeView"
+    def _update_details_tree_view(self):
+        print "_update_details_tree_view"
         self.treeStoreDetails = gtk.TreeStore(str,str)
 
         #Clean old colomns
@@ -248,45 +248,45 @@ class GuiExerciseManager:
 
         if self.selectedExo:
             exo = self.selectedExo
-            if exo.getState() == "installed":
+            if exo.get_state() == "installed":
                 installStatus = _("Installed")
-            elif exo.getState() == "available":
+            elif exo.get_state() == "available":
                 installStatus = _("Available")
-            elif exo.getState() == "used":
+            elif exo.get_state() == "used":
                 installStatus = _("Used")
-            elif exo.getState() == "done":
+            elif exo.get_state() == "done":
                 installStatus = _("Done")
 
-            self.treeStoreDetails.append(None,["<b>"+_("Name")+"</b>",exo.getName()])
-            self.treeStoreDetails.append(None,["<b>"+_("Licence")+"</b>",exo.getLicence()])
-            self.treeStoreDetails.append(None,["<b>"+_("Description")+"</b>",exo.getDescription()])
-            self.treeStoreDetails.append(None,["<b>"+_("Author")+"</b>",exo.getAuthor()])
-            self.treeStoreDetails.append(None,["<b>"+_("Author website")+"</b>",exo.getAuthorWebsite()])
-            self.treeStoreDetails.append(None,["<b>"+_("Author contact")+"</b>",exo.getAuthorContact()])
+            self.treeStoreDetails.append(None,["<b>"+_("Name")+"</b>",exo.get_name()])
+            self.treeStoreDetails.append(None,["<b>"+_("Licence")+"</b>",exo.get_licence()])
+            self.treeStoreDetails.append(None,["<b>"+_("Description")+"</b>",exo.get_description()])
+            self.treeStoreDetails.append(None,["<b>"+_("Author")+"</b>",exo.get_author()])
+            self.treeStoreDetails.append(None,["<b>"+_("Author website")+"</b>",exo.get_author_website()])
+            self.treeStoreDetails.append(None,["<b>"+_("Author contact")+"</b>",exo.get_author_contact()])
 
 
-            self.treeStoreDetails.append(None,["<b>"+_("Version")+"</b>",exo.getVersion()])
-            self.treeStoreDetails.append(None,["<b>"+_("Words count")+"</b>",exo.getWordsCount()])
-            self.treeStoreDetails.append(None,["<b>"+_("Language")+"</b>",exo.getLanguage()])
-            self.treeStoreDetails.append(None,["<b>"+_("Media type")+"</b>",exo.getMediaType()])
-            self.treeStoreDetails.append(None,["<b>"+_("Id")+"</b>",exo.getId()])
+            self.treeStoreDetails.append(None,["<b>"+_("Version")+"</b>",exo.get_version()])
+            self.treeStoreDetails.append(None,["<b>"+_("Words count")+"</b>",exo.get_words_count()])
+            self.treeStoreDetails.append(None,["<b>"+_("Language")+"</b>",exo.get_language()])
+            self.treeStoreDetails.append(None,["<b>"+_("Media type")+"</b>",exo.get_media_type()])
+            self.treeStoreDetails.append(None,["<b>"+_("Id")+"</b>",exo.get_id()])
             self.treeStoreDetails.append(None,["<b>"+_("Install status")+"</b>",installStatus])
 
 
-            for translation in exo.getTranslationsList():
+            for translation in exo.get_translations_list():
                 self.treeStoreDetails.append(None,["<b>"+_("Translation")+"</b>",translation])
 
 
 
-            self.treeStoreDetails.append(None,["<b>"+_("Packager")+"</b>",exo.getPackager()])
-            self.treeStoreDetails.append(None,["<b>"+_("Packager website")+"</b>",exo.getPackagerWebsite()])
-            self.treeStoreDetails.append(None,["<b>"+_("Packager contact")+"</b>",exo.getPackagerContact()])
+            self.treeStoreDetails.append(None,["<b>"+_("Packager")+"</b>",exo.get_packager()])
+            self.treeStoreDetails.append(None,["<b>"+_("Packager website")+"</b>",exo.get_packager_website()])
+            self.treeStoreDetails.append(None,["<b>"+_("Packager contact")+"</b>",exo.get_packager_contact()])
 
-            self.treeStoreDetails.append(None,["<b>"+_("Exercise path")+"</b>",exo.getLocalPath()])
-            self.treeStoreDetails.append(None,["<b>"+_("Package path")+"</b>",exo.getFilePath()])
-            self.treeStoreDetails.append(None,["<b>"+_("Template path")+"</b>",exo.getTemplatePath()])
-            self.treeStoreDetails.append(None,["<b>"+_("Instance path")+"</b>",exo.getInstancePath()])
-            self.treeStoreDetails.append(None,["<b>"+_("Done path")+"</b>",exo.getDonePath()])
+            self.treeStoreDetails.append(None,["<b>"+_("Exercise path")+"</b>",exo.get_local_path()])
+            self.treeStoreDetails.append(None,["<b>"+_("Package path")+"</b>",exo.get_file_path()])
+            self.treeStoreDetails.append(None,["<b>"+_("Template path")+"</b>",exo.get_template_path()])
+            self.treeStoreDetails.append(None,["<b>"+_("Instance path")+"</b>",exo.get_instance_path()])
+            self.treeStoreDetails.append(None,["<b>"+_("Done path")+"</b>",exo.get_done_path()])
 
         cell = gtk.CellRendererText()
 
@@ -309,7 +309,7 @@ class GuiExerciseManager:
         self.treeviewDetails.set_model(self.treeStoreDetails)
 
 
-    def on_treeviewExercises_cursor_changed(self,widget,data=None):
+    def on_treeview_exercises_cursor_changed(self,widget,data=None):
 
         (modele, iter) =  self.treeselectionExercises.get_selected()
         self.iterExo = iter
@@ -323,81 +323,81 @@ class GuiExerciseManager:
         else:
             self.selectedExo = None
 
-        self._updateActionButton()
-        self._updateDetailsTreeView()
+        self._update_action_button()
+        self._update_details_tree_view()
 
 
-    def _updateActionButton(self):
+    def _update_action_button(self):
         if self.selectedExo == None:
             self.buttonAction.set_sensitive(False)
             return
 
         exo = self.selectedExo
 
-        if exo.getState() == "available" or exo.getState() == "corrupted" or exo.getState() == "canceled":
+        if exo.get_state() == "available" or exo.get_state() == "corrupted" or exo.get_state() == "canceled":
             self.buttonAction.set_label(_("Install"))
             self.action = "install"
             self.buttonAction.set_sensitive(True)
-        elif exo.getState() == "downloading":
+        elif exo.get_state() == "downloading":
             self.buttonAction.set_label(_("Cancel install"))
             self.action = "cancel"
             self.buttonAction.set_sensitive(True)
-        elif exo.getState() == "installing":
+        elif exo.get_state() == "installing":
             self.buttonAction.set_label(_("Cancel install"))
             self.action = "cancel"
             self.buttonAction.set_sensitive(False)
-        elif exo.getState() == "installed":
+        elif exo.get_state() == "installed":
             self.buttonAction.set_label(_("Use"))
             self.action = "use"
             self.buttonAction.set_sensitive(True)
-        elif exo.getState() == "removing":
+        elif exo.get_state() == "removing":
             self.buttonAction.set_label(_("Remove"))
             self.action = "remove"
             self.buttonAction.set_sensitive(False)
-        elif exo.getState() == "used":
+        elif exo.get_state() == "used":
             self.buttonAction.set_label(_("Continue"))
             self.action = "continue"
             self.buttonAction.set_sensitive(True)
-        elif exo.getState() == "done":
+        elif exo.get_state() == "done":
             self.buttonAction.set_label(_("Remove"))
             self.action = "remove"
             self.buttonAction.set_sensitive(True)
 
-    def on_buttonAction_clicked(self,widget,data=None):
+    def on_button_action_clicked(self,widget,data=None):
         print "on_buttonAction_activate"
         if self.action == "install":
-            self._installSelectedExercise()
+            self._install_selected_exercise()
         elif self.action == "cancel":
-            self._cancelSelectedExercise()
+            self._cancel_selected_exercise()
         elif self.action == "use":
-            self._useSelectedExercise()
+            self._use_selected_exercise()
         elif self.action == "continue":
-            self._continueSelectedExercise()
+            self._continue_selected_exercise()
 
 
-    def _installSelectedExercise(self):
+    def _install_selected_exercise(self):
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
-        exo.startInstall()
+        exo.start_install()
 
-    def _cancelSelectedExercise(self):
+    def _cancel_selected_exercise(self):
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
-        exo.cancelInstall()
+        exo.cancel_install()
 
-    def _useSelectedExercise(self):
+    def _use_selected_exercise(self):
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
-        self.core.LoadExercise(exo.getTemplatePath())
-        self.core.exercise.setOutputSavePath(exo.getInstancePath())
+        self.core.load_exercise(exo.get_template_path())
+        self.core.exercise.set_output_save_path(exo.get_instance_path())
         self.core.save()
         self.dialog.response(gtk.RESPONSE_OK)
 
 
-    def _continueSelectedExercise(self):
+    def _continue_selected_exercise(self):
         (exo,) = self.treeStoreExercices.get(self.iterExo, 5)
-        self.core.LoadExercise(exo.getInstancePath())
+        self.core.load_exercise(exo.get_instance_path())
         self.dialog.response(gtk.RESPONSE_OK)
 
 
-    def _updateStatus(self):
+    def _update_status(self):
         if self.availableExoCount > 1:
             status = _("%d available exercises") % self.availableExoCount
         else:
@@ -412,69 +412,69 @@ class GuiExerciseManager:
 
         self.labelStatus.set_text(status)
 
-    def exerciceStateChangeListener(self, oldState, iter):
+    def exercice_state_change_listener(self, oldState, iter):
         (exo,) = self.treeStoreExercices.get(iter, 5)
-        if oldState == "installed" and exo.getState() != "installed":
+        if oldState == "installed" and exo.get_state() != "installed":
             self.availableExoCount += 1
             self.installedExoCount -= 1
-        elif oldState != "installed" and exo.getState() == "installed":
+        elif oldState != "installed" and exo.get_state() == "installed":
             self.availableExoCount -= 1
             self.installedExoCount += 1
 
-        if exo.getState() == "available":
+        if exo.get_state() == "available":
             self.treeStoreExercices.set_value(iter, 3, _("Available"))
-        elif exo.getState() == "downloading":
+        elif exo.get_state() == "downloading":
             self.treeStoreExercices.set_value(iter, 3, _("Downloading"))
-            thread.start_new_thread(self._downloadExerciseThread, (iter, ))
-        elif exo.getState() == "installing":
+            thread.start_new_thread(self._download_exercise_thread, (iter, ))
+        elif exo.get_state() == "installing":
             self.treeStoreExercices.set_value(iter, 3, _("Installing"))
-        elif exo.getState() == "installed":
+        elif exo.get_state() == "installed":
             self.treeStoreExercices.set_value(iter, 3, _("Installed"))
-        elif exo.getState() == "corrupted":
+        elif exo.get_state() == "corrupted":
             self.treeStoreExercices.set_value(iter, 3, _("Corrupted"))
-        elif exo.getState() == "canceled":
+        elif exo.get_state() == "canceled":
             self.treeStoreExercices.set_value(iter, 3, _("Canceled"))
-        elif exo.getState() == "removing":
+        elif exo.get_state() == "removing":
             self.treeStoreExercices.set_value(iter, 3, _("Removing"))
-        elif exo.getState() == "used":
+        elif exo.get_state() == "used":
             self.treeStoreExercices.set_value(iter, 3, _("Used"))
-        elif exo.getState() == "done":
+        elif exo.get_state() == "done":
             self.treeStoreExercices.set_value(iter, 3, _("Done"))
 
-        self._updateStatus()
-        self._updateActionButton()
+        self._update_status()
+        self._update_action_button()
 
-    def _downloadExerciseThread(self, iter):
+    def _download_exercise_thread(self, iter):
         (exo,) = self.treeStoreExercices.get(iter, 5)
-        while exo.getState() == "downloading":
-            self.treeStoreExercices.set_value(iter, 3, _("<small>Downloading ... %d%%</small>") % exo.getDownloadPercent())
+        while exo.get_state() == "downloading":
+            self.treeStoreExercices.set_value(iter, 3, _("<small>Downloading ... %d%%</small>") % exo.get_download_percent())
             time.sleep(0.5)
 
 
-    def on_checkbuttonTreeViewMode_toggled(self, widget, data=None):
+    def on_checkbutton_tree_view_mode_toggled(self, widget, data=None):
         checkbuttonTreeViewMode = self.builder.get_object("checkbuttonTreeViewMode")
         if checkbuttonTreeViewMode.props.active:
             self.config.set("repositorymanager.displayonlyexercises",0)
         else:
             self.config.set("repositorymanager.displayonlyexercises",1)
-        self._updateExerciseTreeView()
+        self._update_exercise_tree_view()
 
 
-    def on_buttonAddRepo_clicked(self, widget, data=None):
-        personnalRepoList = self.repositoryManager.getPersonalExerciseRepositoryList()
+    def on_button_add_repo_clicked(self, widget, data=None):
+        personnalRepoList = self.repositoryManager.get_personal_exercise_repository_list()
         personnalRepoList.append(self.builder.get_object("entryNewRepo").get_text())
         self.builder.get_object("entryNewRepo").set_text("")
-        self.repositoryManager.writePersonalExerciseRepositoryList(personnalRepoList)
-        self.Load()
+        self.repositoryManager.write_personal_exercise_repository_list(personnalRepoList)
+        self.load()
 
-    def on_buttonDeleteRepo_clicked(self, widget, data=None):
-        personnalRepoList = self.repositoryManager.getPersonalExerciseRepositoryList()
+    def on_button_delete_repo_clicked(self, widget, data=None):
+        personnalRepoList = self.repositoryManager.get_personal_exercise_repository_list()
         personnalRepoList.remove(self.builder.get_object("entryNewRepo").get_text())
         self.builder.get_object("entryNewRepo").set_text("")
-        self.repositoryManager.writePersonalExerciseRepositoryList(personnalRepoList)
-        self.Load()
+        self.repositoryManager.write_personal_exercise_repository_list(personnalRepoList)
+        self.load()
 
-    def on_treeviewRepositories_cursor_changed(self,widget,data=None):
+    def on_treeview_repositories_cursor_changed(self,widget,data=None):
 
         (modele, iter) =  self.treeselectionRepositories.get_selected()
         if iter == None:
@@ -482,7 +482,7 @@ class GuiExerciseManager:
         (repo,) = self.treeStoreRepository.get(iter, 0)
         self.builder.get_object("entryNewRepo").set_text(repo)
 
-    def on_expanderDetails_activate(self,widget,data=None):
+    def on_expander_details_activate(self,widget,data=None):
         if self.builder.get_object("box1").get_homogeneous():
             self.builder.get_object("box1").set_homogeneous(False)
         else:

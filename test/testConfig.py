@@ -30,7 +30,7 @@ pathTemp = "./test/testConfigTemp.ini"
 pathTemp2 = "./a/b/c/testConfigTemp.ini"
 
 class testConfig(unittest.TestCase):
-    def testLoad(self):
+    def test_load(self):
         c=Config()
         c.load_writable_config_file(pathWritable, pathRef)
         
@@ -43,7 +43,7 @@ class testConfig(unittest.TestCase):
         self.assertEqual(c.get("liststr"), ["one", "two"])
         self.assertEqual(c.get("listint"), [1, 2, 3])
         
-    def testSave(self):
+    def test_save(self):
         shutil.copy(pathWritable, pathTemp)
         c=Config()
         c.load_writable_config_file(pathTemp, pathRef)
@@ -66,7 +66,7 @@ class testConfig(unittest.TestCase):
         self.assertEqual(c.get("firstint"), 666)
         shutil.rmtree("./a")
     
-    def testError(self):
+    def test_error(self):
         c=Config()
         self.failUnlessRaises(KeyError, lambda :c.set("MAJ", 3))
         self.failUnlessRaises(KeyError, lambda :c.get("MAJ"))

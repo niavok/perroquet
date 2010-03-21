@@ -85,7 +85,7 @@ class VideoPlayer(object):
             self.activate_video_area(True)
             gtk.gdk.threads_leave()
 
-    def Open(self,path):
+    def open(self,path):
         self.playbin.set_property("uri", "file://" + path)
         self.play_thread_id = thread.start_new_thread(self.play_thread, ())
         self.player.set_state(gst.STATE_PAUSED)
@@ -106,32 +106,32 @@ class VideoPlayer(object):
         self.player.set_state(gst.STATE_PAUSED)
         self.playing = False
 
-    def IsPaused(self):
+    def is_paused(self):
         return not self.playing
 
-    def isSpeedChangeable(self):
+    def is_speed_changeable(self):
         return self.canChangeSpeed
 
-    def Seek(self, time):
+    def seek(self, time):
         value = int(time * 1000000 )
         self.playbin.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH,value)
 
-    def SeekAsSoonAsReady(self, time):
+    def seek_as_soon_as_ready(self, time):
         self.timeToSeek = time
 
-    def setCallback(self, callback):
+    def set_callback(self, callback):
         self.callback = callback
 
-    def setNextCallbackTime(self, nextCallbackTime):
+    def set_next_callback_time(self, nextCallbackTime):
         self.nextCallbackTime = nextCallbackTime
 
-    def setWindowId(self, windowId):
+    def set_window_id(self, windowId):
         self.windowId = windowId
 
-    def ActivateVideoCallback(self, activateVideo):
+    def activate_video_callback(self, activateVideo):
         self.activateVideo = activateVideo
 
-    def getCurrentTime(self):
+    def get_current_time(self):
         pos_int = -1
         try:
             pos_int = self.playbin.query_position(self.time_format, None)[0]
@@ -159,10 +159,10 @@ class VideoPlayer(object):
                 self.callback()
 
             if pos_int != -1 and self.timeToSeek != -1:
-                self.Seek(self.timeToSeek)
+                self.seek(self.timeToSeek)
                 self.timeToSeek = -1
 
-    def Close(self):
+    def close(self):
         self.player.set_state(gst.STATE_NULL)
 
 

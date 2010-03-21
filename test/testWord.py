@@ -36,92 +36,92 @@ class TestLevenshtein(unittest.TestCase):
             self.assertEqual(numeral, result)       
 
 class TestWord(unittest.TestCase):
-    def testUsualsFunc(self):
+    def test_usuals_func(self):
         w=Word("batman")
-        self.assert_(w.isEmpty())
-        self.assertFalse(w.isValid())
-        self.assertEqual(w.getValid(), "batman")
+        self.assert_(w.is_empty())
+        self.assertFalse(w.is_valid())
+        self.assertEqual(w.get_valid(), "batman")
         
-        w.setText("bat")
-        self.assertEqual(w.getText(), "bat")
-        self.assertFalse(w.isEmpty())
-        self.assertFalse(w.isValid())
+        w.set_text("bat")
+        self.assertEqual(w.get_text(), "bat")
+        self.assertFalse(w.is_empty())
+        self.assertFalse(w.is_valid())
         
-        w.setText("batman")
-        self.assertFalse(w.isEmpty())
-        self.assert_(w.isValid())
+        w.set_text("batman")
+        self.assertFalse(w.is_empty())
+        self.assert_(w.is_valid())
         
-        w.setText("tt")
-        self.assertFalse(w.isValid())
+        w.set_text("tt")
+        self.assertFalse(w.is_valid())
         
         w.complete()
-        self.assertFalse(w.isEmpty())
-        self.assert_(w.isValid())
+        self.assertFalse(w.is_empty())
+        self.assert_(w.is_valid())
     
-    def testShowHint(self):
+    def test_show_hint(self):
         w=Word("joker")
-        w.setText ( "jo" )
+        w.set_text ( "jo" )
         for i in range(4):
-            self.assertFalse(w.isValid())
-            w.showHint()
-        self.assert_(w.isValid())
-        self.failUnlessRaises(ValidWordError, w.showHint)
+            self.assertFalse(w.is_valid())
+            w.show_hint()
+        self.assert_(w.is_valid())
+        self.failUnlessRaises(ValidWordError, w.show_hint)
     
-    def test_writeChar(self):
+    def test_write_char(self):
         w=Word("robin")
-        for i, char in enumerate(w.getValid()):
-            w.writeChar(char)
-            self.assertEqual(w.getText(), w.getValid()[:i+1])
+        for i, char in enumerate(w.get_valid()):
+            w.write_char(char)
+            self.assertEqual(w.get_text(), w.get_valid()[:i+1])
         
         w=Word("spiderman")
         for i in "spi":
-            w.writeChar(i)
-        w.setText("spi"+w._helpChar*6)
-        w.writeChar("d")
-        self.assertEqual(w.getText(), "spid"+w._helpChar*5) 
+            w.write_char(i)
+        w.set_text("spi"+w._helpChar*6)
+        w.write_char("d")
+        self.assertEqual(w.get_text(), "spid"+w._helpChar*5) 
         
-        w.setPos(9)
-        w.writeChar("m")
-        self.assertEqual(w.getText(), "spidm")
+        w.set_pos(9)
+        w.write_char("m")
+        self.assertEqual(w.get_text(), "spidm")
         
-        w.setText(w.getValid())
-        self.failUnlessRaises(ValidWordError, lambda: w.writeChar("r"))
+        w.set_text(w.get_valid())
+        self.failUnlessRaises(ValidWordError, lambda: w.write_char("r"))
     
-    def test_setPos(self):
+    def test_set_pos(self):
         w=Word("superman")
-        w.setText("suprman")
-        w.setPos(3)
-        self.assertEqual(w.getPos(), 3)
-        w.writeChar("e")
-        self.assert_(w.isValid())
+        w.set_text("suprman")
+        w.set_pos(3)
+        self.assertEqual(w.get_pos(), 3)
+        w.write_char("e")
+        self.assert_(w.is_valid())
         
-        w.setPos(-1)
-        self.assertEqual(w.getPos(), 8)
+        w.set_pos(-1)
+        self.assertEqual(w.get_pos(), 8)
         
-        self.failUnlessRaises(NoCharPossible, lambda :w.setPos(len(w.getValid())+1))
-        self.failUnlessRaises(NoCharPossible, lambda :w.setPos(-2))
-        w.setPos(len(w.getValid()))
+        self.failUnlessRaises(NoCharPossible, lambda :w.set_pos(len(w.get_valid())+1))
+        self.failUnlessRaises(NoCharPossible, lambda :w.set_pos(-2))
+        w.set_pos(len(w.get_valid()))
     
-    def test_Delete(self):
+    def test_delete(self):
         w=Word("angel")
         
-        w.setText("XYangel")
-        w.setPos(1)
-        w.deleteNextChar()      #Y
-        w.deletePreviousChar()  #X
-        self.assertEqual(w.getText(), w.getValid())
+        w.set_text("XYangel")
+        w.set_pos(1)
+        w.delete_next_char()      #Y
+        w.delete_previous_char()  #X
+        self.assertEqual(w.get_text(), w.get_valid())
         
-        w.setText("WangelW")
-        w.setPos(0)
-        self.failUnlessRaises(NoCharPossible, w.deletePreviousChar)
-        w.setPos(len(w.getText()))
-        self.failUnlessRaises(NoCharPossible, w.deleteNextChar)
+        w.set_text("WangelW")
+        w.set_pos(0)
+        self.failUnlessRaises(NoCharPossible, w.delete_previous_char)
+        w.set_pos(len(w.get_text()))
+        self.failUnlessRaises(NoCharPossible, w.delete_next_char)
         
-        w.setPos(1)
-        w.deletePreviousChar()
-        w.setPos(5)
-        w.deleteNextChar()
-        self.assertEqual(w.getText(), w.getValid())
+        w.set_pos(1)
+        w.delete_previous_char()
+        w.set_pos(5)
+        w.delete_next_char()
+        self.assertEqual(w.get_text(), w.get_valid())
         
 if __name__=="__main__":
     unittest.main()

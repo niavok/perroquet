@@ -32,7 +32,7 @@ class SubtitlesLoader(object):
     targetFormat = 'utf-8'
     outputDir = 'converted'
 
-    def convertFile(self,fileName):
+    def convert_file(self,fileName):
         for format in self.sourceFormats:
             try:
                 sourceFile = codecs.open(fileName, 'rU', format)
@@ -47,9 +47,9 @@ class SubtitlesLoader(object):
         print("Error: failed to convert '" + fileName + "'.")
 
 
-    def getSubtitleList(self, path):
+    def get_subtitle_list(self, path):
         outputList = []
-        f = self.convertFile(path)
+        f = self.convert_file(path)
         #f = open(path, 'r')
         state = SubtitlesLoader.LOOK_FOR_ID
         for line in f:
@@ -64,7 +64,7 @@ class SubtitlesLoader(object):
                 if len(line) > 0:
                     current = Subtitle()
                     try:
-                        current.setId(int(line))
+                        current.set_id(int(line))
                         state = SubtitlesLoader.LOOK_FOR_TIME
                     except:
                         pass
@@ -93,42 +93,42 @@ class SubtitlesLoader(object):
                         endTime += int(m.group(7))*1000
                         endTime += int(endMili)
 
-                        current.setTimeBegin(beginTime)
-                        current.setTimeEnd(endTime)
-                        current.setText('')
+                        current.set_time_begin(beginTime)
+                        current.set_time_end(endTime)
+                        current.set_text('')
                         state = SubtitlesLoader.LOOK_FOR_TEXT
             elif state == SubtitlesLoader.LOOK_FOR_TEXT:
                 if len(line) > 0:
-                    if len(current.getText()) == 0:
-                        current.setText(line)
+                    if len(current.get_text()) == 0:
+                        current.set_text(line)
                     else:
-                        current.setText(current.getText() + " " + line)
+                        current.set_text(current.get_text() + " " + line)
                 else:
                     state = SubtitlesLoader.LOOK_FOR_ID
                     outputList.append(current)
 
-        if len(current.getText()) > 0:
+        if len(current.get_text()) > 0:
             outputList.append(current)
 
         return outputList
 
-    def CompactSubtitlesList(self, list, timeToMerge, maxTime):
+    def compact_subtitles_list(self, list, timeToMerge, maxTime):
         outputList = []
         id = 0
         current = None
         for sub in list:
-            if id == 0 or (sub.getTimeBegin() - current.getTimeEnd() > int(timeToMerge*1000)) or (sub.getTimeEnd() - current.getTimeBegin() > int(maxTime*1000)):
+            if id == 0 or (sub.get_time_begin() - current.get_time_end() > int(timeToMerge*1000)) or (sub.get_time_end() - current.get_time_begin() > int(maxTime*1000)):
                 if id > 0:
                     outputList.append(current)
                 id += 1
                 current = Subtitle()
-                current.setId(id)
-                current.setText(sub.getText())
-                current.setTimeBegin(sub.getTimeBegin())
-                current.setTimeEnd(sub.getTimeEnd())
+                current.set_id(id)
+                current.set_text(sub.get_text())
+                current.set_time_begin(sub.get_time_begin())
+                current.set_time_end(sub.get_time_end())
             else:
-                current.setText(current.getText() + " " + sub.getText())
-                current.setTimeEnd(sub.getTimeEnd())
+                current.set_text(current.get_text() + " " + sub.get_text())
+                current.set_time_end(sub.get_time_end())
         if current:
             outputList.append(current)
         return outputList
@@ -139,19 +139,19 @@ class Subtitle(object):
     def __init__(self):
         self.text = ""
 
-    def getText(self):
+    def get_text(self):
         return self.text
 
-    def getTimeBegin(self):
+    def get_time_begin(self):
         return self.timeBegin
 
-    def getTimeEnd(self):
+    def get_time_end(self):
         return self.timeEnd
 
-    def getId(self):
+    def get_id(self):
         return self.id
 
-    def setText(self,text):
+    def set_text(self,text):
         # | mean new line in some srt files
         text = text.replace("|","\n")
         #Some subs have <i>...</i> or {]@^\`}. We need to delete them.
@@ -162,12 +162,12 @@ class Subtitle(object):
         self.text = text
 
 
-    def setTimeBegin(self,timeBegin):
+    def set_time_begin(self,timeBegin):
         self.timeBegin = timeBegin
 
-    def setTimeEnd(self,timeEnd):
+    def set_time_end(self,timeEnd):
         self.timeEnd = timeEnd
 
-    def setId(self,id):
+    def set_id(self,id):
         self.id = id
 

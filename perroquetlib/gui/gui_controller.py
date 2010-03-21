@@ -80,7 +80,7 @@ class GuiController:
 
 
             #Disable speed change slider if the media player not support it
-            if self.core.getPlayer().isSpeedChangeable():
+            if self.core.get_player().is_speed_changeable():
                 self.gui.set_enable_speed_selection(True)     
             else:
                 self.gui.set_enable_speed_selection(False)
@@ -229,9 +229,9 @@ class GuiController:
 
         for char in new_text:
             if char == " ":
-                self.core.NextWord()
+                self.core.next_word()
             else:
-                self.core.WriteChar(char)
+                self.core.write_char(char)
         return True
 
     def notify_move_cursor(self,movement):
@@ -242,32 +242,32 @@ class GuiController:
 
     def notify_key_press(self,keyname):
         if keyname == "Return" or keyname == "KP_Enter":
-            self.core.UserRepeat()
+            self.core.user_repeat()
             self.core.repeat_sequence()
         elif keyname == "BackSpace":
-            self.core.DeletePreviousChar()
+            self.core.delete_previous_char()
         elif keyname == "Delete":
-            self.core.DeleteNextChar()
+            self.core.delete_next_char()
         elif keyname == "Page_Down":
-            self.core.PreviousSequence()
+            self.core.previous_sequence()
         elif keyname == "Page_Up":
             self.core.next_sequence()
         elif keyname == "Down":
-           self.core.PreviousSequence()
+           self.core.previous_sequence()
         elif keyname == "Up":
            self.core.next_sequence()
         elif keyname == "Tab":
-            self.core.NextWord()
+            self.core.next_word()
         elif keyname == "ISO_Left_Tab":
-            self.core.PreviousWord()
+            self.core.previous_word()
         elif keyname == "F1":
-            self.core.CompleteWord()
+            self.core.complete_word()
         elif keyname == "F2":
             self.toggle_translation()
         elif keyname == "F9":
             self.toggle_lateral_panel()
         elif keyname == "Pause":
-            self.core.togglePause()
+            self.core.toggle_pause()
         elif keyname == "KP_Add":
             if self.current_speed > 0.9:
                 self.core.set_speed(1.0)
@@ -285,7 +285,7 @@ class GuiController:
 
     def notify_quit(self):
         if not config.get("autosave"):
-            if not self.core.getCanSave():
+            if not self.core.get_can_save():
                 self.gui.quit()
                 return False #True for quit
             if self.gui.ask_confirm_quit_without_save():
@@ -318,7 +318,7 @@ class GuiController:
     
     def ask_reset_exercise_content(self):
         if self.gui.ask_reset_exercise_content:
-            self.core.resetExerciseContent()
+            self.core.reset_exercise_content()
 
     def notify_reset_exercise_content(self):
         self.gui.ask_reset_exercise_content()
@@ -335,10 +335,10 @@ class GuiController:
         self.gui.set_visible_new_exercise_dialog(False)
 
     def notify_export_as_template(self):
-        self.core.exportAsTemplate()
+        self.core.export_as_template()
 
     def notify_export_as_package(self):
-        self.core.exportAsPackage()
+        self.core.export_as_package()
 
     def notify_import_package(self):
         self.core.import_package()
@@ -347,23 +347,23 @@ class GuiController:
         self.core.next_sequence()
 
     def notify_previous_sequence(self):
-        self.core.PreviousSequence()
+        self.core.previous_sequence()
 
     def notify_repeat_sequence(self):
-        self.core.UserRepeat()
+        self.core.user_repeat()
         self.core.repeat_sequence()
 
     def notify_select_sequence_number(self, value):
         self.core.select_sequence(value)
 
     def notify_select_sequence_time(self, value):
-        self.core.SeekSequence(value)
+        self.core.seek_sequence(value)
 
     def notify_select_speed(self, value):
         self.core.set_speed(value)
 
     def notify_hint(self):
-        self.core.CompleteWord()
+        self.core.complete_word()
 
     def notify_play(self):
         self.core.play()
@@ -380,7 +380,7 @@ class GuiController:
     def notify_load(self):
         path = self.gui.ask_load_exercise()
         if path:
-            self.core.LoadExercise(path)
+            self.core.load_exercise(path)
 
     def notify_filter_change(self):
         self.update_word_list()

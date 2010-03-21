@@ -213,7 +213,7 @@
                         <property name="visible">True</property>
                         <property name="create_folders">False</property>
                         <property name="title" translatable="yes">Select a video file</property>
-                        <signal name="file_set" handler="on_filechooserbuttonVideoProp_file_set"/>
+                        <signal name="file_set" handler="on_filechooserbutton_video_prop_file_set"/>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -293,7 +293,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="search_column">0</property>
-                            <signal name="cursor_changed" handler="on_treeviewPathsList_cursor_changed"/>
+                            <signal name="cursor_changed" handler="on_treeview_paths_list_cursor_changed"/>
                           </object>
                           <packing>
                             <property name="position">0</property>
@@ -310,7 +310,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="clicked" handler="on_buttonAddPath_clicked"/>
+                                <signal name="clicked" handler="on_button_add_path_clicked"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -324,7 +324,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="clicked" handler="on_buttonRemovePath_clicked"/>
+                                <signal name="clicked" handler="on_button_remove_path_clicked"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -338,7 +338,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="clicked" handler="on_buttonUpPath_clicked"/>
+                                <signal name="clicked" handler="on_button_up_path_clicked"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -352,7 +352,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="clicked" handler="on_buttonDownPath_clicked"/>
+                                <signal name="clicked" handler="on_button_down_path_clicked"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -430,7 +430,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_buttonDefautTimeBetweenSequences_clicked"/>
+                        <signal name="clicked" handler="on_button_defaut_time_between_sequences_clicked"/>
                       </object>
                       <packing>
                         <property name="padding">3</property>
@@ -475,7 +475,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_buttonDefautMaximumSequenceTime_clicked"/>
+                        <signal name="clicked" handler="on_button_defaut_maximum_sequence_time_clicked"/>
                       </object>
                       <packing>
                         <property name="padding">3</property>
@@ -519,7 +519,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_buttonDefautTimeBeforeSequence_clicked"/>
+                        <signal name="clicked" handler="on_button_defaut_time_before_sequence_clicked"/>
                       </object>
                       <packing>
                         <property name="padding">3</property>
@@ -563,7 +563,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_buttonDefautTimeAfterSequence_clicked"/>
+                        <signal name="clicked" handler="on_button_defaut_time_after_sequence_clicked"/>
                       </object>
                       <packing>
                         <property name="padding">3</property>
@@ -631,7 +631,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_buttonExercisePropCancel_clicked"/>
+                <signal name="clicked" handler="on_button_exercise_prop_cancel_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -647,7 +647,7 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="xalign">0.52999997138977051</property>
-                <signal name="clicked" handler="on_buttonExercisePropOk_clicked"/>
+                <signal name="clicked" handler="on_button_exercise_prop_ok_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>

@@ -30,52 +30,52 @@ class ExerciseRepositoryGroup:
         self.description = ""
         self.exercisesList = []
 
-    def setName(self, name):
+    def set_name(self, name):
         self.name = name
 
-    def setDescription(self, description):
+    def set_description(self, description):
         self.description = description
 
-    def getName(self):
+    def get_name(self):
         return self.name
 
-    def getDescription(self):
+    def get_description(self):
         return self.description
 
-    def setId(self, id):
+    def set_id(self, id):
         self.id = id
 
-    def getId(self):
+    def get_id(self):
         return self.id
 
-    def addExercise(self, exercise):
+    def add_exercise(self, exercise):
         self.exercisesList.append(exercise)
-        exercise.setParent(self)
+        exercise.set_parent(self)
 
-    def getExercises(self):
+    def get_exercises(self):
         return self.exercisesList
 
-    def setParent(self,parent):
+    def set_parent(self,parent):
         self.parent = parent
 
-    def getLocalPath(self):
-        return os.path.join(self.parent.getLocalPath(), self.id)
+    def get_local_path(self):
+        return os.path.join(self.parent.get_local_path(), self.id)
 
-    def parseDescription(self,xml_group):
-        self.setName(self._getText(xml_group.getElementsByTagName("name")[0].childNodes))
-        self.setId(self._getText(xml_group.getElementsByTagName("id")[0].childNodes))
-        self.setDescription(self._getText(xml_group.getElementsByTagName("description")[0].childNodes))
+    def parse_description(self,xml_group):
+        self.set_name(self._get_text(xml_group.getElementsByTagName("name")[0].childNodes))
+        self.set_id(self._get_text(xml_group.getElementsByTagName("id")[0].childNodes))
+        self.set_description(self._get_text(xml_group.getElementsByTagName("description")[0].childNodes))
 
-    def generateDescription(self):
-        self._generateDescription()
-        for exo in self.getExercises():
-            exo.generateDescription()
+    def generate_description(self):
+        self._generate_description()
+        for exo in self.get_exercises():
+            exo.generate_description()
 
-    def _generateDescription(self):
+    def _generate_description(self):
 
-        if not os.path.isdir(self.getLocalPath()):
+        if not os.path.isdir(self.get_local_path()):
             try:
-                os.makedirs(self.getLocalPath())
+                os.makedirs(self.get_local_path())
             except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
                 if ErrorNumber == errno.EEXIST:
                     pass
@@ -88,48 +88,48 @@ class ExerciseRepositoryGroup:
 
         # Name
         xml_name = newdoc.createElement("name")
-        xml_name.appendChild(newdoc.createTextNode(self.getName()))
+        xml_name.appendChild(newdoc.createTextNode(self.get_name()))
         root_element.appendChild(xml_name)
 
         # Id
         xml_id = newdoc.createElement("id")
-        xml_id.appendChild(newdoc.createTextNode(self.getId()))
+        xml_id.appendChild(newdoc.createTextNode(self.get_id()))
         root_element.appendChild(xml_id)
 
         # Description
         xml_description = newdoc.createElement("description")
-        xml_description.appendChild(newdoc.createTextNode(self.getDescription()))
+        xml_description.appendChild(newdoc.createTextNode(self.get_description()))
         root_element.appendChild(xml_description)
 
         xml_string = newdoc.toprettyxml()
         xml_string = xml_string.encode('utf8')
 
-        repoDescriptionPath = os.path.join(self.getLocalPath(),"group.xml")
+        repoDescriptionPath = os.path.join(self.get_local_path(),"group.xml")
         f = open(repoDescriptionPath, 'w')
         f.write(xml_string)
         f.close()
 
-    def initFromPath(self, groupPath):
+    def init_from_path(self, groupPath):
         groupDescriptionPath = os.path.join(groupPath,"group.xml")
 
         if os.path.isfile(groupDescriptionPath):
             f = open(groupDescriptionPath, 'r')
             dom = parse(f)
-            self.parseDescription(dom)
+            self.parse_description(dom)
         else:
-            self.setId(os.path.basename(groupPath))
-            self.setName(os.path.basename(groupPath))
+            self.set_id(os.path.basename(groupPath))
+            self.set_name(os.path.basename(groupPath))
 
         exercisePathList = os.listdir(groupPath)
         for exercisePath in exercisePathList:
             path = os.path.join(groupPath, exercisePath)
             if os.path.isdir(path):
                 exo = ExerciseRepositoryExercise()
-                exo.initFromPath(path)
-                self.addExercise(exo)
+                exo.init_from_path(path)
+                self.add_exercise(exo)
 
 
-    def _getText(self, nodelist):
+    def _get_text(self, nodelist):
         rc = ""
         for node in nodelist:
             if node.nodeType == node.TEXT_NODE:

@@ -13,17 +13,17 @@ class Pep8FunctionsTestCase(unittest.TestCase):
     
     def test_find_functions_names(self):
         text="""
-        def testAffd():
+        def test_affd():
             pass
             
-        def test_Bddr():
+        def test_bddr():
             pass
         
         def test_ee():
             pass
         """
         self.assertEqual(pep8.find_function_names(text),
-                        ["testAffd", "test_Bddr"])
+                        ["test_affd", "test_bddr"])
         
     def test_replace_word(self):
         text = "test a.test test.b a.test.a rrtestrr r_test_a"
@@ -32,7 +32,7 @@ class Pep8FunctionsTestCase(unittest.TestCase):
         self.assertEqual(pep8.replace_words(tuples, text), text_)
         
 class Pep8FunctionsBlank(unittest.TestCase):
-    def testRmBlanks(self):
+    def test_rm_blanks(self):
         text1="""
         def a():
             

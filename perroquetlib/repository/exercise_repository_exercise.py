@@ -35,32 +35,32 @@ class ExerciseRepositoryExercise:
         self.translationList = []
         self.version = None
 
-    def isInstalled(self):
-        return os.path.isfile(self.getTemplatePath())
+    def is_installed(self):
+        return os.path.isfile(self.get_template_path())
 
-    def isUsed(self):
-        return os.path.isfile(self.getInstancePath())
+    def is_used(self):
+        return os.path.isfile(self.get_instance_path())
 
-    def isDone(self):
-        return os.path.isfile(self.getDonePath())
+    def is_done(self):
+        return os.path.isfile(self.get_done_path())
 
 
-    def startInstall(self):
+    def start_install(self):
         self.mutexInstalling.acquire()
         self.canceled = False
         self.downloadPercent = 0
-        self.play_thread_id = thread.start_new_thread(self.installThread, ())
+        self.play_thread_id = thread.start_new_thread(self.install_thread, ())
 
-    def cancelInstall(self):
+    def cancel_install(self):
         self.canceled = True
 
-    def waitInstallEnd(self):
+    def wait_install_end(self):
         self.mutexInstalling.acquire()
         self.mutexInstalling.release()
 
     def download(self):
 
-        f=urllib2.urlopen(self.getFilePath())
+        f=urllib2.urlopen(self.get_file_path())
         _, tempPath = tempfile.mkstemp("","perroquet-");
         wf = open(tempPath, 'w+b')
         size = f.info().get('Content-Length')
@@ -82,10 +82,10 @@ class ExerciseRepositoryExercise:
         return tempPath
 
 
-    def getDownloadPercent(self):
+    def get_download_percent(self):
         return self.downloadPercent
 
-    def getState(self):
+    def get_state(self):
         #available
         #downloading
         #installing
@@ -97,37 +97,37 @@ class ExerciseRepositoryExercise:
         #done
 
         if self.state == "none":
-            if self.isDone():
+            if self.is_done():
                 self.state = "done"
-            elif self.isUsed():
+            elif self.is_used():
                 self.state = "used"
-            elif self.isInstalled():
+            elif self.is_installed():
                 self.state = "installed"
             else:
                 self.state = "available"
 
         return self.state
 
-    def setState(self, state):
+    def set_state(self, state):
         oldState = self.state
         self.state = state
         self.notifyStateChange(oldState, self.callbackData)
 
-    def setStateChangeCallback(self, callback, callbackData):
+    def set_state_change_callback(self, callback, callbackData):
         self.notifyStateChange = callback
         self.callbackData = callbackData
 
-    def installThread(self):
-        self.setState("downloading")
+    def install_thread(self):
+        self.set_state("downloading")
         tmpPath = self.download()
         if self.canceled:
             print "remove temp file"
-            self.setState("canceled")
+            self.set_state("canceled")
             os.remove(tmpPath)
         else:
-            self.setState("installing")
+            self.set_state("installing")
             tar = tarfile.open(tmpPath)
-            outPath = self.getLocalPath()
+            outPath = self.get_local_path()
             try:
                 os.makedirs(outPath)
             except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
@@ -137,161 +137,161 @@ class ExerciseRepositoryExercise:
             tar.extractall(outPath)
             tar.close()
             os.remove(tmpPath)
-            if self.isInstalled():
-                self.setState("installed")
+            if self.is_installed():
+                self.set_state("installed")
             else:
-                self.setState("corrupted")
+                self.set_state("corrupted")
         self.mutexInstalling.release()
 
-    def getTemplatePath(self):
-        return os.path.join(self.getLocalPath(),"template.perroquet")
+    def get_template_path(self):
+        return os.path.join(self.get_local_path(),"template.perroquet")
 
-    def getInstancePath(self):
-        return os.path.join(self.getLocalPath(),"instance.perroquet")
+    def get_instance_path(self):
+        return os.path.join(self.get_local_path(),"instance.perroquet")
 
-    def getDonePath(self):
-        return os.path.join(self.getLocalPath(),"done.perroquet")
+    def get_done_path(self):
+        return os.path.join(self.get_local_path(),"done.perroquet")
 
-    def setName(self, name):
+    def set_name(self, name):
         self.name = name
 
-    def getName(self):
+    def get_name(self):
         return self.name
 
-    def setId(self, id):
+    def set_id(self, id):
         self.id = id
 
-    def getId(self):
+    def get_id(self):
         return self.id
 
-    def setDescription(self, description):
+    def set_description(self, description):
         self.description = description
 
-    def getDescription(self):
+    def get_description(self):
         return self.description
 
-    def setLicence(self, licence):
+    def set_licence(self, licence):
         self.licence = licence
 
-    def getLicence(self):
+    def get_licence(self):
         return self.licence
 
-    def setLanguage(self, language):
+    def set_language(self, language):
         self.language = language
 
-    def getLanguage(self):
+    def get_language(self):
         return self.language
 
-    def setMediaType(self, mediaType):
+    def set_media_type(self, mediaType):
         self.mediaType = mediaType
 
-    def getMediaType(self):
+    def get_media_type(self):
         return self.mediaType
 
-    def setVersion(self, version):
+    def set_version(self, version):
         self.version = version
 
-    def getVersion(self):
+    def get_version(self):
         return self.version
 
-    def setAuthor(self, author):
+    def set_author(self, author):
         self.author = author
 
-    def getAuthor(self):
+    def get_author(self):
         return self.author
 
-    def setWordsCount(self, wordsCount):
+    def set_words_count(self, wordsCount):
         self.wordsCount = wordsCount
 
-    def getWordsCount(self):
+    def get_words_count(self):
         return self.wordsCount
 
-    def setAuthorWebsite(self, authorWebsite):
+    def set_author_website(self, authorWebsite):
         self.authorWebsite = authorWebsite
 
-    def getAuthorWebsite(self):
+    def get_author_website(self):
         return self.authorWebsite
 
-    def setAuthorContact(self, authorContact):
+    def set_author_contact(self, authorContact):
         self.authorContact = authorContact
 
-    def getAuthorContact(self):
+    def get_author_contact(self):
         return self.authorContact
 
-    def setPackager(self, packager):
+    def set_packager(self, packager):
         self.packager = packager
 
-    def getPackager(self):
+    def get_packager(self):
         return self.packager
 
-    def setPackagerWebsite(self, packagerWebsite):
+    def set_packager_website(self, packagerWebsite):
         self.packagerWebsite = packagerWebsite
 
-    def getPackagerWebsite(self):
+    def get_packager_website(self):
         return self.packagerWebsite
 
-    def setPackagerContact(self, packagerContact):
+    def set_packager_contact(self, packagerContact):
         self.packagerContact = packagerContact
 
-    def getPackagerContact(self):
+    def get_packager_contact(self):
         return self.packagerContact
 
-    def setFilePath(self, filePath):
+    def set_file_path(self, filePath):
         self.filePath = filePath
 
-    def getFilePath(self):
+    def get_file_path(self):
         return self.filePath
 
-    def setTranslationsList(self, translationList):
+    def set_translations_list(self, translationList):
         self.translationList = translationList
 
-    def getTranslationsList(self):
+    def get_translations_list(self):
         return self.translationList
 
-    def setParent(self,parent):
+    def set_parent(self,parent):
         self.parent = parent
 
-    def getLocalPath(self):
+    def get_local_path(self):
         if self.version is not None:
-            return os.path.join(self.parent.getLocalPath(), self.id+"_"+self.version)
+            return os.path.join(self.parent.get_local_path(), self.id+"_"+self.version)
         else:
-            return os.path.join(self.parent.getLocalPath(), self.id)
+            return os.path.join(self.parent.get_local_path(), self.id)
 
-    def parseDescription(self,xml_exercise):
-        self.setName(self._getText(xml_exercise.getElementsByTagName("name")[0].childNodes))
-        self.setId(self._getText(xml_exercise.getElementsByTagName("id")[0].childNodes))
-        self.setDescription(self._getText(xml_exercise.getElementsByTagName("description")[0].childNodes))
-        self.setLicence(self._getText(xml_exercise.getElementsByTagName("licence")[0].childNodes))
-        self.setLanguage(self._getText(xml_exercise.getElementsByTagName("language")[0].childNodes))
-        self.setMediaType(self._getText(xml_exercise.getElementsByTagName("media_type")[0].childNodes))
-        self.setVersion(self._getText(xml_exercise.getElementsByTagName("exercise_version")[0].childNodes))
-        self.setAuthor(self._getText(xml_exercise.getElementsByTagName("author")[0].childNodes))
-        self.setAuthorWebsite(self._getText(xml_exercise.getElementsByTagName("author_website")[0].childNodes))
-        self.setAuthorContact(self._getText(xml_exercise.getElementsByTagName("author_contact")[0].childNodes))
-        self.setPackager(self._getText(xml_exercise.getElementsByTagName("packager")[0].childNodes))
-        self.setPackagerWebsite(self._getText(xml_exercise.getElementsByTagName("packager_website")[0].childNodes))
-        self.setPackagerContact(self._getText(xml_exercise.getElementsByTagName("packager_contact")[0].childNodes))
+    def parse_description(self,xml_exercise):
+        self.set_name(self._get_text(xml_exercise.getElementsByTagName("name")[0].childNodes))
+        self.set_id(self._get_text(xml_exercise.getElementsByTagName("id")[0].childNodes))
+        self.set_description(self._get_text(xml_exercise.getElementsByTagName("description")[0].childNodes))
+        self.set_licence(self._get_text(xml_exercise.getElementsByTagName("licence")[0].childNodes))
+        self.set_language(self._get_text(xml_exercise.getElementsByTagName("language")[0].childNodes))
+        self.set_media_type(self._get_text(xml_exercise.getElementsByTagName("media_type")[0].childNodes))
+        self.set_version(self._get_text(xml_exercise.getElementsByTagName("exercise_version")[0].childNodes))
+        self.set_author(self._get_text(xml_exercise.getElementsByTagName("author")[0].childNodes))
+        self.set_author_website(self._get_text(xml_exercise.getElementsByTagName("author_website")[0].childNodes))
+        self.set_author_contact(self._get_text(xml_exercise.getElementsByTagName("author_contact")[0].childNodes))
+        self.set_packager(self._get_text(xml_exercise.getElementsByTagName("packager")[0].childNodes))
+        self.set_packager_website(self._get_text(xml_exercise.getElementsByTagName("packager_website")[0].childNodes))
+        self.set_packager_contact(self._get_text(xml_exercise.getElementsByTagName("packager_contact")[0].childNodes))
         if len(xml_exercise.getElementsByTagName("words_count")) > 0:
-            self.setWordsCount(self._getText(xml_exercise.getElementsByTagName("words_count")[0].childNodes))
+            self.set_words_count(self._get_text(xml_exercise.getElementsByTagName("words_count")[0].childNodes))
         if len(xml_exercise.getElementsByTagName("file")) > 0:
-            self.setFilePath(self._getText(xml_exercise.getElementsByTagName("file")[0].childNodes))
+            self.set_file_path(self._get_text(xml_exercise.getElementsByTagName("file")[0].childNodes))
 
         if len(xml_exercise.getElementsByTagName("translations")) > 0:
             xml_translations = xml_exercise.getElementsByTagName("translations")[0]
             translationList = []
             for xml_translation in xml_translations.getElementsByTagName("translation"):
-                translationList.append(self._getText(xml_translation.childNodes))
+                translationList.append(self._get_text(xml_translation.childNodes))
 
-            self.setTranslationsList(translationList)
+            self.set_translations_list(translationList)
 
-    def generateDescription(self):
-        self._generateDescription()
+    def generate_description(self):
+        self._generate_description()
 
-    def _generateDescription(self):
+    def _generate_description(self):
 
-        if not os.path.isdir(self.getLocalPath()):
+        if not os.path.isdir(self.get_local_path()):
             try:
-                os.makedirs(self.getLocalPath())
+                os.makedirs(self.get_local_path())
             except OSError, (ErrorNumber, ErrorMessage): # Python <=2.5
                 if ErrorNumber == 666: #EEXIST ???
                     pass
@@ -304,77 +304,77 @@ class ExerciseRepositoryExercise:
 
         # Name
         xml_name = newdoc.createElement("name")
-        xml_name.appendChild(newdoc.createTextNode(self.getName()))
+        xml_name.appendChild(newdoc.createTextNode(self.get_name()))
         root_element.appendChild(xml_name)
 
         # Id
         xml_id = newdoc.createElement("id")
-        xml_id.appendChild(newdoc.createTextNode(self.getId()))
+        xml_id.appendChild(newdoc.createTextNode(self.get_id()))
         root_element.appendChild(xml_id)
 
         # Description
         xml_description = newdoc.createElement("description")
-        xml_description.appendChild(newdoc.createTextNode(self.getDescription()))
+        xml_description.appendChild(newdoc.createTextNode(self.get_description()))
         root_element.appendChild(xml_description)
 
         # Words count
         xml_version = newdoc.createElement("words_count")
-        xml_version.appendChild(newdoc.createTextNode(str(self.getWordsCount())))
+        xml_version.appendChild(newdoc.createTextNode(str(self.get_words_count())))
         root_element.appendChild(xml_version)
 
         # Version
         xml_version = newdoc.createElement("exercise_version")
-        xml_version.appendChild(newdoc.createTextNode(self.getVersion()))
+        xml_version.appendChild(newdoc.createTextNode(self.get_version()))
         root_element.appendChild(xml_version)
 
         # Licence
         xml_node = newdoc.createElement("licence")
-        xml_node.appendChild(newdoc.createTextNode(self.getLicence()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_licence()))
         root_element.appendChild(xml_node)
 
         # Language
         xml_node = newdoc.createElement("language")
-        xml_node.appendChild(newdoc.createTextNode(self.getLanguage()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_language()))
         root_element.appendChild(xml_node)
 
         # Media type
         xml_node = newdoc.createElement("media_type")
-        xml_node.appendChild(newdoc.createTextNode(self.getMediaType()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_media_type()))
         root_element.appendChild(xml_node)
 
         # author
         xml_node = newdoc.createElement("author")
-        xml_node.appendChild(newdoc.createTextNode(self.getAuthor()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_author()))
         root_element.appendChild(xml_node)
 
         # author website
         xml_node = newdoc.createElement("author_website")
-        xml_node.appendChild(newdoc.createTextNode(self.getAuthorWebsite()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_author_website()))
         root_element.appendChild(xml_node)
 
         # author contact
         xml_node = newdoc.createElement("author_contact")
-        xml_node.appendChild(newdoc.createTextNode(self.getAuthorContact()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_author_contact()))
         root_element.appendChild(xml_node)
 
         # packager
         xml_node = newdoc.createElement("packager")
-        xml_node.appendChild(newdoc.createTextNode(self.getPackager()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_packager()))
         root_element.appendChild(xml_node)
 
         # packager website
         xml_node = newdoc.createElement("packager_website")
-        xml_node.appendChild(newdoc.createTextNode(self.getPackagerWebsite()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_packager_website()))
         root_element.appendChild(xml_node)
 
         # packager contact
         xml_node = newdoc.createElement("packager_contact")
-        xml_node.appendChild(newdoc.createTextNode(self.getPackagerContact()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_packager_contact()))
         root_element.appendChild(xml_node)
 
         # template path
         xml_node = newdoc.createElement("template")
-        xml_node.appendChild(newdoc.createTextNode(self.getTemplatePath()))
+        xml_node.appendChild(newdoc.createTextNode(self.get_template_path()))
         root_element.appendChild(xml_node)
 
         # translation
@@ -384,7 +384,7 @@ class ExerciseRepositoryExercise:
         xml_string = newdoc.toprettyxml()
         xml_string = xml_string.encode('utf8')
 
-        repoDescriptionPath = os.path.join(self.getLocalPath(),"exercise.xml")
+        repoDescriptionPath = os.path.join(self.get_local_path(),"exercise.xml")
         f = open(repoDescriptionPath, 'w')
 
         f.write(xml_string)
@@ -392,18 +392,18 @@ class ExerciseRepositoryExercise:
 
 
 
-    def initFromPath(self, exercisePath):
+    def init_from_path(self, exercisePath):
         exerciseDescriptionPath = os.path.join(exercisePath,"exercise.xml")
         if os.path.isfile(exerciseDescriptionPath):
             f = open(exerciseDescriptionPath, 'r')
             dom = parse(f)
-            self.parseDescription(dom)
+            self.parse_description(dom)
         else:
             self.id = os.path.basename(exercisePath)
             self.name = self.id
             self.description = _("Imported exercise")
 
-    def _getText(self, nodelist):
+    def _get_text(self, nodelist):
         rc = ""
         for node in nodelist:
             if node.nodeType == node.TEXT_NODE:

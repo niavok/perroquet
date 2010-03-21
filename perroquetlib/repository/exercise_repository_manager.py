@@ -34,25 +34,25 @@ class ExerciseRepositoryManager:
     def __init__(self):
         self.config = config
 
-    def getExerciseRepositoryList(self):
+    def get_exercise_repository_list(self):
         repositoryPathList = self.config.get("repository_source_list")
         repositoryList = []
 
-        repositoryList += self._getLocalExerciseRepositoryList();
+        repositoryList += self._get_local_exercise_repository_list();
         #repositoryList += _getSystemExerciseRepositoryList();
-        repositoryList += self._getDistantExerciseRepositoryList();
-        repositoryList += self._getOrphanExerciseRepositoryList(repositoryList);
+        repositoryList += self._get_distant_exercise_repository_list();
+        repositoryList += self._get_orphan_exercise_repository_list(repositoryList);
 
         return repositoryList
 
-    def _getLocalExerciseRepositoryList(self):
+    def _get_local_exercise_repository_list(self):
         repositoryList = []
         localRepoPath = os.path.join(self.config.get("local_repo_root_dir"),"local")
 
         if os.path.isdir(localRepoPath):
             repository = ExerciseRepository()
-            repository.initFromPath(localRepoPath)
-            repository.setType("local")
+            repository.init_from_path(localRepoPath)
+            repository.set_type("local")
             repositoryList.append(repository)
 
         return repositoryList
@@ -60,7 +60,7 @@ class ExerciseRepositoryManager:
 
 
 
-    def _getDistantExerciseRepositoryList(self):
+    def _get_distant_exercise_repository_list(self):
         repositoryPathList = self.config.get("repository_source_list")
         repositoryList = []
         offlineRepoList = []
@@ -85,10 +85,10 @@ class ExerciseRepositoryManager:
                 else:
                     print "init distant repo"
                     repository = ExerciseRepository()
-                    repository.parseDistantRepositoryFile(handle)
-                    repository.setUrl(line)
+                    repository.parse_distant_repository_file(handle)
+                    repository.set_url(line)
                     repositoryList.append(repository)
-                    repository.generateDescription()
+                    repository.generate_description()
 
         if len(offlineRepoList) > 0:
             repoPathList = os.listdir(self.config.get("local_repo_root_dir"))
@@ -99,20 +99,20 @@ class ExerciseRepositoryManager:
                     continue
                 f = open(repoDescriptionPath, 'r')
                 dom = parse(f)
-                repository.parseDescription(dom)
-                print "test offline url : " +repository.getUrl()
-                if repository.getUrl() in offlineRepoList:
-                    print "add url : " +repository.getUrl()
+                repository.parse_description(dom)
+                print "test offline url : " +repository.get_url()
+                if repository.get_url() in offlineRepoList:
+                    print "add url : " +repository.get_url()
                     repository = ExerciseRepository()
-                    repository.initFromPath(os.path.join(self.config.get("local_repo_root_dir"),repoPath))
-                    repository.setType("offline")
+                    repository.init_from_path(os.path.join(self.config.get("local_repo_root_dir"),repoPath))
+                    repository.set_type("offline")
                     repositoryList.append(repository)
 
         return repositoryList
 
 
 
-    def getPersonalExerciseRepositoryList(self):
+    def get_personal_exercise_repository_list(self):
         repositoryPath = self.config.get("personal_repository_source_path")
         repositoryList = []
 
@@ -128,7 +128,7 @@ class ExerciseRepositoryManager:
 
         return repositoryList
 
-    def writePersonalExerciseRepositoryList(self, newRepositoryList):
+    def write_personal_exercise_repository_list(self, newRepositoryList):
         #The goal of this methods is to make an inteligent write of config file
         #Line biginning with # are comment and must be keep in place
 
@@ -157,24 +157,24 @@ class ExerciseRepositoryManager:
 
         f.close()
 
-    def _getOrphanExerciseRepositoryList(self,repositoryListIn):
+    def _get_orphan_exercise_repository_list(self,repositoryListIn):
         repoPathList = os.listdir(self.config.get("local_repo_root_dir"))
         repoUsedPath = []
         repositoryList = []
         for repo in repositoryListIn:
-            repoUsedPath.append(repo.getLocalPath())
+            repoUsedPath.append(repo.get_local_path())
 
         for repoPath in repoPathList:
             path = os.path.join(self.config.get("local_repo_root_dir"), repoPath)
             if path not in repoUsedPath:
                 repository = ExerciseRepository()
-                repository.initFromPath(path)
-                repository.setType("orphan")
+                repository.init_from_path(path)
+                repository.set_type("orphan")
                 repositoryList.append(repository)
 
         return repositoryList
 
-    def _getText(self, nodelist):
+    def _get_text(self, nodelist):
         rc = ""
         for node in nodelist:
             if node.nodeType == node.TEXT_NODE:
@@ -182,7 +182,7 @@ class ExerciseRepositoryManager:
         rc = rc.strip()
         return rc
 
-    def exportAsPackage(self, exercise, outPath):
+    def export_as_package(self, exercise, outPath):
         tempPath = tempfile.mkdtemp("","perroquet-");
 
         exercisePackage = exercise
@@ -214,31 +214,31 @@ class ExerciseRepositoryManager:
                     else: raise
 
             #Copy resources locally
-            videoPath = os.path.join(sequencePath,os.path.basename(subExo.getVideoPath()))
-            exercisePath = os.path.join(sequencePath,os.path.basename(subExo.getExercisePath()))
-            translationPath = os.path.join(sequencePath,os.path.basename(subExo.getTranslationPath()))
+            videoPath = os.path.join(sequencePath,os.path.basename(subExo.get_video_path()))
+            exercisePath = os.path.join(sequencePath,os.path.basename(subExo.get_exercise_path()))
+            translationPath = os.path.join(sequencePath,os.path.basename(subExo.get_translation_path()))
 
-            videoRelPath = os.path.join(localPath,os.path.basename(subExo.getVideoPath()))
-            exerciseRelPath = os.path.join(localPath,os.path.basename(subExo.getExercisePath()))
-            translationRelPath = os.path.join(localPath,os.path.basename(subExo.getTranslationPath()))
+            videoRelPath = os.path.join(localPath,os.path.basename(subExo.get_video_path()))
+            exerciseRelPath = os.path.join(localPath,os.path.basename(subExo.get_exercise_path()))
+            translationRelPath = os.path.join(localPath,os.path.basename(subExo.get_translation_path()))
 
-            shutil.copyfile(subExo.getVideoPath(), videoPath)
-            shutil.copyfile(subExo.getExercisePath(), exercisePath)
-            if subExo.getTranslationPath() != '':
-                shutil.copyfile(subExo.getTranslationPath(), translationPath)
+            shutil.copyfile(subExo.get_video_path(), videoPath)
+            shutil.copyfile(subExo.get_exercise_path(), exercisePath)
+            if subExo.get_translation_path() != '':
+                shutil.copyfile(subExo.get_translation_path(), translationPath)
 
 
-            subExo.setVideoExportPath(videoRelPath)
-            subExo.setExerciseExportPath(exerciseRelPath)
-            if subExo.getTranslationPath() != '':
-                subExo.setTranslationExportPath(translationRelPath)
+            subExo.set_video_export_path(videoRelPath)
+            subExo.set_exercise_export_path(exerciseRelPath)
+            if subExo.get_translation_path() != '':
+                subExo.set_translation_export_path(translationRelPath)
 
         templatePath = os.path.join(tempPath, "template.perroquet")
 
-        exercisePackage.setOutputSavePath(templatePath)
+        exercisePackage.set_output_save_path(templatePath)
         saver = ExerciseSaver()
-        exercisePackage.setTemplate(True)
-        saver.save(exercisePackage, exercisePackage.getOutputSavePath())
+        exercisePackage.set_template(True)
+        saver.save(exercisePackage, exercisePackage.get_output_save_path())
 
         # Create the tar
         tar = tarfile.open(outPath, 'w')
@@ -271,9 +271,9 @@ class ExerciseRepositoryManager:
 
         #Find install path
         loader =  ExerciseLoader()
-        exercise = loader.Load(template_path)
-        if exercise.getName() != '':
-            name = exercise.getName()
+        exercise = loader.load(template_path)
+        if exercise.get_name() != '':
+            name = exercise.get_name()
         else:
             name = exercise.GetVideoPath()
 

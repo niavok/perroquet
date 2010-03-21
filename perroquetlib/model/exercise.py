@@ -44,10 +44,10 @@ class Exercise(object):
         self.playMarginAfter = 500
         self.playMarginBefore = 1000
 
-    def Initialize(self):
-        self._LoadSubtitles()
+    def initialize(self):
+        self.__load_subtitles()
         if self.randomOrder:
-            self.order = [x for x in range(self.getSequenceCount())]
+            self.order = [x for x in range(self.get_sequence_count())]
             random.shuffle(self.order)
             self.reverseOrder = copy.copy(self.order)
             for i,j in enumerate(self.order):
@@ -60,7 +60,7 @@ class Exercise(object):
             self.currentSubExerciseId = 0
             self.currentSequenceId = 0
             languageManager = LanguagesManager()
-            self.language = languageManager.getDefaultLanguage()
+            self.language = languageManager.get_default_language()
 
             self.maxSequenceLength = float(config.get("default_exercise_max_sequence_length"))/1000
             self.timeBetweenSequence = float(config.get("default_exercise_time_between_sequences"))/1000
@@ -70,23 +70,23 @@ class Exercise(object):
             self.repeatAfterCompeted = (config.get("default_exercise_repeat_after_competed") == 1)
             self.randomOrder = (config.get("default_exercise_random_order") == 1)
 
-            self.setLanguageId(config.get("default_exercise_language"))
+            self.set_language_id(config.get("default_exercise_language"))
 
-    def _LoadSubtitles(self):
+    def __load_subtitles(self):
 
         for subExo in self.subExercisesList:
-            subExo.LoadSubtitles()
+            subExo.load_subtitles()
 
     # Reset the work done in the exercise
     def reset(self):
-        for sequence in self.getSequenceList():
+        for sequence in self.get_sequence_list():
             sequence.reset()
 
-    def ExtractWordList(self):
+    def extract_word_list(self):
         wordList = []
 
         for subExo in self.subExercisesList:
-            wordList = wordList + subExo.ExtractWordList()
+            wordList = wordList + subExo.extract_word_list()
 
         #Remove double words and sort
         wordList = list(set(wordList))
@@ -94,37 +94,37 @@ class Exercise(object):
         return wordList
 
 
-    def GotoSequence(self, id):
+    def goto_sequence(self, id):
         self.currentSequenceId = id
         localId = id
 
         for subExo in self.subExercisesList:
-            if localId < len(subExo.getSequenceList()):
-                subExo.setCurrentSequence(localId)
+            if localId < len(subExo.get_sequence_list()):
+                subExo.set_current_sequence(localId)
                 if self.currentSubExercise != subExo:
                     self.currentSubExercise = subExo
-                    self.notifyMediaChange()
+                    self.notify_media_change()
                 return True
             else:
-                localId -= len(subExo.getSequenceList())
+                localId -= len(subExo.get_sequence_list())
 
 
-        self.GotoSequence(self.getSequenceCount()-1)
+        self.goto_sequence(self.get_sequence_count()-1)
         return False
 
 
-    def GotoNextSequence(self):
+    def goto_next_sequence(self):
 
         if self.randomOrder:
             randomId = self.reverseOrder[self.currentSequenceId]
             randomId += 1
             if randomId >= len(self.order):
                 randomId = 0
-            return self.GotoSequence(self.order[randomId])
+            return self.goto_sequence(self.order[randomId])
         else:
-            return self.GotoSequence(self.currentSequenceId+1)
+            return self.goto_sequence(self.currentSequenceId+1)
 
-    def GotoPreviousSequence(self):
+    def goto_previous_sequence(self):
 
 
         if self.randomOrder:
@@ -132,147 +132,147 @@ class Exercise(object):
             randomId -= 1
             if randomId < 0:
                 randomId = len(self.order)-1
-            return self.GotoSequence(self.order[randomId])
+            return self.goto_sequence(self.order[randomId])
         else:
             if self.currentSequenceId > 0:
-                return self.GotoSequence(self.currentSequenceId-1)
+                return self.goto_sequence(self.currentSequenceId-1)
             else:
                 return False
 
 
 
-    def IsPathsValid(self):
+    def is_paths_valid(self):
         error = False
         errorList = []
 
         for subExo in self.subExercisesList:
-            (valid, subErrorList) = subExo.IsPathsValid()
+            (valid, subErrorList) = subExo.is_paths_valid()
             if not valid:
                 error = True
             errorList = errorList + subErrorList
 
         return (not error), errorList
 
-    def IncrementRepeatCount(self):
+    def increment_repeat_count(self):
         self.repeatCount += 1
 
-    def setVideoPath(self, videoPath):
-        self.currentSubExercise.setVideoPath(videoPath)
+    def set_video_path(self, videoPath):
+        self.currentSubExercise.set_video_path(videoPath)
 
-    def setExercisePath(self, exercisePath):
-        self.currentSubExercise.setExercisePath(exercisePath)
+    def set_exercise_path(self, exercisePath):
+        self.currentSubExercise.set_exercise_path(exercisePath)
 
-    def setTranslationPath(self, translationPath):
-        self.currentSubExercise.setTranslationPath(translationPath)
+    def set_translation_path(self, translationPath):
+        self.currentSubExercise.set_translation_path(translationPath)
 
-    def getCurrentSequence(self):
-        return self.currentSubExercise.getCurrentSequence()
+    def get_current_sequence(self):
+        return self.currentSubExercise.get_current_sequence()
 
-    def getCurrentSequenceId(self):
+    def get_current_sequence_id(self):
         return self.currentSequenceId
 
-    def getSequenceList(self):
+    def get_sequence_list(self):
         list = []
         for subExo in self.subExercisesList:
-            list += subExo.getSequenceList()
+            list += subExo.get_sequence_list()
         return list
 
-    def getSequenceCount(self):
+    def get_sequence_count(self):
         count = 0
         for subExo in self.subExercisesList:
-            count += subExo.getSequenceCount()
+            count += subExo.get_sequence_count()
         return count
 
-    def setRepeatCount(self, count):
+    def set_repeat_count(self, count):
         self.repeatCount = count
 
-    def getRepeatCount(self):
+    def get_repeat_count(self):
         return self.repeatCount
 
-    def getVideoPath(self):
-        return self.currentSubExercise.getVideoPath()
+    def get_video_path(self):
+        return self.currentSubExercise.get_video_path()
 
-    def getExercisePath(self):
-        return self.currentSubExercise.getExercisePath()
+    def get_exercise_path(self):
+        return self.currentSubExercise.get_exercise_path()
 
-    def getTranslationPath(self):
-        return self.currentSubExercise.getTranslationPath()
+    def get_translation_path(self):
+        return self.currentSubExercise.get_translation_path()
 
-    def getTranslationList(self):
-        return self.currentSubExercise.getTranslationList()
+    def get_translation_list(self):
+        return self.currentSubExercise.get_translation_list()
 
-    def setRepeatAfterCompleted(self, state):
+    def set_repeat_after_completed(self, state):
         self.repeatAfterCompeted = state
 
-    def getRepeatAfterCompleted(self):
+    def get_repeat_after_completed(self):
         return self.repeatAfterCompeted
 
-    def setTimeBetweenSequence(self, time):
+    def set_time_between_sequence(self, time):
         self.timeBetweenSequence = time
 
-    def getTimeBetweenSequence(self):
+    def get_time_between_sequence(self):
         return self.timeBetweenSequence
 
-    def setMaxSequenceLength(self, time):
+    def set_max_sequence_length(self, time):
         self.maxSequenceLength = time
 
-    def getMaxSequenceLength(self):
+    def get_max_sequence_length(self):
         return self.maxSequenceLength
 
-    def getOutputSavePath(self):
+    def get_output_save_path(self):
         return self.outputSavePath
 
-    def setOutputSavePath(self, outputSavePath):
+    def set_output_save_path(self, outputSavePath):
         self.outputSavePath = outputSavePath
-        self.setTemplate(False)
+        self.set_template(False)
 
-    def getName(self):
+    def get_name(self):
         return self.name
 
-    def setName(self, name):
+    def set_name(self, name):
         self.name = name
 
-    def isTemplate(self):
+    def is_template(self):
         return self.template
 
-    def setTemplate(self, isTemplate):
-        self.template = isTemplate
+    def set_template(self, is_template):
+        self.template = is_template
 
-    def isRandomOrder(self):
+    def is_random_order(self):
         return self.randomOrder
 
-    def setRandomOrder(self, isRandomOrder):
-        self.randomOrder = isRandomOrder
+    def set_random_order(self, is_random_order):
+        self.randomOrder = is_random_order
 
-    def setMediaChangeCallback(self, mediaChangeCallback):
+    def set_media_change_callback(self, mediaChangeCallback):
         self.mediaChangeCallback = mediaChangeCallback
 
-    def notifyMediaChange(self):
+    def notify_media_change(self):
         if self.mediaChangeCallback != None:
             self.mediaChangeCallback()
 
 
-    def setLanguageId(self, langId):
+    def set_language_id(self, langId):
         languageManager = LanguagesManager()
-        self.language =languageManager.getLanguageById(langId)
+        self.language =languageManager.get_language_by_id(langId)
 
-    def getLanguageId(self):
+    def get_language_id(self):
         (langId, langName, langCharList) = self.language
         return langId
 
-    def isCharacterMatch(self,char):
+    def is_character_match(self,char):
         (langId, langName, langCharList) = self.language
         return re.match('^['+langCharList+']$',char)
 
-    def getPlayMarginBefore(self):
+    def get_play_margin_before(self):
         return self.playMarginBefore
 
-    def setPlayMarginBefore(self, margin):
+    def set_play_margin_before(self, margin):
         self.playMarginBefore = margin
 
-    def getPlayMarginAfter(self):
+    def get_play_margin_after(self):
         return self.playMarginAfter
 
-    def setPlayMarginAfter(self, margin):
+    def set_play_margin_after(self, margin):
         self.playMarginAfter = margin
 
