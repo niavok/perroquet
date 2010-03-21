@@ -21,10 +21,14 @@
 
 from xml.dom.minidom import getDOMImplementation, parse
 import os
+import errno
 
 from perroquetlib.config import config
 from perroquetlib.repository.exercise_repository_group import ExerciseRepositoryGroup
 from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
+
+#FIXME import needed but bug
+#from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 
 class ExerciseRepository:
 
@@ -47,9 +51,6 @@ class ExerciseRepository:
 
     def set_version(self, version):
         self.version = version
-
-    def set_name(self, name):
-        self.name = name
 
     def get_name(self):
         return self.name
@@ -94,8 +95,9 @@ class ExerciseRepository:
             groupUsedPath.append(group.get_local_path())
 
         for groupPath in groupPathList:
-            if groupPath not in groupUsedPath:
+            if groupPath not in groupUsedPath: #FIXME used or not ???
                 group = ExerciseRepositoryManager.createGroupFromPath(repoPath)
+                            #FIXME repoPath ??????
                 orphanGroupList.append(group)
 
         return orphanGroupList

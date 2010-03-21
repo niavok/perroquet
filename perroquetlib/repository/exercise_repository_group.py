@@ -21,6 +21,7 @@
 
 import os
 from xml.dom.minidom import getDOMImplementation, parse
+import errno
 
 from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
 

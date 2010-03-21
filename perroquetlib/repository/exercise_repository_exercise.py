@@ -25,6 +25,7 @@ import tempfile
 import os
 import tarfile
 import errno
+import gettext
 from xml.dom.minidom import getDOMImplementation, parse
 from threading import Lock
 
@@ -406,7 +407,7 @@ class ExerciseRepositoryExercise:
         else:
             self.id = os.path.basename(exercisePath)
             self.name = self.id
-            self.description = _("Imported exercise")
+            self.description = gettext.gettext("Imported exercise")
 
     def _get_text(self, nodelist):
         rc = ""

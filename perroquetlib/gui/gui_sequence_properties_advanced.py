@@ -24,6 +24,7 @@ import gettext
 from perroquetlib.config import config
 from perroquetlib.model.languages_manager import LanguagesManager
 from perroquetlib.model.exercise import Exercise
+from perroquetlib.model.sub_exercise import SubExercise
 
 _ = gettext.gettext
 

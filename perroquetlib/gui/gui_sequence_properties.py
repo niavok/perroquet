@@ -124,7 +124,7 @@ class GuiSequenceProperties:
         self.core.get_exercise().set_language_id(langId)
 
 
-        self.core.UpdatePaths(videoPath,exercisePath, translationPath)
+        self.core._update_paths(videoPath,exercisePath, translationPath)
 
         self.core.set_can_save(True)
 

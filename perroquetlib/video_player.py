@@ -21,6 +21,7 @@ import gst
 import gtk
 import thread
 import time
+from gettext import gettext as _
 
 class VideoPlayer(object):
     def __init__(self):

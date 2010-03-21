@@ -696,7 +696,7 @@ class FileSelector(gtk.FileChooserDialog):
                 "Adds a widget to the file selection"
 
                 if self.inputsection == None:
-                        self.inputsection = ui.InputSection()
+                        self.inputsection = ui.InputSection() #FIXME ui ???
                         self.set_extra_widget(self.inputsection)
 
                 self.inputsection.append_widget(title, widget)

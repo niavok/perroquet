@@ -310,18 +310,15 @@ class GuiController:
         self.gui.ask_properties_advanced(self.core)
 
     def ask_properties(self):
-        self.gui.ask_properties()
+        self.gui.ask_properties(self.core)
 
     def notify_settings(self):
         self.gui.ask_settings()
         self.refresh()
-    
-    def ask_reset_exercise_content(self):
-        if self.gui.ask_reset_exercise_content:
-            self.core.reset_exercise_content()
 
     def notify_reset_exercise_content(self):
-        self.gui.ask_reset_exercise_content()
+        if self.gui.ask_reset_exercise_content:
+            self.core.reset_exercise_content()
 
     def notify_new_exercise(self):
         self.gui.ask_new_exercise()

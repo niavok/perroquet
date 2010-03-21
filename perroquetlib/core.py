@@ -21,6 +21,7 @@
 import thread
 import time
 import gtk
+from gettext import gettext as _
 
 from video_player import VideoPlayer
 from model.exercise_serializer import ExerciseLoader, ExerciseSaver

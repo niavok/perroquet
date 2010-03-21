@@ -26,6 +26,7 @@ import tempfile
 import tarfile
 import errno
 import shutil
+from gettext import gettext as _
 
 from perroquetlib.config import config
 from perroquetlib.model.exercise_serializer import ExerciseLoader, ExerciseSaver
