@@ -37,6 +37,7 @@ class GuiController:
         self.mode = "closed"
         
         self.gui = Gui(self)
+        self.gui.set_active_video_area(False)
         self.gui_exercise_controller = None
         self.translation_visible = False
         self.current_speed = 1.0
@@ -123,7 +124,7 @@ class GuiController:
         return self.gui.get_video_window_id()
 
     def activate_video_area(self,state):
-        self.gui.activate_video_area(state)
+        self.gui.set_active_video_area(state)
 
 
     def set_word_list(self, word_list):
@@ -222,14 +223,21 @@ class GuiController:
 
     def notify_typing(self, new_text):
 
+        if self.mode != "loaded":
+            self.gui.set_typing_area_text([])
+            return False
+
         for char in new_text:
             if char == " ":
                 self.core.NextWord()
             else:
                 self.core.WriteChar(char)
+        return True
 
     def notify_move_cursor(self,movement):
-        self.gui_exercise_controller.notify_move_cursor(movement)
+        if self.mode != "loaded":
+            return True
+        return self.gui_exercise_controller.notify_move_cursor(movement)
         
 
     def notify_key_press(self,keyname):
@@ -275,7 +283,6 @@ class GuiController:
 
         return True;
 
-
     def notify_quit(self):
         if not config.get("autosave"):
             if not self.core.getCanSave():
@@ -292,3 +299,95 @@ class GuiController:
             config.save()
             self.gui.quit()
             return True #True for quit
+
+    def notify_properties_advanced(self):
+        self.ask_properties_advanced()
+
+    def notify_properties(self):
+        self.ask_properties()
+
+    def ask_properties_advanced(self):
+        self.gui.ask_properties_advanced()
+
+    def ask_properties(self):
+        self.gui.ask_properties()
+
+    def notify_settings(self):
+        self.gui.ask_settings()
+        self.refresh()
+    
+    def ask_reset_exercise_content(self):
+        if self.gui.ask_reset_exercise_content:
+            self.core.resetExerciseContent()
+
+    def notify_reset_exercise_content(self):
+        self.gui.ask_reset_exercise_content()
+
+    def notify_new_exercise(self):
+        self.gui.ask_new_exercise()
+        self.gui.set_visible_new_exercise_dialog(True)
+
+    def notify_new_exercise_create(self, videoPath,exercisePath, translationPath, langId):
+        self.gui.set_visible_new_exercise_dialog(False)
+        self.core.new_exercise(videoPath,exercisePath, translationPath, langId)
+        
+    def notify_new_exercise_cancel(self):
+        self.gui.set_visible_new_exercise_dialog(False)
+
+    def notify_export_as_template(self):
+        self.core.exportAsTemplate()
+
+    def notify_export_as_package(self):
+        self.core.exportAsPackage()
+
+    def notify_import_package(self):
+        self.core.import_package()
+
+    def notify_next_sequence(self):
+        self.core.next_sequence()
+
+    def notify_previous_sequence(self):
+        self.core.PreviousSequence()
+
+    def notify_repeat_sequence(self):
+        self.core.UserRepeat()
+        self.core.repeat_sequence()
+
+    def notify_select_sequence_number(self, value):
+        self.core.select_sequence(value)
+
+    def notify_select_sequence_time(self, value):
+        self.core.SeekSequence(value)
+
+    def notify_select_speed(self, value):
+        self.core.set_speed(value)
+
+    def notify_hint(self):
+        self.core.CompleteWord()
+
+    def notify_play(self):
+        self.core.play()
+
+    def notify_pause(self):
+        self.core.pause()
+
+    def notify_save(self):
+        self.core.save()
+    
+    def notify_save_as(self):
+        self.core.save(True)
+
+    def notify_load(self):
+        path = self.gui.ask_load_exercise()
+        if path:
+            self.core.LoadExercise(path)
+
+    def notify_filter_change(self):
+        self.update_word_list()
+
+    def notify_toogle_translation(self,visible):
+        if visible != self.translation_visible:
+            self.toggle_translation()
+
+    def notify_exercise_manager(self):
+        self.gui.display_exercice_manager(self.core)

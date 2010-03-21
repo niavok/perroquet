@@ -470,7 +470,7 @@ class Core(object):
 
     def exportAsTemplate(self):
         self.gui.ask_properties_advanced()
-        path = self.gui.AskExportAsTemplatePath()
+        path = self.gui.ask_export_as_template_path()
         if path:
             saver = ExerciseSaver()
             self.exercise.setTemplate(True)
@@ -479,7 +479,7 @@ class Core(object):
 
     def exportAsPackage(self):
         self.gui.ask_properties_advanced()
-        path = self.gui.AskExportAsPackagePath()
+        path = self.gui.ask_export_as_package_path()
         if path:
             repoManager = ExerciseRepositoryManager()
             repoManager.exportAsPackage(self.exercise,path)
