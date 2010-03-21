@@ -25,7 +25,7 @@ from distutils.cmd import Command
 from distutils.command.install_data import install_data
 from distutils.command.build import build
 from distutils.dep_util import newer
-from distutils.log import warn, info, error, fatal
+from distutils.log import warn, info, error
 import glob
 import os
 import sys

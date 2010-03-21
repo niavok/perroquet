@@ -19,7 +19,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-import thread, urllib2, tempfile, os, tarfile, errno
+import thread
+import urllib2
+import tempfile
+import os
+import tarfile
+import errno
 from xml.dom.minidom import getDOMImplementation, parse
 from threading import Lock
 

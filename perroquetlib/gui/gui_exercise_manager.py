@@ -18,8 +18,11 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 
-import gtk, time, urllib, re, os, gettext
-import locale, thread, textwrap
+import gtk
+import time
+import gettext
+import thread
+import textwrap
 
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 from perroquetlib.config import config

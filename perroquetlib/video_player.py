@@ -19,7 +19,8 @@
 
 import gst
 import gtk
-import thread, time, traceback, sys
+import thread
+import time
 
 class VideoPlayer(object):
     def __init__(self):

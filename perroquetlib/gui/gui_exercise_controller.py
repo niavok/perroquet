@@ -176,5 +176,5 @@ class GuiExerciseController:
             word_index = self.word_index_map[movement]
             word_index_position = self.word_pos_map[movement]
             if word_index == -1:
-                wordIndex = 0
+                word_index = 0
             self.core.select_sequence_word(word_index,word_index_position)

@@ -19,9 +19,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, shutil
-
+import os
+import shutil
 import unittest
+
 from perroquetlib.config import Config
 
 pathRef = "./test/testConfigReference.ini"
@@ -29,9 +30,9 @@ pathWritable = "./test/testConfigWritable.ini"
 pathTemp = "./test/testConfigTemp.ini"
 pathTemp2 = "./a/b/c/testConfigTemp.ini"
 
-class testConfig(unittest.TestCase):
+class TestConfig(unittest.TestCase):
     def test_load(self):
-        c=Config()
+        c = Config()
         c.load_writable_config_file(pathWritable, pathRef)
         
         self.assertEqual(c.get("christmas"), "merry Christmas\nand happy new year")
@@ -45,20 +46,20 @@ class testConfig(unittest.TestCase):
         
     def test_save(self):
         shutil.copy(pathWritable, pathTemp)
-        c=Config()
+        c = Config()
         c.load_writable_config_file(pathTemp, pathRef)
         c.set("firstint", 666)
         c.set("liststr", ["1", "2", "3"])
-        c.set("listint", [666,666])
+        c.set("listint", [666, 666])
         c.save()
-        c=Config()
+        c = Config()
         c.load_writable_config_file(pathTemp, pathRef)
         self.assertEqual(c.get("firstint"), 666)
         self.assertEqual(c.get("liststr"), ["1", "2", "3"])
         self.assertEqual(c.get("listint"), [666, 666])
         os.remove(pathTemp)
         
-        c=Config()
+        c = Config()
         c.load_writable_config_file(pathTemp2, pathRef)
         c.set("firstint", 666)
         c.save()
@@ -67,15 +68,15 @@ class testConfig(unittest.TestCase):
         shutil.rmtree("./a")
     
     def test_error(self):
-        c=Config()
-        self.failUnlessRaises(KeyError, lambda :c.set("MAJ", 3))
-        self.failUnlessRaises(KeyError, lambda :c.get("MAJ"))
+        c = Config()
+        self.failUnlessRaises(KeyError, lambda:c.set("MAJ", 3))
+        self.failUnlessRaises(KeyError, lambda:c.get("MAJ"))
 
         c.load_writable_config_file(pathWritable, pathRef)
-        self.failUnlessRaises(KeyError, lambda :c.get("easter"))
+        self.failUnlessRaises(KeyError, lambda:c.get("easter"))
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     unittest.main()
         
 

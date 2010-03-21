@@ -278,8 +278,6 @@ class Gui:
 
         cell = gtk.CellRendererText()
 
-        treeviewcolumnName = gtk.TreeViewColumn(_("Name"))
-
         treeViewColumn = gtk.TreeViewColumn(_("Path"))
         treeViewColumn.pack_start(cell, False)
         treeViewColumn.add_attribute(cell, 'markup', 0)

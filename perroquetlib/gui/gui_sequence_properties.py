@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk, time, urllib, re, os, gettext
-import locale
+import gtk
+import gettext
 from perroquetlib.config import config
 from perroquetlib.model.languages_manager import LanguagesManager
 _ = gettext.gettext
@@ -99,8 +99,6 @@ class GuiSequenceProperties:
 
 
     def on_button_exercise_prop_ok_clicked(self,widget,data=None):
-        dialogExerciseProperties = self.builder.get_object("dialogExerciseProperties")
-
         videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
         videoPath = videoChooser.get_filename()
         exerciseChooser = self.builder.get_object("filechooserbuttonExerciseProp")

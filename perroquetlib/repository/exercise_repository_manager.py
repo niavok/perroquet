@@ -19,15 +19,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from xml.dom.minidom import getDOMImplementation, parse
-import urllib2, os, tempfile, tarfile, errno, shutil
+from xml.dom.minidom import parse
+import urllib2
+import os
+import tempfile
+import tarfile
+import errno
+import shutil
 
 from perroquetlib.config import config
 from perroquetlib.model.exercise_serializer import ExerciseLoader, ExerciseSaver
 
 from perroquetlib.repository.exercise_repository import ExerciseRepository
-from perroquetlib.repository.exercise_repository_group import ExerciseRepositoryGroup
-from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
 
 class ExerciseRepositoryManager:
 
@@ -35,7 +38,6 @@ class ExerciseRepositoryManager:
         self.config = config
 
     def get_exercise_repository_list(self):
-        repositoryPathList = self.config.get("repository_source_list")
         repositoryList = []
 
         repositoryList += self._get_local_exercise_repository_list();
