@@ -374,13 +374,13 @@ class Gui:
         if state:
             self.builder.get_object("toolbuttonPlay").show()
         else:
-            self.builder.get_object("toolbuttonPlay").shide()
+            self.builder.get_object("toolbuttonPlay").hide()
 
     def set_visible_pause(self, state):
         if state:
             self.builder.get_object("toolbuttonPause").show()
         else:
-            self.builder.get_object("toolbuttonPause").shide()
+            self.builder.get_object("toolbuttonPause").hide()
 
     def set_visible_lateral_panel(self, state):
         if state:
