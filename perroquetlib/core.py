@@ -56,7 +56,7 @@ class Core(object):
         self.exercise.Initialize()
         self._reload(True);
         self._ActivateSequence()
-        self.gui.setTitle("", True)
+        self.gui.set_title("", True)
 
     #Configure the paths for the current exercice. Reload subtitles list.
     def _set_paths(self, videoPath, exercisePath, translationPath):
@@ -74,7 +74,7 @@ class Core(object):
         self.player.setWindowId(self.gui.get_video_window_id())
         self.player.ActivateVideoCallback(self.gui.activate_video_area)
         self.player.Open(self.exercise.getVideoPath())
-        self.player.setCallback(self._TimeCallback)
+        self.player.setCallback(self._time_callback)
         self.paused = False
         self.gui.activate_video_area(False)
         self.gui.activate("loaded")
@@ -131,12 +131,12 @@ class Core(object):
         self._ActivateSequence()
         if load:
             self.repeat_sequence()
-        self.setCanSave(True)
+        self.set_can_save(True)
 
     #Goto next sequence
     def next_sequence(self, load = True):
         if self.exercise.GotoNextSequence():
-            self.setCanSave(True)
+            self.set_can_save(True)
         self._ActivateSequence()
         if load:
             self.repeat_sequence()
@@ -144,7 +144,7 @@ class Core(object):
     #Goto previous sequence
     def PreviousSequence(self, load = True):
         if self.exercise.GotoPreviousSequence():
-            self.setCanSave(True)
+            self.set_can_save(True)
         self._ActivateSequence()
         if load:
             self.repeat_sequence()
@@ -227,7 +227,7 @@ class Core(object):
         if self.exercise.isCharacterMatch(char):
             self.exercise.getCurrentSequence().writeChar(char)
             self._update()
-            self.setCanSave(True)
+            self.set_can_save(True)
         else:
             pass
 
@@ -263,13 +263,13 @@ class Core(object):
     def DeletePreviousChar(self):
         self.exercise.getCurrentSequence().deletePreviousChar()
         self._update()
-        self.setCanSave(True)
+        self.set_can_save(True)
 
     #Delete a char after the cursor in current sequence
     def DeleteNextChar(self):
         self.exercise.getCurrentSequence().deleteNextChar()
         self._update()
-        self.setCanSave(True)
+        self.set_can_save(True)
 
     #Goto previous char in current sequence
     def PreviousChar(self):
@@ -288,14 +288,14 @@ class Core(object):
         self.exercise.getCurrentSequence().showHint()
         self.exercise.getCurrentSequence().nextChar()
         self._update()
-        self.setCanSave(True)
+        self.set_can_save(True)
 
     #reset whole exercise
     def resetExerciseContent(self):
         self.exercise.reset()
         self.exercise.GotoSequence(0) #FIXME
         self._update()
-        self.setCanSave(True)
+        self.set_can_save(True)
         print "need to stop the current sequence" #FIXME
 
     #pause or play media
@@ -354,7 +354,7 @@ class Core(object):
         path = self.exercise.getOutputSavePath()
         self.config.set("lastopenfiles", [path]+[p for p in l if p!=path])
 
-        self.setCanSave(False)
+        self.set_can_save(False)
 
     #Load the exercice at path
     def LoadExercise(self, path):
@@ -377,16 +377,16 @@ class Core(object):
             for error in errorList:
                 self.gui.signal_exercise_bad_path(error)
 
-            self.setCanSave(False)
+            self.set_can_save(False)
             self.gui.activate("load_failed")
             self.gui.ask_properties()
             return
 
         self._reload(False)
         if self.exercise.getOutputSavePath() == None:
-            self.setCanSave(True)
+            self.set_can_save(True)
         else:
-            self.setCanSave(False)
+            self.set_can_save(False)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.play()
@@ -402,12 +402,12 @@ class Core(object):
             for error in errorList:
                 self.gui.signal_exercise_bad_path(error)
             self.gui.activate("load_failed")
-            self.setCanSave(False)
+            self.set_can_save(False)
             return
 
         self._set_paths( videoPath, exercisePath, translationPath)
         self._reload(True)
-        self.setCanSave(True)
+        self.set_can_save(True)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.play()
@@ -415,7 +415,7 @@ class Core(object):
     def UpdateProperties(self):
         self.exercise.Initialize()
         self._reload(True)
-        self.setCanSave(True)
+        self.set_can_save(True)
         self._ActivateSequence()
         self.GotoSequenceBegin(True)
         self.play()
@@ -431,11 +431,11 @@ class Core(object):
     #Notify the user use the repeat command (for stats)
     def UserRepeat(self):
         self.exercise.IncrementRepeatCount()
-        self.setCanSave(True)
+        self.set_can_save(True)
 
     #Signal to the gui that the exercise has unsaved changes
-    def setCanSave(self, save):
-        self.gui.setCanSave(save)
+    def set_can_save(self, save):
+        self.gui.set_can_save(save)
 
         if self.exercise == None:
             title = ""
@@ -447,7 +447,7 @@ class Core(object):
             title = _("Untitled exercise")
 
         self.last_save = save
-        self.gui.setTitle(title, save)
+        self.gui.set_title(title, save)
 
     def getCanSave(self):
         return self.last_save

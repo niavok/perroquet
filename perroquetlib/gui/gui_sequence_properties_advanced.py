@@ -250,7 +250,7 @@ class GuiSequencePropertiesAdvanced:
             self.core.getExercise().subExercisesList[i].setTranslationPath(subPath[3])
 
         self.core.UpdateProperties()
-        self.core.setCanSave(True)
+        self.core.set_can_save(True)
 
         self.dialog.response(gtk.RESPONSE_OK)
 

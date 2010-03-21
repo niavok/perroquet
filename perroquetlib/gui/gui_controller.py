@@ -136,4 +136,18 @@ class GuiController:
     def set_playing(self, state):
         self.gui.set_enable_play(not state)
         self.gui.set_enable_pause(state)
-       
+
+    def set_can_save(self, state):
+        self.gui.set_enable_save(state)
+
+    def set_title(self, title, save):
+
+        newTitle = _("Perroquet")
+
+        if save:
+            newTitle += " *"
+
+        if title != "":
+            newTitle += " - " + title
+
+        self.gui.set_title(newTitle)

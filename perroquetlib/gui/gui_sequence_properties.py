@@ -128,7 +128,7 @@ class GuiSequenceProperties:
 
         self.core.UpdatePaths(videoPath,exercisePath, translationPath)
 
-        self.core.setCanSave(True)
+        self.core.set_can_save(True)
 
         self.dialog.response(gtk.RESPONSE_OK)
 

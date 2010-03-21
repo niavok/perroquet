@@ -139,9 +139,7 @@ class Gui:
 
     
 
-    def setCanSave(self, state):
-        self.builder.get_object("saveButton").set_sensitive(state)
-        self.builder.get_object("imagemenuitemSave").set_sensitive(state)
+    
 
 
     def set_word_list(self, word_list):
@@ -175,17 +173,8 @@ class Gui:
         text = text + _("- Repeat ratio: %s per words") % str(round(repeatRate,1))
         labelProgress.set_label(text)
 
-    def setTitle(self, title, save):
-
-        newTitle = _("Perroquet")
-
-        if save:
-            newTitle += " *"
-
-        if title != "":
-            newTitle += " - " + title
-
-        self.window.set_title(newTitle)
+    def set_title(self, title):
+        self.window.set_title(title)
 
     def setSequence(self, sequence):
         self.disableChangedTextEvent = True
