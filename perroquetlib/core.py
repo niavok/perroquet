@@ -24,7 +24,7 @@ import gtk
 from gettext import gettext as _
 
 from video_player import VideoPlayer
-from model.exercise_serializer import ExerciseLoader, ExerciseSaver
+from model.exercise_parser import load_exercise, save_exercise
 from model.exercise import Exercise
 from model.sequence import NoCharPossible
 from config import config
@@ -345,8 +345,7 @@ class Core(object):
                 return
             self.exercise.set_output_save_path(outputSavePath+".perroquet")
 
-        saver = ExerciseSaver()
-        saver.save(self.exercise, self.exercise.get_output_save_path())
+        save_exercise(self.exercise, self.exercise.get_output_save_path())
 
         self.config.set("lastopenfile", self.exercise.get_output_save_path())
 
@@ -360,11 +359,10 @@ class Core(object):
     #load the exercice at path
     def load_exercise(self, path):
         self.gui_controller.activate("closed")
-        loader = ExerciseLoader()
         if self.exercise:
             self.save()
         try:
-            self.exercise = loader.load(path)
+            self.exercise = load_exercise(path)
             self.exercise.set_media_change_callback(self.media_change_call_back)
         except IOError:
             print "No file at "+path
@@ -473,9 +471,8 @@ class Core(object):
         self.gui_controller.ask_properties_advanced()
         path = self.gui_controller.ask_export_as_template_path()
         if path:
-            saver = ExerciseSaver()
             self.exercise.set_template(True)
-            saver.save(self.exercise, path)
+            save_exercise(self.exercise, path)
             self.exercise.set_template(False)
 
     def export_as_package(self):

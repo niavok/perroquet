@@ -29,7 +29,7 @@ import shutil
 from gettext import gettext as _
 
 from perroquetlib.config import config
-from perroquetlib.model.exercise_serializer import ExerciseLoader, ExerciseSaver
+from perroquetlib.model.exercise_parser import load_exercise, save_exercise
 
 from perroquetlib.repository.exercise_repository import ExerciseRepository
 
@@ -239,9 +239,8 @@ class ExerciseRepositoryManager:
         templatePath = os.path.join(tempPath, "template.perroquet")
 
         exercisePackage.set_output_save_path(templatePath)
-        saver = ExerciseSaver()
         exercisePackage.set_template(True)
-        saver.save(exercisePackage, exercisePackage.get_output_save_path())
+        save_exercise(exercisePackage, exercisePackage.get_output_save_path())
 
         # Create the tar
         tar = tarfile.open(outPath, 'w')
@@ -273,8 +272,7 @@ class ExerciseRepositoryManager:
 
 
         #Find install path
-        loader =  ExerciseLoader()
-        exercise = loader.load(template_path)
+        exercise = load_exercise(template_path)
         if exercise.get_name() != '':
             name = exercise.get_name()
         else:

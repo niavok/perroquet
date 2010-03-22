@@ -25,7 +25,7 @@ from lib import get_text
 from parser_v1_1_0 import load as load_v1_1_0, save as save_v1_1_0
 from parser_v1_0_0 import load as load_v1_0_0, save as save_v1_0_0
 
-def load(path):
+def load_exercise(path):
     "load a perroquet exercise"
     exercise = Exercise()
 
@@ -49,5 +49,5 @@ def load(path):
 
     return exercise
 
-def save(*args):
-    save_v1_1_0(*args)
+def save_exercise(exercise, outputPath):
+    save_v1_1_0(exercise, outputPath)
