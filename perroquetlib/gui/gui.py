@@ -479,7 +479,7 @@ class Gui:
         iter = comboboxLanguage.get_active_iter()
         langId = self.liststoreLanguage.get_value(iter,1)
 
-        self.controller.notify_new_exercise_cancel(videoPath,exercisePath, translationPath, langId)
+        self.controller.notify_new_exercise_create(videoPath,exercisePath, translationPath, langId)
         
 
     def on_button_new_exercise_cancel_clicked(self,widget,data=None):

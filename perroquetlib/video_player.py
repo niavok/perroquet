@@ -23,7 +23,7 @@ import thread
 import time
 from gettext import gettext as _
 
-class VideoPlayer(object):
+class VideoPlayer:
     def __init__(self):
 
         self.player =  gst.Pipeline()
@@ -84,7 +84,7 @@ class VideoPlayer(object):
             imagesink = message.src
             imagesink.set_property("force-aspect-ratio", True)
             imagesink.set_xwindow_id(self.windowId)
-            self.activate_video_area(True)
+            #self.activate_video_area(True)
             gtk.gdk.threads_leave()
 
     def open(self,path):

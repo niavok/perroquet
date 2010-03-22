@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
 
 def ls_rec(directory, hidden=False):
     files = []
