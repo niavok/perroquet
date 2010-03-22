@@ -25,75 +25,16 @@ from sub_exercise import SubExercise
 from perroquetlib.config import config
 from languages_manager import LanguagesManager
 
-from exercise_parser import save, load as load_real
+from exercise_parser import save, load
 
 class ExerciseSaver(object):
-    save = save
-
-    
-
-
-
-
-
-
-
-
-
+    def save(self, exercise, path): 
+        save(exercise, path)
 
 class ExerciseLoader(object):
 
     def load(self, path):
-        self.exercise = Exercise()
-
-        dom = parse(path)
-        if len(dom.getElementsByTagName("version")) > 0:
-            version = self.get_text(dom.getElementsByTagName("version")[0].childNodes)
-
-            if version >= "1.1.0":
-                self._load_v1_1_0(dom, path)
-            elif version >= "1.0.0":
-                self._load_v1_0_0(dom, path)
-            else:
-                print "Unknown file version: "+version
-                self.exercise = None
-        else:
-            print "Invalid perroquet file"
-            self.exercise = None
-
-        dom.unlink()
-
-        return self.exercise
-
-    def get_text(self, nodelist):
-        rc = ""
-        for node in nodelist:
-            if node.nodeType == node.TEXT_NODE:
-                rc = rc + node.data
-        rc = rc.strip()
-        return rc
-
-
-    def update_sequence_list(self ):
-        for subExo,self.progress in zip(self.exercise.subExercisesList,self.subExo):
-            sequenceList = subExo.get_sequence_list()
-
-            for (id, state, words) in self.progress:
-                if id >= len(sequenceList):
-                    break
-                sequence = sequenceList[id]
-                if state == "done":
-                    sequence.complete_all()
-                elif state == "in_progress":
-                    i = 0
-                    for word in words:
-                        if id >= sequence.get_word_count():
-                            break
-                        sequence.get_words()[i].set_text(word)
-                        i = i+1
-                      
-    def _load_v1_1_0(self, dom, path):
-        return load_real(self, self.exercise, dom, path)
+        return load(path)
     
     def _load_v1_0_0(self,dom, path):
 

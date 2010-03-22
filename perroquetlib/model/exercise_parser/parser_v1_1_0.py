@@ -6,7 +6,7 @@ from perroquetlib.model.sub_exercise import SubExercise
 
 from lib import get_text, update_sequence_list
 
-def save(self,exercise, outputPath):
+def save(exercise, outputPath):
 
         impl = getDOMImplementation()
 
@@ -172,14 +172,14 @@ def save(self,exercise, outputPath):
 
 
 
-def load(self, exercise, dom, path):
+def load(exercise, dom, path):
     #Name
     if len(dom.getElementsByTagName("name")) > 0:
-        exercise.set_name(get_text(self, dom.getElementsByTagName("name")[0].childNodes))
+        exercise.set_name(get_text(dom.getElementsByTagName("name")[0].childNodes))
 
     #Language
     if len(dom.getElementsByTagName("language")) > 0:
-        exercise.set_language_id(get_text(self, dom.getElementsByTagName("language")[0].childNodes))
+        exercise.set_language_id(get_text(dom.getElementsByTagName("language")[0].childNodes))
     else:
         languageManager = LanguagesManager()
         (langId, langName, langChars) = languageManager.get_default_language()
@@ -187,38 +187,38 @@ def load(self, exercise, dom, path):
 
     #Template
     if len(dom.getElementsByTagName("template")) > 0:
-        exercise.set_template(get_text(self, dom.getElementsByTagName("template")[0].childNodes) == "True")
+        exercise.set_template(get_text(dom.getElementsByTagName("template")[0].childNodes) == "True")
 
     #Random order
     if len(dom.getElementsByTagName("random_order")) > 0:
-        exercise.set_random_order(get_text(self, dom.getElementsByTagName("random_order")[0].childNodes) == "True")
+        exercise.set_random_order(get_text(dom.getElementsByTagName("random_order")[0].childNodes) == "True")
 
 
     #Exercise
     xml_exercise = dom.getElementsByTagName("exercise")[0]
 
     #Exercise - CurrentWord
-    currentWord = int(get_text(self, xml_exercise.getElementsByTagName("current_word")[0].childNodes))
+    currentWord = int(get_text( xml_exercise.getElementsByTagName("current_word")[0].childNodes))
     #Exercise - CurrentSequence
-    currentSequence = int(get_text(self, xml_exercise.getElementsByTagName("current_sequence")[0].childNodes))
+    currentSequence = int(get_text( xml_exercise.getElementsByTagName("current_sequence")[0].childNodes))
 
     # Stats
     xml_stats = dom.getElementsByTagName("stats")[0]
-    exercise.set_repeat_count(int(get_text(self, xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
+    exercise.set_repeat_count(int(get_text( xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
 
     # Properties
     if len(dom.getElementsByTagName("properties")) > 0:
         xml_properties = dom.getElementsByTagName("properties")[0]
         if len(xml_properties.getElementsByTagName("repeat_after_complete")) > 0:
-            exercise.set_repeat_after_completed(get_text(self, xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes) == "True")
+            exercise.set_repeat_after_completed(get_text( xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes) == "True")
         if len(xml_properties.getElementsByTagName("time_between_sequence")) > 0:
-            exercise.set_time_between_sequence(float(get_text(self, xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
+            exercise.set_time_between_sequence(float(get_text( xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
-            exercise.set_max_sequence_length(float(get_text(self, xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
+            exercise.set_max_sequence_length(float(get_text( xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("play_margin_before")) > 0:
-            exercise.set_play_margin_before(int(get_text(self, xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
+            exercise.set_play_margin_before(int(get_text( xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("play_margin_after")) > 0:
-            exercise.set_play_margin_after(int(get_text(self, xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
+            exercise.set_play_margin_after(int(get_text( xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
 
 
     #Subexercises
@@ -232,22 +232,22 @@ def load(self, exercise, dom, path):
         progress = []
 
         for xml_sequence in xml_sequences.getElementsByTagName("sequence"):
-            id = int(get_text(self, xml_sequence.getElementsByTagName("id")[0].childNodes))
-            state = get_text(self, xml_sequence.getElementsByTagName("state")[0].childNodes)
+            id = int(get_text( xml_sequence.getElementsByTagName("id")[0].childNodes))
+            state = get_text( xml_sequence.getElementsByTagName("state")[0].childNodes)
             words = []
 
             if state == "in_progress":
                 xml_words = xml_sequence.getElementsByTagName("words")[0]
                 for xml_world in xml_words.getElementsByTagName("word"):
-                    words.append(get_text(self, xml_world.childNodes))
+                    words.append(get_text( xml_world.childNodes))
 
             progress.append((id, state, words))
 
         #Paths
         xml_paths = xml_subExercise.getElementsByTagName("paths")[0]
-        subExercise.set_video_path(get_text(self, xml_paths.getElementsByTagName("video")[0].childNodes))
-        subExercise.set_exercise_path(get_text(self, xml_paths.getElementsByTagName("exercise")[0].childNodes))
-        subExercise.set_translation_path(get_text(self, xml_paths.getElementsByTagName("translation")[0].childNodes))
+        subExercise.set_video_path(get_text( xml_paths.getElementsByTagName("video")[0].childNodes))
+        subExercise.set_exercise_path(get_text( xml_paths.getElementsByTagName("exercise")[0].childNodes))
+        subExercise.set_translation_path(get_text( xml_paths.getElementsByTagName("translation")[0].childNodes))
 
         exercise.subExercisesList.append(subExercise)
 
@@ -281,7 +281,7 @@ def load(self, exercise, dom, path):
 
     exercise.initialize()
 
-    update_sequence_list(self.exercise, subExos)
+    update_sequence_list(exercise, subExos)
 
     exercise.goto_sequence(currentSequence)
 

@@ -1,5 +1,6 @@
 
-def get_text(self, nodelist):
+def get_text(nodelist):
+    ""
     rc = ""
     for node in nodelist:
         if node.nodeType == node.TEXT_NODE:
@@ -9,6 +10,7 @@ def get_text(self, nodelist):
 
 
 def update_sequence_list(exercise, subExos ):
+    "set the sequences empty, partially done or done"
     for subExo, progress in zip(exercise.subExercisesList, subExos):
         sequenceList = subExo.get_sequence_list()
 
