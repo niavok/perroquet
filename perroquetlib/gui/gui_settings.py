@@ -35,7 +35,7 @@ class Guisettings:
         self.builder.set_translation_domain("perroquet")
         self.builder.add_from_file(self.config.get("ui_settings_path"))
         self.builder.connect_signals(self)
-        self.dialog = self.builder.get_object("dialogsettings")
+        self.dialog = self.builder.get_object("dialogSettings")
         self.dialog.set_modal(True)
         self.dialog.set_transient_for(self.parent)
 

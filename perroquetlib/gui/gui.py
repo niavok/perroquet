@@ -214,13 +214,6 @@ class Gui:
     def ask_save_path(self):
         saver = SaveFileSelector(self.window)
         path =saver.run()
-        if path == None:
-            return
-
-        if path == "None" or path == None :
-            path = ""
-        elif not path.endswith(".perroquet"):
-            path = path +".perroquet"
         return path
 
     def ask_export_as_template_path(self):
@@ -621,7 +614,7 @@ class Gui:
         self.controller.notify_properties_advanced()
 
     def on_imagemenuitem_settings_activate(self,widget,data=None):
-        self.notify_settings()
+        self.controller.notify_settings()
 
     def on_imagemenuitem_quit_activate(self,widget,data=None):
         return self.controller.notify_quit()

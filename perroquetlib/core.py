@@ -341,9 +341,9 @@ class Core(object):
 
         if saveAs or self.exercise.get_output_save_path() == None:
             outputSavePath = self.gui_controller.ask_save_path()
-            if outputSavePath == None:
+            if not outputSavePath:
                 return
-            self.exercise.set_output_save_path(outputSavePath)
+            self.exercise.set_output_save_path(outputSavePath+".perroquet")
 
         saver = ExerciseSaver()
         saver.save(self.exercise, self.exercise.get_output_save_path())

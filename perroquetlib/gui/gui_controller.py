@@ -242,12 +242,15 @@ class GuiController:
 
     def notify_key_press(self,keyname):
         if keyname == "Return" or keyname == "KP_Enter":
-            self.core.user_repeat()
-            self.core.repeat_sequence()
+            if not self.core.exercise.get_current_sequence().is_valid():
+                self.core.user_repeat()
+                self.core.repeat_sequence()
         elif keyname == "BackSpace":
-            self.core.delete_previous_char()
+            if not self.core.exercise.get_current_sequence().is_valid():
+                self.core.delete_previous_char()
         elif keyname == "Delete":
-            self.core.delete_next_char()
+            if not self.core.exercise.get_current_sequence().is_valid():
+                self.core.delete_next_char()
         elif keyname == "Page_Down":
             self.core.previous_sequence()
         elif keyname == "Page_Up":
@@ -257,11 +260,14 @@ class GuiController:
         elif keyname == "Up":
            self.core.next_sequence()
         elif keyname == "Tab":
-            self.core.next_word()
+            if not self.core.exercise.get_current_sequence().is_valid():
+                self.core.next_word()
         elif keyname == "ISO_Left_Tab":
-            self.core.previous_word()
+            if not self.core.exercise.get_current_sequence().is_valid():
+                self.core.previous_word()
         elif keyname == "F1":
-            self.core.complete_word()
+            if not self.core.exercise.get_current_sequence().is_valid():
+                self.core.complete_word()
         elif keyname == "F2":
             self.toggle_translation()
         elif keyname == "F9":
@@ -288,7 +294,7 @@ class GuiController:
             if not self.core.get_can_save():
                 self.gui.quit()
                 return False #True for quit
-            if self.gui.ask_confirm_quit_without_save():
+            elif self.gui.ask_confirm_quit_without_save():
                 config.save()
                 self.gui.quit()
                 return False #True for quit
@@ -317,7 +323,7 @@ class GuiController:
         self.refresh()
 
     def notify_reset_exercise_content(self):
-        if self.gui.ask_reset_exercise_content:
+        if self.gui.ask_reset_exercise_content():
             self.core.reset_exercise_content()
 
     def notify_new_exercise(self):
@@ -373,6 +379,9 @@ class GuiController:
     
     def notify_save_as(self):
         self.core.save(True)
+    
+    def ask_save_path(self):
+        return self.gui.ask_save_path()
 
     def notify_load(self):
         path = self.gui.ask_load_exercise()
