@@ -1,171 +1,153 @@
 
-from xml.dom.minidom import getDOMImplementation, parse
+from xml.dom.minidom import getDOMImplementation
 import os
 
 from perroquetlib.model.sub_exercise import SubExercise
+from perroquetlib.model.languages_manager import LanguagesManager
 
 from lib import get_text, update_sequence_list
 
 def save(exercise, outputPath):
 
-        impl = getDOMImplementation()
+    impl = getDOMImplementation()
 
-        newdoc = impl.createDocument(None, "perroquet", None)
-        root_element = newdoc.documentElement
+    newdoc = impl.createDocument(None, "perroquet", None)
+    root_element = newdoc.documentElement
 
-        # Version
-        xml_version = newdoc.createElement("version")
-        xml_version.appendChild(newdoc.createTextNode("1.1.0"))
-        root_element.appendChild(xml_version)
+    # Version
+    xml_version = newdoc.createElement("version")
+    xml_version.appendChild(newdoc.createTextNode("1.1.0"))
+    root_element.appendChild(xml_version)
 
-        #Name
-        if exercise.get_name() != None:
-            xml_node = newdoc.createElement("name")
-            xml_node.appendChild(newdoc.createTextNode(exercise.get_name()))
-            root_element.appendChild(xml_node)
-
-        #Language
-        if exercise.get_language_id() != None:
-            xml_node = newdoc.createElement("language")
-            xml_node.appendChild(newdoc.createTextNode(exercise.get_language_id()))
-            root_element.appendChild(xml_node)
-
-        #Template
-        xml_node = newdoc.createElement("template")
-        xml_node.appendChild(newdoc.createTextNode(str(exercise.is_template())))
+    #Name
+    if exercise.get_name() != None:
+        xml_node = newdoc.createElement("name")
+        xml_node.appendChild(newdoc.createTextNode(exercise.get_name()))
         root_element.appendChild(xml_node)
 
-        #RandomOrder
-        xml_node = newdoc.createElement("random_order")
-        xml_node.appendChild(newdoc.createTextNode(str(exercise.is_random_order())))
+    #Language
+    if exercise.get_language_id() != None:
+        xml_node = newdoc.createElement("language")
+        xml_node.appendChild(newdoc.createTextNode(exercise.get_language_id()))
         root_element.appendChild(xml_node)
 
-        #Exercise
-        xml_exercise = newdoc.createElement("exercise")
+    #Template
+    xml_node = newdoc.createElement("template")
+    xml_node.appendChild(newdoc.createTextNode(str(exercise.is_template())))
+    root_element.appendChild(xml_node)
 
-        xml_current_sequence = newdoc.createElement("current_sequence")
-        xml_current_sequence.appendChild(newdoc.createTextNode(str(exercise.get_current_sequence_id())))
-        xml_exercise.appendChild(xml_current_sequence)
+    #RandomOrder
+    xml_node = newdoc.createElement("random_order")
+    xml_node.appendChild(newdoc.createTextNode(str(exercise.is_random_order())))
+    root_element.appendChild(xml_node)
 
-        xml_current_word = newdoc.createElement("current_word")
-        xml_current_word.appendChild(newdoc.createTextNode(str(exercise.get_current_sequence().get_active_word_index())))
-        xml_exercise.appendChild(xml_current_word)
+    #Exercise
+    xml_exercise = newdoc.createElement("exercise")
 
-        root_element.appendChild(xml_exercise)
+    xml_current_sequence = newdoc.createElement("current_sequence")
+    xml_current_sequence.appendChild(newdoc.createTextNode(str(exercise.get_current_sequence_id())))
+    xml_exercise.appendChild(xml_current_sequence)
 
-        #Exercise - SubExercises
-        for subExo in exercise.subExercisesList:
-            xml_subExo = newdoc.createElement("sub_exercise")
-            xml_exercise.appendChild(xml_subExo)
+    xml_current_word = newdoc.createElement("current_word")
+    xml_current_word.appendChild(newdoc.createTextNode(str(exercise.get_current_sequence().get_active_word_index())))
+    xml_exercise.appendChild(xml_current_word)
 
-            #Paths
-            xml_paths = newdoc.createElement("paths")
-            xml_subExo.appendChild(xml_paths)
+    root_element.appendChild(xml_exercise)
 
-            xml_video_paths = newdoc.createElement("video")
-            xml_video_paths.appendChild(newdoc.createTextNode(subExo.get_video_export_path()))
-            xml_paths.appendChild(xml_video_paths)
+    #Exercise - SubExercises
+    for subExo in exercise.subExercisesList:
+        xml_subExo = newdoc.createElement("sub_exercise")
+        xml_exercise.appendChild(xml_subExo)
 
-            xml_exercice_paths = newdoc.createElement("exercise")
-            xml_exercice_paths.appendChild(newdoc.createTextNode(subExo.get_exercise_export_path()))
-            xml_paths.appendChild(xml_exercice_paths)
+        #Paths
+        xml_paths = newdoc.createElement("paths")
+        xml_subExo.appendChild(xml_paths)
 
-            xml_translation_paths = newdoc.createElement("translation")
-            xml_translation_paths.appendChild(newdoc.createTextNode(subExo.get_translation_export_path()))
-            xml_paths.appendChild(xml_translation_paths)
+        xml_video_paths = newdoc.createElement("video")
+        xml_video_paths.appendChild(newdoc.createTextNode(subExo.get_video_export_path()))
+        xml_paths.appendChild(xml_video_paths)
 
-            xml_sequences = newdoc.createElement("sequences")
-            xml_subExo.appendChild(xml_sequences)
-            for id, sequence in enumerate(subExo.get_sequence_list()):
-                if sequence.is_valid():
-                    xml_sequence = newdoc.createElement("sequence")
-                    xml_sequence_id = newdoc.createElement("id")
-                    xml_sequence_id.appendChild(newdoc.createTextNode(str(id)))
-                    xml_sequence.appendChild(xml_sequence_id)
-                    xml_sequence_state = newdoc.createElement("state")
-                    xml_sequence_state.appendChild(newdoc.createTextNode("done"))
-                    xml_sequence.appendChild(xml_sequence_state)
+        xml_exercice_paths = newdoc.createElement("exercise")
+        xml_exercice_paths.appendChild(newdoc.createTextNode(subExo.get_exercise_export_path()))
+        xml_paths.appendChild(xml_exercice_paths)
 
-                    xml_sequences.appendChild(xml_sequence)
-                elif not sequence.is_empty():
-                    xml_sequence = newdoc.createElement("sequence")
-                    xml_sequence_id = newdoc.createElement("id")
-                    xml_sequence_id.appendChild(newdoc.createTextNode(str(id)))
-                    xml_sequence.appendChild(xml_sequence_id)
-                    xml_sequence_state = newdoc.createElement("state")
-                    xml_sequence_state.appendChild(newdoc.createTextNode("in_progress"))
-                    xml_sequence.appendChild(xml_sequence_state)
+        xml_translation_paths = newdoc.createElement("translation")
+        xml_translation_paths.appendChild(newdoc.createTextNode(subExo.get_translation_export_path()))
+        xml_paths.appendChild(xml_translation_paths)
 
-                    xml_sequence_words = newdoc.createElement("words")
+        xml_sequences = newdoc.createElement("sequences")
+        xml_subExo.appendChild(xml_sequences)
+        for id, sequence in enumerate(subExo.get_sequence_list()):
+            if sequence.is_valid():
+                xml_sequence = newdoc.createElement("sequence")
+                xml_sequence_id = newdoc.createElement("id")
+                xml_sequence_id.appendChild(newdoc.createTextNode(str(id)))
+                xml_sequence.appendChild(xml_sequence_id)
+                xml_sequence_state = newdoc.createElement("state")
+                xml_sequence_state.appendChild(newdoc.createTextNode("done"))
+                xml_sequence.appendChild(xml_sequence_state)
 
-                    for word in (w.get_text() for w in sequence.get_words()):
-                        xml_sequence_word = newdoc.createElement("word")
-                        xml_sequence_word.appendChild(newdoc.createTextNode(word))
-                        xml_sequence_words.appendChild(xml_sequence_word)
+                xml_sequences.appendChild(xml_sequence)
+            elif not sequence.is_empty():
+                xml_sequence = newdoc.createElement("sequence")
+                xml_sequence_id = newdoc.createElement("id")
+                xml_sequence_id.appendChild(newdoc.createTextNode(str(id)))
+                xml_sequence.appendChild(xml_sequence_id)
+                xml_sequence_state = newdoc.createElement("state")
+                xml_sequence_state.appendChild(newdoc.createTextNode("in_progress"))
+                xml_sequence.appendChild(xml_sequence_state)
 
-                    xml_sequence.appendChild(xml_sequence_words)
+                xml_sequence_words = newdoc.createElement("words")
 
-                    xml_sequences.appendChild(xml_sequence)
+                for word in (w.get_text() for w in sequence.get_words()):
+                    xml_sequence_word = newdoc.createElement("word")
+                    xml_sequence_word.appendChild(newdoc.createTextNode(word))
+                    xml_sequence_words.appendChild(xml_sequence_word)
 
+                xml_sequence.appendChild(xml_sequence_words)
 
-        #Stats
-        xml_stats = newdoc.createElement("stats")
+                xml_sequences.appendChild(xml_sequence)
 
-        xml_repeatCount = newdoc.createElement("repeat_count")
-        xml_repeatCount.appendChild(newdoc.createTextNode(str(exercise.get_repeat_count())))
-        xml_stats.appendChild(xml_repeatCount)
+    #Stats
+    xml_stats = newdoc.createElement("stats")
 
-        root_element.appendChild(xml_stats)
+    xml_repeatCount = newdoc.createElement("repeat_count")
+    xml_repeatCount.appendChild(newdoc.createTextNode(str(exercise.get_repeat_count())))
+    xml_stats.appendChild(xml_repeatCount)
 
-        #Properties
-        xml_properties = newdoc.createElement("properties")
+    root_element.appendChild(xml_stats)
 
-        xml_repeatAfterComplete = newdoc.createElement("repeat_after_complete")
-        xml_repeatAfterComplete.appendChild(newdoc.createTextNode(str(exercise.get_repeat_after_completed())))
-        xml_properties.appendChild(xml_repeatAfterComplete)
+    #Properties
+    xml_properties = newdoc.createElement("properties")
 
-        xml_maxSequenceLength = newdoc.createElement("max_sequence_length")
-        xml_maxSequenceLength.appendChild(newdoc.createTextNode(str(exercise.get_max_sequence_length())))
-        xml_properties.appendChild(xml_maxSequenceLength)
+    xml_repeatAfterComplete = newdoc.createElement("repeat_after_complete")
+    xml_repeatAfterComplete.appendChild(newdoc.createTextNode(str(exercise.get_repeat_after_completed())))
+    xml_properties.appendChild(xml_repeatAfterComplete)
 
-        xml_timeBetweenSequences = newdoc.createElement("time_between_sequence")
-        xml_timeBetweenSequences.appendChild(newdoc.createTextNode(str(exercise.get_time_between_sequence())))
-        xml_properties.appendChild(xml_timeBetweenSequences)
+    xml_maxSequenceLength = newdoc.createElement("max_sequence_length")
+    xml_maxSequenceLength.appendChild(newdoc.createTextNode(str(exercise.get_max_sequence_length())))
+    xml_properties.appendChild(xml_maxSequenceLength)
 
-        xml_playMarginBefore = newdoc.createElement("play_margin_before")
-        xml_playMarginBefore.appendChild(newdoc.createTextNode(str(exercise.get_play_margin_before())))
-        xml_properties.appendChild(xml_playMarginBefore)
+    xml_timeBetweenSequences = newdoc.createElement("time_between_sequence")
+    xml_timeBetweenSequences.appendChild(newdoc.createTextNode(str(exercise.get_time_between_sequence())))
+    xml_properties.appendChild(xml_timeBetweenSequences)
 
-        xml_playMarginAfter = newdoc.createElement("play_margin_after")
-        xml_playMarginAfter.appendChild(newdoc.createTextNode(str(exercise.get_play_margin_after())))
-        xml_properties.appendChild(xml_playMarginAfter)
+    xml_playMarginBefore = newdoc.createElement("play_margin_before")
+    xml_playMarginBefore.appendChild(newdoc.createTextNode(str(exercise.get_play_margin_before())))
+    xml_properties.appendChild(xml_playMarginBefore)
 
+    xml_playMarginAfter = newdoc.createElement("play_margin_after")
+    xml_playMarginAfter.appendChild(newdoc.createTextNode(str(exercise.get_play_margin_after())))
+    xml_properties.appendChild(xml_playMarginAfter)
 
-        root_element.appendChild(xml_properties)
+    root_element.appendChild(xml_properties)
 
-        xml_string = newdoc.toprettyxml()
-        xml_string = xml_string.encode('utf8')
+    xml_string = newdoc.toprettyxml()
+    xml_string = xml_string.encode('utf8')
 
-        f = open(outputPath, 'w')
-        f.write(xml_string)
-        f.close()
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    f = open(outputPath, 'w')
+    f.write(xml_string)
+    f.close()
 
 
 
@@ -193,7 +175,6 @@ def load(exercise, dom, path):
     if len(dom.getElementsByTagName("random_order")) > 0:
         exercise.set_random_order(get_text(dom.getElementsByTagName("random_order")[0].childNodes) == "True")
 
-
     #Exercise
     xml_exercise = dom.getElementsByTagName("exercise")[0]
 
@@ -219,7 +200,6 @@ def load(exercise, dom, path):
             exercise.set_play_margin_before(int(get_text( xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("play_margin_after")) > 0:
             exercise.set_play_margin_after(int(get_text( xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
-
 
     #Subexercises
     subExos = []
@@ -253,8 +233,6 @@ def load(exercise, dom, path):
 
         subExos.append(progress)
 
-
-
     #Convert relative path
     for subExo in exercise.subExercisesList:
         if not os.path.isfile(subExo.get_exercise_path()):
@@ -277,7 +255,6 @@ def load(exercise, dom, path):
                 subExo.set_translation_path("")
             else:
                 subExo.set_translation_path(absPath)
-
 
     exercise.initialize()
 

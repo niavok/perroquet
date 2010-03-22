@@ -1,11 +1,11 @@
 
-from xml.dom.minidom import getDOMImplementation, parse
+from xml.dom.minidom import parse
 
 from perroquetlib.model.exercise import Exercise
 
 from lib import get_text
-from parser_v1_1_0 import save as save_v1_1_0
 from parser_v1_1_0 import load as load_v1_1_0, save as save_v1_1_0
+from parser_v1_0_0 import load as load_v1_0_0, save as save_v1_0_0
 
 def load(path):
     "load a perroquet exercise"
@@ -31,4 +31,5 @@ def load(path):
 
     return exercise
 
-save = save_v1_1_0
+def save(*args):
+    save_v1_1_0(*args)
