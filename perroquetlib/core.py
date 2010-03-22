@@ -44,7 +44,7 @@ class Core(object):
 
     #Call by the main, give an handler to the main gui
     def set_gui(self, gui):
-        self.gui = gui
+        self.gui_controller = gui
 
     #Create a new exercice based on paths. load the new exercise and
     #begin to play
@@ -57,7 +57,7 @@ class Core(object):
         self.exercise.initialize()
         self._reload(True);
         self._activate_sequence()
-        self.gui.set_title("", True)
+        self.gui_controller.set_title("", True)
 
     #Configure the paths for the current exercice. Reload subtitles list.
     def _set_paths(self, videoPath, exercisePath, translationPath):
@@ -72,13 +72,13 @@ class Core(object):
             self.player.close()
 
         self.player = VideoPlayer()
-        self.player.set_window_id(self.gui.get_video_window_id())
-        self.player.activate_video_callback(self.gui.activate_video_area)
+        self.player.set_window_id(self.gui_controller.get_video_window_id())
+        self.player.activate_video_callback(self.gui_controller.activate_video_area)
         self.player.open(self.exercise.get_video_path())
         self.player.set_callback(self._time_callback)
         self.paused = False
-        self.gui.activate_video_area(False)
-        self.gui.activate("loaded")
+        self.gui_controller.activate_video_area(False)
+        self.gui_controller.activate("loaded")
         self._update_word_list()
         self.timeUpdateThreadId = thread.start_new_thread(self.time_update_thread, ())
 
@@ -89,19 +89,19 @@ class Core(object):
 
     #play the media
     def play(self):
-        self.gui.set_playing(True)
+        self.gui_controller.set_playing(True)
         self.player.play()
         self.paused = False
 
     #pause the media
     def pause(self):
-        self.gui.set_playing(False)
+        self.gui_controller.set_playing(False)
         self.player.pause()
         self.paused = True
 
     #Modify media speed
     def set_speed(self, speed):
-        self.gui.set_speed(speed)
+        self.gui_controller.set_speed(speed)
         self.player.set_speed(speed)
 
     #Callback call by video player to notify change of media position.
@@ -156,15 +156,15 @@ class Core(object):
         self.set_speed(1)
         self.player.set_next_callback_time(self.exercise.get_current_sequence().get_time_begin())
 
-        self.gui.set_sequence_number(self.exercise.get_current_sequence_id(), self.exercise.get_sequence_count())
-        self.gui.set_sequence(self.exercise.get_current_sequence())
+        self.gui_controller.set_sequence_number(self.exercise.get_current_sequence_id(), self.exercise.get_sequence_count())
+        self.gui_controller.set_sequence(self.exercise.get_current_sequence())
         self.__activate_translation()
         self._update_stats()
 
     #_update displayed translation on new active sequence
     def __activate_translation(self):
         if not self.exercise.get_translation_list():
-            self.gui.set_translation("")
+            self.gui_controller.set_translation("")
         else:
             translation = ""
             currentBegin = self.exercise.get_current_sequence().get_time_begin()
@@ -175,7 +175,7 @@ class Core(object):
                 if (begin >= currentBegin and begin <= currentEnd) or (end >= currentBegin and end <= currentEnd) or (begin <= currentBegin and end >= currentEnd):
                     translation += sub.get_text() + " "
 
-            self.gui.set_translation(translation)
+            self.gui_controller.set_translation(translation)
 
     #Update displayed stats on new active sequence
     def _update_stats(self):
@@ -194,10 +194,10 @@ class Core(object):
             repeatRate = float(0)
         else:
             repeatRate = float(self.exercise.get_repeat_count()) / float(wordFound)
-        self.gui.set_statitics(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
+        self.gui_controller.set_statitics(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
 
     def _update(self):
-        self.gui.set_sequence(self.exercise.get_current_sequence())
+        self.gui_controller.set_sequence(self.exercise.get_current_sequence())
         self.__validate_sequence()
 
     #Verify if the sequence is complete
@@ -331,7 +331,7 @@ class Core(object):
                     begin_time = 0
                 duration = end_time - begin_time
                 pos = pos_int -begin_time
-                self.gui.set_sequence_time(pos, duration)
+                self.gui_controller.set_sequence_time(pos, duration)
 
     #Save current exercice
     def save(self, saveAs = False):
@@ -340,7 +340,7 @@ class Core(object):
             return
 
         if saveAs or self.exercise.get_output_save_path() == None:
-            outputSavePath = self.gui.ask_save_path()
+            outputSavePath = self.gui_controller.ask_save_path()
             if outputSavePath == None:
                 return
             self.exercise.set_output_save_path(outputSavePath)
@@ -359,7 +359,7 @@ class Core(object):
 
     #load the exercice at path
     def load_exercise(self, path):
-        self.gui.activate("closed")
+        self.gui_controller.activate("closed")
         loader = ExerciseLoader()
         if self.exercise:
             self.save()
@@ -376,11 +376,11 @@ class Core(object):
         validPaths, errorList = self.exercise.is_paths_valid()
         if not validPaths:
             for error in errorList:
-                self.gui.signal_exercise_bad_path(error)
+                self.gui_controller.signal_exercise_bad_path(error)
 
             self.set_can_save(False)
-            self.gui.activate("load_failed")
-            self.gui.ask_properties()
+            self.gui_controller.activate("load_failed")
+            self.gui_controller.ask_properties()
             return
 
         self._reload(False)
@@ -401,8 +401,8 @@ class Core(object):
         validPaths, errorList = self.exercise.is_paths_valid()
         if not validPaths:
             for error in errorList:
-                self.gui.signal_exercise_bad_path(error)
-            self.gui.activate("load_failed")
+                self.gui_controller.signal_exercise_bad_path(error)
+            self.gui_controller.activate("load_failed")
             self.set_can_save(False)
             return
 
@@ -427,7 +427,7 @@ class Core(object):
 
     #Udpates vocabulary list in interface
     def _update_word_list(self):
-        self.gui.set_word_list(self.exercise.extract_word_list())
+        self.gui_controller.set_word_list(self.exercise.extract_word_list())
 
     #Notify the user use the repeat command (for stats)
     def user_repeat(self):
@@ -436,7 +436,7 @@ class Core(object):
 
     #Signal to the gui that the exercise has unsaved changes
     def set_can_save(self, save):
-        self.gui.set_can_save(save)
+        self.gui_controller.set_can_save(save)
 
         if self.exercise == None:
             title = ""
@@ -448,7 +448,7 @@ class Core(object):
             title = _("Untitled exercise")
 
         self.last_save = save
-        self.gui.set_title(title, save)
+        self.gui_controller.set_title(title, save)
 
     def get_can_save(self):
         return self.last_save
@@ -470,8 +470,8 @@ class Core(object):
         self.play()
 
     def export_as_template(self):
-        self.gui.ask_properties_advanced()
-        path = self.gui.ask_export_as_template_path()
+        self.gui_controller.ask_properties_advanced()
+        path = self.gui_controller.ask_export_as_template_path()
         if path:
             saver = ExerciseSaver()
             self.exercise.set_template(True)
@@ -479,20 +479,20 @@ class Core(object):
             self.exercise.set_template(False)
 
     def export_as_package(self):
-        self.gui.ask_properties_advanced()
-        path = self.gui.ask_export_as_package_path()
+        self.gui_controller.ask_properties_advanced()
+        path = self.gui_controller.ask_export_as_package_path()
         if path:
             repoManager = ExerciseRepositoryManager()
             repoManager.export_as_package(self.exercise,path)
         print "Export done"
 
     def import_package(self):
-        import_path = self.gui.ask_import_package()
+        import_path = self.gui_controller.ask_import_package()
 
         if import_path is not None:
             repo_manager = ExerciseRepositoryManager()
             error = repo_manager.import_package(import_path)
             if error is None:
-                self.gui.display_message(_("Import finish succesfully. Use the exercises manager to use the newly installed exercise."))
+                self.gui_controller.display_message(_("Import finish succesfully. Use the exercises manager to use the newly installed exercise."))
             else:
-                self.gui.display_message(_("Import failed."+ " " + error ))
+                self.gui_controller.display_message(_("Import failed."+ " " + error ))
