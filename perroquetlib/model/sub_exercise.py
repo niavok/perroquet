@@ -17,10 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
+
+
 import os
 
 from subtitles_loader import SubtitlesLoader
-from sequence import Sequence
+from perroquetlib.model.sequence.sequence_dynamic_correction import SequenceDynamicCorrection
+from perroquetlib.model.sequence.sequence_simple import SequenceSimple
+
 
 class SubExercise(object):
 
@@ -49,11 +53,14 @@ class SubExercise(object):
         (langId,langName,charToFind) = self.parent.language
 
         for sub in self.subList:
-            self.sequence = Sequence(charToFind)
-            self.sequence.load(sub.get_text())
-            self.sequence.set_time_begin(sub.get_time_begin())
-            self.sequence.set_time_end(sub.get_time_end())
-            self.sequenceList.append(self.sequence)
+            if self.parent.is_use_dynamic_correction():
+                sequence = SequenceDynamicCorrection(charToFind)
+            else:
+                sequence = SequenceSimple(charToFind)
+            sequence.load(sub.get_text())
+            sequence.set_time_begin(sub.get_time_begin())
+            sequence.set_time_end(sub.get_time_end())
+            self.sequenceList.append(sequence)
 
         #Restore found words
         if len(oldSequenceList) > 0:

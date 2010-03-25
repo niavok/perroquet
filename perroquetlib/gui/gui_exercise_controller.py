@@ -36,14 +36,19 @@ class GuiExerciseController:
         self._genererate_style_tag_list()
 
     def set_sequence(self, sequence):
-        self._generate_formatted_exercise_text(sequence)
+        if self.core.get_exercise().is_correction_visible():
+            self._generate_formatted_corrected_exercise_text(sequence)
+        elif self.core.get_exercise().is_use_dynamic_correction():
+            self._generate_formatted_dynamic_correction_exercise_text(sequence)
+        else:
+            self._generate_formatted_simple_exercise_text(sequence)
 
         self.gui.set_typing_area_text(self.formatted_text)
         self.gui.set_typing_area_cursor_position(self.cursor_position)
         self.gui.set_focus_typing_area()
       
 
-    def _generate_formatted_exercise_text(self, sequence):
+    def _generate_formatted_dynamic_correction_exercise_text(self, sequence):
 
         self._clear()
         
@@ -70,12 +75,68 @@ class GuiExerciseController:
         self.word_pos_map.append(self.current_pos_index)
 
         self.cursor_position = self.cursor_position + sequence.get_active_word().get_pos()
-        
 
-    def _add_word(self, word, score, isFound=False, is_empty=False):
+    def _generate_formatted_simple_exercise_text(self, sequence):
+
+        self._clear()
+
+        pos = 0
+
+        for i, symbol in enumerate(sequence.get_symbols()):
+            pos += len(symbol)
+            self._add_symbol(symbol)
+            if i < len(sequence.get_words()):
+                if sequence.get_active_word_index() == i:
+                    self.cursor_position = pos
+                if sequence.get_words()[i].is_empty():
+                    self._add_word(" ", 0, is_empty=True)
+                    pos += 1
+                else:
+                    self._add_word(sequence.get_words()[i].get_text(), 0)
+                    pos += len(sequence.get_words()[i].get_text())
+
+
+        self.word_index_map.append(self.current_word_index)
+        self.word_pos_map.append(self.current_pos_index)
+
+        self.cursor_position = self.cursor_position + sequence.get_active_word().get_pos()
+
+    def _generate_formatted_corrected_exercise_text(self, sequence):
+
+        self._clear()
+        print "plop"
+        pos = 0
+
+        for i, symbol in enumerate(sequence.get_symbols()):
+            pos += len(symbol)
+            self._add_symbol(symbol)
+            if i < len(sequence.get_words()):
+                if sequence.get_active_word_index() == i:
+                    self.cursor_position = pos
+                if sequence.get_words()[i].is_empty():
+                    self._add_word(sequence.get_words()[i].get_valid(lower=False),0)
+                    pos += 1
+                elif sequence.get_words()[i].is_valid():
+                    self._add_word(sequence.get_words()[i].get_valid(lower=False), 0, isFound=True)
+                    pos += len(sequence.get_words()[i].get_text())
+                else:
+                    print "plop"
+                    self._add_word(sequence.get_words()[i].get_text(), sequence.get_words()[i].get_score(), through=True)
+                    self._add_word(sequence.get_words()[i].get_valid(lower=False), 0, isFound=True)
+                    pos += len(sequence.get_words()[i].get_text())
+
+
+        self.word_index_map.append(self.current_word_index)
+        self.word_pos_map.append(self.current_pos_index)
+
+        self.cursor_position = self.cursor_position + sequence.get_active_word().get_pos()
+
+    def _add_word(self, word, score, isFound=False, is_empty=False, through=False):
 
         score250 = int(score*250) #score between -250 and 250
-        if is_empty:
+        if through:
+            tagName = "word_througt"
+        elif is_empty:
             tagName = "word_empty"
         elif isFound:
             tagName = "word_found"
@@ -141,20 +202,23 @@ class GuiExerciseController:
             blue = int((1-coeff)*blueFrom + coeff*blueTo)
             return (red, green, blue)
 
-        self.style_tag_list.append(("symbol",18.0,None, None))
-        self.style_tag_list.append(("word_empty",18.0,color_not_found, get_bcolor_not_found(0)))
-        self.style_tag_list.append(("word_found",18.0,color_found, None))
+        self.style_tag_list.append(("symbol",18.0,None, None, False))
+        self.style_tag_list.append(("word_empty",18.0,color_not_found, get_bcolor_not_found(0), False))
+        self.style_tag_list.append(("word_found",18.0,color_found, None, False))
+        self.style_tag_list.append(("word_througt",18.0,get_bcolor_not_found(250),None, True ))
         
         for score250 in xrange(251):
             self.style_tag_list.append(("word_to_found"+str(-score250),
             18.0,
             color_not_found,
-            get_bcolor_not_found(score250)))
+            get_bcolor_not_found(score250),
+            False))
 
             self.style_tag_list.append(("word_near"+str(score250),
             18.0,
             color_not_found,
-            get_bcolor_near(score250)))
+            get_bcolor_near(score250),
+            False))
 
         self.gui.set_typing_area_style_list(self.style_tag_list)
 
@@ -169,7 +233,7 @@ class GuiExerciseController:
         elif movement =="last_word" :
             self.core.last_word()
         elif movement =="previous_word" :
-            self.core.previous_word()()
+            self.core.previous_word()
         elif movement =="next_word" :
             self.core.next_word()
         else:

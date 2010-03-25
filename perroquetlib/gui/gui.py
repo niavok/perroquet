@@ -183,7 +183,7 @@ class Gui:
         tag_table = buffer.get_tag_table()
         tag_table.foreach(self._destroy_tag, tag_table)
 
-        for (tag_name,size, foreground_color ,background_color) in style_list:
+        for (tag_name,size, foreground_color ,background_color, through) in style_list:
             if foreground_color:
                 (red, green, bleu) = foreground_color
                 gtk_foreground_color = self.window.get_colormap().alloc_color(
@@ -205,6 +205,7 @@ class Gui:
             buffer.create_tag(tag_name,
             background=gtk_background_color,
             foreground=gtk_foreground_color,
+            strikethrough=through,
             size_points=size)
       
 

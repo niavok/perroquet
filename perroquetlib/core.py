@@ -252,12 +252,12 @@ class Core(object):
 
     #Goto first word in current sequence
     def first_word(self):
-        self.exercise.get_current_sequence().first_false_word()
+        self.exercise.get_current_sequence().first_word()
         self._update()
 
     #Goto last word in current sequence
     def last_word(self):
-        self.exercise.get_current_sequence().last_false_word()
+        self.exercise.get_current_sequence().last_word()
         self._update()
 
     #Delete a char before the cursor in current sequence

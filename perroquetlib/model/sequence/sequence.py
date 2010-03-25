@@ -19,7 +19,7 @@
 
 import re
 
-from word import Word, ValidWordError, NoCharPossible
+from word import Word
 
 class Sequence(object):
     def __init__(self, charToFind):
@@ -41,12 +41,14 @@ class Sequence(object):
         self._wordList = []
 
         self._activeWordIndex = 0
-
+        
         self._helpChar = '~'
 
         allChar = charToFind
         self.validChar = "["+allChar+"]"
         self.notValidChar = "[^"+allChar+"]"
+        self.beginTime = 0
+        self.endTime = 0
 
     def load(self, text):
         #TODO FIXME
@@ -121,15 +123,7 @@ class Sequence(object):
             else:
                 raise NotImplemented
 
-    def next_false_word(self, loop=False):
-        "go to the next non valid word"
-        if loop:
-            raise NotImplemented
-        if self.get_active_word().is_valid():
-            if self.is_valid() or self.get_active_word_index() == self.get_last_index():
-                return
-            self.next_word()
-            self.next_false_word()
+    
 
     def previous_word(self, loop=False):
         "go to the previous word"
@@ -142,98 +136,42 @@ class Sequence(object):
             else:
                 raise NotImplemented
 
-    def previous_false_word(self, loop=False):
-        "go to the previous non valid word"
-        if loop:
-            raise NotImplemented
-        if self.get_active_word().is_valid():
-            if self.is_valid() or self.get_active_word_index() == 0:
-                return
-            self.previous_word()
-            self.previous_false_word()
-
     def select_sequence_word(self, wordIndex,wordIndexPos):
-        self.get_active_word().set_pos(wordIndexPos)
-        self.set_active_word_index(wordIndex)
-
-        self.next_false_word()
+        """Go to the first editable position after the position of wordIndex
+        word and wordIndexPos character"""
 
     def write_char(self, char):
-        try:
+        if not self.get_active_word().is_valid():
             self.get_active_word().write_char(char)
-            if self.get_active_word().is_valid():
-                self.next_char()
-        except ValidWordError:
-            self.next_word()
-            self.next_false_word()
+        else:
+            self._next_false_word()
             self.write_char(char)
         self.update_after_write()
 
     def _write_sentence(self, sentence):
         """write many chars. a ' ' mean next word.
         Only for tests"""
-        for char in sentence:
-            if char==" ":
-                pass
-            elif char=="+":
-                self.next_word()
-                self.next_false_word()
-            else:
-                self.write_char(char)
 
     def delete_next_char(self):
-        self.previous_false_word()
-        try:
-            self.get_active_word().delete_next_char()
-        except NoCharPossible:
-            if self.get_active_word_index() < self.get_word_count():
-                self.previous_word()
-                self.delete_next_char()
-        self.update_after_write()
+        """delete the next deletable character"""
 
     def delete_previous_char(self):
-        self.previous_false_word()
-        try:
-            self.get_active_word().delete_previous_char()
-        except NoCharPossible:
-            if self.get_active_word_index() > 0:
-                self.previous_word()
-                self.delete_previous_char()
-        except ValidWordError:
-            if self.get_active_word_index() > 0:
-                self.previous_word()
-                self.delete_previous_char()
+        """delete the previous deletable character"""
 
-        self.update_after_write()
+    def first_word(self):
+        """goto first editable character"""
 
-    def first_false_word(self):
-        self._activeWordIndex = 0
-        self.get_active_word().set_pos(0)
-        self.next_false_word()
-
-    def last_false_word(self):
-        self._activeWordIndex = self.get_last_index()
-        self.get_active_word().set_pos(self.get_active_word().get_last_pos())
-        self.previous_false_word()
+    def last_word(self):
+        """goto last editable character"""
 
     def next_char(self):
-        try:
-            self.get_active_word().next_char()
-        except NoCharPossible:
-            self.next_word()
-            self.next_false_word()
-            self.get_active_word().set_pos(0)
+        """goto next editable character"""
 
     def previous_char(self):
-        try:
-            self.get_active_word().previous_char()
-        except NoCharPossible:
-            self.previous_word()
-            self.previous_false_word()
-            self.get_active_word().set_pos(-1)
+        """goto to previous editable character"""
 
     def is_valid(self):
-        return all(w.is_valid() for w in self.get_words())
+        """Return True if the entire sequence is valid, else return False"""
 
     def is_empty(self):
         return all(w.is_empty() for w in self.get_words())
@@ -250,18 +188,7 @@ class Sequence(object):
 
     def update_after_write(self):
         "update after a modification of the text"
-        self._check_location()
-
-    def _check_location(self):
-        """Check if a word is correct but at a wrong place."""
-        for w1 in self.get_words():
-            for j, w2 in enumerate(self.get_words()):
-                if w1.get_score()<=0 and w1.get_text()==w2.get_valid() and not w2.is_valid():
-                    w2.set_text(w1.get_text())
-                    w1.set_text("")
-                    self.set_active_word_index(j)
-                    self.next_false_word()
-
+        
     def get_time_begin(self):
         return self.beginTime
 
@@ -275,9 +202,9 @@ class Sequence(object):
         self.endTime = time
 
     def show_hint(self):
-        try:
+        if not self.get_active_word().is_valid():
             self.get_active_word().show_hint()
-        except ValidWordError:
+        else:
             if self.get_active_word_index()==self.get_word_count()-1:
                 return
             else:

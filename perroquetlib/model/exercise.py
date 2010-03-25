@@ -45,6 +45,8 @@ class Exercise(object):
         self.randomOrder = False
         self.playMarginAfter = 500
         self.playMarginBefore = 1000
+        self.use_dynamic_correction = True
+        self.correction_visible = False
 
     def initialize(self):
         self.__load_subtitles()
@@ -71,6 +73,7 @@ class Exercise(object):
 
             self.repeatAfterCompeted = (config.get("default_exercise_repeat_after_competed") == 1)
             self.randomOrder = (config.get("default_exercise_random_order") == 1)
+            self.use_dynamic_correction = (config.get("default_exercise_dynamic_correction") == 1)
 
             self.set_language_id(config.get("default_exercise_language"))
 
@@ -277,4 +280,17 @@ class Exercise(object):
 
     def set_play_margin_after(self, margin):
         self.playMarginAfter = margin
+
+    def is_use_dynamic_correction(self):
+        return self.use_dynamic_correction
+
+    def set_use_dynamic_correction(self, use):
+        self.use_dynamic_correction = use
+
+    def is_correction_visible(self):
+        return self.correction_visible
+
+    def set_correction_visible(self, visible):
+        self.correction_visible = visible
+
 

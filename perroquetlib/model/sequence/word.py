@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-class ValidWordError(Exception):
-    pass
+
 class NoCharPossible(Exception):
     pass
     
@@ -91,8 +90,6 @@ class Word:
         char = char.lower()
         if len(char)!=1 or char==" ":
             raise AttributeError, "char='"+char+"'"
-        if self.is_valid():
-            raise ValidWordError
         #if replacing an helpChar
         if self.get_pos() < len(self.get_text()) and self.get_text()[self.get_pos()] == self._helpChar:
             self.set_text(self.get_text()[:self.get_pos()] + char + self.get_text()[self.get_pos()+1:])
@@ -124,24 +121,18 @@ class Word:
             self.set_pos(first_error+1)
         elif first_error != -1:
             self.set_pos(first_error)
-        else:
-            raise ValidWordError
         
         self.set_text(outWord)
     
     def delete_previous_char(self):
-        if self.is_valid():
-            raise ValidWordError
-        elif self.get_pos() == 0 or self.get_text() =="":
+        if self.get_pos() == 0 or self.get_text() =="":
             raise NoCharPossible
         else:
             self.set_text(self.get_text()[:self.get_pos()-1]  + self.get_text()[self.get_pos():])
             self._pos -= 1
     
     def delete_next_char(self):
-        if self.is_valid():
-            raise ValidWordError
-        elif self.get_pos() == len(self.get_text()) or self.get_text() =="":
+        if self.get_pos() == len(self.get_text()) or self.get_text() =="":
             raise NoCharPossible
         else:
             self.set_text(self.get_text()[:self.get_pos()]  + self.get_text()[self.get_pos()+1:])

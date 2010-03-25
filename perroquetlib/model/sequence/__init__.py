@@ -18,4 +18,4 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 from sequence import Sequence
-from word import ValidWordError, NoCharPossible, Word, levenshtein
+from word import NoCharPossible, Word, levenshtein
