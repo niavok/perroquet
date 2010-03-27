@@ -333,6 +333,18 @@ class Gui:
         self.builder.get_object("toggletoolbuttonShowTranslation").set_sensitive(state)
         self.builder.get_object("checkmenuitemTranslation").set_sensitive(state)
 
+    def set_enable_correction(self, state):
+        self.builder.get_object("toolbutton_show_correction").set_sensitive(state)
+        self.builder.get_object("checkmenuitem_correction").set_sensitive(state)
+
+    def set_active_translation(self, state):
+        self.builder.get_object("toggletoolbuttonShowTranslation").set_active(state)
+        self.builder.get_object("checkmenuitemTranslation").set_active(state)
+
+    def set_active_correction(self, state):
+        self.builder.get_object("toolbutton_show_correction").set_active(state)
+        self.builder.get_object("checkmenuitem_correction").set_active(state)
+
     def set_enable_save_as(self, state):
         self.builder.get_object("imagemenuitemSaveAs").set_sensitive(state)
 
@@ -384,7 +396,7 @@ class Gui:
         if state:
             self.builder.get_object("scrolledwindowTranslation").show()
         else:
-            self.builder.get_object("scrolledwindowTranslation").shide()
+            self.builder.get_object("scrolledwindowTranslation").hide()
 
 
 
@@ -563,7 +575,18 @@ class Gui:
 
     def on_toggletoolbutton_show_translation_toggled(self, widget, data=None):
         toggletoolbuttonShowTranslation = self.builder.get_object("toggletoolbuttonShowTranslation")
-        self.controllernotify_toogle_translation(toggletoolbuttonShowTranslation.props.active)
+        self.controller.notify_toogle_translation(toggletoolbuttonShowTranslation.props.active)
+
+    def on_checkmenuitem_correction_toggled(self, widget, data=None):
+        print "plip"
+        toolbutton_show_correction = self.builder.get_object("toolbutton_show_correction")
+        self.controller.notify_toogle_correction(toolbutton_show_correction.props.active)
+
+    def on_toolbutton_show_correction_toggled(self, widget, data=None):
+        print "plop"
+        toolbutton_show_correction = self.builder.get_object("toolbutton_show_correction")
+        self.controller.notify_toogle_correction(toolbutton_show_correction.props.active)
+
 
     def on_type_view_move_cursor(self, textview, step_size, count, extend_selection):
 
@@ -606,7 +629,7 @@ class Gui:
 
     def on_checkmenuitem_translation_toggled(self,widget,data=None):
         checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
-        self.controllernotify_toogle_translation(checkmenuitemTranslation.props.active)
+        self.controller.notify_toogle_translation(checkmenuitemTranslation.props.active)
         
     def on_imagemenuitem_properties_activate(self,widget,data=None):
         self.controller.notify_properties()

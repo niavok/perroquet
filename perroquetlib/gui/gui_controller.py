@@ -40,6 +40,7 @@ class GuiController:
         self.gui.set_active_video_area(False)
         self.gui_exercise_controller = None
         self.translation_visible = False
+        self.correction_visible = False
         self.current_speed = 1.0
 
         if not config.get("showlateralpanel"):
@@ -52,7 +53,7 @@ class GuiController:
     def set_core(self, core):
         """Define perroquet core to use"""
         self.core = core
-        self.gui_exercise_controller = GuiExerciseController(self.core, self.gui)
+        self.gui_exercise_controller = GuiExerciseController(self, self.core, self.gui)
 
 
 
@@ -150,6 +151,9 @@ class GuiController:
 
         self.gui.set_word_list(filtered_word_list)
 
+    def is_correction_visible(self):
+        return self.correction_visible
+
     def set_playing(self, state):
         self.gui.set_enable_play(not state)
         self.gui.set_enable_pause(state)
@@ -215,11 +219,26 @@ class GuiController:
         if not self.translation_visible:
             self.gui.set_visible_translation_panel(True)
             self.gui.set_enable_translation(True)
+            self.gui.set_active_translation(True)
             self.translation_visible = True
         else:
             self.gui.set_visible_translation_panel(False)
-            self.gui.set_enable_translation(False)
+            self.gui.set_enable_translation(True)
+            self.gui.set_active_translation(False)
             self.translation_visible = False
+
+    def toggle_correction(self):
+        print "plop"
+        if not self.correction_visible:
+            self.gui.set_enable_correction(True)
+            self.gui.set_active_correction(True)
+            self.correction_visible = True
+            self.gui_exercise_controller.repaint()
+        else:
+            self.gui.set_enable_correction(True)
+            self.gui.set_active_correction(False)
+            self.correction_visible = False
+            self.gui_exercise_controller.repaint()
 
     def notify_typing(self, new_text):
 
@@ -394,6 +413,15 @@ class GuiController:
     def notify_toogle_translation(self,visible):
         if visible != self.translation_visible:
             self.toggle_translation()
+
+    def notify_toogle_correction(self,visible):
+        print "notify_toogle_correction"
+        print visible
+        print self.correction_visible
+        if visible != self.correction_visible:
+            self.toggle_correction()
+
+
 
     def notify_exercise_manager(self):
         self.gui.display_exercice_manager(self.core)

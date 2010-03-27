@@ -226,6 +226,13 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkCheckMenuItem" id="checkmenuitem_correction">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Correction</property>
+                        <signal name="toggled" handler="on_checkmenuitem_correction_toggled"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkImageMenuItem" id="imagemenuitemHint">
                         <property name="label" translatable="yes">Hint</property>
                         <property name="visible">True</property>
@@ -420,6 +427,20 @@
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-spell-check</property>
                 <signal name="toggled" handler="on_toggletoolbutton_show_translation_toggled"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton_show_correction">
+                <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Show/Hide correction</property>
+                <property name="label" translatable="yes">Display correction</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-ok</property>
+                <signal name="toggled" handler="on_toolbutton_show_correction_toggled"/>
               </object>
               <packing>
                 <property name="expand">False</property>

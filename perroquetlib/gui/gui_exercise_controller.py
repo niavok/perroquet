@@ -20,9 +20,10 @@
 
 class GuiExerciseController:
     
-    def __init__(self, core, gui):
+    def __init__(self, gui_controller, core, gui):
         self.gui = gui
         self.core = core
+        self.gui_controller = gui_controller
         
         self.current_index = 0
         self.current_word_index = -1
@@ -36,7 +37,8 @@ class GuiExerciseController:
         self._genererate_style_tag_list()
 
     def set_sequence(self, sequence):
-        if self.core.get_exercise().is_correction_visible():
+        self.sequence = sequence
+        if self.gui_controller.is_correction_visible():
             self._generate_formatted_corrected_exercise_text(sequence)
         elif self.core.get_exercise().is_use_dynamic_correction():
             self._generate_formatted_dynamic_correction_exercise_text(sequence)
@@ -46,7 +48,11 @@ class GuiExerciseController:
         self.gui.set_typing_area_text(self.formatted_text)
         self.gui.set_typing_area_cursor_position(self.cursor_position)
         self.gui.set_focus_typing_area()
-      
+
+    def repaint(self):
+        """Draw the same sequence"""
+        self.set_sequence(self.sequence);
+
 
     def _generate_formatted_dynamic_correction_exercise_text(self, sequence):
 

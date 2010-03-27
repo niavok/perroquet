@@ -46,7 +46,6 @@ class Exercise(object):
         self.playMarginAfter = 500
         self.playMarginBefore = 1000
         self.use_dynamic_correction = True
-        self.correction_visible = False
 
     def initialize(self):
         self.__load_subtitles()
@@ -287,10 +286,8 @@ class Exercise(object):
     def set_use_dynamic_correction(self, use):
         self.use_dynamic_correction = use
 
-    def is_correction_visible(self):
-        return self.correction_visible
+    
 
-    def set_correction_visible(self, visible):
-        self.correction_visible = visible
+   
 
 
