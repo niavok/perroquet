@@ -88,6 +88,10 @@ class GuiSequencePropertiesAdvanced:
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         checkbuttonRepeatAfterComplete.set_active(self.core.get_exercise().get_repeat_after_completed())
 
+        checkbuttonUseDynamicCorrection = self.builder.get_object("checkbuttonUseDynamicCorrection")
+        checkbuttonUseDynamicCorrection.set_active(self.core.get_exercise().is_use_dynamic_correction())
+
+
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
         checkbuttonRandomOrder.set_active(self.core.get_exercise().is_random_order())
 
@@ -210,6 +214,10 @@ class GuiSequencePropertiesAdvanced:
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         self.core.get_exercise().set_repeat_after_completed(checkbuttonRepeatAfterComplete.get_active())
+
+        checkbuttonUseDynamicCorrection = self.builder.get_object("checkbuttonUseDynamicCorrection")
+        self.core.get_exercise().set_use_dynamic_correction(checkbuttonUseDynamicCorrection.get_active())
+
 
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
         self.core.get_exercise().set_random_order(checkbuttonRandomOrder.get_active())

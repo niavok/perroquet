@@ -73,6 +73,9 @@ class GuiSequenceProperties:
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         checkbuttonRepeatAfterComplete.set_active(self.core.get_exercise().get_repeat_after_completed())
 
+        checkbuttonUseDynamicCorrection = self.builder.get_object("checkbuttonUseDynamicCorrection")
+        checkbuttonUseDynamicCorrection.set_active(self.core.get_exercise().is_use_dynamic_correction())
+        
         self.liststoreLanguage = gtk.ListStore(str,str)
 
         languageManager = LanguagesManager()
@@ -115,6 +118,10 @@ class GuiSequenceProperties:
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         self.core.get_exercise().set_repeat_after_completed(checkbuttonRepeatAfterComplete.get_active())
+        
+        checkbuttonUseDynamicCorrection = self.builder.get_object("checkbuttonUseDynamicCorrection")
+        self.core.get_exercise().set_use_dynamic_correction(checkbuttonUseDynamicCorrection.get_active())
+
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
