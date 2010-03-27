@@ -142,6 +142,10 @@ def save(exercise, outputPath):
     xml_repeatAfterComplete.appendChild(newdoc.createTextNode(str(exercise.get_repeat_after_completed())))
     xml_properties.appendChild(xml_repeatAfterComplete)
 
+    xml_use_dynamic_correction = newdoc.createElement("use_dynamic_correction")
+    xml_use_dynamic_correction.appendChild(newdoc.createTextNode(str(exercise.is_use_dynamic_correction())))
+    xml_properties.appendChild(xml_use_dynamic_correction)
+
     xml_maxSequenceLength = newdoc.createElement("max_sequence_length")
     xml_maxSequenceLength.appendChild(newdoc.createTextNode(str(exercise.get_max_sequence_length())))
     xml_properties.appendChild(xml_maxSequenceLength)
@@ -218,6 +222,9 @@ def load(exercise, dom, path):
             exercise.set_play_margin_before(int(get_text( xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("play_margin_after")) > 0:
             exercise.set_play_margin_after(int(get_text( xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
+        if len(xml_properties.getElementsByTagName("use_dynamic_correction")) > 0:
+            exercise.set_use_dynamic_correction(get_text( xml_properties.getElementsByTagName("use_dynamic_correction")[0].childNodes) == "True")
+
 
     #Subexercises
     subExos = []

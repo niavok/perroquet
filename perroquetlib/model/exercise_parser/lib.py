@@ -18,7 +18,7 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 def get_text(nodelist):
-    "??????? Need comment ???????" #FIXME
+    """Extract the text of a node"""
     rc = ""
     for node in nodelist:
         if node.nodeType == node.TEXT_NODE:
