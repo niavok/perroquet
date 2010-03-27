@@ -34,25 +34,69 @@ from perroquetlib.model.exercise_parser import load_exercise, save_exercise
 from perroquetlib.repository.exercise_repository import ExerciseRepository
 
 class ExerciseRepositoryManager:
-
+    """This class provide an interface to get a list of exercise repository,
+    instance of ExerciseRepository. A repository is a tree of Perroquet
+    exercises which can be syncronized with an online image. During
+    syncronization, only the exercise's metadatas are downloaded but it's
+    possible to install the real exercise then use it.
+    A repository contain a list of exercises group. A group contains a list
+    of exercises.
+    The repositories metadatas are store in a diretory tree in the local
+    datas of the user. This path is call 'repo root directory'.
+    """
     def __init__(self):
-        self.config = config
+        """Constructor"""
 
     def get_exercise_repository_list(self):
+        """Return the list of all find repositories.
+        The list is build from multiple sources:
+        - from the list url of repository online description found in the
+        main config file
+        - from the list url of repository online description found in the
+        local config file
+        - from the directory present in the repo_root directory whose not
+        correspond with an url
+
+        The returned list classify each repository in one of these type:
+        - local: if a directory name 'local' is find in the repo_root
+        directory, a repository named 'local' is initialized from this path.
+        The local repository is not syncronised with distant description but
+        contains all manually installed exercises.
+        - distant: if an repository url is reachable, a distant repository
+        is initialized after syncronization with the distant description
+        file.
+        - offline: if an repository url is not reachable, an offline
+        repository is initialized from the directory created during the
+        last syncronization.
+        - orphan : an orphan repository is initialized from each directory
+        in repo_root which not correspond to any others type of repository.
+        An orphan repository car appear is a syncronized exercise
+        description is remove from list of url.
+        """
         repositoryList = []
 
-        repositoryList += self._get_local_exercise_repository_list();
-        #repositoryList += _getSystemExerciseRepositoryList();
-        repositoryList += self._get_distant_exercise_repository_list();
-        repositoryList += self._get_orphan_exercise_repository_list(repositoryList);
+        #Add the local repository if exist
+        repositoryList += self._get_local_exercise_repository_list()
+        #Add the list of distant and offline repository
+        repositoryList += self._get_distant_exercise_repository_list()
+        #Add the list of orphan repository
+        repositoryList += self._get_orphan_exercise_repository_list(repositoryList)
 
         return repositoryList
 
     def _get_local_exercise_repository_list(self):
-        repositoryList = []
-        localRepoPath = os.path.join(self.config.get("local_repo_root_dir"),"local")
+        """Build and return the list of local repority. In fact, this list
+        will contain at maximum 1 repository.
+        A local repository is added to the list if a directory named 'local'
+        exist in the repo root directory"""
 
+        repositoryList = []
+        #Build potential local repository path
+        localRepoPath = os.path.join(config.get("local_repo_root_dir"),"local")
+
+        # Test local repository existance
         if os.path.isdir(localRepoPath):
+            #Repository found so Initialize it from the path and set it as local
             repository = ExerciseRepository()
             repository.init_from_path(localRepoPath)
             repository.set_type("local")
@@ -64,40 +108,56 @@ class ExerciseRepositoryManager:
 
 
     def _get_distant_exercise_repository_list(self):
-        repositoryPathList = self.config.get("repository_source_list")
+        """Build and return a list of distant and offline repositories.
+        There is one repository initialized for each url found in the
+        config files. If the url is reachable, a distant repository is
+        initialized, else an offline repository is created.
+        """
+        #Get the list of files containing url list
+        repositoryPathList = config.get("repository_source_list")
         repositoryList = []
         offlineRepoList = []
 
+        #Fetch repository urls file
         for path in repositoryPathList:
             f = open(path, 'r')
+            #Fetch urls of repo description
             for line in f:
                 line = line.rstrip()
                 if line[0] == "#":
                     #Comment line
                     continue
-
                 req = urllib2.Request(line)
                 try:
+                    #try to download the file headers
                     handle = urllib2.urlopen(req)
                 except IOError:
+                    #if the download failed store the url in a list of
+                    #offline urls
                     print "Fail to connection to repository '"+line+"'"
                     offlineRepoList.append(line)
                 except ValueError:
                     print "Unknown url type '"+line+"'"
                     offlineRepoList.append(line)
                 else:
+                   #if the download success, init a repository from the
+                   #downloaded file and regenerate the tree
                     print "init distant repo"
                     repository = ExerciseRepository()
                     repository.parse_distant_repository_file(handle)
                     repository.set_url(line)
                     repositoryList.append(repository)
                     repository.generate_description()
-
+        #if the list of url is not empty, add a list of offline repository
         if len(offlineRepoList) > 0:
-            repoPathList = os.listdir(self.config.get("local_repo_root_dir"))
+            repoPathList = os.listdir(config.get("local_repo_root_dir"))
             for repoPath in repoPathList:
+                #for eaach directory in the repo root path analyse the
+                #description file. If the url of this repo match with one
+                #of offline url, then init an offline repository from this
+                #path
                 repository = ExerciseRepository()
-                repoDescriptionPath = os.path.join(self.config.get("local_repo_root_dir"),repoPath,"repository.xml")
+                repoDescriptionPath = os.path.join(config.get("local_repo_root_dir"),repoPath,"repository.xml")
                 if not os.path.isfile(repoDescriptionPath):
                     continue
                 f = open(repoDescriptionPath, 'r')
@@ -116,7 +176,8 @@ class ExerciseRepositoryManager:
 
 
     def get_personal_exercise_repository_list(self):
-        repositoryPath = self.config.get("personal_repository_source_path")
+        """Return the list of the url of the repository url add by the user"""
+        repositoryPath = config.get("personal_repository_source_path")
         repositoryList = []
 
         if os.path.isfile(repositoryPath):
@@ -132,10 +193,11 @@ class ExerciseRepositoryManager:
         return repositoryList
 
     def write_personal_exercise_repository_list(self, newRepositoryList):
-        #The goal of this methods is to make an inteligent write of config file
-        #Line biginning with # are comment and must be keep in place
+        """The goal of this methods is to make an inteligent write of
+        config file. Lines beginning with # are comment and must be keep
+        in place"""
 
-        repositoryPath = self.config.get("personal_repository_source_path")
+        repositoryPath = config.get("personal_repository_source_path")
         repositoryList = []
 
         if os.path.isfile(repositoryPath):
