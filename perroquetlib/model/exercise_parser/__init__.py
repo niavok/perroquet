@@ -26,7 +26,7 @@ from parser_v1_1_0 import load as load_v1_1_0, save as save_v1_1_0
 from parser_v1_0_0 import load as load_v1_0_0, save as save_v1_0_0
 
 def load_exercise(path):
-    "load a perroquet exercise"
+    """Load a perroquet exercise."""
     exercise = Exercise()
 
     dom = parse(path)
@@ -50,4 +50,6 @@ def load_exercise(path):
     return exercise
 
 def save_exercise(exercise, outputPath):
+    """Save a perroquet exercise.
+    exercise must be an empty perroquet Exercise or inherited"""
     save_v1_1_0(exercise, outputPath)

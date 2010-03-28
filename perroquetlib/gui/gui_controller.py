@@ -407,6 +407,9 @@ class GuiController:
         if path:
             self.core.load_exercise(path)
 
+    def notify_load_path(self, path):
+        self.core.load_exercise(path)
+
     def notify_filter_change(self):
         self.update_word_list()
 

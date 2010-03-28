@@ -642,6 +642,7 @@
                           <object class="GtkTreeView" id="lastopenfilesTreeView">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <signal name="cursor_changed" handler="on_lastopenfilesTreeView_cursor_changed"/>
                           </object>
                         </child>
                       </object>
