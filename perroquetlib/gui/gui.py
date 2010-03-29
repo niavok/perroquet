@@ -388,9 +388,9 @@ class Gui:
 
     def set_visible_lateral_panel(self, state):
         if state:
-            self.builder.get_object("vbox2").show()
+            self.builder.get_object("lateralPanel").show()
         else:
-            self.builder.get_object("vbox2").hide()
+            self.builder.get_object("lateralPanel").hide()
 
     def set_visible_translation_panel(self, state):
         if state:
