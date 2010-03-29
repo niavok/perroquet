@@ -43,6 +43,7 @@ class TestConfig(unittest.TestCase):
         
         self.assertEqual(c.get("liststr"), ["one", "two"])
         self.assertEqual(c.get("listint"), [1, 2, 3])
+        self.assertEqual(c.get("lls"), [["a", "1"], ["b", "2"], ["c", "2", "ccc"]])
         
     def test_save(self):
         shutil.copy(pathWritable, pathTemp)
@@ -51,12 +52,14 @@ class TestConfig(unittest.TestCase):
         c.set("firstint", 666)
         c.set("liststr", ["1", "2", "3"])
         c.set("listint", [666, 666])
+        c.set("lls", [["A"], ["B", "BETA"], ["C", "CETA", "3"]])
         c.save()
         c = Config()
         c.load_writable_config_file(pathTemp, pathRef)
         self.assertEqual(c.get("firstint"), 666)
         self.assertEqual(c.get("liststr"), ["1", "2", "3"])
         self.assertEqual(c.get("listint"), [666, 666])
+        self.assertEqual(c.get("lls"), [["A"], ["B", "BETA"], ["C", "CETA", "3"]])
         os.remove(pathTemp)
         
         c = Config()
