@@ -487,6 +487,9 @@ class Gui:
 
         self.controller.notify_new_exercise_create(videoPath,exercisePath, translationPath, langId)
         
+    def on_newExerciseDialog_delete_event(self,widget,data=None):
+        self.controller.notify_new_exercise_cancel()
+        return True #True for stop event propagation
 
     def on_button_new_exercise_cancel_clicked(self,widget,data=None):
         self.controller.notify_new_exercise_cancel()
@@ -578,12 +581,10 @@ class Gui:
         self.controller.notify_toogle_translation(toggletoolbuttonShowTranslation.props.active)
 
     def on_checkmenuitem_correction_toggled(self, widget, data=None):
-        print "plip"
         toolbutton_show_correction = self.builder.get_object("toolbutton_show_correction")
         self.controller.notify_toogle_correction(toolbutton_show_correction.props.active)
 
     def on_toolbutton_show_correction_toggled(self, widget, data=None):
-        print "plop"
         toolbutton_show_correction = self.builder.get_object("toolbutton_show_correction")
         self.controller.notify_toogle_correction(toolbutton_show_correction.props.active)
 
