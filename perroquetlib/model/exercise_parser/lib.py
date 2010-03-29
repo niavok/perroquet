@@ -32,10 +32,11 @@ def update_sequence_list(exercise, subExos ):
     for subExo, progress in zip(exercise.subExercisesList, subExos):
         sequenceList = subExo.get_sequence_list()
 
-        for (id, state, words) in progress:
+        for (id, state, words, repeat_count) in progress:
             if id >= len(sequenceList):
                 break
             sequence = sequenceList[id]
+            sequence.set_repeat_count(repeat_count)
             if state == "done":
                 sequence.complete_all()
             elif state == "in_progress":

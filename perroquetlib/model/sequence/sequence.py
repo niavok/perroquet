@@ -47,6 +47,8 @@ class Sequence(object):
         allChar = charToFind
         self.validChar = "["+allChar+"]"
         self.notValidChar = "[^"+allChar+"]"
+        self.repeat_count = 0
+        
         self.beginTime = 0
         self.endTime = 0
 
@@ -216,3 +218,15 @@ class Sequence(object):
 
     def __repr__(self):
         return self.__print__()
+
+    def get_time_end(self):
+        return self.endTime
+
+    def set_repeat_count(self, repeat_count):
+        self.repeat_count = repeat_count
+
+    def get_repeat_count(self):
+        return self.repeat_count
+
+    
+   

@@ -106,6 +106,11 @@ def save(exercise, outputPath):
                 xml_sequence_state = newdoc.createElement("state")
                 xml_sequence_state.appendChild(newdoc.createTextNode("done"))
                 xml_sequence.appendChild(xml_sequence_state)
+                
+                repeat_count = sequence.get_repeat_count()
+                xml_sequence_repeat_count = newdoc.createElement("repeat_count")
+                xml_sequence_repeat_count.appendChild(newdoc.createTextNode(str(repeat_count)))
+                xml_sequence.appendChild(xml_sequence_repeat_count)
 
                 xml_sequences.appendChild(xml_sequence)
             elif not sequence.is_empty():
@@ -116,6 +121,11 @@ def save(exercise, outputPath):
                 xml_sequence_state = newdoc.createElement("state")
                 xml_sequence_state.appendChild(newdoc.createTextNode("in_progress"))
                 xml_sequence.appendChild(xml_sequence_state)
+
+                repeat_count = sequence.get_repeat_count()
+                xml_sequence_repeat_count = newdoc.createElement("repeat_count")
+                xml_sequence_repeat_count.appendChild(newdoc.createTextNode(str(repeat_count)))
+                xml_sequence.appendChild(xml_sequence_repeat_count)
 
                 xml_sequence_words = newdoc.createElement("words")
 
@@ -164,6 +174,10 @@ def save(exercise, outputPath):
     xml_playMarginAfter.appendChild(newdoc.createTextNode(str(exercise.get_play_margin_after())))
     xml_properties.appendChild(xml_playMarginAfter)
 
+    xml_repeat_count_by_sequence_limit = newdoc.createElement("repeat_count_by_sequence_limit")
+    xml_repeat_count_by_sequence_limit.appendChild(newdoc.createTextNode(str(exercise.get_repeat_count_limit_by_sequence())))
+    xml_properties.appendChild(xml_repeat_count_by_sequence_limit)
+
     root_element.appendChild(xml_properties)
 
     xml_string = newdoc.toprettyxml()
@@ -207,6 +221,7 @@ def load(exercise, dom, path):
     #Exercise - CurrentSequence
     currentSequence = int(get_text( xml_exercise.getElementsByTagName("current_sequence")[0].childNodes))
 
+    
     # Stats
     xml_stats = dom.getElementsByTagName("stats")[0]
     exercise.set_repeat_count(int(get_text( xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
@@ -226,6 +241,8 @@ def load(exercise, dom, path):
             exercise.set_play_margin_after(int(get_text( xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("use_dynamic_correction")) > 0:
             exercise.set_use_dynamic_correction(get_text( xml_properties.getElementsByTagName("use_dynamic_correction")[0].childNodes) == "True")
+        if len(xml_properties.getElementsByTagName("repeat_count_by_sequence_limit")) > 0:
+            exercise.set_repeat_count_limit_by_sequence(int(get_text( xml_properties.getElementsByTagName("repeat_count_by_sequence_limit")[0].childNodes)))
 
 
     #Subexercises
@@ -241,6 +258,11 @@ def load(exercise, dom, path):
         for xml_sequence in xml_sequences.getElementsByTagName("sequence"):
             id = int(get_text( xml_sequence.getElementsByTagName("id")[0].childNodes))
             state = get_text( xml_sequence.getElementsByTagName("state")[0].childNodes)
+            #Sequence repeat count
+            if len(xml_sequence.getElementsByTagName("repeat_count")) > 0:
+                repeat_count = int(get_text( xml_sequence.getElementsByTagName("repeat_count")[0].childNodes))
+            else:
+                repeat_count = 0
             words = []
 
             if state == "in_progress":
@@ -248,7 +270,7 @@ def load(exercise, dom, path):
                 for xml_world in xml_words.getElementsByTagName("word"):
                     words.append(get_text( xml_world.childNodes))
 
-            progress.append((id, state, words))
+            progress.append((id, state, words, repeat_count))
 
         #Paths
         xml_paths = xml_subExercise.getElementsByTagName("paths")[0]

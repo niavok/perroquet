@@ -56,13 +56,14 @@ def load(self, exercise, dom, path):
         id = int(get_text(xml_sequence.getElementsByTagName("id")[0].childNodes))
         state = get_text(xml_sequence.getElementsByTagName("state")[0].childNodes)
         words = []
+        repeat_count = 0
 
         if state == "in_progress":
             xml_words = xml_sequence.getElementsByTagName("words")[0]
             for xml_world in xml_words.getElementsByTagName("word"):
                 words.append(get_text(xml_world.childNodes))
 
-        progress.append((id, state, words))
+        progress.append((id, state, words, repeat_count))
 
 
     # Stats

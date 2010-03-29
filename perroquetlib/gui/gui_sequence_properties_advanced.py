@@ -140,6 +140,9 @@ class GuiSequencePropertiesAdvanced:
             entryExerciseName.set_text("")
 
 
+        entryRepeatCountLimit = self.builder.get_object("entryRepeatCountLimit")
+        entryRepeatCountLimit.set_text(str(self.core.get_exercise().get_repeat_count_limit_by_sequence()))
+
         self._update_path_buttons()
 
     def __load_path(self, videoPath, exercisePath, translationPath):
@@ -244,13 +247,18 @@ class GuiSequencePropertiesAdvanced:
         entryExerciseName = self.builder.get_object("entryExerciseName")
         self.core.get_exercise().set_name(entryExerciseName.get_text())
 
+        entryRepeatCountLimit = self.builder.get_object("entryRepeatCountLimit")
+        self.core.get_exercise().set_repeat_count_limit_by_sequence(int(entryRepeatCountLimit.get_text()))
+        entryRepeatCountLimit.set_text(str(self.core.get_exercise().get_repeat_count_limit_by_sequence()))
 
+        if self.core.get_exercise().get_repeat_count_limit_by_sequence() == 0:
+            self.core.get_exercise().clear_sequence_repeat_count()
 
         # Update paths
         if len(self.pathListStore) != len(self.core.get_exercise().subExercisesList):
             self.core.get_exercise().subExercisesList = []
             for subPath in self.pathListStore:
-                self.core.get_exercise().subExercisesList.append(SubExercise(self.exercise))
+                self.core.get_exercise().subExercisesList.append(SubExercise(self.core.get_exercise()))
 
         for i,subPath in enumerate(self.pathListStore):
             self.core.get_exercise().subExercisesList[i].set_video_path(subPath[1])

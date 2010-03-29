@@ -46,6 +46,7 @@ class Exercise(object):
         self.playMarginAfter = 500
         self.playMarginBefore = 1000
         self.use_dynamic_correction = True
+        self.repeat_count_limit_by_sequence = 0
 
     def initialize(self):
         self.__load_subtitles()
@@ -75,6 +76,8 @@ class Exercise(object):
             self.use_dynamic_correction = (config.get("default_exercise_dynamic_correction") == 1)
 
             self.set_language_id(config.get("default_exercise_language"))
+
+            self.repeat_count_limit_by_sequence = int(config.get("default_repeat_count_limit_by_sequence"))
 
     def __load_subtitles(self):
 
@@ -286,8 +289,19 @@ class Exercise(object):
     def set_use_dynamic_correction(self, use):
         self.use_dynamic_correction = use
 
-    
+    def set_repeat_count_limit_by_sequence(self, repeat_count_limit):
+        self.repeat_count_limit_by_sequence = repeat_count_limit
 
-   
+    def get_repeat_count_limit_by_sequence(self):
+        return self.repeat_count_limit_by_sequence
 
+    def is_current_sequence_repeat_limit_reach(self):
+        return  self.get_repeat_count_limit_by_sequence() != 0 and self.get_current_sequence().get_repeat_count() >= self.get_repeat_count_limit_by_sequence()
+
+    def increment_current_sequence_repeat_count(self):
+        self.get_current_sequence().set_repeat_count(self.get_current_sequence().get_repeat_count()+1)
+
+    def clear_sequence_repeat_count(self):
+        for sequence in self.get_sequence_list():
+            sequence.set_repeat_count(0)
 

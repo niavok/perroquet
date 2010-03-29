@@ -82,7 +82,8 @@ class Core(object):
         self._update_word_list()
         self.timeUpdateThreadId = thread.start_new_thread(self.time_update_thread, ())
 
-        if load:
+        if load and self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
             self.play()
         else:
             self.pause()
@@ -121,8 +122,12 @@ class Core(object):
 
     #Repeat the currence sequence
     def repeat_sequence(self):
-        self.goto_sequence_begin()
-        self.play()
+        if not self.exercise.is_current_sequence_repeat_limit_reach():
+            #Repeat limit not reach or no limit
+            self.goto_sequence_begin()
+            self.play()
+            self.exercise.increment_current_sequence_repeat_count()
+            
 
     #Change the active sequence
     def select_sequence(self, num, load = True):
@@ -130,7 +135,8 @@ class Core(object):
             return
         self.exercise.goto_sequence(num)
         self._activate_sequence()
-        if load:
+        if load and self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
             self.repeat_sequence()
         self.set_can_save(True)
 
@@ -139,7 +145,8 @@ class Core(object):
         if self.exercise.goto_next_sequence():
             self.set_can_save(True)
         self._activate_sequence()
-        if load:
+        if load and self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
             self.repeat_sequence()
 
     #Goto previous sequence
@@ -147,7 +154,8 @@ class Core(object):
         if self.exercise.goto_previous_sequence():
             self.set_can_save(True)
         self._activate_sequence()
-        if load:
+        if load and self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
             self.repeat_sequence()
 
     #Update interface with new sequence. Configure stop media callback
@@ -204,10 +212,15 @@ class Core(object):
     def __validate_sequence(self):
         if self.exercise.get_current_sequence().is_valid():
             if self.exercise.get_repeat_after_completed():
-                self.repeat_sequence()
+                if self.exercise.get_repeat_count_limit_by_sequence() == 0:
+                    #Auto start play only if repeat is not limited
+                    self.repeat_sequence()
             else:
                 self.next_sequence(False)
-                self.play()
+                if self.exercise.get_repeat_count_limit_by_sequence() == 0:
+                    #Auto start play only if repeat is not limited
+                    self.play()
+                
 
     #Goto beginning of the current sequence. Can start to play as soon
     #as the media player is ready
@@ -316,7 +329,9 @@ class Core(object):
         self.player.seek(pos)
         self.player.set_next_callback_time(self.exercise.get_current_sequence().get_time_end() + self.exercise.get_play_margin_after())
         self.state = Core.WAIT_END
-        self.play()
+        if self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
+            self.play()
 
     #Thread to update slider position in gui
     def time_update_thread(self):
@@ -388,7 +403,9 @@ class Core(object):
             self.set_can_save(False)
         self._activate_sequence()
         self.goto_sequence_begin(True)
-        self.play()
+        if self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
+            self.play()
 
     #Change paths of current exercice and reload subtitles and video
     def _update_paths(self, videoPath, exercisePath, translationPath):
@@ -409,7 +426,9 @@ class Core(object):
         self.set_can_save(True)
         self._activate_sequence()
         self.goto_sequence_begin(True)
-        self.play()
+        if self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
+            self.play()
 
     def update_properties(self):
         self.exercise.initialize()
@@ -417,7 +436,9 @@ class Core(object):
         self.set_can_save(True)
         self._activate_sequence()
         self.goto_sequence_begin(True)
-        self.play()
+        if self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
+            self.play()
 
     #get paths of current exercise
     def get_paths(self):
@@ -465,7 +486,9 @@ class Core(object):
         self._reload(True)
         self._activate_sequence()
         self.goto_sequence_begin(True)
-        self.play()
+        if self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
+            self.play()
 
     def export_as_template(self):
         self.gui_controller.ask_properties_advanced()
