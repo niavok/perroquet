@@ -289,7 +289,7 @@ class GuiExerciseManager:
             self.treeStoreDetails.append(None,["<b>"+_("Package path")+"</b>",exo.get_file_path()])
             self.treeStoreDetails.append(None,["<b>"+_("Template path")+"</b>",exo.get_template_path()])
             self.treeStoreDetails.append(None,["<b>"+_("Instance path")+"</b>",exo.get_instance_path()])
-            self.treeStoreDetails.append(None,["<b>"+_("Done path")+"</b>",exo.get_done_path()])
+            self.treeStoreDetails.append(None,["<b>"+_("Finished exercise  path")+"</b>",exo.get_done_path()])
 
         cell = gtk.CellRendererText()
 

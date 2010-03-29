@@ -153,7 +153,7 @@
                     <child>
                       <object class="GtkLabel" id="labelRepeatCountPerSequence">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Limit repeat count by sequence (0 for no limit):</property>
+                        <property name="label" translatable="yes">Repeat count limit by sequence (0 for no limit):</property>
                       </object>
                       <packing>
                         <property name="padding">3</property>
@@ -578,7 +578,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkbuttonRepeatAfterComplete">
-                    <property name="label" translatable="yes">Repeat sequences after completed it</property>
+                    <property name="label" translatable="yes">Repeat sequences after having completed it</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
