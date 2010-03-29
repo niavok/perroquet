@@ -87,6 +87,8 @@ class ExerciseRepository:
         return self.exercisesGroupList
 
     def get_orphan_groups(self):
+        #FIXME ugly
+        from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
         groupPathList = os.listDir(self.get_local_path())
 
         groupUsedPath = []

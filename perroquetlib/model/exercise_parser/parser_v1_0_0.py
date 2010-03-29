@@ -24,6 +24,8 @@ from perroquetlib.model.languages_manager import LanguagesManager
 
 from lib import get_text
 
+VERSION = "1.0.0"
+
 def save(path):
     raise NotImplemented
 

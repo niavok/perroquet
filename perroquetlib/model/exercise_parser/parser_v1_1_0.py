@@ -25,6 +25,8 @@ from perroquetlib.model.languages_manager import LanguagesManager
 
 from lib import get_text, update_sequence_list
 
+VERSION = "1.1.0 dev"
+
 def save(exercise, outputPath):
 
     impl = getDOMImplementation()
@@ -34,7 +36,7 @@ def save(exercise, outputPath):
 
     # Version
     xml_version = newdoc.createElement("version")
-    xml_version.appendChild(newdoc.createTextNode("1.1.0"))
+    xml_version.appendChild(newdoc.createTextNode(VERSION))
     root_element.appendChild(xml_version)
 
     #Name

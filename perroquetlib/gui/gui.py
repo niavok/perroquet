@@ -448,7 +448,7 @@ class Gui:
     def ask_load_exercise(self):
         loader = OpenFileSelector(self.window)
         result =loader.run()
-        return result == None
+        return result
 
     def display_exercice_manager(self,core):
         dialogExerciseManager = GuiExerciseManager(core, self.window)
@@ -682,7 +682,14 @@ class Gui:
 
     def on_reset_exercise_content_clicked(self, widget, data=None):
         self.controller.notify_reset_exercise_content()
-    
+
+    def on_lastopenfilesTreeView_cursor_changed(self, widget, data=None):
+        gtkTree = self.builder.get_object("lastopenfilesTreeView")
+        gtkSelection = gtkTree.get_selection()
+        (modele, iter) =  gtkSelection.get_selected()
+        path = modele.get(iter, 0)[0]
+        self.controller.notify_load_path(path)
+        
 EVENT_FILTER = None
 
 
@@ -709,6 +716,7 @@ class FileSelector(gtk.FileChooserDialog):
                 self.inputsection = None
 
 
+        #FIXME unused
         def add_widget(self, title, widget):
                 "Adds a widget to the file selection"
 
