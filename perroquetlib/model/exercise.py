@@ -20,6 +20,9 @@
 import re
 import random
 import copy
+import hashlib
+import string
+
 
 from subtitles_loader import SubtitlesLoader
 from sub_exercise import SubExercise
@@ -47,6 +50,12 @@ class Exercise(object):
         self.playMarginBefore = 1000
         self.use_dynamic_correction = True
         self.repeat_count_limit_by_sequence = 0
+        self.lock_properties = False
+        self.lock_correction = False
+        self.lock_properties_password = None
+        self.lock_correction_password = None
+        self.lock_properties_salt = None
+        self.lock_correction_salt = None
 
     def initialize(self):
         self.__load_subtitles()
@@ -305,3 +314,60 @@ class Exercise(object):
         for sequence in self.get_sequence_list():
             sequence.set_repeat_count(0)
 
+    def is_lock_properties(self):
+        return self.lock_properties
+
+    def is_lock_properties_password(self):
+        return self.lock_properties_salt == None
+
+    def set_lock_properties(self, state, new_password = None):
+        self.lock_properties = state
+        if new_password is not None:
+            salt = ""
+            pop = string.hexdigits
+            while len(salt) < 6:
+                salt += random.choice(pop)
+
+            self.lock_properties_password = self.hash(salt, new_password)
+            self.lock_properties_salt = salt
+        else:
+            self.lock_properties_salt = None
+            self.lock_properties_password = None
+
+    def verify_lock_properties_password(self, password):
+        return self.lock_properties_password == self.hash(self.lock_properties_salt, password)
+
+    def is_lock_correction(self):
+        return self.lock_correction
+
+    def is_lock_correction_password(self):
+        return self.lock_correction_salt == None
+
+    def set_lock_correction(self, state, new_password = None):
+        self.lock_correction = state
+        print "set_lock_correction "
+        print new_password
+        if new_password is not None:
+            salt = ""
+            pop = string.hexdigits
+            while len(salt) < 6:
+                salt += random.choice(pop)
+
+            self.lock_correction_password = self.hash(salt, new_password)
+            self.lock_correction_salt = salt
+        else:
+            self.lock_corrections_salt = None
+            self.lock_correction_password = None
+
+    def verify_lock_correction_password(self, password):
+        return self.lock_correction_password == self.hash(self.lock_correction_salt, password)
+
+    def hash(self, salt, password):
+        """Compute the hashed password for the salt and the password"""
+        m = hashlib.sha256()
+        m.update(salt+password)
+        print salt
+        print password
+        print m.hexdigest()
+        return m.hexdigest()
+        

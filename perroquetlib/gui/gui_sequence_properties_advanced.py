@@ -143,6 +143,12 @@ class GuiSequencePropertiesAdvanced:
         entryRepeatCountLimit = self.builder.get_object("entryRepeatCountLimit")
         entryRepeatCountLimit.set_text(str(self.core.get_exercise().get_repeat_count_limit_by_sequence()))
 
+        #Locks
+        checkbutton_lock_properties = self.builder.get_object("checkbutton_lock_properties")
+        checkbutton_lock_properties.set_active(self.core.get_exercise().is_lock_properties())
+
+        checkbutton_lock_correction = self.builder.get_object("checkbutton_lock_correction")
+        checkbutton_lock_correction.set_active(self.core.get_exercise().is_lock_correction())
         self._update_path_buttons()
 
     def __load_path(self, videoPath, exercisePath, translationPath):
@@ -254,6 +260,28 @@ class GuiSequencePropertiesAdvanced:
         if self.core.get_exercise().get_repeat_count_limit_by_sequence() == 0:
             self.core.get_exercise().clear_sequence_repeat_count()
 
+        #Locks
+        checkbutton_lock_properties = self.builder.get_object("checkbutton_lock_properties")
+        lock_properties = checkbutton_lock_properties.get_active()
+        entry_lock_properties = self.builder.get_object("entry_lock_properties")
+        lock_properties_password =  entry_lock_properties.get_text()
+        if len(lock_properties_password) == 0:
+            lock_properties_password = None
+
+        if lock_properties != self.core.get_exercise().is_lock_properties() or lock_properties_password is not None:
+            self.core.get_exercise().set_lock_properties(lock_properties, lock_properties_password)
+
+
+        checkbutton_lock_correction = self.builder.get_object("checkbutton_lock_correction")
+        lock_correction = checkbutton_lock_correction.get_active()
+        entry_lock_correction = self.builder.get_object("entry_lock_correction")
+        lock_correction_password =  entry_lock_correction.get_text()
+        if len(lock_correction_password) == 0:
+            lock_correction_password = None
+
+        if lock_correction != self.core.get_exercise().is_lock_correction() or lock_correction_password is not None:
+            self.core.get_exercise().set_lock_correction(lock_correction, lock_correction_password)
+      
         # Update paths
         if len(self.pathListStore) != len(self.core.get_exercise().subExercisesList):
             self.core.get_exercise().subExercisesList = []
