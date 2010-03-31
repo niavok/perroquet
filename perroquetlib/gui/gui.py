@@ -303,7 +303,7 @@ class Gui:
     def ask_reset_exercise_content(self):
         dialogExerciseProperties = GuiResetExercise( self.window)
         response = dialogExerciseProperties.run()
-        return response == gtk.RESPONSE_YES
+        return response
 
     def display_message(self, message):
         #TODO implemernt message box

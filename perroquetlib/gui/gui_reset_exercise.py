@@ -39,13 +39,17 @@ class GuiResetExercise:
 
         self.dialog.set_modal(True)
         self.dialog.set_transient_for(self.parent)
+        self.result = False
 
     def run(self):
         self.dialog.run()
         self.dialog.destroy()
+        return self.result
 
     def on_button_reset_ok_clicked(self, widget, data=None):
+        self.result = True
         self.dialog.response(gtk.RESPONSE_OK)
 
     def on_button_reset_cancel_clicked(self, widget, data=None):
+        self.result = False
         self.dialog.response(gtk.RESPONSE_CANCEL)
