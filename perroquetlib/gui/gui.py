@@ -27,7 +27,6 @@ import locale
 from perroquetlib.config import config
 from perroquetlib.model.languages_manager import LanguagesManager
 
-
 from gui_sequence_properties import GuiSequenceProperties
 from gui_sequence_properties_advanced import GuiSequencePropertiesAdvanced
 from gui_reset_exercise import GuiResetExercise

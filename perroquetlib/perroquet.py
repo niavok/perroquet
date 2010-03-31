@@ -22,8 +22,9 @@
 
 import sys
 import os
+import logging
 
-from perroquetlib.core import Core
+from perroquetlib.core import Core, defaultLoggingHandler
 from perroquetlib.gui.gui_controller import GuiController
 from perroquetlib.config.perroquet_config import config
 
@@ -37,13 +38,16 @@ class Perroquet(object):
         self.core.set_gui(self.gui)
         self.gui.set_core(self.core)
         self.gui.activate("closed")
+        self.logger = logging.Logger("Perroquet")
+        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(defaultLoggingHandler)
 
     def run(self):
         if len(sys.argv) > 1:
             path = os.path.abspath(sys.argv[1])
             self.core.load_exercise( path )
         elif config.get("lastopenfile"):
-            print "last open file : " + config.get("lastopenfile")
+            self.logger.info("last open file : " + config.get("lastopenfile"))
             self.core.load_exercise(config.get("lastopenfile"))
 
         self.gui.run()

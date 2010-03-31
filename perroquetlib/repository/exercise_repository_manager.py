@@ -26,8 +26,10 @@ import tempfile
 import tarfile
 import errno
 import shutil
+import logging
 from gettext import gettext as _
 
+from perroquetlib.core import defaultLoggingHandler
 from perroquetlib.config import config
 from perroquetlib.model.exercise_parser import load_exercise, save_exercise
 
@@ -46,6 +48,9 @@ class ExerciseRepositoryManager:
     """
     def __init__(self):
         """Constructor"""
+        self.logger = logging.Logger("ExerciseRepositoryManager")
+        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(defaultLoggingHandler)
 
     def get_exercise_repository_list(self):
         """Return the list of all find repositories.

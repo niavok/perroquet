@@ -21,6 +21,12 @@
 import thread
 import time
 import gtk
+import logging
+import sys
+# Build some logger related objects
+defaultLoggingHandler = logging.StreamHandler(sys.stdout)
+defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s","%a %H:%M:%S"))
+
 from gettext import gettext as _
 
 from video_player import VideoPlayer
@@ -41,7 +47,10 @@ class Core(object):
         self.last_save = False
         self.exercise = None
         self.config = config
-
+        self.logger = logging.Logger("Core")
+        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(defaultLoggingHandler)
+        
     #Call by the main, give an handler to the main gui
     def set_gui(self, gui):
         self.gui_controller = gui
@@ -310,7 +319,7 @@ class Core(object):
         self.exercise.goto_sequence(0) #FIXME
         self._update()
         self.set_can_save(True)
-        print "need to stop the current sequence" #FIXME
+        self.logger.debug("need to stop the current sequence") #FIXME
 
     #pause or play media
     def toggle_pause(self):
@@ -351,7 +360,7 @@ class Core(object):
     #Save current exercice
     def save(self, saveAs = False):
         if not self.exercise:
-            print "Error core.save called but no exercise load"
+            self.logger.error("Save called but no exercise load")
             return
 
         if saveAs or self.exercise.get_output_save_path() == None:
@@ -380,7 +389,7 @@ class Core(object):
             self.exercise = load_exercise(path)
             self.exercise.set_media_change_callback(self.media_change_call_back)
         except IOError:
-            print "No file at "+path
+            self.logger.exception("No file at "+path)
             return
         if not self.exercise:
             return
@@ -479,7 +488,7 @@ class Core(object):
         return self.player
 
     def media_change_call_back(self):
-        print "new media : "+self.exercise.get_video_path()
+        self.logger.info("new media : "+self.exercise.get_video_path())
         """self.Pause()
         self.player.open(self.exercise.get_video_path())
         """
@@ -504,7 +513,7 @@ class Core(object):
         if path:
             repoManager = ExerciseRepositoryManager()
             repoManager.export_as_package(self.exercise,path)
-        print "Export done"
+        self.logger.info("Export done")
 
     def import_package(self):
         import_path = self.gui_controller.ask_import_package()
