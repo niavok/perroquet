@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import perroquetlib
 
 # Copyright (C) 2009-2010 Frédéric Bertolus.
 # Copyright (C) 2009-2010 Matthieu Bizien.
@@ -23,6 +24,8 @@
 import os
 from ConfigParser import ConfigParser
 
+import logging
+from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
         
 class Parser(ConfigParser):
     """A general class to make parsers"""
@@ -108,6 +111,9 @@ class Config:
     def __init__(self):
         self._properties = {}
         self._writableParsers = []
+        self.logger = logging.Logger("Config")
+        self.logger.setLevel(defaultLoggingLevel)
+        self.logger.addHandler(defaultLoggingHandler)
         
     def load_writable_config_file(self, writablePath, referencePath):
         """load an ini config file that can be modified."""

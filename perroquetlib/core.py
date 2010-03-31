@@ -26,6 +26,7 @@ import sys
 # Build some logger related objects
 defaultLoggingHandler = logging.StreamHandler(sys.stdout)
 defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s","%a %H:%M:%S"))
+defaultLoggingLevel = logging.DEBUG
 
 from gettext import gettext as _
 
@@ -48,7 +49,7 @@ class Core(object):
         self.exercise = None
         self.config = config
         self.logger = logging.Logger("Core")
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
         
     #Call by the main, give an handler to the main gui

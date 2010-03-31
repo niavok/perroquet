@@ -151,6 +151,6 @@ else:
     globalPath = existantGlobalPaths[0]
 localPath = os.path.join( config.get("localconfigdir"), "config.ini")
 if not os.path.isfile(localPath):
-    print "No local conf file found"
+    config.logger.warn("No local conf file found")
 config.load_writable_config_file(localPath, globalPath)
 

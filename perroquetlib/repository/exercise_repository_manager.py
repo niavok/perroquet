@@ -29,7 +29,7 @@ import shutil
 import logging
 from gettext import gettext as _
 
-from perroquetlib.core import defaultLoggingHandler
+from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.config import config
 from perroquetlib.model.exercise_parser import load_exercise, save_exercise
 
@@ -38,18 +38,18 @@ from perroquetlib.repository.exercise_repository import ExerciseRepository
 class ExerciseRepositoryManager:
     """This class provide an interface to get a list of exercise repository,
     instance of ExerciseRepository. A repository is a tree of Perroquet
-    exercises which can be syncronized with an online image. During
-    syncronization, only the exercise's metadatas are downloaded but it's
+    exercises which can be synchronized with an online image. During
+    synchronization, only the exercise's metadatas are downloaded but it's
     possible to install the real exercise then use it.
     A repository contain a list of exercises group. A group contains a list
     of exercises.
-    The repositories metadatas are store in a diretory tree in the local
+    The repositories metadatas are store in a directory tree in the local
     datas of the user. This path is call 'repo root directory'.
     """
     def __init__(self):
         """Constructor"""
         self.logger = logging.Logger("ExerciseRepositoryManager")
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
 
     def get_exercise_repository_list(self):
@@ -139,15 +139,15 @@ class ExerciseRepositoryManager:
                 except IOError:
                     #if the download failed store the url in a list of
                     #offline urls
-                    print "Fail to connection to repository '"+line+"'"
+                    self.logger.error("Fail to connection to repository '"+line+"'")
                     offlineRepoList.append(line)
                 except ValueError:
-                    print "Unknown url type '"+line+"'"
+                    self.logger.exception("Unknown url type '"+line+"'")
                     offlineRepoList.append(line)
                 else:
                    #if the download success, init a repository from the
                    #downloaded file and regenerate the tree
-                    print "init distant repo"
+                    self.logger.debug("init distant repo")
                     repository = ExerciseRepository()
                     repository.parse_distant_repository_file(handle)
                     repository.set_url(line)
@@ -168,9 +168,9 @@ class ExerciseRepositoryManager:
                 f = open(repoDescriptionPath, 'r')
                 dom = parse(f)
                 repository.parse_description(dom)
-                print "test offline url : " +repository.get_url()
+                self.logger.debug("test offline url : " +repository.get_url())
                 if repository.get_url() in offlineRepoList:
-                    print "add url : " +repository.get_url()
+                    self.logger.info("add url : " +repository.get_url())
                     repository = ExerciseRepository()
                     repository.init_from_path(os.path.join(config.get("local_repo_root_dir"),repoPath))
                     repository.set_type("offline")
@@ -222,7 +222,7 @@ class ExerciseRepositoryManager:
 
         f = open(repositoryPath, 'w')
         for line in repositoryList:
-            print line
+            self.logger.debug(line)
             f.writelines(line+'\n')
 
         f.close()

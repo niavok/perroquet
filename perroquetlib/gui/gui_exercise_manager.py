@@ -23,15 +23,21 @@ import time
 import gettext
 import thread
 import textwrap
+import logging
 
+from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 from perroquetlib.config import config
+import perroquetlib
 
 _ = gettext.gettext
 
 class GuiExerciseManager:
     def __init__(self, core, parent):
 
+        self.logger = logging.Logger("GuiExerciseManager")
+        self.logger.setLevel(defaultLoggingLevel)
+        self.logger.addHandler(defaultLoggingHandler)
         self.core = core
         self.config = config
         self.parent = parent
@@ -239,7 +245,7 @@ class GuiExerciseManager:
         self.treeselectionRepositories = self.treeviewRepositories.get_selection()
 
     def _update_details_tree_view(self):
-        print "_update_details_tree_view"
+        self.logger.debug("_update_details_tree_view")
         self.treeStoreDetails = gtk.TreeStore(str,str)
 
         #Clean old colomns
@@ -367,7 +373,7 @@ class GuiExerciseManager:
             self.buttonAction.set_sensitive(True)
 
     def on_button_action_clicked(self,widget,data=None):
-        print "on_buttonAction_activate"
+        self.logger.debug("on_buttonAction_activate")
         if self.action == "install":
             self._install_selected_exercise()
         elif self.action == "cancel":

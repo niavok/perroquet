@@ -26,8 +26,10 @@ import os
 import tarfile
 import errno
 import gettext
+import logging
 from xml.dom.minidom import getDOMImplementation, parse
 from threading import Lock
+from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 
 class ExerciseRepositoryExercise:
     def __init__(self):
@@ -40,6 +42,9 @@ class ExerciseRepositoryExercise:
         self.wordsCount = 0
         self.translationList = []
         self.version = None
+        self.logger = logging.Logger("ExerciseRepositoryExercise")
+        self.logger.setLevel(defaultLoggingLevel)
+        self.logger.addHandler(defaultLoggingHandler)
 
     def is_installed(self):
         return os.path.isfile(self.get_template_path())
@@ -127,7 +132,7 @@ class ExerciseRepositoryExercise:
         self.set_state("downloading")
         tmpPath = self.download()
         if self.canceled:
-            print "remove temp file"
+            self.logger.info("remove temp file")
             self.set_state("canceled")
             os.remove(tmpPath)
         else:

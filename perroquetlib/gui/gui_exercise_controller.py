@@ -110,7 +110,7 @@ class GuiExerciseController:
     def _generate_formatted_corrected_exercise_text(self, sequence):
 
         self._clear()
-        print "plop"
+        self.gui.logger.debug("plop")
         pos = 0
 
         for i, symbol in enumerate(sequence.get_symbols()):
@@ -126,7 +126,7 @@ class GuiExerciseController:
                     self._add_word(sequence.get_words()[i].get_valid(lower=False), 0, isFound=True)
                     pos += len(sequence.get_words()[i].get_text())
                 else:
-                    print "plop"
+                    self.gui.logger.debug("plop")
                     self._add_word(sequence.get_words()[i].get_text(), sequence.get_words()[i].get_score(), through=True)
                     self._add_word(sequence.get_words()[i].get_valid(lower=False), 0, isFound=True)
                     pos += len(sequence.get_words()[i].get_text())

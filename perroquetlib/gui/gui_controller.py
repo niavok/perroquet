@@ -228,7 +228,7 @@ class GuiController:
             self.translation_visible = False
 
     def toggle_correction(self):
-        print "plop"
+        self.gui.logger.debug("plop")
         if not self.correction_visible:
             self.gui.set_enable_correction(True)
             self.gui.set_active_correction(True)
@@ -418,9 +418,8 @@ class GuiController:
             self.toggle_translation()
 
     def notify_toogle_correction(self,visible):
-        print "notify_toogle_correction"
-        print visible
-        print self.correction_visible
+        self.gui.logger.debug("notify_toogle_correction")
+        self.gui.logger.debug("visible="+visible+" , correction_visible="+self.correction_visible)        
         if visible != self.correction_visible:
             self.toggle_correction()
 

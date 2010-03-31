@@ -24,7 +24,7 @@ import sys
 import os
 import logging
 
-from perroquetlib.core import Core, defaultLoggingHandler
+from perroquetlib.core import Core, defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.gui.gui_controller import GuiController
 from perroquetlib.config.perroquet_config import config
 
@@ -39,7 +39,7 @@ class Perroquet(object):
         self.gui.set_core(self.core)
         self.gui.activate("closed")
         self.logger = logging.Logger("Perroquet")
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
 
     def run(self):

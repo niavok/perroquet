@@ -16,10 +16,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
-
+import logging
 from xml.dom.minidom import parse
 
 from perroquetlib.model.exercise import Exercise
+from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 
 from lib import get_text
 from parser_v1_1_0 import load as load_v1_1_0, save as save_v1_1_0
@@ -28,6 +29,9 @@ from parser_v1_0_0 import load as load_v1_0_0, save as save_v1_0_0
 def load_exercise(path):
     """Load a perroquet exercise."""
     exercise = Exercise()
+    logger = logging.Logger("load_exercise")
+    logger.setLevel(defaultLoggingLevel)
+    logger.addHandler(defaultLoggingHandler)
 
     dom = parse(path)
     if len(dom.getElementsByTagName("version")) > 0:
@@ -39,10 +43,10 @@ def load_exercise(path):
             raise NotImplemented
             load_v1_0_0(exercise, dom, path)
         else:
-            print "Unknown file version: "+version
+            logger.error("Unknown file version: "+version)
             exercise = None
     else:
-        print "Invalid perroquet file"
+        logger.error("Invalid perroquet file")
         exercise = None
 
     dom.unlink()
