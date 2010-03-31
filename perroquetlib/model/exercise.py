@@ -345,8 +345,6 @@ class Exercise(object):
 
     def set_lock_correction(self, state, new_password = None):
         self.lock_correction = state
-        print "set_lock_correction "
-        print new_password
         if new_password is not None:
             salt = ""
             pop = string.hexdigits
@@ -366,8 +364,5 @@ class Exercise(object):
         """Compute the hashed password for the salt and the password"""
         m = hashlib.sha256()
         m.update(salt+password)
-        print salt
-        print password
-        print m.hexdigest()
         return m.hexdigest()
         
