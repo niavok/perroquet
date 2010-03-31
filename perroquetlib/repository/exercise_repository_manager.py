@@ -167,7 +167,7 @@ class ExerciseRepositoryManager:
                 if repository.get_url() in offlineRepoList:
                     print "add url : " +repository.get_url()
                     repository = ExerciseRepository()
-                    repository.init_from_path(os.path.join(self.config.get("local_repo_root_dir"),repoPath))
+                    repository.init_from_path(os.path.join(config.get("local_repo_root_dir"),repoPath))
                     repository.set_type("offline")
                     repositoryList.append(repository)
 
@@ -223,14 +223,14 @@ class ExerciseRepositoryManager:
         f.close()
 
     def _get_orphan_exercise_repository_list(self,repositoryListIn):
-        repoPathList = os.listdir(self.config.get("local_repo_root_dir"))
+        repoPathList = os.listdir(config.get("local_repo_root_dir"))
         repoUsedPath = []
         repositoryList = []
         for repo in repositoryListIn:
             repoUsedPath.append(repo.get_local_path())
 
         for repoPath in repoPathList:
-            path = os.path.join(self.config.get("local_repo_root_dir"), repoPath)
+            path = os.path.join(config.get("local_repo_root_dir"), repoPath)
             if path not in repoUsedPath:
                 repository = ExerciseRepository()
                 repository.init_from_path(path)
@@ -341,7 +341,7 @@ class ExerciseRepositoryManager:
             name = exercise.GetVideoPath()
 
 
-        localRepoPath = os.path.join(self.config.get("local_repo_root_dir"),"local")
+        localRepoPath = os.path.join(config.get("local_repo_root_dir"),"local")
         group_path = os.path.join(localRepoPath,"Imported")
         install_path = os.path.join(group_path,name)
 
