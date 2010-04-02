@@ -509,7 +509,6 @@ class Core(object):
             self.exercise.set_template(False)
 
     def export_as_package(self):
-        print "export_as_package"
         self.gui_controller.ask_properties_advanced()
         path = self.gui_controller.ask_export_as_package_path()
         if path:
