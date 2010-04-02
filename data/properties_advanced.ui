@@ -24,7 +24,6 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox3">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <object class="GtkNotebook" id="notebookTabs1">
@@ -33,7 +32,6 @@
             <child>
               <object class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkHBox" id="hbox5">
                     <property name="visible">True</property>
@@ -186,7 +184,6 @@
                     <child>
                       <object class="GtkVBox" id="vbox1">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkCheckButton" id="checkbutton_lock_correction">
                             <property name="label" translatable="yes">Lock correction</property>
@@ -293,7 +290,6 @@
               <object class="GtkVBox" id="pagePaths1">
                 <property name="visible">True</property>
                 <property name="border_width">5</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkHBox" id="hbox4">
@@ -401,7 +397,6 @@
                         <child>
                           <object class="GtkVBox" id="vbox2">
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkButton" id="buttonAddPath">
                                 <property name="label">gtk-add</property>
@@ -495,7 +490,6 @@
             <child>
               <object class="GtkVBox" id="pageSequences1">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">5</property>
                 <child>
                   <object class="GtkHBox" id="hbox11">
@@ -785,12 +779,10 @@
     <property name="upper">1000</property>
     <property name="step_increment">10</property>
     <property name="page_increment">100</property>
-    <property name="page_size">100</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentTimeAfterSequence">
     <property name="upper">5000</property>
     <property name="step_increment">10</property>
     <property name="page_increment">100</property>
-    <property name="page_size">100</property>
   </object>
 </interface>
