@@ -514,7 +514,10 @@ class Core(object):
         if path:
             repoManager = ExerciseRepositoryManager()
             repoManager.export_as_package(self.exercise,path)
-        self.logger.info("Export done")
+            self.logger.info("Export done")
+        else:
+            self.logger.warn("Nothing to be saved??")
+        
 
     def import_package(self):
         import_path = self.gui_controller.ask_import_package()
