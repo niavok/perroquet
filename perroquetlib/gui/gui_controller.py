@@ -192,7 +192,7 @@ class GuiController:
         self.gui.set_sequence_time_selection(sequence_position, sequence_time)
 
     def set_sequence(self, sequence):
-       self.gui_exercise_controller.set_sequence(sequence)
+        self.gui_exercise_controller.set_sequence(sequence)
 
     def set_translation(self, translation):
         self.gui.set_translation(translation)
@@ -275,9 +275,9 @@ class GuiController:
         elif keyname == "Page_Up":
             self.core.next_sequence()
         elif keyname == "Down":
-           self.core.previous_sequence()
+            self.core.previous_sequence()
         elif keyname == "Up":
-           self.core.next_sequence()
+            self.core.next_sequence()
         elif keyname == "Tab":
             if not self.core.exercise.get_current_sequence().is_valid():
                 self.core.next_word()
@@ -336,6 +336,9 @@ class GuiController:
 
     def ask_properties(self):
         self.gui.ask_properties(self.core)
+        
+    def ask_export_as_package_path(self):
+        self.gui.ask_export_as_package_path()
 
     def notify_settings(self):
         self.gui.ask_settings()
