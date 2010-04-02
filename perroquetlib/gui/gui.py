@@ -34,7 +34,7 @@ from gui_sequence_properties_advanced import GuiSequencePropertiesAdvanced
 from gui_reset_exercise import GuiResetExercise
 from gui_settings import Guisettings
 from gui_exercise_manager import GuiExerciseManager
-import perroquetlib
+from gui_password_dialog import GuiPasswordDialog
 
 _ = gettext.gettext
 
@@ -74,6 +74,7 @@ class Gui:
         self.newExerciseDialog = None
         self.liststoreLanguage = None
 
+        self.disable_correction_event = False
 
         self._update_last_open_files_tab()
 
@@ -263,6 +264,10 @@ class Gui:
         dialogsettings = Guisettings(self.window)
         dialogsettings.run()
 
+    def ask_correction(self):
+        dialog_password = GuiPasswordDialog(self.window, "correction")
+        return  dialog_password.run()
+    
     def run(self):
         gtk.gdk.threads_init()
         self.window.show()
@@ -347,8 +352,10 @@ class Gui:
         self.builder.get_object("checkmenuitemTranslation").set_active(state)
 
     def set_active_correction(self, state):
+        self.disable_correction_event = True
         self.builder.get_object("toolbutton_show_correction").set_active(state)
         self.builder.get_object("checkmenuitem_correction").set_active(state)
+        self.disable_correction_event = False
 
     def set_enable_save_as(self, state):
         self.builder.get_object("imagemenuitemSaveAs").set_sensitive(state)
@@ -586,10 +593,14 @@ class Gui:
         self.controller.notify_toogle_translation(toggletoolbuttonShowTranslation.props.active)
 
     def on_checkmenuitem_correction_toggled(self, widget, data=None):
+        if self.disable_correction_event:
+            return False
         toolbutton_show_correction = self.builder.get_object("toolbutton_show_correction")
-        self.controller.notify_toogle_correction(toolbutton_show_correction.props.active)
+        self.controller.notify_toogle_correction(not toolbutton_show_correction.props.active)
 
     def on_toolbutton_show_correction_toggled(self, widget, data=None):
+        if self.disable_correction_event:
+            return False
         toolbutton_show_correction = self.builder.get_object("toolbutton_show_correction")
         self.controller.notify_toogle_correction(toolbutton_show_correction.props.active)
 

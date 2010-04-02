@@ -341,7 +341,7 @@ class Exercise(object):
         return self.lock_correction
 
     def is_lock_correction_password(self):
-        return self.lock_correction_salt == None
+        return self.lock_correction_salt != None
 
     def set_lock_correction(self, state, new_password = None):
         self.lock_correction = state

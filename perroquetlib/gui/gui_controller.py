@@ -77,7 +77,11 @@ class GuiController:
             self.gui.set_enable_export_as_template(True)
             self.gui.set_enable_export_as_package(True)
 
-            
+            if self.core.get_exercise().is_lock_correction() and not self.core.get_exercise().is_lock_correction_password():
+                self.gui.set_enable_correction(False)
+            else:
+                self.gui.set_enable_correction(True)
+
 
 
             #Disable speed change slider if the media player not support it
@@ -99,6 +103,7 @@ class GuiController:
             self.gui.set_enable_export_as_template(False)
             self.gui.set_enable_export_as_package(False)
             self.gui.set_enable_speed_selection(False)
+            self.gui.set_enable_correction(False)
             
         if self.mode == "closed":
             self.gui.set_enable_sequence_index_selection(False)
@@ -113,6 +118,7 @@ class GuiController:
             self.gui.set_enable_export_as_template(False)
             self.gui.set_enable_export_as_package(False)
             self.gui.set_enable_speed_selection(False)
+            self.gui.set_enable_correction(False)
             
         if config.get("interface_show_play_pause_buttons") == 1:
             self.gui.set_visible_play(True)
@@ -228,7 +234,6 @@ class GuiController:
             self.translation_visible = False
 
     def toggle_correction(self):
-        self.gui.logger.debug("plop")
         if not self.correction_visible:
             self.gui.set_enable_correction(True)
             self.gui.set_active_correction(True)
@@ -421,7 +426,22 @@ class GuiController:
         self.gui.logger.debug("notify_toogle_correction")
         self.gui.logger.debug("visible="+str(visible)+" , correction_visible="+str(self.correction_visible))        
         if visible != self.correction_visible:
-            self.toggle_correction()
+            if not self.correction_visible and self.core.get_exercise().is_lock_correction() and self.core.get_exercise().is_lock_correction_password():
+                password = self.gui.ask_correction()
+                if password is not None: #Do nothing if cancel
+                    if self.core.get_exercise().verify_lock_correction_password(password):
+                        #Good password, unlock password
+                        self.toggle_correction()
+                        self.core.get_exercise().set_lock_correction(False)
+                    else:
+                        #Wrong password
+                        self.gui.display_message(_("Wrong password"))
+                        self.gui.set_active_correction(False)
+                else:
+                    #Cancel by user
+                    self.gui.set_active_correction(False)
+            else:
+                self.toggle_correction()
 
 
 

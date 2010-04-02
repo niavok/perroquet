@@ -132,6 +132,16 @@ elif  os.path.isfile(os.path.join(config.get("script"), '../share/perroquet/exer
 else:
     raise IOError,  "Error : gui file 'exercise_manager.ui' not found"
 
+#gui_password_dialog.ui
+if os.path.isfile(os.path.join(config.get("script"), 'data/gui_password_dialog.ui')):
+    config.set("ui_password_path", os.path.join(config.get("script"), 'data/gui_password_dialog.ui'))
+elif  os.path.isfile(os.path.join(config.get("script"), '../share/perroquet/gui_password_dialog.ui')):
+    config.set("ui_password_path", os.path.join(config.get("script"), '../share/perroquet/gui_password_dialog.ui'))
+else:
+    raise IOError,  "Error : gui file 'gui_password_dialog.ui' not found"
+
+
+
 #languages.list
 if os.path.isfile(os.path.join(config.get("script"), 'data/languages.list')):
     config.set("languages_list_path", os.path.join(config.get("script"), 'data/languages.list'))
