@@ -343,7 +343,10 @@ class GuiController:
         self.gui.ask_properties(self.core)
         
     def ask_export_as_package_path(self):
-        self.gui.ask_export_as_package_path()
+        return self.gui.ask_export_as_package_path()
+
+    def ask_export_as_template_path(self):
+        return self.gui.ask_export_as_template_path()
 
     def notify_settings(self):
         self.gui.ask_settings()

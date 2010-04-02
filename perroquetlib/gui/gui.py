@@ -226,23 +226,19 @@ class Gui:
     def ask_export_as_template_path(self):
         saver = ExportAsTemplateFileSelector(self.window)
         path =saver.run()
-        if path == None:
-            return
 
         if path == "None" or path == None :
-            path = ""
+            return None
         elif not path.endswith(".perroquet"):
             path = path +".perroquet"
         return path
 
     def ask_export_as_package_path(self):
         saver = ExportAsPackageFileSelector(self.window)
-        path =saver.run()
-        if path == None:
-            return
-
+        path = saver.run()
+        
         if path == "None" or path == None :
-            path = ""
+            return None
         elif not path.endswith(".tar"):
             path = path +".tar"
         return path

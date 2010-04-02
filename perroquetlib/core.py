@@ -509,6 +509,7 @@ class Core(object):
             self.exercise.set_template(False)
 
     def export_as_package(self):
+        print "export_as_package"
         self.gui_controller.ask_properties_advanced()
         path = self.gui_controller.ask_export_as_package_path()
         if path:
@@ -516,7 +517,7 @@ class Core(object):
             repoManager.export_as_package(self.exercise,path)
             self.logger.info("Export done")
         else:
-            self.logger.warn("Nothing to be saved??")
+            self.logger.warn("No valid path to export??")
         
 
     def import_package(self):
