@@ -362,6 +362,7 @@ class Gui:
 
     def set_enable_save(self, state):
         self.builder.get_object("imagemenuitemSave").set_sensitive(state)
+        self.builder.get_object("saveButton").set_sensitive(state)
 
     def set_enable_export_as_template(self, state):
         self.builder.get_object("imagemenuitemExportAsTemplate").set_sensitive(state)
