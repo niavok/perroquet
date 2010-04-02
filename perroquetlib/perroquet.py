@@ -38,7 +38,7 @@ class Perroquet(object):
         self.core.set_gui(self.gui)
         self.gui.set_core(self.core)
         self.gui.activate("closed")
-        self.logger = logging.Logger("Perroquet")
+        self.logger = logging.Logger(self.__class__.__name__)
         self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
 

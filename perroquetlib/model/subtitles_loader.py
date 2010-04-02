@@ -20,6 +20,8 @@
 
 import re
 import codecs
+import logging
+from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 
 class SubtitlesLoader(object):
     LOOK_FOR_ID = 0
@@ -29,6 +31,11 @@ class SubtitlesLoader(object):
     sourceFormats = ['ascii', 'iso-8859-1']
     targetFormat = 'utf-8'
     outputDir = 'converted'
+    
+    def __init__(self):
+        self.logger = logging.Logger(self.__class__.__name__)
+        self.logger.setLevel(defaultLoggingLevel)
+        self.logger.addHandler(defaultLoggingHandler)
 
     def convert_file(self,fileName):
         for format in self.sourceFormats:
@@ -41,8 +48,7 @@ class SubtitlesLoader(object):
                 return convertedFile
             except UnicodeDecodeError:
                 pass
-
-        print("Error: failed to convert '" + fileName + "'.")
+        self.logger.error("Error: failed to convert '" + fileName + "'.")
 
 
     def get_subtitle_list(self, path):

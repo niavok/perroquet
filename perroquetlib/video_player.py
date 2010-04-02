@@ -21,6 +21,12 @@ import gst
 import gtk
 import thread
 import time
+import logging
+import sys
+# Build some logger related objects
+defaultLoggingHandler = logging.StreamHandler(sys.stdout)
+defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s","%a %H:%M:%S"))
+defaultLoggingLevel = logging.DEBUG
 from gettext import gettext as _
 
 class VideoPlayer:
@@ -29,14 +35,16 @@ class VideoPlayer:
         self.player =  gst.Pipeline()
         self.playbin =  gst.element_factory_make("playbin2", "player")
         self.player.add(self.playbin)
-
+        self.logger = logging.Logger("VideoPlayer")
+        self.logger.setLevel(defaultLoggingLevel)
+        self.logger.addHandler(defaultLoggingHandler)
         #Audio
         audiobin = gst.Bin("audio-speed-bin")
         try:
             self.audiospeedchanger = gst.element_factory_make("pitch")
             self.canChangeSpeed = True
         except gst.ElementNotFoundError:
-            print (_(u"You need to install the gstreamer soundtouch elements to "
+            self.logger.warn(_(u"You need to install the gstreamer soundtouch elements to "
                     "use slowly play feature."))
             self.canChangeSpeed = False
 
@@ -72,7 +80,7 @@ class VideoPlayer:
         elif t == gst.MESSAGE_ERROR:
             self.player.set_state(gst.STATE_NULL)
             err, debug = message.parse_error()
-            print "Error: %s" % err, debug
+            self.logger.error("Error: %s" % (err, debug))
 
     def on_sync_message(self, bus, message):
         if message.structure is None:
