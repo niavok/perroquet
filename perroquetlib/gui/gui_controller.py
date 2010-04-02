@@ -419,7 +419,7 @@ class GuiController:
 
     def notify_toogle_correction(self,visible):
         self.gui.logger.debug("notify_toogle_correction")
-        self.gui.logger.debug("visible="+visible+" , correction_visible="+self.correction_visible)        
+        self.gui.logger.debug("visible="+str(visible)+" , correction_visible="+str(self.correction_visible))        
         if visible != self.correction_visible:
             self.toggle_correction()
 
