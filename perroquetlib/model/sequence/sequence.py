@@ -219,9 +219,6 @@ class Sequence(object):
     def __repr__(self):
         return self.__print__()
 
-    def get_time_end(self):
-        return self.endTime
-
     def set_repeat_count(self, repeat_count):
         self.repeat_count = repeat_count
 
