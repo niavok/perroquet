@@ -69,8 +69,6 @@ class GuiController:
             self.gui.set_enable_sequence_time_selection(True)
             self.gui.set_enable_hint(True)
             self.gui.set_enable_replay_sequence(True)
-            self.gui.set_enable_properties(True)
-            self.gui.set_enable_advanced_properties(True)
             self.gui.set_enable_translation(True)
             self.gui.set_enable_save_as(True)
             self.gui.set_enable_save(True)
@@ -82,6 +80,12 @@ class GuiController:
             else:
                 self.gui.set_enable_correction(True)
 
+            if self.core.get_exercise().is_lock_properties() and not self.core.get_exercise().is_lock_properties_password():
+                self.gui.set_enable_properties(False)
+                self.gui.set_enable_advanced_properties(False)
+            else:
+                self.gui.set_enable_properties(True)
+                self.gui.set_enable_advanced_properties(True)
 
 
             #Disable speed change slider if the media player not support it
@@ -245,6 +249,24 @@ class GuiController:
             self.correction_visible = False
             self.gui_exercise_controller.repaint()
 
+    def _allow_properties(self):
+        if self.core.get_exercise().is_lock_properties() and self.core.get_exercise().is_lock_properties_password():
+            password = self.gui.ask_properties_password()
+            if password is not None: #Do nothing if cancel
+                if self.core.get_exercise().verify_lock_properties_password(password):
+                    #Good password, unlock passwor
+                    self.core.get_exercise().set_lock_properties(False)
+                    return True
+                else:
+                    #Wrong password
+                    self.gui.display_message(_("Wrong password"))
+                    return False
+            else:
+                #Cancel by user
+                return False
+        else:
+            return True
+
     def notify_typing(self, new_text):
 
         if self.mode != "loaded":
@@ -331,10 +353,12 @@ class GuiController:
             return True #True for quit
 
     def notify_properties_advanced(self):
-        self.ask_properties_advanced()
+        if self._allow_properties():
+            self.ask_properties_advanced()
 
     def notify_properties(self):
-        self.ask_properties()
+        if self._allow_properties():
+            self.ask_properties()
 
     def ask_properties_advanced(self):
         self.gui.ask_properties_advanced(self.core)
@@ -433,7 +457,7 @@ class GuiController:
         self.gui.logger.debug("visible="+str(visible)+" , correction_visible="+str(self.correction_visible))        
         if visible != self.correction_visible:
             if not self.correction_visible and self.core.get_exercise().is_lock_correction() and self.core.get_exercise().is_lock_correction_password():
-                password = self.gui.ask_correction()
+                password = self.gui.ask_correction_password()
                 if password is not None: #Do nothing if cancel
                     if self.core.get_exercise().verify_lock_correction_password(password):
                         #Good password, unlock password

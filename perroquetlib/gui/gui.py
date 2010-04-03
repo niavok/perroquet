@@ -260,10 +260,14 @@ class Gui:
         dialogsettings = Guisettings(self.window)
         dialogsettings.run()
 
-    def ask_correction(self):
+    def ask_correction_password(self):
         dialog_password = GuiPasswordDialog(self.window, "correction")
         return  dialog_password.run()
-    
+
+    def ask_properties_password(self):
+        dialog_password = GuiPasswordDialog(self.window, "properties")
+        return  dialog_password.run()
+
     def run(self):
         gtk.gdk.threads_init()
         self.window.show()
@@ -333,6 +337,8 @@ class Gui:
         self.builder.get_object("imagemenuitemProperties").set_sensitive(state)
 
     def set_enable_advanced_properties(self, state):
+        print "set_enable_advanced_properties"
+        print state
         self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(state)
 
     def set_enable_translation(self, state):

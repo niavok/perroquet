@@ -318,7 +318,7 @@ class Exercise(object):
         return self.lock_properties
 
     def is_lock_properties_password(self):
-        return self.lock_properties_salt == None
+        return self.lock_properties_salt != None
 
     def set_lock_properties(self, state, new_password = None):
         self.lock_properties = state
