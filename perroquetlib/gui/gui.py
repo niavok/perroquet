@@ -337,8 +337,6 @@ class Gui:
         self.builder.get_object("imagemenuitemProperties").set_sensitive(state)
 
     def set_enable_advanced_properties(self, state):
-        print "set_enable_advanced_properties"
-        print state
         self.builder.get_object("imagemenuitemAdvancedProperties").set_sensitive(state)
 
     def set_enable_translation(self, state):

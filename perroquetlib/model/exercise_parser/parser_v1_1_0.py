@@ -61,6 +61,38 @@ def save(exercise, outputPath):
     xml_node.appendChild(newdoc.createTextNode(str(exercise.is_random_order())))
     root_element.appendChild(xml_node)
 
+    #Locks
+    xml_locks = newdoc.createElement("locks")
+
+    if exercise.is_lock_correction():
+        xml_lock = newdoc.createElement("correction_lock")
+        if exercise.lock_correction_password is not None or exercise.lock_correction_salt is not None:
+            xml_node = newdoc.createElement("hash")
+            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_correction_password)))
+            xml_lock.appendChild(xml_node)
+            
+            xml_node = newdoc.createElement("salt")
+            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_correction_salt)))
+            xml_lock.appendChild(xml_node)
+
+        xml_locks.appendChild(xml_lock)
+
+    if exercise.is_lock_properties():
+        xml_lock = newdoc.createElement("properties_lock")
+        if exercise.lock_properties_password is not None or exercise.lock_properties_salt is not None:
+            xml_node = newdoc.createElement("hash")
+            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_password)))
+            xml_lock.appendChild(xml_node)
+            
+            xml_node = newdoc.createElement("salt")
+            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_salt)))
+            xml_lock.appendChild(xml_node)
+
+        xml_locks.appendChild(xml_lock)
+
+    root_element.appendChild(xml_locks)
+
+
     #Exercise
     xml_exercise = newdoc.createElement("exercise")
 
@@ -212,6 +244,29 @@ def load(exercise, dom, path):
     #Random order
     if len(dom.getElementsByTagName("random_order")) > 0:
         exercise.set_random_order(get_text(dom.getElementsByTagName("random_order")[0].childNodes) == "True")
+
+    #Locks
+    if len(dom.getElementsByTagName("locks")) > 0:
+        xml_locks = dom.getElementsByTagName("locks")[0]
+        #Correction lock
+        if len(xml_locks.getElementsByTagName("correction_lock")) > 0:
+            exercise.lock_correction = True
+            xml_lock = xml_locks.getElementsByTagName("correction_lock")[0]
+            if len(xml_lock.getElementsByTagName("hash")) > 0:
+                exercise.lock_correction_password = get_text(xml_lock.getElementsByTagName("hash")[0].childNodes)
+            if len(xml_lock.getElementsByTagName("salt")) > 0:
+                exercise.lock_correction_salt = get_text(xml_lock.getElementsByTagName("salt")[0].childNodes)
+
+        #Properties lock
+        if len(xml_locks.getElementsByTagName("properties_lock")) > 0:
+            exercise.lock_properties = True
+            xml_lock = xml_locks.getElementsByTagName("properties_lock")[0]
+            if len(xml_lock.getElementsByTagName("hash")) > 0:
+                exercise.lock_properties_password = get_text(xml_lock.getElementsByTagName("hash")[0].childNodes)
+            if len(xml_lock.getElementsByTagName("salt")) > 0:
+                exercise.lock_properties_salt = get_text(xml_lock.getElementsByTagName("salt")[0].childNodes)
+
+
 
     #Exercise
     xml_exercise = dom.getElementsByTagName("exercise")[0]
