@@ -35,6 +35,8 @@ from gui_reset_exercise import GuiResetExercise
 from gui_settings import Guisettings
 from gui_exercise_manager import GuiExerciseManager
 from gui_password_dialog import GuiPasswordDialog
+from gui_message_dialog import GuiMessageDialog
+
 
 _ = gettext.gettext
 
@@ -316,8 +318,9 @@ class Gui:
         return response
 
     def display_message(self, message):
-        #TODO implemernt message box
-        self.logger.warn("display_message TODO:"+ message)
+        dialog_message = GuiMessageDialog(self.window)
+        dialog_message.set_message(_("Information"), message)
+        dialog_message.run()
 
     def set_enable_sequence_index_selection(self, state):
         self.builder.get_object("hscaleSequenceNum").set_sensitive(state)

@@ -140,6 +140,13 @@ elif  os.path.isfile(os.path.join(config.get("script"), '../share/perroquet/gui_
 else:
     raise IOError,  "Error : gui file 'gui_password_dialog.ui' not found"
 
+#gui_message_dialog.ui
+if os.path.isfile(os.path.join(config.get("script"), 'data/gui_message_dialog.ui')):
+    config.set("ui_message_path", os.path.join(config.get("script"), 'data/gui_message_dialog.ui'))
+elif  os.path.isfile(os.path.join(config.get("script"), '../share/perroquet/gui_message_dialog.ui')):
+    config.set("ui_message_path", os.path.join(config.get("script"), '../share/perroquet/gui_message_dialog.ui'))
+else:
+    raise IOError,  "Error : gui file 'gui_message_dialog.ui' not found"
 
 
 #languages.list
