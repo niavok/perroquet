@@ -92,7 +92,7 @@ class VideoPlayer:
             imagesink = message.src
             imagesink.set_property("force-aspect-ratio", True)
             imagesink.set_xwindow_id(self.windowId)
-            #self.activate_video_area(True)
+            self.activate_video_area(True)
             gtk.gdk.threads_leave()
 
     def open(self,path):
@@ -138,8 +138,8 @@ class VideoPlayer:
     def set_window_id(self, windowId):
         self.windowId = windowId
 
-    def activate_video_callback(self, activateVideo):
-        self.activateVideo = activateVideo
+    def activate_video_callback(self, activate_video):
+        self.activate_video_area = activate_video
 
     def get_current_time(self):
         pos_int = -1
