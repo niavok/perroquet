@@ -55,12 +55,16 @@ class GuiPasswordDialog:
         return self.result
 
     def on_button_reset_ok_clicked(self, widget, data=None):
-        self.result = self.builder.get_object("entryPassword").get_text()
+        self.result = self.builder.get_object("entry_password").get_text()
         self.dialog.response(gtk.RESPONSE_OK)
 
     def on_button_reset_cancel_clicked(self, widget, data=None):
         self.result = None
         self.dialog.response(gtk.RESPONSE_CANCEL)
+
+    def on_entry_password_activate(self, widget, data=None):
+        self.result = self.builder.get_object("entry_password").get_text()
+        self.dialog.response(gtk.RESPONSE_OK)
 
     def on_dialog_password_delete_event(self, widget, data=None):
         self.result = None
