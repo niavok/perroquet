@@ -35,6 +35,7 @@ from model.exercise_parser import load_exercise, save_exercise
 from model.exercise import Exercise
 from model.sequence import NoCharPossible
 from config import config
+defaultLoggingLevel = logging._levelNames[config.get("default_debug_level")]
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 
 # The Core make the link between the GUI, the vidéo player, the current
