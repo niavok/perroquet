@@ -89,7 +89,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="checkbuttonDisableHelp">
+                  <object class="GtkCheckButton" id="checkbutton_disable_help">
                     <property name="label" translatable="yes">Disable help tools</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>

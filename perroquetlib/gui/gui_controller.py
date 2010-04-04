@@ -67,9 +67,7 @@ class GuiController:
         if self.mode == "loaded":
             self.gui.set_enable_sequence_index_selection(True)
             self.gui.set_enable_sequence_time_selection(True)
-            self.gui.set_enable_hint(True)
             self.gui.set_enable_replay_sequence(True)
-            self.gui.set_enable_translation(True)
             self.gui.set_enable_save_as(True)
             self.gui.set_enable_save(True)
             self.gui.set_enable_export_as_template(True)
@@ -87,9 +85,19 @@ class GuiController:
                 self.gui.set_enable_properties(True)
                 self.gui.set_enable_advanced_properties(True)
 
+            #Help
+            if self.core.get_exercise().is_lock_help():
+                self.gui.set_enable_hint(False)
+                self.gui.set_enable_translation(False)
+
+            else:
+                self.gui.set_enable_hint(True)
+                self.gui.set_enable_translation(True)
+
+
 
             #Disable speed change slider if the media player not support it
-            if self.core.get_player().is_speed_changeable():
+            if self.core.get_player().is_speed_changeable() and not self.core.get_exercise().is_lock_help():
                 self.gui.set_enable_speed_selection(True)     
             else:
                 self.gui.set_enable_speed_selection(False)

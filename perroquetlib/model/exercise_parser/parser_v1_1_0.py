@@ -64,15 +64,19 @@ def save(exercise, outputPath):
     #Locks
     xml_locks = newdoc.createElement("locks")
 
-    if exercise.is_lock_correction():
-        xml_lock = newdoc.createElement("correction_lock")
-        if exercise.lock_correction_password is not None or exercise.lock_correction_salt is not None:
+    if exercise.is_lock_help():
+        xml_lock = newdoc.createElement("help_lock")
+        xml_locks.appendChild(xml_lock)
+
+    if exercise.is_lock_properties():
+        xml_lock = newdoc.createElement("properties_lock")
+        if exercise.lock_properties_password is not None or exercise.lock_properties_salt is not None:
             xml_node = newdoc.createElement("hash")
-            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_correction_password)))
+            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_password)))
             xml_lock.appendChild(xml_node)
             
             xml_node = newdoc.createElement("salt")
-            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_correction_salt)))
+            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_salt)))
             xml_lock.appendChild(xml_node)
 
         xml_locks.appendChild(xml_lock)
@@ -83,7 +87,7 @@ def save(exercise, outputPath):
             xml_node = newdoc.createElement("hash")
             xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_password)))
             xml_lock.appendChild(xml_node)
-            
+
             xml_node = newdoc.createElement("salt")
             xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_salt)))
             xml_lock.appendChild(xml_node)
@@ -266,7 +270,10 @@ def load(exercise, dom, path):
             if len(xml_lock.getElementsByTagName("salt")) > 0:
                 exercise.lock_properties_salt = get_text(xml_lock.getElementsByTagName("salt")[0].childNodes)
 
-
+        #Help lock
+        if len(xml_locks.getElementsByTagName("help_lock")) > 0:
+            exercise.lock_help = True
+            
 
     #Exercise
     xml_exercise = dom.getElementsByTagName("exercise")[0]

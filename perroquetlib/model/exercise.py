@@ -50,6 +50,7 @@ class Exercise(object):
         self.playMarginBefore = 1000
         self.use_dynamic_correction = True
         self.repeat_count_limit_by_sequence = 0
+        self.lock_help = False
         self.lock_properties = False
         self.lock_correction = False
         self.lock_properties_password = None
@@ -366,3 +367,8 @@ class Exercise(object):
         m.update(salt+password)
         return m.hexdigest()
         
+    def is_lock_help(self):
+        return self.lock_help
+
+    def set_lock_help(self, state):
+        self.lock_help = state

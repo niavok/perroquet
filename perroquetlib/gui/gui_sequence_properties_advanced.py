@@ -95,7 +95,8 @@ class GuiSequencePropertiesAdvanced:
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
         checkbuttonRandomOrder.set_active(self.core.get_exercise().is_random_order())
 
-
+        checkbutton_disable_help = self.builder.get_object("checkbutton_disable_help")
+        checkbutton_disable_help.set_active(self.core.get_exercise().is_lock_help())
 
 
         self.liststoreLanguage = gtk.ListStore(str, str)
@@ -261,6 +262,10 @@ class GuiSequencePropertiesAdvanced:
             self.core.get_exercise().clear_sequence_repeat_count()
 
         #Locks
+
+        checkbutton_disable_help = self.builder.get_object("checkbutton_disable_help")
+        self.core.get_exercise().set_lock_help(checkbutton_disable_help.get_active())
+
         checkbutton_lock_properties = self.builder.get_object("checkbutton_lock_properties")
         lock_properties = checkbutton_lock_properties.get_active()
         entry_lock_properties = self.builder.get_object("entry_lock_properties")
