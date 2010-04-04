@@ -253,7 +253,7 @@ class Core(object):
             self._update()
             self.set_can_save(True)
         else:
-            pass
+            self._update()
 
     #Goto next word in current sequence
     def next_word(self):
