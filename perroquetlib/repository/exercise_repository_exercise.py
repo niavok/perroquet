@@ -31,6 +31,8 @@ from xml.dom.minidom import getDOMImplementation, parse
 from threading import Lock
 from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 
+_ = gettext.gettext
+
 class ExerciseRepositoryExercise:
     def __init__(self):
         self.id ="no-id"
@@ -45,6 +47,16 @@ class ExerciseRepositoryExercise:
         self.logger = logging.Logger("ExerciseRepositoryExercise")
         self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
+        self.licence = _("Not specified")
+        self.author = _("Not specified")
+        self.authorWebsite = _("Not specified")
+        self.authorContact = _("Not specified")
+        self.packager = _("Not specified")
+        self.packagerWebsite = _("Not specified")
+        self.packagerContact = _("Not specified")
+        self.language = _("Not specified")
+        self.mediaType = _("Not specified")
+        self.filePath = _("Not specified")
 
     def is_installed(self):
         return os.path.isfile(self.get_template_path())
