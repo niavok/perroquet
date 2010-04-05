@@ -347,6 +347,8 @@ class GuiSequencePropertiesAdvanced:
             if not translationChooser.get_filename() or not os.path.isfile(translationChooser.get_filename()):
                 translationChooser.set_current_folder(filePath)
 
+        self.__store_path_changes()
+
     def previous_iter(self, model, iter):
         if not iter:
             return None
