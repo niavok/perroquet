@@ -380,6 +380,12 @@ class GuiController:
     def ask_export_as_template_path(self):
         return self.gui.ask_export_as_template_path()
 
+    def ask_import_package(self):
+        return self.gui.ask_import_package()
+
+    def display_message(self,message):
+        return self.gui.display_message(message)
+
     def notify_settings(self):
         self.gui.ask_settings()
         self.refresh()
