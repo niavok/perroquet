@@ -28,7 +28,7 @@ class SubtitlesLoader(object):
     LOOK_FOR_TIME = 1
     LOOK_FOR_TEXT = 2
 
-    sourceFormats = ['ascii', 'iso-8859-1']
+    sourceFormats = ['utf-8', 'ascii', 'iso-8859-1']
     targetFormat = 'utf-8'
     outputDir = 'converted'
     
