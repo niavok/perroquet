@@ -388,8 +388,9 @@ class Gui:
     def set_enable_previous_sequence(self, state):
         self.builder.get_object("toolbuttonPreviousSequence").set_sensitive(state)
 
-
-
+    def set_enable_settings(self, state):
+        self.builder.get_object("imagemenuitemSettings").set_sensitive(state)
+        
     def set_visible_play(self, state):
         if state:
             self.builder.get_object("toolbuttonPlay").show()
@@ -414,6 +415,11 @@ class Gui:
         else:
             self.builder.get_object("scrolledwindowTranslation").hide()
 
+    def set_visible_settings(self, state):
+        if state:
+            self.builder.get_object("imagemenuitemSettings").show()
+        else:
+            self.builder.get_object("imagemenuitemSettings").hide()
 
 
     def set_checked_lateral_panel(self, checked):

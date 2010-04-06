@@ -139,6 +139,14 @@ class GuiController:
             self.gui.set_visible_play(False)
             self.gui.set_visible_pause(False)
 
+        if config.get("interface_lock_settings") != 1:
+            self.gui.set_enable_settings(True)
+        else:
+            self.gui.set_enable_settings(False)
+
+
+
+
     def get_video_window_id(self):
         return self.gui.get_video_window_id()
 

@@ -71,6 +71,10 @@ class Guisettings:
         checkbuttonShowPlayPauseButtons = self.builder.get_object("checkbuttonShowPlayPauseButtons")
         checkbuttonShowPlayPauseButtons.set_active(config.get("interface_show_play_pause_buttons") == 1)
 
+        checkbuttonShowSettings = self.builder.get_object("checkbuttonShowSettings")
+        checkbuttonShowSettings.set_active(config.get("interface_lock_settings") != 1)
+
+
         # Language
         self.liststoreLanguage = gtk.ListStore(str,str)
 
@@ -127,6 +131,14 @@ class Guisettings:
             config.set("interface_show_play_pause_buttons",1)
         else:
             config.set("interface_show_play_pause_buttons",0)
+
+        checkbuttonShowSettings = self.builder.get_object("checkbuttonShowSettings")
+        if checkbuttonShowSettings.get_active():
+            config.set("interface_lock_settings",0)
+        else:
+            config.set("interface_lock_settings",1)
+
+
 
 
 
