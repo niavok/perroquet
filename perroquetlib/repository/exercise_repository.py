@@ -99,7 +99,7 @@ class ExerciseRepository:
         for groupPath in groupPathList:
             if groupPath not in groupUsedPath: #FIXME used or not ???
                 group = ExerciseRepositoryManager.createGroupFromPath(repoPath)
-                            #FIXME repoPath ??????
+                            #FIXME repoPath unknow var
                 orphanGroupList.append(group)
 
         return orphanGroupList

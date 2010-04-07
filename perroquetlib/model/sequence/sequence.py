@@ -225,5 +225,3 @@ class Sequence(object):
     def get_repeat_count(self):
         return self.repeat_count
 
-    
-   

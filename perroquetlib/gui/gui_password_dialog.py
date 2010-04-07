@@ -70,4 +70,4 @@ class GuiPasswordDialog:
         self.result = None
         self.dialog.response(gtk.RESPONSE_CANCEL)
         return True
-        
+

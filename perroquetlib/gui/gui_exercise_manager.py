@@ -28,7 +28,6 @@ import logging
 from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 from perroquetlib.config import config
-import perroquetlib
 
 _ = gettext.gettext
 
@@ -164,7 +163,6 @@ class GuiExerciseManager:
 
 
         cell = gtk.CellRendererText()
-        pix = gtk.CellRendererPixbuf()
 
         treeviewcolumnName = gtk.TreeViewColumn(_("Name"))
         treeviewcolumnName.pack_start(cell, False)

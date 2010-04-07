@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import perroquetlib
 
 # Copyright (C) 2009-2010 Frédéric Bertolus.
 # Copyright (C) 2009-2010 Matthieu Bizien.
