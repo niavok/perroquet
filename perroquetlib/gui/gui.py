@@ -714,9 +714,10 @@ class Gui:
         gtkTree = self.builder.get_object("lastopenfilesTreeView")
         gtkSelection = gtkTree.get_selection()
         (modele, iter) =  gtkSelection.get_selected()
-        path = modele.get(iter, 0)[0]
-        self.controller.notify_load_path(path)
-        
+        if iter is not None:
+            path = modele.get(iter, 0)[0]
+            self.controller.notify_load_path(path)
+
 EVENT_FILTER = None
 
 
