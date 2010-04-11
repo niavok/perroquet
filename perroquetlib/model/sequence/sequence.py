@@ -123,9 +123,7 @@ class Sequence(object):
             if not loop:
                 pass
             else:
-                raise NotImplemented
-
-    
+                raise NotImplementedError
 
     def previous_word(self, loop=False):
         "go to the previous word"
@@ -136,7 +134,7 @@ class Sequence(object):
             if not loop:
                 pass
             else:
-                raise NotImplemented
+                raise NotImplementedError
 
     def select_sequence_word(self, wordIndex,wordIndexPos):
         """Go to the first editable position after the position of wordIndex
@@ -153,27 +151,35 @@ class Sequence(object):
     def _write_sentence(self, sentence):
         """write many chars. a ' ' mean next word.
         Only for tests"""
+        raise NotImplementedError
 
     def delete_next_char(self):
         """delete the next deletable character"""
+        raise NotImplementedError
 
     def delete_previous_char(self):
         """delete the previous deletable character"""
+        raise NotImplementedError
 
     def first_word(self):
         """goto first editable character"""
+        raise NotImplementedError
 
     def last_word(self):
         """goto last editable character"""
+        raise NotImplementedError
 
     def next_char(self):
         """goto next editable character"""
+        raise NotImplementedError
 
     def previous_char(self):
         """goto to previous editable character"""
+        raise NotImplementedError
 
     def is_valid(self):
         """Return True if the entire sequence is valid, else return False"""
+        raise NotImplementedError
 
     def is_empty(self):
         return all(w.is_empty() for w in self.get_words())
@@ -213,15 +219,15 @@ class Sequence(object):
                 self.next_word()
                 self.show_hint()
 
-    def __print__(self):
-        return "-".join(w.get_text() for w in self.get_words())+" VS "+"-".join(w.get_valid() for w in self.get_words())
-
-    def __repr__(self):
-        return self.__print__()
-
     def set_repeat_count(self, repeat_count):
         self.repeat_count = repeat_count
 
     def get_repeat_count(self):
         return self.repeat_count
+
+    def __print__(self):
+        return "-".join(w.get_text() for w in self.get_words())+" VS "+"-".join(w.get_valid() for w in self.get_words())
+
+    def __repr__(self):
+        return self.__print__()
 

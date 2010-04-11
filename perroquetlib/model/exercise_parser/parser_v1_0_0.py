@@ -27,7 +27,7 @@ from lib import get_text
 VERSION = "1.0.0"
 
 def save(path):
-    raise NotImplemented
+    raise NotImplementedError
 
 def load(self, exercise, dom, path):
     #Name

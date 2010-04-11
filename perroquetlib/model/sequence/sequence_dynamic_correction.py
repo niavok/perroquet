@@ -22,11 +22,9 @@ from perroquetlib.model.sequence.sequence import Sequence
 
 class SequenceDynamicCorrection(Sequence):
     """Sequence which lock valids words"""
-
     def is_valid(self):
+        """Return True if the entire sequence is valid, else return False"""
         return all(w.is_valid() for w in self.get_words())
-
-
 
     def select_sequence_word(self, wordIndex,wordIndexPos):
         self.get_active_word().set_pos(wordIndexPos)
@@ -109,7 +107,7 @@ class SequenceDynamicCorrection(Sequence):
     def _next_false_word(self, loop=False):
         "go to the next non valid word"
         if loop:
-            raise NotImplemented
+            raise NotImplementedError
         if self.get_active_word().is_valid():
             if self.is_valid() or self.get_active_word_index() == self.get_last_index():
                 return
@@ -119,7 +117,7 @@ class SequenceDynamicCorrection(Sequence):
     def _previous_false_word(self, loop=False):
         "go to the previous non valid word"
         if loop:
-            raise NotImplemented
+            raise NotImplementedError
         if self.get_active_word().is_valid():
             if self.is_valid() or self.get_active_word_index() == 0:
                 return

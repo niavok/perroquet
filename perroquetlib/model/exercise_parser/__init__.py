@@ -40,7 +40,7 @@ def load_exercise(path):
         if version >= "1.1.0":
             load_v1_1_0(exercise, dom, path)
         elif version >= "1.0.0":
-            raise NotImplemented
+            raise NotImplementedError
             load_v1_0_0(exercise, dom, path)
         else:
             logger.error("Unknown file version: "+version)
