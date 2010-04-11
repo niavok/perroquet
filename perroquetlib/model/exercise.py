@@ -274,12 +274,11 @@ class Exercise(object):
         self.language =languageManager.get_language_by_id(langId)
 
     def get_language_id(self):
-        (langId, langName, langCharList) = self.language
-        return langId
+        return self.language.id
 
     def is_character_match(self,char):
-        (langId, langName, langCharList) = self.language
-        return re.match('^['+langCharList+']$',char)
+        langAvailableChars = self.language.availableChars
+        return re.match('^['+langAvailableChars+']$',char)
 
     def get_play_margin_before(self):
         return self.playMarginBefore

@@ -238,8 +238,7 @@ def load(exercise, dom, path):
         exercise.set_language_id(get_text(dom.getElementsByTagName("language")[0].childNodes))
     else:
         languageManager = LanguagesManager()
-        (langId, langName, langChars) = languageManager.get_default_language()
-        exercise.set_language_id(langId)
+        exercise.set_language_id(languageManager.get_default_language().id)
 
     #Template
     if len(dom.getElementsByTagName("template")) > 0:

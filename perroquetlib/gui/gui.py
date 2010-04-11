@@ -441,9 +441,8 @@ class Gui:
         languagesList =languageManager.get_languages_list()
 
         for language in languagesList:
-            (langId,langName,chars) = language
-            iter = self.liststoreLanguage.append([langName,langId])
-            if langId == config.get("default_exercise_language"):
+            iter = self.liststoreLanguage.append([language.name, language.id])
+            if language.id == config.get("default_exercise_language"):
                 currentIter = iter
 
         comboboxLanguage = self.builder.get_object("comboboxLanguage")

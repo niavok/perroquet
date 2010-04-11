@@ -21,6 +21,28 @@
 
 from perroquetlib.config import config
 
+
+class Language:
+    def __init__(self, id, name, availableChars, helpChar="~"):
+        self.id = id
+        self.name = name
+        self.availableChars = availableChars
+        self.helpChar = helpChar
+        self._aliases = []
+
+    def add_alias(self, alias, meaning):
+        self._aliases.append((alias,meaning))
+
+    def add_synonyms(self, l):
+        for alias in l:
+            for meaning in (e for e in l if e!=alias):
+                self.add_alias(alias, meaning)
+
+    def is_alias(self, alias, meaning):
+        return (alias, meaning) in self._aliases
+
+
+
 class LanguagesManager:
 
     LOOK_FOR_ID = 0
@@ -37,8 +59,7 @@ class LanguagesManager:
 
     def get_language_by_id(self,idToFind):
         for language in self.languageList:
-            (id,name,charList) = language
-            if id == idToFind:
+            if language.id == idToFind:
                 return language
         return None
 
@@ -66,6 +87,9 @@ class LanguagesManager:
                     current_name = line
                     state = LanguagesManager.LOOK_FOR_CHARLIST
             elif state == LanguagesManager.LOOK_FOR_CHARLIST:
-                current_charList = line
+                current_availableChars = line
                 state = LanguagesManager.LOOK_FOR_ID
-                self.languageList.append((current_id,current_name,current_charList))
+
+                language = Language(current_id,current_name,current_availableChars)
+                self.languageList.append(language)
+

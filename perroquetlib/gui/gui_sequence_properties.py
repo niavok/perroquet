@@ -84,9 +84,8 @@ class GuiSequenceProperties:
         currentLangId = self.core.get_exercise().get_language_id()
 
         for language in languagesList:
-            (langId,langName,chars) = language
-            iter = self.liststoreLanguage.append([langName,langId])
-            if langId == currentLangId:
+            iter = self.liststoreLanguage.append([language.name, language.id])
+            if language.id == currentLangId:
                 currentIter = iter
 
 

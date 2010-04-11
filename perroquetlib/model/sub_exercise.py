@@ -50,13 +50,11 @@ class SubExercise(object):
 
         self.sequenceList = []
 
-        (langId,langName,charToFind) = self.parent.language
-
         for sub in self.subList:
             if self.parent.is_use_dynamic_correction():
-                sequence = SequenceDynamicCorrection(charToFind)
+                sequence = SequenceDynamicCorrection(self.parent.language.availableChars)
             else:
-                sequence = SequenceSimple(charToFind)
+                sequence = SequenceSimple(self.parent.language.availableChars)
             sequence.load(sub.get_text())
             sequence.set_time_begin(sub.get_time_begin())
             sequence.set_time_end(sub.get_time_end())

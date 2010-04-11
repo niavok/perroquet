@@ -35,8 +35,7 @@ def load(self, exercise, dom, path):
 
     #Language
     languageManager = LanguagesManager()
-    (langId, langName, langChars) = languageManager.get_default_language()
-    exercise.set_language_id(langId)
+    exercise.set_language_id(languageManager.get_default_language().id)
 
     #Template
     exercise.set_template(False)

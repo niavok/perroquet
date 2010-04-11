@@ -22,7 +22,7 @@ import re
 from word import Word
 
 class Sequence(object):
-    def __init__(self, charToFind):
+    def __init__(self, availableChars):
 
         # self._symbolList = what is between words (or "")
         # self._wordList = a list of Words items that we want to find
@@ -44,7 +44,7 @@ class Sequence(object):
         
         self._helpChar = '~'
 
-        allChar = charToFind
+        allChar = availableChars
         self.validChar = "["+allChar+"]"
         self.notValidChar = "[^"+allChar+"]"
         self.repeat_count = 0
