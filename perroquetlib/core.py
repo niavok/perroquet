@@ -378,7 +378,8 @@ class Core(object):
         #lastopenfileS
         l=self.config.get("lastopenfiles")
         path = self.exercise.get_output_save_path()
-        self.config.set("lastopenfiles", [path]+[p for p in l if p!=path])
+        name = self.exercise.get_name() or path
+        self.config.set("lastopenfiles", [[path, name]]+[p for p in l if p[0]!=path][:10])
 
         self.set_can_save(False)
 

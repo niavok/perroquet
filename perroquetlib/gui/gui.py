@@ -279,9 +279,6 @@ class Gui:
         #TODO: move part in controller ?
         gtkTree = self.builder.get_object("lastopenfilesTreeView")
 
-        if not gtkTree.get_columns() == []:
-            raise Exception
-
         cell = gtk.CellRendererText()
 
         treeViewColumn = gtk.TreeViewColumn(_("Path"))
@@ -291,9 +288,11 @@ class Gui:
         gtkTree.append_column(treeViewColumn)
 
 
-        treeStore = gtk.TreeStore(str)
-        for file in config.get("lastopenfiles"):
-            treeStore.append(None, [file])
+        treeStore = gtk.TreeStore(str, str)
+        for obj in config.get("lastopenfiles"):
+            path = obj[0]
+            name = obj[1] if len(obj)>=2 else path
+            treeStore.append(None, [name, path])
 
         gtkTree.set_model(treeStore)
 
@@ -715,7 +714,7 @@ class Gui:
         gtkSelection = gtkTree.get_selection()
         (modele, iter) =  gtkSelection.get_selected()
         if iter is not None:
-            path = modele.get(iter, 0)[0]
+            path = modele.get(iter, 1)[0]
             self.controller.notify_load_path(path)
 
 EVENT_FILTER = None
