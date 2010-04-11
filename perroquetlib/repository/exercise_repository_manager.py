@@ -129,7 +129,7 @@ class ExerciseRepositoryManager:
             #Fetch urls of repo description
             for line in f:
                 line = line.rstrip()
-                if line[0] == "#":
+                if line and line[0] == "#":
                     #Comment line
                     continue
                 req = urllib2.Request(line)
@@ -189,7 +189,7 @@ class ExerciseRepositoryManager:
             f = open(repositoryPath, 'r')
             for line in f:
                 line = line.rstrip()
-                if line[0] == "#":
+                if line and line[0] == "#":
                     #Comment line
                     continue
 
