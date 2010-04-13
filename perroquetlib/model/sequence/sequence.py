@@ -22,7 +22,7 @@ import re
 from word import Word
 
 class Sequence(object):
-    def __init__(self, availableChars):
+    def __init__(self, language):
 
         # self._symbolList = what is between words (or "")
         # self._wordList = a list of Words items that we want to find
@@ -44,7 +44,8 @@ class Sequence(object):
         
         self._helpChar = '~'
 
-        allChar = availableChars
+        self.language = language
+        allChar = self.language.availableChars
         self.validChar = "["+allChar+"]"
         self.notValidChar = "[^"+allChar+"]"
         self.repeat_count = 0
@@ -66,7 +67,7 @@ class Sequence(object):
                 word = m.group(1)
                 sizeToCut =  len(word)
                 textToParse = textToParse[sizeToCut:]
-                self._wordList.append(Word(word))
+                self._wordList.append(Word(word, self.language))
             # if the text begin with no word char but followed by a word
             elif re.match('^('+self.notValidChar+'+)'+self.validChar, textToParse):
                 m = re.search('^('+self.notValidChar+'+)'+self.validChar, textToParse)
@@ -78,7 +79,7 @@ class Sequence(object):
             else:
                 # if there is only one word
                 if re.match('^('+self.validChar+'+)', textToParse):
-                    self._wordList.append(Word(textToParse))
+                    self._wordList.append(Word(textToParse, self.language))
                 # if there is only one separator
                 else:
                     self._symbolList.append(textToParse)
@@ -139,6 +140,7 @@ class Sequence(object):
     def select_sequence_word(self, wordIndex,wordIndexPos):
         """Go to the first editable position after the position of wordIndex
         word and wordIndexPos character"""
+        raise NotImplementedError
 
     def write_char(self, char):
         if not self.get_active_word().is_valid():
@@ -196,6 +198,7 @@ class Sequence(object):
 
     def update_after_write(self):
         "update after a modification of the text"
+        raise NotImplementedError
         
     def get_time_begin(self):
         return self.beginTime

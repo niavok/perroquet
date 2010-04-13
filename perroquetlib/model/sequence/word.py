@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-
 class NoCharPossible(Exception):
     pass
     
@@ -47,13 +46,14 @@ class Word:
     valid   -> the word we want to find
     
     NB: texts are stored lowercases"""
-    def __init__(self, validText, helpChar="~"):
+    def __init__(self, validText, language):
         if " " in validText:
             raise AttributeError, "validText=' '"
         self._text = ""
         self._valid = validText
-        
-        self._helpChar = helpChar
+
+        self.language = language
+        self._helpChar = self.language.helpChar
         self._pos = 0
 
     def levenshtein(self):

@@ -52,9 +52,9 @@ class SubExercise(object):
 
         for sub in self.subList:
             if self.parent.is_use_dynamic_correction():
-                sequence = SequenceDynamicCorrection(self.parent.language.availableChars)
+                sequence = SequenceDynamicCorrection(self.parent.language)
             else:
-                sequence = SequenceSimple(self.parent.language.availableChars)
+                sequence = SequenceSimple(self.parent.language)
             sequence.load(sub.get_text())
             sequence.set_time_begin(sub.get_time_begin())
             sequence.set_time_end(sub.get_time_end())
