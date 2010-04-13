@@ -19,10 +19,9 @@
 
 import os
 
-from perroquetlib.model.sub_exercise import SubExercise
-from perroquetlib.model.languages_manager import LanguagesManager
-
 from lib import get_text
+from perroquetlib.model.languages_manager import LanguagesManager
+from perroquetlib.model.sub_exercise import SubExercise
 
 VERSION = "1.0.0"
 

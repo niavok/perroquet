@@ -20,13 +20,13 @@
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import sys
-import os
 import logging
+import os
+import sys
 
+from perroquetlib.config.perroquet_config import config
 from perroquetlib.core import Core, defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.gui.gui_controller import GuiController
-from perroquetlib.config.perroquet_config import config
 
 class Perroquet(object):
 
@@ -45,7 +45,7 @@ class Perroquet(object):
     def run(self):
         if len(sys.argv) > 1:
             path = os.path.abspath(sys.argv[1])
-            self.core.load_exercise( path )
+            self.core.load_exercise(path)
         elif config.get("lastopenfile"):
             self.logger.info("last open file : " + config.get("lastopenfile"))
             self.core.load_exercise(config.get("lastopenfile"))

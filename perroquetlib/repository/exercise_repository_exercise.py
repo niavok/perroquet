@@ -19,24 +19,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-import thread
-import urllib2
-import tempfile
-import os
-import tarfile
 import errno
 import gettext
 import logging
-from xml.dom.minidom import getDOMImplementation, parse
+import os
+import tarfile
+import tempfile
+import thread
+import urllib2
 from threading import Lock
+from xml.dom.minidom import getDOMImplementation, parse
+
 from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 
 _ = gettext.gettext
 
 class ExerciseRepositoryExercise:
     def __init__(self):
-        self.id ="no-id"
-        self.name ="No name"
+        self.id = "no-id"
+        self.name = "No name"
         self.description = ""
         self.mutexInstalling = Lock()
         self.downloadPercent = 0
@@ -83,23 +84,23 @@ class ExerciseRepositoryExercise:
 
     def download(self):
 
-        f=urllib2.urlopen(self.get_file_path())
-        _, tempPath = tempfile.mkstemp("","perroquet-");
+        f = urllib2.urlopen(self.get_file_path())
+        _, tempPath = tempfile.mkstemp("", "perroquet-");
         wf = open(tempPath, 'w+b')
         size = f.info().get('Content-Length')
         if size is None:
             size = 0
         else:
             size = int(size)
-        count=0
+        count = 0
         sizeToRead = 50000
         while not self.canceled:
-            data=f.read(sizeToRead)
+            data = f.read(sizeToRead)
             wf.write(data)
             if len(data) != sizeToRead:
                 break;
-            count+=sizeToRead
-            self.downloadPercent =  (round((float(count)/float(size))*100))
+            count += sizeToRead
+            self.downloadPercent = (round((float(count) / float(size)) * 100))
 
         self.downloading = False
         return tempPath
@@ -167,13 +168,13 @@ class ExerciseRepositoryExercise:
         self.mutexInstalling.release()
 
     def get_template_path(self):
-        return os.path.join(self.get_local_path(),"template.perroquet")
+        return os.path.join(self.get_local_path(), "template.perroquet")
 
     def get_instance_path(self):
-        return os.path.join(self.get_local_path(),"instance.perroquet")
+        return os.path.join(self.get_local_path(), "instance.perroquet")
 
     def get_done_path(self):
-        return os.path.join(self.get_local_path(),"done.perroquet")
+        return os.path.join(self.get_local_path(), "done.perroquet")
 
     def set_name(self, name):
         self.name = name
@@ -271,16 +272,16 @@ class ExerciseRepositoryExercise:
     def get_translations_list(self):
         return self.translationList
 
-    def set_parent(self,parent):
+    def set_parent(self, parent):
         self.parent = parent
 
     def get_local_path(self):
         if self.version is not None:
-            return os.path.join(self.parent.get_local_path(), self.id+"_"+self.version)
+            return os.path.join(self.parent.get_local_path(), self.id + "_" + self.version)
         else:
             return os.path.join(self.parent.get_local_path(), self.id)
 
-    def parse_description(self,xml_exercise):
+    def parse_description(self, xml_exercise):
         self.set_name(self._get_text(xml_exercise.getElementsByTagName("name")[0].childNodes))
         self.set_id(self._get_text(xml_exercise.getElementsByTagName("id")[0].childNodes))
         self.set_description(self._get_text(xml_exercise.getElementsByTagName("description")[0].childNodes))
@@ -407,7 +408,7 @@ class ExerciseRepositoryExercise:
         xml_string = newdoc.toprettyxml()
         xml_string = xml_string.encode('utf8')
 
-        repoDescriptionPath = os.path.join(self.get_local_path(),"exercise.xml")
+        repoDescriptionPath = os.path.join(self.get_local_path(), "exercise.xml")
         f = open(repoDescriptionPath, 'w')
 
         f.write(xml_string)
@@ -416,7 +417,7 @@ class ExerciseRepositoryExercise:
 
 
     def init_from_path(self, exercisePath):
-        exerciseDescriptionPath = os.path.join(exercisePath,"exercise.xml")
+        exerciseDescriptionPath = os.path.join(exercisePath, "exercise.xml")
         if os.path.isfile(exerciseDescriptionPath):
             f = open(exerciseDescriptionPath, 'r')
             dom = parse(f)

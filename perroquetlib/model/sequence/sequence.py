@@ -46,8 +46,8 @@ class Sequence(object):
 
         self.language = language
         allChar = self.language.availableChars
-        self.validChar = "["+allChar+"]"
-        self.notValidChar = "[^"+allChar+"]"
+        self.validChar = "[" + allChar + "]"
+        self.notValidChar = "[^" + allChar + "]"
         self.repeat_count = 0
         
         self.beginTime = 0
@@ -62,15 +62,15 @@ class Sequence(object):
             self._symbolList.append('')
         while len(textToParse) > 0:
             # if the text begin with a word followed by a not word char
-            if re.match('^('+self.validChar+'+)'+self.notValidChar, textToParse):
-                m = re.search('^('+self.validChar+'+)'+self.notValidChar, textToParse)
+            if re.match('^(' + self.validChar + '+)' + self.notValidChar, textToParse):
+                m = re.search('^(' + self.validChar + '+)' + self.notValidChar, textToParse)
                 word = m.group(1)
-                sizeToCut =  len(word)
+                sizeToCut = len(word)
                 textToParse = textToParse[sizeToCut:]
                 self._wordList.append(Word(word, self.language))
             # if the text begin with no word char but followed by a word
-            elif re.match('^('+self.notValidChar+'+)'+self.validChar, textToParse):
-                m = re.search('^('+self.notValidChar+'+)'+self.validChar, textToParse)
+            elif re.match('^(' + self.notValidChar + '+)' + self.validChar, textToParse):
+                m = re.search('^(' + self.notValidChar + '+)' + self.validChar, textToParse)
                 symbol = m.group(1)
                 sizeToCut = len(symbol)
                 textToParse = textToParse[sizeToCut:]
@@ -78,7 +78,7 @@ class Sequence(object):
             # if there is only one word or one separator
             else:
                 # if there is only one word
-                if re.match('^('+self.validChar+'+)', textToParse):
+                if re.match('^(' + self.validChar + '+)', textToParse):
                     self._wordList.append(Word(textToParse, self.language))
                 # if there is only one separator
                 else:
@@ -98,10 +98,10 @@ class Sequence(object):
         return self._activeWordIndex
 
     def set_active_word_index(self, index):
-        if index==-1:
-            index=self.get_word_count()
+        if index == -1:
+            index = self.get_word_count()
 
-        if index<0 or index>self.get_word_count():
+        if index < 0 or index > self.get_word_count():
             raise AttributeError, str(index)
 
         self._activeWordIndex = index
@@ -118,7 +118,7 @@ class Sequence(object):
     def next_word(self, loop=False):
         "go to the next word"
         if self.get_active_word_index() < self.get_last_index():
-            self._activeWordIndex +=1
+            self._activeWordIndex += 1
             self.get_active_word().set_pos(0)
         else:
             if not loop:
@@ -137,7 +137,7 @@ class Sequence(object):
             else:
                 raise NotImplementedError
 
-    def select_sequence_word(self, wordIndex,wordIndexPos):
+    def select_sequence_word(self, wordIndex, wordIndexPos):
         """Go to the first editable position after the position of wordIndex
         word and wordIndexPos character"""
         raise NotImplementedError
@@ -216,7 +216,7 @@ class Sequence(object):
         if not self.get_active_word().is_valid():
             self.get_active_word().show_hint()
         else:
-            if self.get_active_word_index()==self.get_word_count()-1:
+            if self.get_active_word_index() == self.get_word_count()-1:
                 return
             else:
                 self.next_word()
@@ -229,7 +229,7 @@ class Sequence(object):
         return self.repeat_count
 
     def __print__(self):
-        return "-".join(w.get_text() for w in self.get_words())+" VS "+"-".join(w.get_valid() for w in self.get_words())
+        return "-".join(w.get_text() for w in self.get_words()) + " VS " + "-".join(w.get_valid() for w in self.get_words())
 
     def __repr__(self):
         return self.__print__()

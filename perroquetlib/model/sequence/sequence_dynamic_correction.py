@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-from perroquetlib.model.sequence.word import NoCharPossible
 from perroquetlib.model.sequence.sequence import Sequence
+from perroquetlib.model.sequence.word import NoCharPossible
 
 class SequenceDynamicCorrection(Sequence):
     """Sequence which lock valids words"""
@@ -26,7 +26,7 @@ class SequenceDynamicCorrection(Sequence):
         """Return True if the entire sequence is valid, else return False"""
         return all(w.is_valid() for w in self.get_words())
 
-    def select_sequence_word(self, wordIndex,wordIndexPos):
+    def select_sequence_word(self, wordIndex, wordIndexPos):
         self.get_active_word().set_pos(wordIndexPos)
         self.set_active_word_index(wordIndex)
 
@@ -98,7 +98,7 @@ class SequenceDynamicCorrection(Sequence):
         """Check if a word is correct but at a wrong place."""
         for w1 in self.get_words():
             for j, w2 in enumerate(self.get_words()):
-                if w1.get_score()<=0 and w1.is_equal(w2.get_valid()) and not w2.is_valid():
+                if w1.get_score() <= 0 and w1.is_equal(w2.get_valid()) and not w2.is_valid():
                     w2.set_text(w1.get_text())
                     w1.set_text("")
                     self.set_active_word_index(j)
@@ -128,9 +128,9 @@ class SequenceDynamicCorrection(Sequence):
         """write many chars. a ' ' mean next word.
         Only for tests"""
         for char in sentence:
-            if char==" ":
+            if char == " ":
                 pass
-            elif char=="+":
+            elif char == "+":
                 self.next_word()
                 self._next_false_word()
             else:

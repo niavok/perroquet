@@ -19,12 +19,11 @@
 import logging
 from xml.dom.minidom import parse
 
-from perroquetlib.model.exercise import Exercise
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
-
 from lib import get_text
-from parser_v1_1_0 import load as load_v1_1_0, save as save_v1_1_0
 from parser_v1_0_0 import load as load_v1_0_0, save as save_v1_0_0
+from parser_v1_1_0 import load as load_v1_1_0, save as save_v1_1_0
+from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
+from perroquetlib.model.exercise import Exercise
 
 def load_exercise(path):
     """Load a perroquet exercise."""
@@ -43,7 +42,7 @@ def load_exercise(path):
             raise NotImplementedError
             load_v1_0_0(exercise, dom, path)
         else:
-            logger.error("Unknown file version: "+version)
+            logger.error("Unknown file version: " + version)
             exercise = None
     else:
         logger.error("Invalid perroquet file")

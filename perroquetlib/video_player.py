@@ -17,23 +17,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-import gst
-import gtk
-import thread
-import time
 import logging
 import sys
+import thread
+import time
+
+import gst
+import gtk
 # Build some logger related objects
 defaultLoggingHandler = logging.StreamHandler(sys.stdout)
-defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s","%a %H:%M:%S"))
+defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s", "%a %H:%M:%S"))
 defaultLoggingLevel = logging.DEBUG
 from gettext import gettext as _
 
 class VideoPlayer:
     def __init__(self):
 
-        self.player =  gst.Pipeline()
-        self.playbin =  gst.element_factory_make("playbin2", "player")
+        self.player = gst.Pipeline()
+        self.playbin = gst.element_factory_make("playbin2", "player")
         self.player.add(self.playbin)
         self.logger = logging.Logger("VideoPlayer")
         self.logger.setLevel(defaultLoggingLevel)
@@ -45,7 +46,7 @@ class VideoPlayer:
             self.canChangeSpeed = True
         except gst.ElementNotFoundError:
             self.logger.warn(_(u"You need to install the gstreamer soundtouch elements to "
-                    "use slowly play feature."))
+                             "use slowly play feature."))
             self.canChangeSpeed = False
 
         #Try to use the pitch element only if it is available
@@ -95,7 +96,7 @@ class VideoPlayer:
             self.activate_video_area(True)
             gtk.gdk.threads_leave()
 
-    def open(self,path):
+    def open(self, path):
         self.playbin.set_property("uri", "file://" + path)
         self.play_thread_id = thread.start_new_thread(self.play_thread, ())
         self.player.set_state(gst.STATE_PAUSED)
@@ -104,11 +105,11 @@ class VideoPlayer:
         self.player.set_state(gst.STATE_PLAYING)
         self.playing = True
 
-    def set_speed(self,speed):
+    def set_speed(self, speed):
         if self.canChangeSpeed:
             self.audiospeedchanger.set_property("tempo", speed)
             if self.nextCallbackTime != -1:
-                self.nextCallbackTime = self.nextCallbackTime * speed/self.speed
+                self.nextCallbackTime = self.nextCallbackTime * speed / self.speed
             self.speed = speed
 
 
@@ -123,8 +124,8 @@ class VideoPlayer:
         return self.canChangeSpeed
 
     def seek(self, time):
-        value = int(time * 1000000 )
-        self.playbin.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH,value)
+        value = int(time * 1000000)
+        self.playbin.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH, value)
 
     def seek_as_soon_as_ready(self, time):
         self.timeToSeek = time
@@ -148,7 +149,7 @@ class VideoPlayer:
         except:
             pass
         if pos_int != -1:
-            return int(self.speed*pos_int/1000000)
+            return int(self.speed * pos_int / 1000000)
         else:
             return None
 
@@ -163,7 +164,7 @@ class VideoPlayer:
             except:
                 pass
 
-            if pos_int != -1 and self.nextCallbackTime != -1 and self.speed*pos_int > self.nextCallbackTime *1000000:
+            if pos_int != -1 and self.nextCallbackTime != -1 and self.speed * pos_int > self.nextCallbackTime * 1000000:
                 self.nextCallbackTime = -1
 
                 self.callback()

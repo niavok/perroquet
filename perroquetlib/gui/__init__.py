@@ -20,4 +20,3 @@
 
 """The gui of perroquet.
 """
-

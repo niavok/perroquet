@@ -27,7 +27,7 @@ def get_text(nodelist):
     return rc
 
 
-def update_sequence_list(exercise, subExos ):
+def update_sequence_list(exercise, subExos):
     "set the sequences empty, partially done or done"
     for subExo, progress in zip(exercise.subExercisesList, subExos):
         sequenceList = subExo.get_sequence_list()
@@ -45,4 +45,4 @@ def update_sequence_list(exercise, subExos ):
                     if id >= sequence.get_word_count():
                         break
                     sequence.get_words()[i].set_text(word)
-                    i = i+1
+                    i = i + 1

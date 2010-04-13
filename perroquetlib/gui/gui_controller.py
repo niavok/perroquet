@@ -21,6 +21,7 @@
 
 import gettext
 import re
+
 from perroquetlib.config.perroquet_config import config
 from perroquetlib.gui.gui import Gui
 from perroquetlib.gui.gui_exercise_controller import GuiExerciseController
@@ -150,7 +151,7 @@ class GuiController:
     def get_video_window_id(self):
         return self.gui.get_video_window_id()
 
-    def activate_video_area(self,state):
+    def activate_video_area(self, state):
         self.gui.set_active_video_area(state)
 
 
@@ -166,13 +167,13 @@ class GuiController:
         filter_regexp = self.gui.get_words_filter()
 
         try:
-            re.search(filter_regexp,"")
+            re.search(filter_regexp, "")
         except re.error:
             filter_regexp = ""
             pass
 
         for word in self.word_list:
-            if re.search(filter_regexp,word):
+            if re.search(filter_regexp, word):
                 filtered_word_list.append(word)
 
         self.gui.set_word_list(filtered_word_list)
@@ -205,7 +206,7 @@ class GuiController:
 
     def set_sequence_number(self, sequenceNumber, sequenceCount):
         sequenceNumber = sequenceNumber + 1
-        self.gui.set_sequence_index_selection(sequenceNumber,sequenceCount)
+        self.gui.set_sequence_index_selection(sequenceNumber, sequenceCount)
 
         self.gui.set_enable_next_sequence(sequenceNumber != sequenceCount)
         self.gui.set_enable_previous_sequence(sequenceNumber != 1)
@@ -223,11 +224,11 @@ class GuiController:
     def set_translation(self, translation):
         self.gui.set_translation(translation)
 
-    def set_statitics(self, sequenceCount,sequenceFound, wordCount, wordFound, repeatRate):
+    def set_statitics(self, sequenceCount, sequenceFound, wordCount, wordFound, repeatRate):
         text = ""
-        text = text + _("- Sequences: %(found)s/%(count)s (%(percent)s %%)\n") % {'found' : str(sequenceFound), 'count' : str(sequenceCount), 'percent' : str(round(100*sequenceFound/sequenceCount,1)) }
-        text = text + _("- Words: %(found)s/%(count)s (%(percent)s %%)\n") % {'found' : str(wordFound), 'count' : str(wordCount), 'percent' : str(round(100*wordFound/wordCount,1))}
-        text = text + _("- Repeat ratio: %s per words") % str(round(repeatRate,1))
+        text = text + _("- Sequences: %(found)s/%(count)s (%(percent)s %%)\n") % {'found': str(sequenceFound), 'count': str(sequenceCount), 'percent': str(round(100 * sequenceFound / sequenceCount, 1))}
+        text = text + _("- Words: %(found)s/%(count)s (%(percent)s %%)\n") % {'found': str(wordFound), 'count': str(wordCount), 'percent': str(round(100 * wordFound / wordCount, 1))}
+        text = text + _("- Repeat ratio: %s per words") % str(round(repeatRate, 1))
         self.gui.set_statitics(text)
 
     def run(self):
@@ -296,13 +297,13 @@ class GuiController:
                 self.core.write_char(char)
         return True
 
-    def notify_move_cursor(self,movement):
+    def notify_move_cursor(self, movement):
         if self.mode != "loaded":
             return True
         return self.gui_exercise_controller.notify_move_cursor(movement)
         
 
-    def notify_key_press(self,keyname):
+    def notify_key_press(self, keyname):
         if keyname == "Return" or keyname == "KP_Enter":
             if not self.core.exercise.get_current_sequence().is_valid():
                 self.core.user_repeat()
@@ -340,7 +341,7 @@ class GuiController:
             if self.current_speed > 0.9:
                 self.core.set_speed(1.0)
             else:
-                self.core.set_speed(self.current_speed+0.1)
+                self.core.set_speed(self.current_speed + 0.1)
         elif keyname == "KP_Subtract":
             if self.current_speed < 0.85:
                 self.core.set_speed(0.75)
@@ -391,7 +392,7 @@ class GuiController:
     def ask_import_package(self):
         return self.gui.ask_import_package()
 
-    def display_message(self,message):
+    def display_message(self, message):
         return self.gui.display_message(message)
 
     def notify_settings(self):
@@ -406,9 +407,9 @@ class GuiController:
         self.gui.ask_new_exercise()
         self.gui.set_visible_new_exercise_dialog(True)
 
-    def notify_new_exercise_create(self, videoPath,exercisePath, translationPath, langId):
+    def notify_new_exercise_create(self, videoPath, exercisePath, translationPath, langId):
         self.gui.set_visible_new_exercise_dialog(False)
-        self.core.new_exercise(videoPath,exercisePath, translationPath, langId)
+        self.core.new_exercise(videoPath, exercisePath, translationPath, langId)
         
     def notify_new_exercise_cancel(self):
         self.gui.set_visible_new_exercise_dialog(False)
@@ -477,13 +478,13 @@ class GuiController:
     def notify_filter_change(self):
         self.update_word_list()
 
-    def notify_toogle_translation(self,visible):
+    def notify_toogle_translation(self, visible):
         if visible != self.translation_visible:
             self.toggle_translation()
 
-    def notify_toogle_correction(self,visible):
+    def notify_toogle_correction(self, visible):
         self.gui.logger.debug("notify_toogle_correction")
-        self.gui.logger.debug("visible="+str(visible)+" , correction_visible="+str(self.correction_visible))        
+        self.gui.logger.debug("visible=" + str(visible) + " , correction_visible=" + str(self.correction_visible))
         if visible != self.correction_visible:
             if not self.correction_visible and self.core.get_exercise().is_lock_correction() and self.core.get_exercise().is_lock_correction_password():
                 password = self.gui.ask_correction_password()

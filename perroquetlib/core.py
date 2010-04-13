@@ -18,14 +18,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-import thread
-import time
-import gtk
 import logging
 import sys
+import thread
+import time
+
+import gtk
 # Build some logger related objects
 defaultLoggingHandler = logging.StreamHandler(sys.stdout)
-defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s","%a %H:%M:%S"))
+defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s", "%a %H:%M:%S"))
 defaultLoggingLevel = logging.DEBUG
 
 from gettext import gettext as _
@@ -141,7 +142,7 @@ class Core(object):
             
 
     #Change the active sequence
-    def select_sequence(self, num, load = True):
+    def select_sequence(self, num, load=True):
         if self.exercise.get_current_sequence_id() == num:
             return
         self.exercise.goto_sequence(num)
@@ -152,7 +153,7 @@ class Core(object):
         self.set_can_save(True)
 
     #Goto next sequence
-    def next_sequence(self, load = True):
+    def next_sequence(self, load=True):
         if self.exercise.goto_next_sequence():
             self.set_can_save(True)
         self._activate_sequence()
@@ -161,7 +162,7 @@ class Core(object):
             self.repeat_sequence()
 
     #Goto previous sequence
-    def previous_sequence(self, load = True):
+    def previous_sequence(self, load=True):
         if self.exercise.goto_previous_sequence():
             self.set_can_save(True)
         self._activate_sequence()
@@ -225,13 +226,13 @@ class Core(object):
             if sequence.is_valid():
                 sequenceFound += 1
                 wordFound += sequence.get_word_count()
-            else :
+            else:
                 wordFound += sequence.get_word_found()
         if wordFound == 0:
             repeatRate = float(0)
         else:
             repeatRate = float(self.exercise.get_repeat_count()) / float(wordFound)
-        self.gui_controller.set_statitics(sequenceCount,sequenceFound, wordCount, wordFound, repeatRate)
+        self.gui_controller.set_statitics(sequenceCount, sequenceFound, wordCount, wordFound, repeatRate)
 
     def _update(self):
         self.gui_controller.set_sequence(self.exercise.get_current_sequence())
@@ -253,7 +254,7 @@ class Core(object):
 
     #Goto beginning of the current sequence. Can start to play as soon
     #as the media player is ready
-    def goto_sequence_begin(self, asSoonAsReady = False):
+    def goto_sequence_begin(self, asSoonAsReady=False):
         self.state = Core.WAIT_END
         begin_time = self.exercise.get_current_sequence().get_time_begin() - self.exercise.get_play_margin_before()
         if begin_time < 0:
@@ -287,9 +288,9 @@ class Core(object):
     #Choose current word in current sequence
     def select_sequence_word(self, wordIndex, wordIndexPos):
         try:
-            self.exercise.get_current_sequence().select_sequence_word(wordIndex,wordIndexPos)
+            self.exercise.get_current_sequence().select_sequence_word(wordIndex, wordIndexPos)
         except NoCharPossible:
-            self.exercise.get_current_sequence().select_sequence_word(wordIndex,-1)
+            self.exercise.get_current_sequence().select_sequence_word(wordIndex, -1)
         self._update()
 
     #Goto first word in current sequence
@@ -378,7 +379,7 @@ class Core(object):
                 self.gui_controller.set_sequence_time(pos, duration)
 
     #Save current exercice
-    def save(self, saveAs = False):
+    def save(self, saveAs=False):
         if not self.exercise:
             self.logger.error("Save called but no exercise load")
             return
@@ -387,17 +388,17 @@ class Core(object):
             outputSavePath = self.gui_controller.ask_save_path()
             if not outputSavePath:
                 return
-            self.exercise.set_output_save_path(outputSavePath+".perroquet")
+            self.exercise.set_output_save_path(outputSavePath + ".perroquet")
 
         save_exercise(self.exercise, self.exercise.get_output_save_path())
 
         self.config.set("lastopenfile", self.exercise.get_output_save_path())
 
         #lastopenfileS
-        l=self.config.get("lastopenfiles")
+        l = self.config.get("lastopenfiles")
         path = self.exercise.get_output_save_path()
         name = self.exercise.get_name() or path
-        self.config.set("lastopenfiles", [[path, name]]+[p for p in l if p[0]!=path][:10])
+        self.config.set("lastopenfiles", [[path, name]] + [p for p in l if p[0] != path][:10])
 
         self.set_can_save(False)
 
@@ -410,7 +411,7 @@ class Core(object):
             self.exercise = load_exercise(path)
             self.exercise.set_media_change_callback(self.media_change_call_back)
         except IOError:
-            self.logger.exception("No file at "+path)
+            self.logger.exception("No file at " + path)
             return
         if not self.exercise:
             return
@@ -451,7 +452,7 @@ class Core(object):
             self.set_can_save(False)
             return
 
-        self._set_paths( videoPath, exercisePath, translationPath)
+        self._set_paths(videoPath, exercisePath, translationPath)
         self._reload(True)
         self.set_can_save(True)
         self._activate_sequence()
@@ -509,7 +510,7 @@ class Core(object):
         return self.player
 
     def media_change_call_back(self):
-        self.logger.info("new media : "+self.exercise.get_video_path())
+        self.logger.info("new media : " + self.exercise.get_video_path())
         """self.Pause()
         self.player.open(self.exercise.get_video_path())
         """
@@ -533,7 +534,7 @@ class Core(object):
         path = self.gui_controller.ask_export_as_package_path()
         if path:
             repoManager = ExerciseRepositoryManager()
-            repoManager.export_as_package(self.exercise,path)
+            repoManager.export_as_package(self.exercise, path)
             self.logger.info("Export done")
         else:
             self.logger.warn("No valid path to export??")
@@ -548,4 +549,4 @@ class Core(object):
             if error is None:
                 self.gui_controller.display_message(_("Import finish succesfully. Use the exercises manager to use the newly installed exercise."))
             else:
-                self.gui_controller.display_message(_("Import failed."+ " " + error ))
+                self.gui_controller.display_message(_("Import failed." + " " + error))

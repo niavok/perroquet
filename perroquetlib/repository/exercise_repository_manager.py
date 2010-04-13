@@ -19,20 +19,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from xml.dom.minidom import parse
-import urllib2
-import os
-import tempfile
-import tarfile
 import errno
-import shutil
 import logging
+import os
+import shutil
+import tarfile
+import tempfile
+import urllib2
 from gettext import gettext as _
+from xml.dom.minidom import parse
 
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.config import config
+from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.model.exercise_parser import load_exercise, save_exercise
-
 from perroquetlib.repository.exercise_repository import ExerciseRepository
 
 class ExerciseRepositoryManager:
@@ -97,7 +96,7 @@ class ExerciseRepositoryManager:
 
         repositoryList = []
         #Build potential local repository path
-        localRepoPath = os.path.join(config.get("local_repo_root_dir"),"local")
+        localRepoPath = os.path.join(config.get("local_repo_root_dir"), "local")
 
         # Test local repository existance
         if os.path.isdir(localRepoPath):
@@ -139,14 +138,14 @@ class ExerciseRepositoryManager:
                 except IOError:
                     #if the download failed store the url in a list of
                     #offline urls
-                    self.logger.error("Fail to connection to repository '"+line+"'")
+                    self.logger.error("Fail to connection to repository '" + line + "'")
                     offlineRepoList.append(line)
                 except ValueError:
-                    self.logger.exception("Unknown url type '"+line+"'")
+                    self.logger.exception("Unknown url type '" + line + "'")
                     offlineRepoList.append(line)
                 else:
-                   #if the download success, init a repository from the
-                   #downloaded file and regenerate the tree
+                    #if the download success, init a repository from the
+                    #downloaded file and regenerate the tree
                     self.logger.debug("init distant repo")
                     repository = ExerciseRepository()
                     repository.parse_distant_repository_file(handle)
@@ -162,17 +161,17 @@ class ExerciseRepositoryManager:
                 #of offline url, then init an offline repository from this
                 #path
                 repository = ExerciseRepository()
-                repoDescriptionPath = os.path.join(config.get("local_repo_root_dir"),repoPath,"repository.xml")
+                repoDescriptionPath = os.path.join(config.get("local_repo_root_dir"), repoPath, "repository.xml")
                 if not os.path.isfile(repoDescriptionPath):
                     continue
                 f = open(repoDescriptionPath, 'r')
                 dom = parse(f)
                 repository.parse_description(dom)
-                self.logger.debug("test offline url : " +repository.get_url())
+                self.logger.debug("test offline url : " + repository.get_url())
                 if repository.get_url() in offlineRepoList:
-                    self.logger.info("add url : " +repository.get_url())
+                    self.logger.info("add url : " + repository.get_url())
                     repository = ExerciseRepository()
-                    repository.init_from_path(os.path.join(config.get("local_repo_root_dir"),repoPath))
+                    repository.init_from_path(os.path.join(config.get("local_repo_root_dir"), repoPath))
                     repository.set_type("offline")
                     repositoryList.append(repository)
 
@@ -223,11 +222,11 @@ class ExerciseRepositoryManager:
         f = open(repositoryPath, 'w')
         for line in repositoryList:
             self.logger.debug(line)
-            f.writelines(line+'\n')
+            f.writelines(line + '\n')
 
         f.close()
 
-    def _get_orphan_exercise_repository_list(self,repositoryListIn):
+    def _get_orphan_exercise_repository_list(self, repositoryListIn):
         repoPathList = os.listdir(config.get("local_repo_root_dir"))
         repoUsedPath = []
         repositoryList = []
@@ -253,7 +252,7 @@ class ExerciseRepositoryManager:
         return rc
 
     def export_as_package(self, exercise, outPath):
-        tempPath = tempfile.mkdtemp("","perroquet-");
+        tempPath = tempfile.mkdtemp("", "perroquet-");
 
         exercisePackage = exercise
 
@@ -269,11 +268,11 @@ class ExerciseRepositoryManager:
                 else: raise
 
         #Exercise - SubExercises
-        for i,subExo in enumerate(exercisePackage.subExercisesList):
+        for i, subExo in enumerate(exercisePackage.subExercisesList):
 
-            localPath = os.path.join("data", "sequence_"+str(i))
+            localPath = os.path.join("data", "sequence_" + str(i))
             #Make sequence directory
-            sequencePath = os.path.join(tempPath,localPath)
+            sequencePath = os.path.join(tempPath, localPath)
 
             if not os.path.isdir(sequencePath):
                 try:
@@ -284,13 +283,13 @@ class ExerciseRepositoryManager:
                     else: raise
 
             #Copy resources locally
-            videoPath = os.path.join(sequencePath,os.path.basename(subExo.get_video_path()))
-            exercisePath = os.path.join(sequencePath,os.path.basename(subExo.get_exercise_path()))
-            translationPath = os.path.join(sequencePath,os.path.basename(subExo.get_translation_path()))
+            videoPath = os.path.join(sequencePath, os.path.basename(subExo.get_video_path()))
+            exercisePath = os.path.join(sequencePath, os.path.basename(subExo.get_exercise_path()))
+            translationPath = os.path.join(sequencePath, os.path.basename(subExo.get_translation_path()))
 
-            videoRelPath = os.path.join(localPath,os.path.basename(subExo.get_video_path()))
-            exerciseRelPath = os.path.join(localPath,os.path.basename(subExo.get_exercise_path()))
-            translationRelPath = os.path.join(localPath,os.path.basename(subExo.get_translation_path()))
+            videoRelPath = os.path.join(localPath, os.path.basename(subExo.get_video_path()))
+            exerciseRelPath = os.path.join(localPath, os.path.basename(subExo.get_exercise_path()))
+            translationRelPath = os.path.join(localPath, os.path.basename(subExo.get_translation_path()))
 
             shutil.copyfile(subExo.get_video_path(), videoPath)
             shutil.copyfile(subExo.get_exercise_path(), exercisePath)
@@ -311,8 +310,8 @@ class ExerciseRepositoryManager:
 
         # Create the tar
         tar = tarfile.open(outPath, 'w')
-        tar.add(templatePath,"template.perroquet")
-        tar.add(dataPath,"data")
+        tar.add(templatePath, "template.perroquet")
+        tar.add(dataPath, "data")
         tar.close()
 
         shutil.rmtree(tempPath)
@@ -321,10 +320,10 @@ class ExerciseRepositoryManager:
 
         #Verify file existence
         if not os.path.isfile(import_path):
-            return _("File not found: ")+import_path + "."
+            return _("File not found: ") + import_path + "."
 
         #Create temporary directory to extract the tar before install it
-        tempPath = tempfile.mkdtemp("","perroquet-");
+        tempPath = tempfile.mkdtemp("", "perroquet-");
 
         #Extract tar in temp directory
         tar = tarfile.open(import_path)
@@ -332,7 +331,7 @@ class ExerciseRepositoryManager:
         tar.close()
 
         #Check package integrity
-        template_path = os.path.join(tempPath,"template.perroquet")
+        template_path = os.path.join(tempPath, "template.perroquet")
         if not os.path.isfile(template_path):
             shutil.rmtree(tempPath)
             return _("Invalid package, missing template.perroquet.")
@@ -346,9 +345,9 @@ class ExerciseRepositoryManager:
             name = exercise.GetVideoPath()
 
 
-        localRepoPath = os.path.join(config.get("local_repo_root_dir"),"local")
-        group_path = os.path.join(localRepoPath,"Imported")
-        install_path = os.path.join(group_path,name)
+        localRepoPath = os.path.join(config.get("local_repo_root_dir"), "local")
+        group_path = os.path.join(localRepoPath, "Imported")
+        install_path = os.path.join(group_path, name)
 
         #Copy files
         if not os.path.isdir(group_path):
@@ -363,6 +362,6 @@ class ExerciseRepositoryManager:
             shutil.rmtree(tempPath)
             return _("Exercise already exist.")
 
-        shutil.move(tempPath,install_path )
+        shutil.move(tempPath, install_path)
 
         return None

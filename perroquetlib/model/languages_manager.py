@@ -33,16 +33,16 @@ class Language:
         try: 
             synonyms_list = config.get("synonyms." + self.id) 
         except KeyError:
-            raise Warning, "No aliases defined for language "+self.id
+            raise Warning, "No aliases defined for language " + self.id
         for synonyms in synonyms_list:
             self.add_synonyms(synonyms)
 
     def add_alias(self, alias, meaning):
-        self._aliases.append((alias,meaning))
+        self._aliases.append((alias, meaning))
 
     def add_synonyms(self, l):
         for alias in l:
-            for meaning in (e for e in l if e!=alias):
+            for meaning in (e for e in l if e != alias):
                 self.add_alias(alias, meaning)
 
     def is_alias(self, alias, meaning):
@@ -64,7 +64,7 @@ class LanguagesManager:
     def get_languages_list(self):
         return self.languageList
 
-    def get_language_by_id(self,idToFind):
+    def get_language_by_id(self, idToFind):
         for language in self.languageList:
             if language.id == idToFind:
                 return language
@@ -77,7 +77,7 @@ class LanguagesManager:
         path = self.config.get("languages_list_path");
         self._parse_language_file(path)
 
-    def _parse_language_file(self,path):
+    def _parse_language_file(self, path):
         self.languageList = []
         f = open(path, 'r')
         state = LanguagesManager.LOOK_FOR_ID
@@ -90,13 +90,13 @@ class LanguagesManager:
                     current_id = line
                     state = LanguagesManager.LOOK_FOR_NAME
             elif state == LanguagesManager.LOOK_FOR_NAME:
-                 if len(line) > 0:
+                if len(line) > 0:
                     current_name = line
                     state = LanguagesManager.LOOK_FOR_CHARLIST
             elif state == LanguagesManager.LOOK_FOR_CHARLIST:
                 current_availableChars = line
                 state = LanguagesManager.LOOK_FOR_ID
 
-                language = Language(current_id,current_name,current_availableChars)
+                language = Language(current_id, current_name, current_availableChars)
                 self.languageList.append(language)
 

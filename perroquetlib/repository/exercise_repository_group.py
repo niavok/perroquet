@@ -19,15 +19,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
+import errno
 import os
 from xml.dom.minidom import getDOMImplementation, parse
-import errno
 
 from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
 
 class ExerciseRepositoryGroup:
     def __init__(self):
-        self.name =""
+        self.name = ""
         self.description = ""
         self.exercisesList = []
 
@@ -56,13 +56,13 @@ class ExerciseRepositoryGroup:
     def get_exercises(self):
         return self.exercisesList
 
-    def set_parent(self,parent):
+    def set_parent(self, parent):
         self.parent = parent
 
     def get_local_path(self):
         return os.path.join(self.parent.get_local_path(), self.id)
 
-    def parse_description(self,xml_group):
+    def parse_description(self, xml_group):
         self.set_name(self._get_text(xml_group.getElementsByTagName("name")[0].childNodes))
         self.set_id(self._get_text(xml_group.getElementsByTagName("id")[0].childNodes))
         self.set_description(self._get_text(xml_group.getElementsByTagName("description")[0].childNodes))
@@ -105,13 +105,13 @@ class ExerciseRepositoryGroup:
         xml_string = newdoc.toprettyxml()
         xml_string = xml_string.encode('utf8')
 
-        repoDescriptionPath = os.path.join(self.get_local_path(),"group.xml")
+        repoDescriptionPath = os.path.join(self.get_local_path(), "group.xml")
         f = open(repoDescriptionPath, 'w')
         f.write(xml_string)
         f.close()
 
     def init_from_path(self, groupPath):
-        groupDescriptionPath = os.path.join(groupPath,"group.xml")
+        groupDescriptionPath = os.path.join(groupPath, "group.xml")
 
         if os.path.isfile(groupDescriptionPath):
             f = open(groupDescriptionPath, 'r')

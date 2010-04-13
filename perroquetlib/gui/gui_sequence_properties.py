@@ -17,8 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk
 import gettext
+
+import gtk
 from perroquetlib.config import config
 from perroquetlib.model.languages_manager import LanguagesManager
 _ = gettext.gettext
@@ -50,7 +51,7 @@ class GuiSequenceProperties:
         self.dialog.destroy()
 
     def load(self):
-        (videoPath,exercisePath,translationPath)  = self.core.get_paths()
+        (videoPath, exercisePath, translationPath)  = self.core.get_paths()
 
         if videoPath == "":
             videoPath = "None"
@@ -76,10 +77,10 @@ class GuiSequenceProperties:
         checkbuttonUseDynamicCorrection = self.builder.get_object("checkbuttonUseDynamicCorrection")
         checkbuttonUseDynamicCorrection.set_active(self.core.get_exercise().is_use_dynamic_correction())
         
-        self.liststoreLanguage = gtk.ListStore(str,str)
+        self.liststoreLanguage = gtk.ListStore(str, str)
 
         languageManager = LanguagesManager()
-        languagesList =languageManager.get_languages_list()
+        languagesList = languageManager.get_languages_list()
 
         currentLangId = self.core.get_exercise().get_language_id()
 
@@ -100,7 +101,7 @@ class GuiSequenceProperties:
 
 
 
-    def on_button_exercise_prop_ok_clicked(self,widget,data=None):
+    def on_button_exercise_prop_ok_clicked(self, widget, data=None):
         videoChooser = self.builder.get_object("filechooserbuttonVideoProp")
         videoPath = videoChooser.get_filename()
         exerciseChooser = self.builder.get_object("filechooserbuttonExerciseProp")
@@ -125,17 +126,17 @@ class GuiSequenceProperties:
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
         iter = comboboxLanguage.get_active_iter()
-        langId = self.liststoreLanguage.get_value(iter,1)
+        langId = self.liststoreLanguage.get_value(iter, 1)
 
         self.core.get_exercise().set_language_id(langId)
 
 
-        self.core._update_paths(videoPath,exercisePath, translationPath)
+        self.core._update_paths(videoPath, exercisePath, translationPath)
 
         self.core.set_can_save(True)
 
         self.dialog.response(gtk.RESPONSE_OK)
 
-    def on_button_exercise_prop_cancel_clicked(self,widget,data=None):
+    def on_button_exercise_prop_cancel_clicked(self, widget, data=None):
         self.dialog.response(gtk.RESPONSE_CANCEL)
 

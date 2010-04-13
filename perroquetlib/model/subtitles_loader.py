@@ -18,9 +18,10 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 
-import re
 import codecs
 import logging
+import re
+
 from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
 
 class SubtitlesLoader(object):
@@ -37,13 +38,13 @@ class SubtitlesLoader(object):
         self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
 
-    def convert_file(self,fileName):
+    def convert_file(self, fileName):
         for format in self.sourceFormats:
             try:
                 sourceFile = codecs.open(fileName, 'rU', format)
                 convertedFile = []
                 for line in sourceFile:
-                    convertedFile.append(line.encode( "utf-8" ))
+                    convertedFile.append(line.encode("utf-8"))
 
                 return convertedFile
             except UnicodeDecodeError:
@@ -61,7 +62,7 @@ class SubtitlesLoader(object):
             line = line.decode("utf8")
 
             #Remove BOM of utf-8 : EFBBBF
-            if len(line) >=3 and ord(line[0]) == 0xEF and ord(line[1]) == 0xBB and ord(line[2]) == 0xBF:
+            if len(line) >= 3 and ord(line[0]) == 0xEF and ord(line[1]) == 0xBB and ord(line[2]) == 0xBF:
                 line = line[3:]
 
             if state == SubtitlesLoader.LOOK_FOR_ID:
@@ -73,10 +74,10 @@ class SubtitlesLoader(object):
                     except:
                         pass
             elif state == SubtitlesLoader.LOOK_FOR_TIME:
-                 if len(line) > 0:
+                if len(line) > 0:
                     #00:00:06,290 --> 00:00:07,550
                     regexp = '([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]+) --> ([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]+)'
-                    if re.search(regexp,line):
+                    if re.search(regexp, line):
                         m = re.search(regexp, line)
 
                         beginMili = m.group(4)
@@ -87,14 +88,14 @@ class SubtitlesLoader(object):
                         while len(endMili) < 3:
                             endMili += "0"
 
-                        beginTime = int(m.group(1))*1000*3600
-                        beginTime += int(m.group(2))*1000*60
-                        beginTime += int(m.group(3))*1000
+                        beginTime = int(m.group(1)) * 1000 * 3600
+                        beginTime += int(m.group(2)) * 1000 * 60
+                        beginTime += int(m.group(3)) * 1000
                         beginTime += int(beginMili)
 
-                        endTime = int(m.group(5))*1000*3600
-                        endTime += int(m.group(6))*1000*60
-                        endTime += int(m.group(7))*1000
+                        endTime = int(m.group(5)) * 1000 * 3600
+                        endTime += int(m.group(6)) * 1000 * 60
+                        endTime += int(m.group(7)) * 1000
                         endTime += int(endMili)
 
                         current.set_time_begin(beginTime)
@@ -121,7 +122,7 @@ class SubtitlesLoader(object):
         id = 0
         current = None
         for sub in list:
-            if id == 0 or (sub.get_time_begin() - current.get_time_end() > int(timeToMerge*1000)) or (sub.get_time_end() - current.get_time_begin() > int(maxTime*1000)):
+            if id == 0 or (sub.get_time_begin() - current.get_time_end() > int(timeToMerge * 1000)) or (sub.get_time_end() - current.get_time_begin() > int(maxTime * 1000)):
                 if id > 0:
                     outputList.append(current)
                 id += 1
@@ -155,9 +156,9 @@ class Subtitle(object):
     def get_id(self):
         return self.id
 
-    def set_text(self,text):
+    def set_text(self, text):
         # | mean new line in some srt files
-        text = text.replace("|","\n")
+        text = text.replace("|", "\n")
         #Some subs have <i>...</i> or {]@^\`}. We need to delete them.
         text = re.sub("(<" "[^>]*" ">)"
                       "|"
@@ -166,12 +167,12 @@ class Subtitle(object):
         self.text = text
 
 
-    def set_time_begin(self,timeBegin):
+    def set_time_begin(self, timeBegin):
         self.timeBegin = timeBegin
 
-    def set_time_end(self,timeEnd):
+    def set_time_end(self, timeEnd):
         self.timeEnd = timeEnd
 
-    def set_id(self,id):
+    def set_id(self, id):
         self.id = id
 

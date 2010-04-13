@@ -19,13 +19,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from xml.dom.minidom import getDOMImplementation, parse
-import os
 import errno
+import os
+from xml.dom.minidom import getDOMImplementation, parse
 
 from perroquetlib.config import config
-from perroquetlib.repository.exercise_repository_group import ExerciseRepositoryGroup
 from perroquetlib.repository.exercise_repository_exercise import ExerciseRepositoryExercise
+from perroquetlib.repository.exercise_repository_group import ExerciseRepositoryGroup
 
 #FIXME import needed but bug
 #from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
@@ -33,7 +33,7 @@ from perroquetlib.repository.exercise_repository_exercise import ExerciseReposit
 class ExerciseRepository:
 
     def __init__(self):
-        self.name =""
+        self.name = ""
         self.description = ""
         self.version = ""
         self.url = ""
@@ -99,7 +99,7 @@ class ExerciseRepository:
         for groupPath in groupPathList:
             if groupPath not in groupUsedPath: #FIXME used or not ???
                 group = ExerciseRepositoryManager.createGroupFromPath(repoPath)
-                            #FIXME repoPath unknow var
+                    #FIXME repoPath unknow var
                 orphanGroupList.append(group)
 
         return orphanGroupList
@@ -155,14 +155,14 @@ class ExerciseRepository:
 
         xml_string = newdoc.toprettyxml()
         xml_string = xml_string.encode('utf8')
-        repoDescriptionPath = os.path.join(self.get_local_path(),"repository.xml")
+        repoDescriptionPath = os.path.join(self.get_local_path(), "repository.xml")
         f = open(repoDescriptionPath, 'w')
         f.write(xml_string)
         f.close()
 
-    def init_from_path(self,path):
+    def init_from_path(self, path):
 
-        repoDescriptionPath = os.path.join(path,"repository.xml")
+        repoDescriptionPath = os.path.join(path, "repository.xml")
         if os.path.isfile(repoDescriptionPath):
             f = open(repoDescriptionPath, 'r')
             dom = parse(f)
@@ -180,7 +180,7 @@ class ExerciseRepository:
                 group.init_from_path(path)
                 self.add_group(group)
 
-    def parse_description(self,dom):
+    def parse_description(self, dom):
         self.set_name(self._get_text(dom.getElementsByTagName("name")[0].childNodes))
         self.set_description(self._get_text(dom.getElementsByTagName("description")[0].childNodes))
         self.set_id(self._get_text(dom.getElementsByTagName("id")[0].childNodes))

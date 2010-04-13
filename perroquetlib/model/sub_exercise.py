@@ -21,9 +21,9 @@
 
 import os
 
-from subtitles_loader import SubtitlesLoader
 from perroquetlib.model.sequence.sequence_dynamic_correction import SequenceDynamicCorrection
 from perroquetlib.model.sequence.sequence_simple import SequenceSimple
+from subtitles_loader import SubtitlesLoader
 
 
 class SubExercise(object):
@@ -68,7 +68,7 @@ class SubExercise(object):
             oldWordIndex = 0
             newWordIndex = 0
 
-            while oldSequenceIndex < len( oldSequenceList) and newSequenceIndex < len(self.sequenceList):
+            while oldSequenceIndex < len(oldSequenceList) and newSequenceIndex < len(self.sequenceList):
 
                 if oldWordIndex >= oldSequenceList[oldSequenceIndex].get_word_count():
                     oldSequenceIndex += 1

@@ -19,23 +19,22 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 
-import gtk
-import os
 import gettext
 import locale
 import logging
+import os
 
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
-from perroquetlib.config import config
-from perroquetlib.model.languages_manager import LanguagesManager
-
+import gtk
+from gui_exercise_manager import GuiExerciseManager
+from gui_message_dialog import GuiMessageDialog
+from gui_password_dialog import GuiPasswordDialog
+from gui_reset_exercise import GuiResetExercise
 from gui_sequence_properties import GuiSequenceProperties
 from gui_sequence_properties_advanced import GuiSequencePropertiesAdvanced
-from gui_reset_exercise import GuiResetExercise
 from gui_settings import Guisettings
-from gui_exercise_manager import GuiExerciseManager
-from gui_password_dialog import GuiPasswordDialog
-from gui_message_dialog import GuiMessageDialog
+from perroquetlib.config import config
+from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
+from perroquetlib.model.languages_manager import LanguagesManager
 
 
 _ = gettext.gettext
@@ -43,7 +42,7 @@ _ = gettext.gettext
 class Gui:
     def __init__(self, controller):
 
-        locale.bindtextdomain(config.get("gettext_package"),config.get("localedir"))
+        locale.bindtextdomain(config.get("gettext_package"), config.get("localedir"))
 
         self.logger = logging.Logger("GUI")
         self.logger.setLevel(defaultLoggingLevel)
@@ -94,7 +93,7 @@ class Gui:
     def get_video_window_id(self):
         return self.builder.get_object("videoArea").window.xid
 
-    def set_active_video_area(self,state):
+    def set_active_video_area(self, state):
         if state:
             self.builder.get_object("videoArea").show()
             self.builder.get_object("imageAudio").hide()
@@ -103,7 +102,7 @@ class Gui:
             self.builder.get_object("imageAudio").show()
 
     def set_speed(self, speed):
-        self.setted_speed = int(speed*100)
+        self.setted_speed = int(speed * 100)
         ajustement = self.builder.get_object("adjustmentSpeed")
         ajustement.configure (self.setted_speed, 75, 100, 1, 10, 0)
 
@@ -115,11 +114,11 @@ class Gui:
 
     def set_sequence_time_selection(self, sequence_position, sequence_time):
         """Documentation"""
-        self.setted_position = sequence_position /100
+        self.setted_position = sequence_position / 100
         ajustement = self.builder.get_object("adjustmentSequenceTime")
-        ajustement.configure (self.setted_position, 0, sequence_time/100, 1, 10, 0)
-        textTime = round(float(sequence_position)/1000,1)
-        textDuration = round(float(sequence_time)/1000,1)
+        ajustement.configure (self.setted_position, 0, sequence_time / 100, 1, 10, 0)
+        textTime = round(float(sequence_position) / 1000, 1)
+        textDuration = round(float(sequence_time) / 1000, 1)
         self.builder.get_object("labelSequenceTime").set_text(str(textTime) + "/" + str(textDuration) + " s")
 
     def set_word_list(self, word_list):
@@ -136,7 +135,7 @@ class Gui:
             formattedWordList = formattedWordList + word + "\n"
 
         iter = buffer.get_end_iter()
-        buffer.insert(iter,formattedWordList)
+        buffer.insert(iter, formattedWordList)
 
     def get_words_filter(self):
         return self.builder.get_object("entryFilter").get_text()
@@ -166,12 +165,12 @@ class Gui:
         for (text, style) in formatted_text:
             size = buffer.get_char_count()
             iter1 = buffer.get_end_iter()
-            buffer.insert(iter1,text)
+            buffer.insert(iter1, text)
             iter1 = buffer.get_iter_at_offset(size)
             iter2 = buffer.get_end_iter()
             buffer.apply_tag_by_name(style, iter1, iter2)
 
-        self.setted_typing_area_text = buffer.get_text(buffer.get_start_iter(),buffer.get_end_iter())
+        self.setted_typing_area_text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())
 
         self.disable_changed_text_event = False
 
@@ -183,7 +182,7 @@ class Gui:
     def set_focus_typing_area(self):
         self.window.set_focus(self.typeLabel)
 
-    def set_typing_area_style_list(self,style_list):
+    def set_typing_area_style_list(self, style_list):
         """creates the labels used for the coloration of the text"""
         buffer = self.typeLabel.get_buffer()
 
@@ -222,32 +221,32 @@ class Gui:
 
     def ask_save_path(self):
         saver = SaveFileSelector(self.window)
-        path =saver.run()
+        path = saver.run()
         return path
 
     def ask_export_as_template_path(self):
         saver = ExportAsTemplateFileSelector(self.window)
-        path =saver.run()
+        path = saver.run()
 
-        if path == "None" or path == None :
+        if path == "None" or path == None:
             return None
         elif not path.endswith(".perroquet"):
-            path = path +".perroquet"
+            path = path + ".perroquet"
         return path
 
     def ask_export_as_package_path(self):
         saver = ExportAsPackageFileSelector(self.window)
         path = saver.run()
         
-        if path == "None" or path == None :
+        if path == "None" or path == None:
             return None
         elif not path.endswith(".tar"):
-            path = path +".tar"
+            path = path + ".tar"
         return path
 
     def ask_import_package(self):
         loader = ImportFileSelector(self.window)
-        result =loader.run()
+        result = loader.run()
         return result
 
     def ask_properties(self, core):
@@ -291,7 +290,7 @@ class Gui:
         treeStore = gtk.TreeStore(str, str)
         for obj in config.get("lastopenfiles"):
             path = obj[0]
-            name = obj[1] if len(obj)>=2 else path
+            name = obj[1] if len(obj) >= 2 else path
             treeStore.append(None, [name, path])
 
         gtkTree.set_model(treeStore)
@@ -302,8 +301,8 @@ class Gui:
 
     def ask_confirm_quit_without_save(self):
         dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
-                                       gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
-                                       _("Do you really quit without save ?"))
+                                   gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
+                                   _("Do you really quit without save ?"))
         dialog.set_title(_("Confirm quit"))
 
         response = dialog.run()
@@ -312,7 +311,7 @@ class Gui:
 
 
     def ask_reset_exercise_content(self):
-        dialogExerciseProperties = GuiResetExercise( self.window)
+        dialogExerciseProperties = GuiResetExercise(self.window)
         response = dialogExerciseProperties.run()
         return response
 
@@ -435,10 +434,10 @@ class Gui:
         exerciseChooser.set_filename("None")
         translationChooser.set_filename("None")
 
-        self.liststoreLanguage = gtk.ListStore(str,str)
+        self.liststoreLanguage = gtk.ListStore(str, str)
 
         languageManager = LanguagesManager()
-        languagesList =languageManager.get_languages_list()
+        languagesList = languageManager.get_languages_list()
 
         for language in languagesList:
             iter = self.liststoreLanguage.append([language.name, language.id])
@@ -459,33 +458,33 @@ class Gui:
 
         
 
-    def set_visible_new_exercise_dialog(self,state):
+    def set_visible_new_exercise_dialog(self, state):
         if state:
             self.newExerciseDialog.show()
         else:
-           self.newExerciseDialog.hide()
+            self.newExerciseDialog.hide()
 
     def ask_load_exercise(self):
         loader = OpenFileSelector(self.window)
-        result =loader.run()
+        result = loader.run()
         return result
 
-    def display_exercice_manager(self,core):
+    def display_exercice_manager(self, core):
         dialogExerciseManager = GuiExerciseManager(core, self.window)
         dialogExerciseManager.run()
 
     #---------------------- Now the functions called directly by the gui--------
 
-    def on_main_window_delete_event(self,widget,data=None):
+    def on_main_window_delete_event(self, widget, data=None):
         # returning True avoids it to signal "destroy-event"
         # returning False makes "destroy-event" be signalled for the window.
         return self.controller.notify_quit()
 
-    def on_new_exercise_button_clicked(self,widget,data=None):
+    def on_new_exercise_button_clicked(self, widget, data=None):
         return self.controller.notify_new_exercise()
 
 
-    def on_button_new_exercise_ok_clicked(self,widget,data=None):
+    def on_button_new_exercise_ok_clicked(self, widget, data=None):
 
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         videoPath = videoChooser.get_filename()
@@ -503,38 +502,38 @@ class Gui:
         comboboxLanguage = self.builder.get_object("comboboxLanguage")
         self.liststoreLanguage.get_iter_first()
         iter = comboboxLanguage.get_active_iter()
-        langId = self.liststoreLanguage.get_value(iter,1)
+        langId = self.liststoreLanguage.get_value(iter, 1)
 
-        self.controller.notify_new_exercise_create(videoPath,exercisePath, translationPath, langId)
+        self.controller.notify_new_exercise_create(videoPath, exercisePath, translationPath, langId)
         
-    def on_newExerciseDialog_delete_event(self,widget,data=None):
+    def on_newExerciseDialog_delete_event(self, widget, data=None):
         self.controller.notify_new_exercise_cancel()
         return True #True for stop event propagation
 
-    def on_button_new_exercise_cancel_clicked(self,widget,data=None):
+    def on_button_new_exercise_cancel_clicked(self, widget, data=None):
         self.controller.notify_new_exercise_cancel()
 
-    def on_imagemenuitem_export_as_template_activate(self,widget,data=None):
+    def on_imagemenuitem_export_as_template_activate(self, widget, data=None):
         self.controller.notify_export_as_template()
 
-    def on_imagemenuitem_export_as_package_activate(self,widget,data=None):
+    def on_imagemenuitem_export_as_package_activate(self, widget, data=None):
         self.controller.notify_export_as_package()
 
-    def on_imagemenuitem_import_activate(self,widget,data=None):
+    def on_imagemenuitem_import_activate(self, widget, data=None):
         self.controller.notify_import_package()
 
-    def on_textbuffer_view_changed(self,widget):
+    def on_textbuffer_view_changed(self, widget):
 
         if self.disable_changed_text_event:
-           return False;
+            return False;
 
         buffer = self.typeLabel.get_buffer()
         oldText = self.setted_typing_area_text
-        newText = buffer.get_text(buffer.get_start_iter(),buffer.get_end_iter())
+        newText = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())
         index = self.typeLabel.get_buffer().props.cursor_position
 
-        newText= newText.decode("utf-8")
-        oldText= oldText.decode("utf-8")
+        newText = newText.decode("utf-8")
+        oldText = oldText.decode("utf-8")
 
         newLength = len(newText) - len(oldText)
         newString = newText[index-newLength:index]
@@ -543,43 +542,43 @@ class Gui:
         
         
 
-    def on_type_view_key_press_event(self,widget, event):
+    def on_type_view_key_press_event(self, widget, event):
         keyname = gtk.gdk.keyval_name(event.keyval)
         return self.controller.notify_key_press(keyname)
         
-    def on_toolbutton_next_sequence_clicked(self,widget,data=None):
+    def on_toolbutton_next_sequence_clicked(self, widget, data=None):
         self.controller.notify_next_sequence()
 
-    def on_toolbutton_previous_sequence_clicked(self,widget,data=None):
+    def on_toolbutton_previous_sequence_clicked(self, widget, data=None):
         self.controller.notify_previous_sequence()
 
-    def on_toolbutton_replay_sequence_clicked(self,widget,data=None):
+    def on_toolbutton_replay_sequence_clicked(self, widget, data=None):
         self.controller.notify_repeat_sequence()
 
-    def on_adjustment_sequence_num_value_changed(self,widget,data=None):
+    def on_adjustment_sequence_num_value_changed(self, widget, data=None):
 
         value = int(self.builder.get_object("adjustmentSequenceNum").get_value())
 
         if value != self.setted_sequence_number:
             self.controller.notify_select_sequence_number(value - 1)
 
-    def on_adjustment_sequence_time_value_changed(self,widget,data=None):
+    def on_adjustment_sequence_time_value_changed(self, widget, data=None):
         value = int(self.builder.get_object("adjustmentSequenceTime").get_value())
         if value != self.setted_position:
-            self.controller.notify_select_sequence_time(value*100)
+            self.controller.notify_select_sequence_time(value * 100)
 
-    def on_adjustment_speed_value_changed(self,widget,data=None):
+    def on_adjustment_speed_value_changed(self, widget, data=None):
         value = int(self.builder.get_object("adjustmentSpeed").get_value())
         if value != self.setted_speed:
-            self.controller.notify_select_speed(float(value)/100)
+            self.controller.notify_select_speed(float(value) / 100)
 
-    def on_toolbutton_hint_clicked(self,widget,data=None):
+    def on_toolbutton_hint_clicked(self, widget, data=None):
         self.controller.notify_hint()
 
-    def on_toolbutton_play_clicked(self,widget,data=None):
+    def on_toolbutton_play_clicked(self, widget, data=None):
         self.controller.notify_play()
 
-    def on_toolbutton_pause_clicked(self,widget,data=None):
+    def on_toolbutton_pause_clicked(self, widget, data=None):
         self.controller.notify_pause()
 
     def on_save_button_clicked(self, widget, data=None):
@@ -643,44 +642,44 @@ class Gui:
     def on_imagemenuitem_exercice_manager_activate(self, widget, data=None):
         self.controller.notify_exercise_manager()
 
-    def on_imagemenuitem_about_activate(self,widget,data=None):
+    def on_imagemenuitem_about_activate(self, widget, data=None):
         self.builder.get_object("aboutdialog").show()
 
-    def on_imagemenuitem_hint_activate(self,widget,data=None):
+    def on_imagemenuitem_hint_activate(self, widget, data=None):
         self.controller.notify_hint()
 
-    def on_checkmenuitem_lateral_panel_toggled(self,widget,data=None):
+    def on_checkmenuitem_lateral_panel_toggled(self, widget, data=None):
         self.controller.toggle_lateral_panel()
 
-    def on_checkmenuitem_translation_toggled(self,widget,data=None):
+    def on_checkmenuitem_translation_toggled(self, widget, data=None):
         checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
         self.controller.notify_toogle_translation(checkmenuitemTranslation.props.active)
         
-    def on_imagemenuitem_properties_activate(self,widget,data=None):
+    def on_imagemenuitem_properties_activate(self, widget, data=None):
         self.controller.notify_properties()
 
-    def on_imagemenuitem_advanced_properties_activate(self,widget,data=None):
+    def on_imagemenuitem_advanced_properties_activate(self, widget, data=None):
         self.controller.notify_properties_advanced()
 
-    def on_imagemenuitem_settings_activate(self,widget,data=None):
+    def on_imagemenuitem_settings_activate(self, widget, data=None):
         self.controller.notify_settings()
 
-    def on_imagemenuitem_quit_activate(self,widget,data=None):
+    def on_imagemenuitem_quit_activate(self, widget, data=None):
         return self.controller.notify_quit()
 
-    def on_imagemenuitem_save_as_activate(self,widget,data=None):
+    def on_imagemenuitem_save_as_activate(self, widget, data=None):
         self.controller.notify_save_as()
 
-    def on_imagemenuitem_save_activate(self,widget,data=None):
+    def on_imagemenuitem_save_activate(self, widget, data=None):
         self.controller.notify_save()
 
-    def on_imagemenuitem_open_activate(self,widget,data=None):
+    def on_imagemenuitem_open_activate(self, widget, data=None):
         self.controller.notify_load()
 
-    def on_imagemenuitem_new_activate(self,widget,data=None):
+    def on_imagemenuitem_new_activate(self, widget, data=None):
         self.controller.notify_new_exercise()
 
-    def on_filechooserbutton_video_file_set(self,widget,data=None):
+    def on_filechooserbutton_video_file_set(self, widget, data=None):
 
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
@@ -694,11 +693,11 @@ class Gui:
             if not translationChooser.get_filename() or not os.path.isfile(translationChooser.get_filename()):
                 translationChooser.set_current_folder(filePath)
 
-    def on_aboutdialog_delete_event(self,widget,data=None):
+    def on_aboutdialog_delete_event(self, widget, data=None):
         self.builder.get_object("aboutdialog").hide()
         return True
 
-    def on_aboutdialog_response(self,widget,data=None):
+    def on_aboutdialog_response(self, widget, data=None):
         self.builder.get_object("aboutdialog").hide()
         return True
 
@@ -711,7 +710,7 @@ class Gui:
     def on_lastopenfilesTreeView_cursor_changed(self, widget, data=None):
         gtkTree = self.builder.get_object("lastopenfilesTreeView")
         gtkSelection = gtkTree.get_selection()
-        (modele, iter) =  gtkSelection.get_selected()
+        (modele, iter) = gtkSelection.get_selected()
         if iter is not None:
             path = modele.get(iter, 1)[0]
             self.controller.notify_load_path(path)
@@ -720,40 +719,40 @@ EVENT_FILTER = None
 
 
 class FileSelector(gtk.FileChooserDialog):
-        "A normal file selector"
+    "A normal file selector"
 
-        def __init__(self, parent, title = None, action = gtk.FILE_CHOOSER_ACTION_OPEN, stockbutton = None):
+    def __init__(self, parent, title=None, action=gtk.FILE_CHOOSER_ACTION_OPEN, stockbutton=None):
 
-                if stockbutton is None:
-                        if action == gtk.FILE_CHOOSER_ACTION_OPEN:
-                                stockbutton = gtk.STOCK_OPEN
+        if stockbutton is None:
+            if action == gtk.FILE_CHOOSER_ACTION_OPEN:
+                stockbutton = gtk.STOCK_OPEN
 
-                        elif action == gtk.FILE_CHOOSER_ACTION_SAVE:
-                                stockbutton = gtk.STOCK_SAVE
+            elif action == gtk.FILE_CHOOSER_ACTION_SAVE:
+                stockbutton = gtk.STOCK_SAVE
 
-                gtk.FileChooserDialog.__init__(
-                        self, title, parent, action,
-                        ( gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, stockbutton, gtk.RESPONSE_OK )
-                )
+        gtk.FileChooserDialog.__init__(
+                                       self, title, parent, action,
+                                       (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, stockbutton, gtk.RESPONSE_OK)
+                                       )
 
-                self.set_local_only(False)
-                self.set_default_response(gtk.RESPONSE_OK)
+        self.set_local_only(False)
+        self.set_default_response(gtk.RESPONSE_OK)
 
-                self.inputsection = None
-
-
-        #FIXME unused function
-        def add_widget(self, title, widget):
-                "Adds a widget to the file selection"
-
-                if self.inputsection == None:
-                        self.inputsection = ui.InputSection() #FIXME ui unknow var
-                        self.set_extra_widget(self.inputsection)
-
-                self.inputsection.append_widget(title, widget)
+        self.inputsection = None
 
 
-        """def get_filename(self):
+    #FIXME unused function
+    def add_widget(self, title, widget):
+        "Adds a widget to the file selection"
+
+        if self.inputsection == None:
+            self.inputsection = ui.InputSection() #FIXME ui unknow var
+            self.set_extra_widget(self.inputsection)
+
+        self.inputsection.append_widget(title, widget)
+
+
+    """def get_filename(self):
                 "Returns the file URI"
 
                 uri = self.get_filename()
@@ -765,126 +764,126 @@ class FileSelector(gtk.FileChooserDialog):
                         return urllib.unquote(uri)"""
 
 
-        def run(self):
-                "Displays and runs the file selector, returns the filename"
+    def run(self):
+        "Displays and runs the file selector, returns the filename"
 
-                self.show_all()
+        self.show_all()
 
-                if EVENT_FILTER != None:
-                        self.window.add_filter(EVENT_FILTER)
+        if EVENT_FILTER != None:
+            self.window.add_filter(EVENT_FILTER)
 
-                response = gtk.FileChooserDialog.run(self)
-                filename = self.get_filename()
-                self.destroy()
+        response = gtk.FileChooserDialog.run(self)
+        filename = self.get_filename()
+        self.destroy()
 
-                if response == gtk.RESPONSE_OK:
-                        return filename
+        if response == gtk.RESPONSE_OK:
+            return filename
 
-                else:
-                        return None
+        else:
+            return None
 
 
 
 
 class OpenFileSelector(FileSelector):
-        "A file selector for opening files"
+    "A file selector for opening files"
 
-        def __init__(self, parent):
-                FileSelector.__init__(
-                        self, parent, _('Select File to open'),
-                        gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
-                )
+    def __init__(self, parent):
+        FileSelector.__init__(
+                              self, parent, _('Select File to open'),
+                              gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
+                              )
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('Perroquet files'))
-                filter.add_pattern("*.perroquet")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('Perroquet files'))
+        filter.add_pattern("*.perroquet")
+        self.add_filter(filter)
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('All files'))
-                filter.add_pattern("*")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('All files'))
+        filter.add_pattern("*")
+        self.add_filter(filter)
 
 class ImportFileSelector(FileSelector):
-        "A file selector for import files"
+    "A file selector for import files"
 
-        def __init__(self, parent):
-                FileSelector.__init__(
-                        self, parent, _('Select package to import'),
-                        gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
-                )
+    def __init__(self, parent):
+        FileSelector.__init__(
+                              self, parent, _('Select package to import'),
+                              gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
+                              )
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('Perroquet package files'))
-                filter.add_pattern("*.tar")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('Perroquet package files'))
+        filter.add_pattern("*.tar")
+        self.add_filter(filter)
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('All files'))
-                filter.add_pattern("*")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('All files'))
+        filter.add_pattern("*")
+        self.add_filter(filter)
 
 class SaveFileSelector(FileSelector):
-        "A file selector for saving files"
+    "A file selector for saving files"
 
-        def __init__(self, parent):
-                FileSelector.__init__(
-                        self, parent, _('Select File to Save to'),
-                        gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
-                )
+    def __init__(self, parent):
+        FileSelector.__init__(
+                              self, parent, _('Select File to Save to'),
+                              gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
+                              )
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('Perroquet files'))
-                filter.add_pattern("*.perroquet")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('Perroquet files'))
+        filter.add_pattern("*.perroquet")
+        self.add_filter(filter)
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('All files'))
-                filter.add_pattern("*")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('All files'))
+        filter.add_pattern("*")
+        self.add_filter(filter)
 
-                self.set_do_overwrite_confirmation(True)
+        self.set_do_overwrite_confirmation(True)
 
 class ExportAsTemplateFileSelector(FileSelector):
-        "A file selector for saving files"
+    "A file selector for saving files"
 
-        def __init__(self, parent):
-                FileSelector.__init__(
-                        self, parent, _('Select File to Export to'),
-                        gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
-                )
+    def __init__(self, parent):
+        FileSelector.__init__(
+                              self, parent, _('Select File to Export to'),
+                              gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
+                              )
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('Perroquet template files'))
-                filter.add_pattern("*.perroquet")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('Perroquet template files'))
+        filter.add_pattern("*.perroquet")
+        self.add_filter(filter)
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('All files'))
-                filter.add_pattern("*")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('All files'))
+        filter.add_pattern("*")
+        self.add_filter(filter)
 
-                self.set_do_overwrite_confirmation(True)
+        self.set_do_overwrite_confirmation(True)
 
 class ExportAsPackageFileSelector(FileSelector):
-        "A file selector for saving files"
+    "A file selector for saving files"
 
-        def __init__(self, parent):
-                FileSelector.__init__(
-                        self, parent, _('Select File to Export to'),
-                        gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
-                )
+    def __init__(self, parent):
+        FileSelector.__init__(
+                              self, parent, _('Select File to Export to'),
+                              gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
+                              )
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('Perroquet package files'))
-                filter.add_pattern("*.tar")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('Perroquet package files'))
+        filter.add_pattern("*.tar")
+        self.add_filter(filter)
 
-                filter = gtk.FileFilter()
-                filter.set_name(_('All files'))
-                filter.add_pattern("*")
-                self.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_('All files'))
+        filter.add_pattern("*")
+        self.add_filter(filter)
 
-                self.set_do_overwrite_confirmation(True)
+        self.set_do_overwrite_confirmation(True)
 
 

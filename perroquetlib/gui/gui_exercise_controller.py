@@ -119,7 +119,7 @@ class GuiExerciseController:
                 if sequence.get_active_word_index() == i:
                     self.cursor_position = pos
                 if sequence.get_words()[i].is_empty():
-                    self._add_word(sequence.get_words()[i].get_valid(lower=False),0)
+                    self._add_word(sequence.get_words()[i].get_valid(lower=False), 0)
                     pos += 1
                 elif sequence.get_words()[i].is_valid():
                     self._add_word(sequence.get_words()[i].get_valid(lower=False), 0, isFound=True)
@@ -137,17 +137,17 @@ class GuiExerciseController:
 
     def _add_word(self, word, score, isFound=False, is_empty=False, through=False):
 
-        score250 = int(score*250) #score between -250 and 250
+        score250 = int(score * 250) #score between -250 and 250
         if through:
             tagName = "word_througt"
         elif is_empty:
             tagName = "word_empty"
         elif isFound:
             tagName = "word_found"
-        elif score > 0 :
-            tagName = "word_near"+str(score250)
+        elif score > 0:
+            tagName = "word_near" + str(score250)
         else:
-            tagName = "word_to_found"+str(score250)
+            tagName = "word_to_found" + str(score250)
 
         self.formatted_text.append((word, tagName))
 
@@ -164,7 +164,7 @@ class GuiExerciseController:
     def _add_symbol(self, symbol):
         if len(symbol) == 0:
             return
-        self.formatted_text.append((symbol,"symbol"))
+        self.formatted_text.append((symbol, "symbol"))
         
         for _ in range(self.current_index, self.current_index + len(symbol)):
             self.word_index_map.append(self.current_word_index)
@@ -183,66 +183,66 @@ class GuiExerciseController:
 
     def _genererate_style_tag_list(self):
 
-        color_not_found = (0,0,80)
-        color_found = (10,150,10)
+        color_not_found = (0, 0, 80)
+        color_found = (10, 150, 10)
 
         def get_bcolor_not_found(score250):
             return _compute_color_between(
-                (150, 210, 250),
-                (255, 100, 100),
-                float(score250) /250.0)
+                                          (150, 210, 250),
+                                          (255, 100, 100),
+                                          float(score250) / 250.0)
 
         def get_bcolor_near(score250):
             return _compute_color_between(
-                (150, 210, 250),
-                (150, 255, 100),
-                float(score250) /250.0)
+                                          (150, 210, 250),
+                                          (150, 255, 100),
+                                          float(score250) / 250.0)
 
         def _compute_color_between(colorFrom, colorTo, coeff):
-            (redFrom, greenFrom, blueFrom)  =  colorFrom
-            (redTo, greenTo, blueTo)  =  colorTo
-            red = int((1-coeff)*redFrom + coeff*redTo)
-            green = int((1-coeff)*greenFrom + coeff*greenTo)
-            blue = int((1-coeff)*blueFrom + coeff*blueTo)
+            (redFrom, greenFrom, blueFrom) = colorFrom
+            (redTo, greenTo, blueTo) = colorTo
+            red = int((1-coeff) * redFrom + coeff * redTo)
+            green = int((1-coeff) * greenFrom + coeff * greenTo)
+            blue = int((1-coeff) * blueFrom + coeff * blueTo)
             return (red, green, blue)
 
-        self.style_tag_list.append(("symbol",18.0,None, None, False))
-        self.style_tag_list.append(("word_empty",18.0,color_not_found, get_bcolor_not_found(0), False))
-        self.style_tag_list.append(("word_found",18.0,color_found, None, False))
-        self.style_tag_list.append(("word_througt",18.0,get_bcolor_not_found(250),None, True ))
+        self.style_tag_list.append(("symbol", 18.0, None, None, False))
+        self.style_tag_list.append(("word_empty", 18.0, color_not_found, get_bcolor_not_found(0), False))
+        self.style_tag_list.append(("word_found", 18.0, color_found, None, False))
+        self.style_tag_list.append(("word_througt", 18.0, get_bcolor_not_found(250), None, True))
         
         for score250 in xrange(251):
-            self.style_tag_list.append(("word_to_found"+str(-score250),
-            18.0,
-            color_not_found,
-            get_bcolor_not_found(score250),
-            False))
+            self.style_tag_list.append(("word_to_found" + str(-score250),
+                                       18.0,
+                                       color_not_found,
+                                       get_bcolor_not_found(score250),
+                                       False))
 
-            self.style_tag_list.append(("word_near"+str(score250),
-            18.0,
-            color_not_found,
-            get_bcolor_near(score250),
-            False))
+            self.style_tag_list.append(("word_near" + str(score250),
+                                       18.0,
+                                       color_not_found,
+                                       get_bcolor_near(score250),
+                                       False))
 
         self.gui.set_typing_area_style_list(self.style_tag_list)
 
-    def notify_move_cursor(self,movement):
+    def notify_move_cursor(self, movement):
         """Documentation"""
-        if movement =="previous_char" :
+        if movement == "previous_char":
             self.core.previous_char()
-        elif movement =="next_char" :
+        elif movement == "next_char":
             self.core.next_char()
-        elif movement =="first_word" :
+        elif movement == "first_word":
             self.core.first_word()
-        elif movement =="last_word" :
+        elif movement == "last_word":
             self.core.last_word()
-        elif movement =="previous_word" :
+        elif movement == "previous_word":
             self.core.previous_word()
-        elif movement =="next_word" :
+        elif movement == "next_word":
             self.core.next_word()
         else:
             word_index = self.word_index_map[movement]
             word_index_position = self.word_pos_map[movement]
             if word_index == -1:
                 word_index = 0
-            self.core.select_sequence_word(word_index,word_index_position)
+            self.core.select_sequence_word(word_index, word_index_position)

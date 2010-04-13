@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-from perroquetlib.model.sequence.word import NoCharPossible
 from perroquetlib.model.sequence.sequence import Sequence
+from perroquetlib.model.sequence.word import NoCharPossible
 
 class SequenceSimple(Sequence):
     """Sequence which dont't lock valids words"""
@@ -80,9 +80,9 @@ class SequenceSimple(Sequence):
         """write many chars. a ' ' mean next word.
         Only for tests"""
         for char in sentence:
-            if char==" ":
+            if char == " ":
                 pass
-            elif char=="+":
+            elif char == "+":
                 self.next_word()
             else:
                 self.write_char(char)

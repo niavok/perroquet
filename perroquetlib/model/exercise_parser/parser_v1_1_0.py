@@ -17,13 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-from xml.dom.minidom import getDOMImplementation
 import os
-
-from perroquetlib.model.sub_exercise import SubExercise
-from perroquetlib.model.languages_manager import LanguagesManager
+from xml.dom.minidom import getDOMImplementation
 
 from lib import get_text, update_sequence_list
+from perroquetlib.model.languages_manager import LanguagesManager
+from perroquetlib.model.sub_exercise import SubExercise
 
 VERSION = "1.1.0 dev"
 
@@ -278,32 +277,32 @@ def load(exercise, dom, path):
     xml_exercise = dom.getElementsByTagName("exercise")[0]
 
     #Exercise - CurrentWord
-    currentWord = int(get_text( xml_exercise.getElementsByTagName("current_word")[0].childNodes))
+    currentWord = int(get_text(xml_exercise.getElementsByTagName("current_word")[0].childNodes))
     #Exercise - CurrentSequence
-    currentSequence = int(get_text( xml_exercise.getElementsByTagName("current_sequence")[0].childNodes))
+    currentSequence = int(get_text(xml_exercise.getElementsByTagName("current_sequence")[0].childNodes))
 
     
     # Stats
     xml_stats = dom.getElementsByTagName("stats")[0]
-    exercise.set_repeat_count(int(get_text( xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
+    exercise.set_repeat_count(int(get_text(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
 
     # Properties
     if len(dom.getElementsByTagName("properties")) > 0:
         xml_properties = dom.getElementsByTagName("properties")[0]
         if len(xml_properties.getElementsByTagName("repeat_after_complete")) > 0:
-            exercise.set_repeat_after_completed(get_text( xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes) == "True")
+            exercise.set_repeat_after_completed(get_text(xml_properties.getElementsByTagName("repeat_after_complete")[0].childNodes) == "True")
         if len(xml_properties.getElementsByTagName("time_between_sequence")) > 0:
-            exercise.set_time_between_sequence(float(get_text( xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
+            exercise.set_time_between_sequence(float(get_text(xml_properties.getElementsByTagName("time_between_sequence")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("max_sequence_length")) > 0:
-            exercise.set_max_sequence_length(float(get_text( xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
+            exercise.set_max_sequence_length(float(get_text(xml_properties.getElementsByTagName("max_sequence_length")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("play_margin_before")) > 0:
-            exercise.set_play_margin_before(int(get_text( xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
+            exercise.set_play_margin_before(int(get_text(xml_properties.getElementsByTagName("play_margin_before")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("play_margin_after")) > 0:
-            exercise.set_play_margin_after(int(get_text( xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
+            exercise.set_play_margin_after(int(get_text(xml_properties.getElementsByTagName("play_margin_after")[0].childNodes)))
         if len(xml_properties.getElementsByTagName("use_dynamic_correction")) > 0:
-            exercise.set_use_dynamic_correction(get_text( xml_properties.getElementsByTagName("use_dynamic_correction")[0].childNodes) == "True")
+            exercise.set_use_dynamic_correction(get_text(xml_properties.getElementsByTagName("use_dynamic_correction")[0].childNodes) == "True")
         if len(xml_properties.getElementsByTagName("repeat_count_by_sequence_limit")) > 0:
-            exercise.set_repeat_count_limit_by_sequence(int(get_text( xml_properties.getElementsByTagName("repeat_count_by_sequence_limit")[0].childNodes)))
+            exercise.set_repeat_count_limit_by_sequence(int(get_text(xml_properties.getElementsByTagName("repeat_count_by_sequence_limit")[0].childNodes)))
 
 
     #Subexercises
@@ -317,11 +316,11 @@ def load(exercise, dom, path):
         progress = []
 
         for xml_sequence in xml_sequences.getElementsByTagName("sequence"):
-            id = int(get_text( xml_sequence.getElementsByTagName("id")[0].childNodes))
-            state = get_text( xml_sequence.getElementsByTagName("state")[0].childNodes)
+            id = int(get_text(xml_sequence.getElementsByTagName("id")[0].childNodes))
+            state = get_text(xml_sequence.getElementsByTagName("state")[0].childNodes)
             #Sequence repeat count
             if len(xml_sequence.getElementsByTagName("repeat_count")) > 0:
-                repeat_count = int(get_text( xml_sequence.getElementsByTagName("repeat_count")[0].childNodes))
+                repeat_count = int(get_text(xml_sequence.getElementsByTagName("repeat_count")[0].childNodes))
             else:
                 repeat_count = 0
             words = []
@@ -329,15 +328,15 @@ def load(exercise, dom, path):
             if state == "in_progress":
                 xml_words = xml_sequence.getElementsByTagName("words")[0]
                 for xml_world in xml_words.getElementsByTagName("word"):
-                    words.append(get_text( xml_world.childNodes))
+                    words.append(get_text(xml_world.childNodes))
 
             progress.append((id, state, words, repeat_count))
 
         #Paths
         xml_paths = xml_subExercise.getElementsByTagName("paths")[0]
-        subExercise.set_video_path(get_text( xml_paths.getElementsByTagName("video")[0].childNodes))
-        subExercise.set_exercise_path(get_text( xml_paths.getElementsByTagName("exercise")[0].childNodes))
-        subExercise.set_translation_path(get_text( xml_paths.getElementsByTagName("translation")[0].childNodes))
+        subExercise.set_video_path(get_text(xml_paths.getElementsByTagName("video")[0].childNodes))
+        subExercise.set_exercise_path(get_text(xml_paths.getElementsByTagName("exercise")[0].childNodes))
+        subExercise.set_translation_path(get_text(xml_paths.getElementsByTagName("translation")[0].childNodes))
 
         exercise.subExercisesList.append(subExercise)
 

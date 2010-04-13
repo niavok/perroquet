@@ -20,15 +20,14 @@
 
 """Library used to create easily configuration"""
 
+import logging
 import os
 import sys
 from ConfigParser import ConfigParser
 
-import logging
-
 #config_lib must not be dependant of perroquetlib
 defaultLoggingHandler = logging.StreamHandler(sys.stdout)
-defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s","%a %H:%M:%S"))
+defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s", "%a %H:%M:%S"))
 defaultLoggingLevel = logging.DEBUG
 
         
@@ -36,17 +35,17 @@ class Parser(ConfigParser):
     """A general class to make parsers"""
     str2object = {
         "int": int,
-        "string": lambda x: x  ,
-        "stringlist" : lambda s: s.split("\n") ,
-        "intlist" : lambda s: [int(x) for x in s.split("\n")] ,
-        "stringlistlist" : lambda ll: [l.split("::") for l in ll.split("\n")]
-        ,}
+        "string": lambda x: x,
+        "stringlist": lambda s: s.split("\n"),
+        "intlist": lambda s: [int(x) for x in s.split("\n")],
+        "stringlistlist": lambda ll: [l.split("::") for l in ll.split("\n")]
+        , }
     object2str = {
         "int": str,
-        "string": lambda x: x  ,
-        "stringlist" : lambda l: ("\n").join(l) ,
-        "intlist" : lambda l: ("\n").join(str(i) for i in l) ,
-        "stringlistlist" : lambda ll: "\n".join("::".join(l) for l in ll)}
+        "string": lambda x: x,
+        "stringlist": lambda l: ("\n").join(l),
+        "intlist": lambda l: ("\n").join(str(i) for i in l),
+        "stringlistlist": lambda ll: "\n".join("::".join(l) for l in ll)}
         
     def __init__(self):
         ConfigParser.__init__(self)
@@ -54,8 +53,8 @@ class Parser(ConfigParser):
     def get_options(self):
         "return {option1: section1, ...}"
         return dict([(option, section)
-                for section in self.sections()
-                for option in self.options(section) ])
+                    for section in self.sections()
+                    for option in self.options(section)])
     
     def set(self, section, option, value):
         "set an option."
@@ -88,7 +87,7 @@ class WritableParser(Parser):
         "Only save the options that have changed"
         def mkpath(path):
             "Create the directeries components of a path"
-            path2=os.path.dirname(path)
+            path2 = os.path.dirname(path)
             if not os.path.isdir(path2):
                 mkpath(path2)
                 os.mkdir(path2)
@@ -154,13 +153,13 @@ class Config:
     def get(self, key):
         """get a propertie"""
         if not key.islower():
-            raise KeyError, key+" is not lowercase"
+            raise KeyError, key + " is not lowercase"
         return self._properties[key]
 
     def set(self, key, value):
         """set a propertie"""
         if not key.islower():
-            raise KeyError, key+" is not lowercase"
+            raise KeyError, key + " is not lowercase"
         self._properties[key] = value
         for writableParser in self._writableParsers:
             writableParser.set_if_existant_key(key, value)
@@ -174,4 +173,4 @@ class Config:
         return str(self._properties).replace(", ", "\n")
     
     def __repr__(self):
-        return "<Config "+str(self)[:50]+">"
+        return "<Config " + str(self)[:50] + ">"

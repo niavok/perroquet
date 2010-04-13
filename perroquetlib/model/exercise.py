@@ -17,17 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
-import re
-import random
 import copy
 import hashlib
+import random
+import re
 import string
 
-
-from subtitles_loader import SubtitlesLoader
-from sub_exercise import SubExercise
 from languages_manager import LanguagesManager
 from perroquetlib.config import config
+from sub_exercise import SubExercise
+from subtitles_loader import SubtitlesLoader
 
 class Exercise(object):
 
@@ -64,7 +63,7 @@ class Exercise(object):
             self.order = [x for x in range(self.get_sequence_count())]
             random.shuffle(self.order)
             self.reverseOrder = copy.copy(self.order)
-            for i,j in enumerate(self.order):
+            for i, j in enumerate(self.order):
                 self.reverseOrder[j] = i
 
     def new(self):
@@ -76,8 +75,8 @@ class Exercise(object):
             languageManager = LanguagesManager()
             self.language = languageManager.get_default_language()
 
-            self.maxSequenceLength = float(config.get("default_exercise_max_sequence_length"))/1000
-            self.timeBetweenSequence = float(config.get("default_exercise_time_between_sequences"))/1000
+            self.maxSequenceLength = float(config.get("default_exercise_max_sequence_length")) / 1000
+            self.timeBetweenSequence = float(config.get("default_exercise_time_between_sequences")) / 1000
             self.playMarginAfter = config.get("default_exercise_play_margin_before")
             self.playMarginBefore = config.get("default_exercise_play_margin_after")
 
@@ -139,7 +138,7 @@ class Exercise(object):
                 randomId = 0
             return self.goto_sequence(self.order[randomId])
         else:
-            return self.goto_sequence(self.currentSequenceId+1)
+            return self.goto_sequence(self.currentSequenceId + 1)
 
     def goto_previous_sequence(self):
 
@@ -290,14 +289,14 @@ class Exercise(object):
 
     def set_language_id(self, langId):
         languageManager = LanguagesManager()
-        self.language =languageManager.get_language_by_id(langId)
+        self.language = languageManager.get_language_by_id(langId)
 
     def get_language_id(self):
         return self.language.id
 
-    def is_character_match(self,char):
+    def is_character_match(self, char):
         langAvailableChars = self.language.availableChars
-        return re.match('^['+langAvailableChars+']$',char)
+        return re.match('^[' + langAvailableChars + ']$', char)
 
     def get_play_margin_before(self):
         return self.playMarginBefore
@@ -327,7 +326,7 @@ class Exercise(object):
         return  self.get_repeat_count_limit_by_sequence() != 0 and self.get_current_sequence().get_repeat_count() >= self.get_repeat_count_limit_by_sequence()
 
     def increment_current_sequence_repeat_count(self):
-        self.get_current_sequence().set_repeat_count(self.get_current_sequence().get_repeat_count()+1)
+        self.get_current_sequence().set_repeat_count(self.get_current_sequence().get_repeat_count() + 1)
 
     def clear_sequence_repeat_count(self):
         for sequence in self.get_sequence_list():
@@ -339,7 +338,7 @@ class Exercise(object):
     def is_lock_properties_password(self):
         return self.lock_properties_salt != None
 
-    def set_lock_properties(self, state, new_password = None):
+    def set_lock_properties(self, state, new_password=None):
         self.lock_properties = state
         if new_password is not None:
             salt = ""
@@ -362,7 +361,7 @@ class Exercise(object):
     def is_lock_correction_password(self):
         return self.lock_correction_salt != None
 
-    def set_lock_correction(self, state, new_password = None):
+    def set_lock_correction(self, state, new_password=None):
         self.lock_correction = state
         if new_password is not None:
             salt = ""
@@ -382,7 +381,7 @@ class Exercise(object):
     def hash(self, salt, password):
         """Compute the hashed password for the salt and the password"""
         m = hashlib.sha256()
-        m.update(salt+password)
+        m.update(salt + password)
         return m.hexdigest()
         
     def is_lock_help(self):
