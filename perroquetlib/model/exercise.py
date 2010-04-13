@@ -156,6 +156,25 @@ class Exercise(object):
             else:
                 return False
 
+    def goto_next_valid_sequence(self):
+        if not self.goto_next_sequence():
+            return False
+        else:
+            if not self.get_current_sequence().is_valid():
+                return True
+            else:
+                return self.goto_next_valid_sequence()
+    
+
+    def goto_previous_valid_sequence(self):
+        if not self.goto_previous_sequence():
+            return False
+        else:
+            if not self.get_current_sequence().is_valid():
+                return True
+            else:
+                return self.goto_previous_valid_sequence()
+
 
 
     def is_paths_valid(self):

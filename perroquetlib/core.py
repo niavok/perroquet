@@ -169,6 +169,24 @@ class Core(object):
             #Auto start play only if repeat is not limited
             self.repeat_sequence()
 
+    #Goto next valid sequence
+    def next_valid_sequence(self, load = True):
+        if self.exercise.goto_next_valid_sequence():
+            self.set_can_save(True)
+        self._activate_sequence()
+        if load and self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
+            self.repeat_sequence()
+
+    #Goto previous valid sequence
+    def previous_valid_sequence(self, load = True):
+        if self.exercise.goto_previous_valid_sequence():
+            self.set_can_save(True)
+        self._activate_sequence()
+        if load and self.exercise.get_repeat_count_limit_by_sequence() == 0:
+            #Auto start play only if repeat is not limited
+            self.repeat_sequence()
+
     #Update interface with new sequence. Configure stop media callback
     def _activate_sequence(self):
         self.state = Core.WAIT_BEGIN

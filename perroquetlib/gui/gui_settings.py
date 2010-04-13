@@ -67,6 +67,10 @@ class Guisettings:
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
         checkbuttonRandomOrder.set_active(config.get("default_exercise_random_order") == 1)
 
+        #General
+        checkbutton_navigation_skip_valid_sequences = self.builder.get_object("checkbutton_navigation_skip_valid_sequences")
+        checkbutton_navigation_skip_valid_sequences.set_active(config.get("navigation_skip_valid_sequences") == 1)
+
         #Interface
         checkbuttonShowPlayPauseButtons = self.builder.get_object("checkbuttonShowPlayPauseButtons")
         checkbuttonShowPlayPauseButtons.set_active(config.get("interface_show_play_pause_buttons") == 1)
@@ -124,6 +128,14 @@ class Guisettings:
         else:
             config.set("default_exercise_random_order",0)
 
+        #General
+
+        checkbutton_navigation_skip_valid_sequences = self.builder.get_object("checkbutton_navigation_skip_valid_sequences")
+        if checkbutton_navigation_skip_valid_sequences.get_active():
+            config.set("navigation_skip_valid_sequences",1)
+        else:
+            config.set("navigation_skip_valid_sequences",0)
+        
         #Interface
         checkbuttonShowPlayPauseButtons = self.builder.get_object("checkbuttonShowPlayPauseButtons")
         if checkbuttonShowPlayPauseButtons.get_active():
@@ -136,6 +148,7 @@ class Guisettings:
             config.set("interface_lock_settings",0)
         else:
             config.set("interface_lock_settings",1)
+
 
 
 

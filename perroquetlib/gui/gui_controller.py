@@ -423,10 +423,17 @@ class GuiController:
         self.core.import_package()
 
     def notify_next_sequence(self):
-        self.core.next_sequence()
+        if config.get("navigation_skip_valid_sequences") == 0:
+            self.core.next_sequence()
+        else:
+            self.core.next_valid_sequence()
 
     def notify_previous_sequence(self):
-        self.core.previous_sequence()
+        if config.get("navigation_skip_valid_sequences") == 0:
+            self.core.previous_sequence()
+        else:
+            self.core.previous_valid_sequence()
+        
 
     def notify_repeat_sequence(self):
         self.core.user_repeat()
