@@ -30,6 +30,13 @@ class Language:
         self.helpChar = helpChar
         self._aliases = []
 
+        try: 
+            synonyms_list = config.get("synonyms." + self.id) 
+        except KeyError:
+            raise Warning, "No aliases defined for language "+self.id
+        for synonyms in synonyms_list:
+            self.add_synonyms(synonyms)
+
     def add_alias(self, alias, meaning):
         self._aliases.append((alias,meaning))
 

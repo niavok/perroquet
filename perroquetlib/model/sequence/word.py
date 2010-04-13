@@ -72,9 +72,13 @@ class Word:
         score2 = self.get_begin_right()
         return (score1*8+score2*2)/10
     
-    def is_valid(self):
-        return self.get_text() == self.get_valid()
+    def is_equal(self, text):
+        return (self.get_text() == text or
+                self.language.is_alias(self.get_text(), text))
     
+    def is_valid(self):
+        return self.is_equal(self.get_valid())
+
     def is_empty(self):
         return self.get_text() == ""
     

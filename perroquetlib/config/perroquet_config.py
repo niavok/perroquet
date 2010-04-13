@@ -171,3 +171,14 @@ if not os.path.isfile(localPath):
     config.logger.warn("No local conf file found")
 config.load_writable_config_file(localPath, globalPath)
 
+#languages_aliases.ini
+paths = (
+    os.path.join( config.get("globalconfigdir"), "languages_aliases.ini"),
+    os.path.join(config.get("script"), 'data/languages_aliases.ini') ,)
+existantPaths = [path for path in paths if os.path.isfile(path)]
+if existantPaths == []:
+    raise IOError,  "Error : global conf file 'languages_aliases.ini' not found"
+else:
+    path = existantPaths[0]
+config.load_config_file(path)
+

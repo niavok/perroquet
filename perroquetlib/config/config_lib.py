@@ -21,10 +21,16 @@
 """Library used to create easily configuration"""
 
 import os
+import sys
 from ConfigParser import ConfigParser
 
 import logging
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
+
+#config_lib must not be dependant of perroquetlib
+defaultLoggingHandler = logging.StreamHandler(sys.stdout)
+defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s","%a %H:%M:%S"))
+defaultLoggingLevel = logging.DEBUG
+
         
 class Parser(ConfigParser):
     """A general class to make parsers"""
@@ -113,7 +119,16 @@ class Config:
         self.logger = logging.Logger("Config")
         self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
-        
+    
+    def load_config_file(self, path):
+        """load an ini config file that can't be modified."""
+        parser = Parser()
+        if not os.path.isfile(path):
+            raise IOError, path
+        parser.read(path)
+        for (option, section) in parser.get_options().items():
+            self.set(option, parser.get(section, option))
+
     def load_writable_config_file(self, writablePath, referencePath):
         """load an ini config file that can be modified."""
         #localParser exists because we din't want to copy referencePath to

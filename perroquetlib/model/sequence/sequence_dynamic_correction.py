@@ -98,7 +98,7 @@ class SequenceDynamicCorrection(Sequence):
         """Check if a word is correct but at a wrong place."""
         for w1 in self.get_words():
             for j, w2 in enumerate(self.get_words()):
-                if w1.get_score()<=0 and w1.get_text()==w2.get_valid() and not w2.is_valid():
+                if w1.get_score()<=0 and w1.is_equal(w2.get_valid()) and not w2.is_valid():
                     w2.set_text(w1.get_text())
                     w1.set_text("")
                     self.set_active_word_index(j)
