@@ -17,13 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
+"""A module that deal with words.
+Usage: from sequence import Sequence"""
+
 import re
 
 from word import Word
 
-class Sequence(object):
+class Sequence:
+    """A class that implement a sequence manipulation with a reference"""
     def __init__(self, language):
-
         # self._symbolList = what is between words (or "")
         # self._wordList = a list of Words items that we want to find
         # self._workValidityList = 1 if the word if good, 0 if it is empty
@@ -54,7 +57,6 @@ class Sequence(object):
         self.endTime = 0
 
     def load(self, text):
-        #TODO FIXME
         textToParse = text
         #We want swswsw... (s=symbol, w=word)
         #So if the 1st char isn't a symbole, we want an empty symbole
@@ -62,15 +64,19 @@ class Sequence(object):
             self._symbolList.append('')
         while len(textToParse) > 0:
             # if the text begin with a word followed by a not word char
-            if re.match('^(' + self.validChar + '+)' + self.notValidChar, textToParse):
-                m = re.search('^(' + self.validChar + '+)' + self.notValidChar, textToParse)
+            if re.match('^(' + self.validChar + '+)' + self.notValidChar,
+                        textToParse):
+                m = re.search('^(' + self.validChar + '+)' + self.notValidChar,
+                              textToParse)
                 word = m.group(1)
                 sizeToCut = len(word)
                 textToParse = textToParse[sizeToCut:]
                 self._wordList.append(Word(word, self.language))
             # if the text begin with no word char but followed by a word
-            elif re.match('^(' + self.notValidChar + '+)' + self.validChar, textToParse):
-                m = re.search('^(' + self.notValidChar + '+)' + self.validChar, textToParse)
+            elif re.match('^(' + self.notValidChar + '+)' + self.validChar,
+                          textToParse):
+                m = re.search('^(' + self.notValidChar + '+)' + self.validChar,
+                              textToParse)
                 symbol = m.group(1)
                 sizeToCut = len(symbol)
                 textToParse = textToParse[sizeToCut:]
@@ -130,7 +136,8 @@ class Sequence(object):
         "go to the previous word"
         if self.get_active_word_index() > 0:
             self._activeWordIndex -= 1
-            self.get_active_word().set_pos(self.get_active_word().get_last_pos())
+            self.get_active_word().set_pos(
+                    self.get_active_word().get_last_pos())
         else:
             if not loop:
                 pass
@@ -143,12 +150,7 @@ class Sequence(object):
         raise NotImplementedError
 
     def write_char(self, char):
-        if not self.get_active_word().is_valid():
-            self.get_active_word().write_char(char)
-        else:
-            self._next_false_word()
-            self.write_char(char)
-        self.update_after_write()
+        raise NotImplementedError
 
     def _write_sentence(self, sentence):
         """write many chars. a ' ' mean next word.
@@ -229,7 +231,8 @@ class Sequence(object):
         return self.repeat_count
 
     def __print__(self):
-        return "-".join(w.get_text() for w in self.get_words()) + " VS " + "-".join(w.get_valid() for w in self.get_words())
+        return "-".join(w.get_text() for w in self.get_words()) + " VS " + \
+                "-".join(w.get_valid() for w in self.get_words())
 
     def __repr__(self):
         return self.__print__()

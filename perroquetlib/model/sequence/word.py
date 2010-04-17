@@ -17,7 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
+"""A module that deal with words.
+Usage: from word import Word"""
+
 class NoCharPossible(Exception):
+    """exception raised when we can't do the selected action because they is no
+    character at the right place"""
     pass
     
 def levenshtein(a, b):
@@ -57,29 +62,36 @@ class Word:
         self._pos = 0
 
     def levenshtein(self):
+        "get the levenshtein distance between the current word an the valid one"
         return levenshtein(self.get_text(), self.get_valid())
         
     def get_begin_right(self):
         """Check if the first chars of self.get_valid() is self.get_text())"""
-        return self.get_valid()[:len(self.get_text(helpChar=False))] == self.get_text(helpChar=False)
+        return self.get_valid().startwith(self.get_text(helpChar=False))
     
     def get_score(self):
         """Show if we are near the solution.
         return a float from -1 to 1. more is better"""
         #score1 and score2 are between -1 and 1
-        score1_ = (2. * len(self.get_valid()) - 2 * self.levenshtein() - len(self.get_text(helpChar=False))) / max(len(self.get_valid()), len(self.get_text(helpChar=False)))
+        score1_ = (2. * len(self.get_valid()) - 2 * self.levenshtein() - \
+                    len(self.get_text(helpChar=False))) /  \
+                    max(len(self.get_valid()),
+                        len(self.get_text(helpChar=False)))
         score1 = max(score1_, -1)
         score2 = self.get_begin_right()
         return (score1 * 8 + score2 * 2) / 10
     
     def is_equal(self, text):
+        "check is the current word is equal or means the text word"
         return (self.get_text() == text or
                 self.language.is_alias(self.get_text(), text))
     
     def is_valid(self):
+        "check is the current word is valid"
         return self.is_equal(self.get_valid())
 
     def is_empty(self):
+        "check is the current word is empty"
         return self.get_text() == ""
     
     def complete(self):
@@ -91,17 +103,22 @@ class Word:
         self.set_text("")
     
     def write_char(self, char):
+        "write a char at the current position"
         char = char.lower()
         if len(char) != 1 or char == " ":
             raise AttributeError, "char='" + char + "'"
         #if replacing an helpChar
-        if self.get_pos() < len(self.get_text()) and self.get_text()[self.get_pos()] == self._helpChar:
-            self.set_text(self.get_text()[:self.get_pos()] + char + self.get_text()[self.get_pos() + 1:])
+        if self.get_pos() < len(self.get_text()) and \
+            self.get_text()[self.get_pos()] == self._helpChar:
+            self.set_text(self.get_text()[:self.get_pos()] + char + \
+                        self.get_text()[self.get_pos() + 1:])
         else:
             if self._helpChar in self.get_text():
                 #removing helps chars
-                self.set_text("".join(c for c in self.get_text() if c != self._helpChar))
-            self.set_text(self.get_text()[:self.get_pos()] + char + self.get_text()[self.get_pos():])
+                self.set_text("".join(c for c in self.get_text() if
+                              c != self._helpChar))
+            self.set_text(self.get_text()[:self.get_pos()] + char +
+                          self.get_text()[self.get_pos():])
         self._pos += 1
 
     def show_hint(self):
@@ -110,7 +127,8 @@ class Word:
         first_error = -1
         
         for i in range(0, len(self.get_valid())):
-            if i < len(self.get_text()) and self.get_text()[i] == self.get_valid()[i]:
+            if i < len(self.get_text()) and \
+                self.get_text()[i] == self.get_valid()[i]:
                 outWord += self.get_valid()[i]
             else:
                 outWord += self._helpChar
@@ -121,7 +139,8 @@ class Word:
         # else                => The word is valid
         
         if len(self.get_text()) == len(self.get_valid()) and first_error != -1:
-            outWord = outWord[:first_error] + self.get_valid()[first_error] + outWord[first_error + 1:]
+            outWord = outWord[:first_error] + self.get_valid()[first_error] + \
+                      outWord[first_error + 1:]
             self.set_pos(first_error + 1)
         elif first_error != -1:
             self.set_pos(first_error)
@@ -129,30 +148,39 @@ class Word:
         self.set_text(outWord)
     
     def delete_previous_char(self):
+        "delete the char before the current pos"
         if self.get_pos() == 0 or self.get_text() == "":
             raise NoCharPossible
         else:
-            self.set_text(self.get_text()[:self.get_pos()-1]  + self.get_text()[self.get_pos():])
+            self.set_text(self.get_text()[:self.get_pos()-1]  +
+                          self.get_text()[self.get_pos():])
             self._pos -= 1
     
     def delete_next_char(self):
+        "delete the char after the current pos"
         if self.get_pos() == len(self.get_text()) or self.get_text() == "":
             raise NoCharPossible
         else:
-            self.set_text(self.get_text()[:self.get_pos()]  + self.get_text()[self.get_pos() + 1:])
+            self.set_text(self.get_text()[:self.get_pos()]  +
+                          self.get_text()[self.get_pos() + 1:])
             
     def set_text(self, text):
+        "set the text in the word"
         if " " in text:
             raise AttributeError
         self._text = text.lower()
         
     def get_text(self, helpChar=True):
+        """get what is writen.
+        if not helpChar (default=True) then don't show the help characters
+        """
         if helpChar:
             return self._text.lower()
         else:
             return "".join([i for i in self.get_text() if i != self._helpChar])
         
     def get_valid(self, lower=True):
+        "get the valid word"
         if lower:
             return self._valid.lower()
         else:
@@ -168,25 +196,30 @@ class Word:
             self._pos = pos
         
     def get_pos(self):
+        "return the position"
         return self._pos
     
     def get_last_pos(self):
+        "return the last possible position"
         return len(self.get_text())
     
     def next_char(self):
+        "go to the next char"
         if self.get_pos() < self.get_last_pos():
             self._pos += 1
         else:
             raise NoCharPossible
     
     def previous_char(self):
+        "go to the previous char"
         if self.get_pos() > 0:
             self._pos -= 1
         else:
             raise NoCharPossible
     
     def __print__(self):
-        return str(self.is_valid()) + " " + self.get_text() + " instead of " + self.get_valid()
+        return str(self.is_valid()) + " " + self.get_text() + " instead of " + \
+                   self.get_valid()
     
     def __repr__(self):
         return self.get_text() + " VS " + self.get_valid()
