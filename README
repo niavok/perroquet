@@ -32,6 +32,7 @@ time-codes, Perroquet cut the video you have to type the words you hear.
 * Key 'return' : Replay sequence.
 * Key 'F1' : Complete current word.
 * Key 'F2' : Show/hide translation
+* Key 'F9' : Show/hide lateral panel
 
 4/ Additional help
 ====================
