@@ -67,7 +67,7 @@ class Word:
 
     def get_begin_right(self):
         """Check if the first chars of self.get_valid() is self.get_text())"""
-        return self.get_valid().startwith(self.get_text(helpChar=False))
+        return self.get_valid().startswith(self.get_text(helpChar=False))
 
     def get_score(self):
         """Show if we are near the solution.

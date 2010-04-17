@@ -22,6 +22,7 @@ import hashlib
 import random
 import re
 import string
+import os.path
 
 from languages_manager import LanguagesManager
 from perroquetlib.config import config
@@ -193,6 +194,8 @@ class Exercise(object):
 
     def set_video_path(self, videoPath):
         self.currentSubExercise.set_video_path(videoPath)
+        if not self.get_name():
+            self.set_name(os.path.basename(videoPath))
 
     def set_exercise_path(self, exercisePath):
         self.currentSubExercise.set_exercise_path(exercisePath)

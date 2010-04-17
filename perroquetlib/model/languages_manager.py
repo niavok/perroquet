@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
+import warnings
+
 from perroquetlib.config import config
 
 
@@ -33,9 +35,10 @@ class Language:
         try:
             synonyms_list = config.get("synonyms." + self.id)
         except KeyError:
-            raise Warning, "No aliases defined for language " + self.id
-        for synonyms in synonyms_list:
-            self.add_synonyms(synonyms)
+            warnings.warn("No aliases defined for language " + self.id, UserWarning)
+        else:
+            for synonyms in synonyms_list:
+                self.add_synonyms(synonyms)
 
     def add_alias(self, alias, meaning):
         self._aliases.append((alias, meaning))
