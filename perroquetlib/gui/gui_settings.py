@@ -135,7 +135,7 @@ class Guisettings:
             config.set("navigation_skip_valid_sequences",1)
         else:
             config.set("navigation_skip_valid_sequences",0)
-        
+
         #Interface
         checkbuttonShowPlayPauseButtons = self.builder.get_object("checkbuttonShowPlayPauseButtons")
         if checkbuttonShowPlayPauseButtons.get_active():
@@ -190,8 +190,3 @@ class Guisettings:
         exercice = Exercise()
         adjustmentTimeAfterSequence.set_value(exercice.get_play_margin_after())"""
         print "TODO"
-
-
-
-
-

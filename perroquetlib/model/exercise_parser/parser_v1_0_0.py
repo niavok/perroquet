@@ -133,4 +133,3 @@ def load(self, exercise, dom, path):
         exercise.set_output_save_path(path)
 
     return exercise
-

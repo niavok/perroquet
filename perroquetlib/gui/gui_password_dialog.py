@@ -48,7 +48,7 @@ class GuiPasswordDialog:
         elif type == "properties":
             self.builder.get_object("labelLabel").set_text(_("Properties password :"))
             self.dialog.set_title("Password for unlock properties")
-    
+
 
     def run(self):
         self.dialog.run()
@@ -71,4 +71,3 @@ class GuiPasswordDialog:
         self.result = None
         self.dialog.response(gtk.RESPONSE_CANCEL)
         return True
-

@@ -30,8 +30,8 @@ class Language:
         self.helpChar = helpChar
         self._aliases = []
 
-        try: 
-            synonyms_list = config.get("synonyms." + self.id) 
+        try:
+            synonyms_list = config.get("synonyms." + self.id)
         except KeyError:
             raise Warning, "No aliases defined for language " + self.id
         for synonyms in synonyms_list:
@@ -99,4 +99,3 @@ class LanguagesManager:
 
                 language = Language(current_id, current_name, current_availableChars)
                 self.languageList.append(language)
-

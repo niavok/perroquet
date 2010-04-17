@@ -181,4 +181,3 @@ if existantPaths == []:
 else:
     path = existantPaths[0]
 config.load_config_file(path)
-

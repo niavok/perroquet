@@ -51,5 +51,3 @@ class Perroquet(object):
             self.core.load_exercise(config.get("lastopenfile"))
 
         self.gui.run()
-
-

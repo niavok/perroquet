@@ -36,7 +36,7 @@ class GuiController:
 
         # Mode can be closed, loaded or load_failed
         self.mode = "closed"
-        
+
         self.gui = Gui(self)
         self.gui.set_active_video_area(False)
         self.gui_exercise_controller = None
@@ -50,7 +50,7 @@ class GuiController:
             self.gui.set_checked_lateral_panel(True)
             self.gui.set_visible_lateral_panel(True)
             config.set("showlateralpanel", 1)
-  
+
     def set_core(self, core):
         """Define perroquet core to use"""
         self.core = core
@@ -99,7 +99,7 @@ class GuiController:
 
             #Disable speed change slider if the media player not support it
             if self.core.get_player().is_speed_changeable() and not self.core.get_exercise().is_lock_help():
-                self.gui.set_enable_speed_selection(True)     
+                self.gui.set_enable_speed_selection(True)
             else:
                 self.gui.set_enable_speed_selection(False)
 
@@ -117,7 +117,7 @@ class GuiController:
             self.gui.set_enable_export_as_package(False)
             self.gui.set_enable_speed_selection(False)
             self.gui.set_enable_correction(False)
-            
+
         if self.mode == "closed":
             self.gui.set_enable_sequence_index_selection(False)
             self.gui.set_enable_sequence_time_selection(False)
@@ -132,7 +132,7 @@ class GuiController:
             self.gui.set_enable_export_as_package(False)
             self.gui.set_enable_speed_selection(False)
             self.gui.set_enable_correction(False)
-            
+
         if config.get("interface_show_play_pause_buttons") == 1:
             self.gui.set_visible_play(True)
             self.gui.set_visible_pause(True)
@@ -210,7 +210,7 @@ class GuiController:
 
         self.gui.set_enable_next_sequence(sequenceNumber != sequenceCount)
         self.gui.set_enable_previous_sequence(sequenceNumber != 1)
- 
+
     def set_sequence_time(self, sequence_position, sequence_time):
         if sequence_position > sequence_time:
             sequence_position = sequence_time
@@ -301,7 +301,7 @@ class GuiController:
         if self.mode != "loaded":
             return True
         return self.gui_exercise_controller.notify_move_cursor(movement)
-        
+
 
     def notify_key_press(self, keyname):
         if keyname == "Return" or keyname == "KP_Enter":
@@ -382,7 +382,7 @@ class GuiController:
 
     def ask_properties(self):
         self.gui.ask_properties(self.core)
-        
+
     def ask_export_as_package_path(self):
         return self.gui.ask_export_as_package_path()
 
@@ -410,7 +410,7 @@ class GuiController:
     def notify_new_exercise_create(self, videoPath, exercisePath, translationPath, langId):
         self.gui.set_visible_new_exercise_dialog(False)
         self.core.new_exercise(videoPath, exercisePath, translationPath, langId)
-        
+
     def notify_new_exercise_cancel(self):
         self.gui.set_visible_new_exercise_dialog(False)
 
@@ -434,7 +434,7 @@ class GuiController:
             self.core.previous_sequence()
         else:
             self.core.previous_valid_sequence()
-        
+
 
     def notify_repeat_sequence(self):
         self.core.user_repeat()
@@ -460,10 +460,10 @@ class GuiController:
 
     def notify_save(self):
         self.core.save()
-    
+
     def notify_save_as(self):
         self.core.save(True)
-    
+
     def ask_save_path(self):
         return self.gui.ask_save_path()
 

@@ -19,12 +19,12 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 class GuiExerciseController:
-    
+
     def __init__(self, gui_controller, core, gui):
         self.gui = gui
         self.core = core
         self.gui_controller = gui_controller
-        
+
         self.current_index = 0
         self.current_word_index = -1
         self.current_pos_index = 0
@@ -57,7 +57,7 @@ class GuiExerciseController:
     def _generate_formatted_dynamic_correction_exercise_text(self, sequence):
 
         self._clear()
-        
+
         pos = 0
 
         for i, symbol in enumerate(sequence.get_symbols()):
@@ -160,12 +160,12 @@ class GuiExerciseController:
             self.current_pos_index += 1
 
         self.current_index += len(word)
-        
+
     def _add_symbol(self, symbol):
         if len(symbol) == 0:
             return
         self.formatted_text.append((symbol, "symbol"))
-        
+
         for _ in range(self.current_index, self.current_index + len(symbol)):
             self.word_index_map.append(self.current_word_index)
             self.word_pos_map.append(self.current_pos_index)
@@ -210,7 +210,7 @@ class GuiExerciseController:
         self.style_tag_list.append(("word_empty", 18.0, color_not_found, get_bcolor_not_found(0), False))
         self.style_tag_list.append(("word_found", 18.0, color_found, None, False))
         self.style_tag_list.append(("word_througt", 18.0, get_bcolor_not_found(250), None, True))
-        
+
         for score250 in xrange(251):
             self.style_tag_list.append(("word_to_found" + str(-score250),
                                        18.0,

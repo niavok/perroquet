@@ -175,5 +175,3 @@ class VideoPlayer:
 
     def close(self):
         self.player.set_state(gst.STATE_NULL)
-
-

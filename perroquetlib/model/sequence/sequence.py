@@ -44,7 +44,7 @@ class Sequence:
         self._wordList = []
 
         self._activeWordIndex = 0
-        
+
         self._helpChar = '~'
 
         self.language = language
@@ -52,7 +52,7 @@ class Sequence:
         self.validChar = "[" + allChar + "]"
         self.notValidChar = "[^" + allChar + "]"
         self.repeat_count = 0
-        
+
         self.beginTime = 0
         self.endTime = 0
 
@@ -192,7 +192,7 @@ class Sequence:
         """Reveal all words"""
         for w in self.get_words():
             w.complete()
-            
+
     def reset(self):
         "RAZ the current seq"
         for w in self.get_words():
@@ -201,7 +201,7 @@ class Sequence:
     def update_after_write(self):
         "update after a modification of the text"
         raise NotImplementedError
-        
+
     def get_time_begin(self):
         return self.beginTime
 
@@ -236,4 +236,3 @@ class Sequence:
 
     def __repr__(self):
         return self.__print__()
-

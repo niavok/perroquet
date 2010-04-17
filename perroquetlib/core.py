@@ -53,7 +53,7 @@ class Core(object):
         self.logger = logging.Logger("Core")
         self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
-        
+
     #Call by the main, give an handler to the main gui
     def set_gui(self, gui):
         self.gui_controller = gui
@@ -139,7 +139,7 @@ class Core(object):
             self.goto_sequence_begin()
             self.play()
             self.exercise.increment_current_sequence_repeat_count()
-            
+
 
     #Change the active sequence
     def select_sequence(self, num, load=True):
@@ -250,7 +250,7 @@ class Core(object):
                 if self.exercise.get_repeat_count_limit_by_sequence() == 0:
                     #Auto start play only if repeat is not limited
                     self.play()
-                
+
 
     #Goto beginning of the current sequence. Can start to play as soon
     #as the media player is ready
@@ -538,7 +538,7 @@ class Core(object):
             self.logger.info("Export done")
         else:
             self.logger.warn("No valid path to export??")
-        
+
 
     def import_package(self):
         import_path = self.gui_controller.ask_import_package()

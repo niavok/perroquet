@@ -94,8 +94,8 @@ class GuiExerciseManager:
         self.availableExoCount = 0
         self.installedExoCount = 0
 
-	if not self.repositoryList:
-	    self.update_exercise_list_thread()
+        if not self.repositoryList:
+            self.update_exercise_list_thread()
 
         for repo in self.repositoryList:
 

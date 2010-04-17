@@ -32,7 +32,7 @@ class SubtitlesLoader(object):
     sourceFormats = ['utf-8', 'ascii', 'iso-8859-1']
     targetFormat = 'utf-8'
     outputDir = 'converted'
-    
+
     def __init__(self):
         self.logger = logging.Logger(self.__class__.__name__)
         self.logger.setLevel(defaultLoggingLevel)
@@ -175,4 +175,3 @@ class Subtitle(object):
 
     def set_id(self, id):
         self.id = id
-

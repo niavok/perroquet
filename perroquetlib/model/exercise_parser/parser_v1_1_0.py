@@ -73,7 +73,7 @@ def save(exercise, outputPath):
             xml_node = newdoc.createElement("hash")
             xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_password)))
             xml_lock.appendChild(xml_node)
-            
+
             xml_node = newdoc.createElement("salt")
             xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_salt)))
             xml_lock.appendChild(xml_node)
@@ -141,7 +141,7 @@ def save(exercise, outputPath):
                 xml_sequence_state = newdoc.createElement("state")
                 xml_sequence_state.appendChild(newdoc.createTextNode("done"))
                 xml_sequence.appendChild(xml_sequence_state)
-                
+
                 repeat_count = sequence.get_repeat_count()
                 xml_sequence_repeat_count = newdoc.createElement("repeat_count")
                 xml_sequence_repeat_count.appendChild(newdoc.createTextNode(str(repeat_count)))
@@ -271,7 +271,7 @@ def load(exercise, dom, path):
         #Help lock
         if len(xml_locks.getElementsByTagName("help_lock")) > 0:
             exercise.lock_help = True
-            
+
 
     #Exercise
     xml_exercise = dom.getElementsByTagName("exercise")[0]
@@ -281,7 +281,7 @@ def load(exercise, dom, path):
     #Exercise - CurrentSequence
     currentSequence = int(get_text(xml_exercise.getElementsByTagName("current_sequence")[0].childNodes))
 
-    
+
     # Stats
     xml_stats = dom.getElementsByTagName("stats")[0]
     exercise.set_repeat_count(int(get_text(xml_stats.getElementsByTagName("repeat_count")[0].childNodes)))
@@ -377,4 +377,3 @@ def load(exercise, dom, path):
         exercise.set_output_save_path(path)
 
     return exercise
-

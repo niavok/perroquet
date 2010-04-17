@@ -48,7 +48,7 @@ class Gui:
         self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
         self.controller = controller
-    
+
         self.builder = gtk.Builder()
         self.builder.set_translation_domain("perroquet")
         self.builder.add_from_file(config.get("ui_path"))
@@ -88,7 +88,7 @@ class Gui:
         dialog.run()
         dialog.destroy()
 
-    
+
 
     def get_video_window_id(self):
         return self.builder.get_object("videoArea").window.xid
@@ -214,7 +214,7 @@ class Gui:
             foreground=gtk_foreground_color,
             strikethrough=through,
             size_points=size)
-      
+
 
     def _destroy_tag(text_tag, tag_table):
         tag_table.remove(text_tag)
@@ -237,7 +237,7 @@ class Gui:
     def ask_export_as_package_path(self):
         saver = ExportAsPackageFileSelector(self.window)
         path = saver.run()
-        
+
         if path == "None" or path == None:
             return None
         elif not path.endswith(".tar"):
@@ -388,7 +388,7 @@ class Gui:
 
     def set_enable_settings(self, state):
         self.builder.get_object("imagemenuitemSettings").set_sensitive(state)
-        
+
     def set_visible_play(self, state):
         if state:
             self.builder.get_object("toolbuttonPlay").show()
@@ -456,7 +456,7 @@ class Gui:
 
         comboboxLanguage.set_active_iter(currentIter)
 
-        
+
 
     def set_visible_new_exercise_dialog(self, state):
         if state:
@@ -505,7 +505,7 @@ class Gui:
         langId = self.liststoreLanguage.get_value(iter, 1)
 
         self.controller.notify_new_exercise_create(videoPath, exercisePath, translationPath, langId)
-        
+
     def on_newExerciseDialog_delete_event(self, widget, data=None):
         self.controller.notify_new_exercise_cancel()
         return True #True for stop event propagation
@@ -539,13 +539,13 @@ class Gui:
         newString = newText[index-newLength:index]
 
         return self.controller.notify_typing(newString)
-        
-        
+
+
 
     def on_type_view_key_press_event(self, widget, event):
         keyname = gtk.gdk.keyval_name(event.keyval)
         return self.controller.notify_key_press(keyname)
-        
+
     def on_toolbutton_next_sequence_clicked(self, widget, data=None):
         self.controller.notify_next_sequence()
 
@@ -586,7 +586,7 @@ class Gui:
 
     def on_load_button_clicked(self, widget, data=None):
         self.controller.notify_load()
-        
+
     def on_button_save_exercise_ok_clicked(self, widget, data=None):
         #TODO : use controller
         saveChooser = self.builder.get_object("filechooserdialogSave")
@@ -654,7 +654,7 @@ class Gui:
     def on_checkmenuitem_translation_toggled(self, widget, data=None):
         checkmenuitemTranslation = self.builder.get_object("checkmenuitemTranslation")
         self.controller.notify_toogle_translation(checkmenuitemTranslation.props.active)
-        
+
     def on_imagemenuitem_properties_activate(self, widget, data=None):
         self.controller.notify_properties()
 
@@ -885,5 +885,3 @@ class ExportAsPackageFileSelector(FileSelector):
         self.add_filter(filter)
 
         self.set_do_overwrite_confirmation(True)
-
-

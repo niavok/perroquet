@@ -42,7 +42,7 @@ class GuiMessageDialog:
     def set_message(self, title, message):
         self.builder.get_object("label_message").set_text(message)
         self.dialog.set_title(title)
-        
+
     def run(self):
         self.dialog.run()
         self.dialog.destroy()
@@ -62,4 +62,3 @@ class GuiMessageDialog:
         self.result = None
         self.dialog.response(gtk.RESPONSE_CANCEL)
         return True
-

@@ -163,7 +163,7 @@ class Exercise(object):
                 return True
             else:
                 return self.goto_next_valid_sequence()
-    
+
 
     def goto_previous_valid_sequence(self):
         if not self.goto_previous_sequence():
@@ -383,7 +383,7 @@ class Exercise(object):
         m = hashlib.sha256()
         m.update(salt + password)
         return m.hexdigest()
-        
+
     def is_lock_help(self):
         return self.lock_help
 

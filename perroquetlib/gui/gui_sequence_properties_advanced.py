@@ -285,7 +285,7 @@ class GuiSequencePropertiesAdvanced:
 
         if lock_correction != self.core.get_exercise().is_lock_correction() or lock_correction_password is not None:
             self.core.get_exercise().set_lock_correction(lock_correction, lock_correction_password)
-      
+
         # Update paths
         if len(self.pathListStore) != len(self.core.get_exercise().subExercisesList):
             self.core.get_exercise().subExercisesList = []
@@ -405,8 +405,3 @@ class GuiSequencePropertiesAdvanced:
         adjustmentTimeAfterSequence = self.builder.get_object("adjustmentTimeAfterSequence")
         exercice = Exercise()
         adjustmentTimeAfterSequence.set_value(exercice.get_play_margin_after())
-
-
-
-
-
