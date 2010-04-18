@@ -71,6 +71,12 @@ class Guisettings:
         checkbutton_navigation_skip_valid_sequences = self.builder.get_object("checkbutton_navigation_skip_valid_sequences")
         checkbutton_navigation_skip_valid_sequences.set_active(config.get("navigation_skip_valid_sequences") == 1)
 
+        checkbutton_use_speed_changer = self.builder.get_object("checkbutton_use_speed_changer")
+        checkbutton_use_speed_changer.set_active(config.get("interface_use_speed_change") == 1)
+
+
+
+
         #Interface
         checkbuttonShowPlayPauseButtons = self.builder.get_object("checkbuttonShowPlayPauseButtons")
         checkbuttonShowPlayPauseButtons.set_active(config.get("interface_show_play_pause_buttons") == 1)
@@ -136,6 +142,14 @@ class Guisettings:
         else:
             config.set("navigation_skip_valid_sequences",0)
 
+
+
+        checkbutton_use_speed_changer = self.builder.get_object("checkbutton_use_speed_changer")
+        if checkbutton_use_speed_changer.get_active():
+            config.set("interface_use_speed_change",1)
+        else:
+            config.set("interface_use_speed_change",0)
+         
         #Interface
         checkbuttonShowPlayPauseButtons = self.builder.get_object("checkbuttonShowPlayPauseButtons")
         if checkbuttonShowPlayPauseButtons.get_active():

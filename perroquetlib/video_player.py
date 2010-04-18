@@ -29,6 +29,7 @@ defaultLoggingHandler = logging.StreamHandler(sys.stdout)
 defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s", "%a %H:%M:%S"))
 defaultLoggingLevel = logging.DEBUG
 from gettext import gettext as _
+from perroquetlib.config import config
 
 class VideoPlayer:
     def __init__(self):
@@ -50,7 +51,7 @@ class VideoPlayer:
             self.canChangeSpeed = False
 
         #Try to use the pitch element only if it is available
-        if self.canChangeSpeed:
+        if self.canChangeSpeed and config.get("interface_use_speed_change"):
             audiobin.add(self.audiospeedchanger)
 
             self.audiosink = gst.element_factory_make("autoaudiosink")

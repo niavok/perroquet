@@ -98,7 +98,7 @@ class GuiController:
 
 
             #Disable speed change slider if the media player not support it
-            if self.core.get_player().is_speed_changeable() and not self.core.get_exercise().is_lock_help():
+            if config.get("interface_use_speed_change") == 1 and self.core.get_player().is_speed_changeable() and not self.core.get_exercise().is_lock_help():
                 self.gui.set_enable_speed_selection(True)
             else:
                 self.gui.set_enable_speed_selection(False)
@@ -397,6 +397,7 @@ class GuiController:
 
     def notify_settings(self):
         self.gui.ask_settings()
+        self.core.update_properties()
         self.refresh()
 
     def notify_reset_exercise_content(self):
