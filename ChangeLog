@@ -1,13 +1,22 @@
 > 2010/??/?? - 1.1 release
   - Added a repository manager
+  - Packages import and export
   - Refactoring most of the code
   - Implement exercise languages
   - Added aliases and synonyms
   - Show last open files
-  - Added many teaching toolstools
+  - Added many teaching tools
   - Change exercise properties
-  - Words are now in color
+  - Exercise template
+  - Add support of french and spannish exercises
+  - Support multi files exercises
+  - Add many new help tools (change the play speed, complete a word or a sequence...)
+  - Words are now in color to indicate the distance to the word to find
+  - A good word at the wrong place is automaticaly moved at the right place
+  - Autosave exercise at exit
+  - Settings
   - Fix various bugs
+  - Add various translations
 
 > 2010/01/13 - 1.0.1 release
   - Improve window resize
