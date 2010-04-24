@@ -193,6 +193,9 @@ class Sequence:
         for w in self.get_words():
             w.complete()
 
+    def complete_word(self):
+         self.get_active_word().complete()
+
     def reset(self):
         "RAZ the current seq"
         for w in self.get_words():

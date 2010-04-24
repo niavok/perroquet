@@ -326,6 +326,19 @@ class Core(object):
         self.exercise.get_current_sequence().next_char()
         self._update()
         self.set_can_save(True)
+    
+    #Reveal correction for word at cursor in current sequence
+    def reveal_word(self):
+        self.exercise.get_current_sequence().complete_word()
+        self.exercise.get_current_sequence().next_word()
+        self._update()
+        self.set_can_save(True)
+
+    #Reveal correction for word at cursor in current sequence
+    def reveal_sequence(self):
+        self.exercise.get_current_sequence().complete_all()
+        self._update()
+        self.set_can_save(True)
 
     #reset whole exercise
     def reset_exercise_content(self):

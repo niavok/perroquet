@@ -89,10 +89,14 @@ class GuiController:
             #Help
             if self.core.get_exercise().is_lock_help():
                 self.gui.set_enable_hint(False)
+                self.gui.set_enable_reveal_word(False)
+                self.gui.set_enable_reveal_sequence(False)
                 self.gui.set_enable_translation(False)
 
             else:
                 self.gui.set_enable_hint(True)
+                self.gui.set_enable_reveal_word(True)
+                self.gui.set_enable_reveal_sequence(True)
                 self.gui.set_enable_translation(True)
 
 
@@ -107,6 +111,8 @@ class GuiController:
             self.gui.set_enable_sequence_index_selection(False)
             self.gui.set_enable_sequence_time_selection(False)
             self.gui.set_enable_hint(False)
+            self.gui.set_enable_reveal_word(False)
+            self.gui.set_enable_reveal_sequence(False)
             self.gui.set_enable_replay_sequence(False)
             self.gui.set_enable_properties(True)
             self.gui.set_enable_advanced_properties(True)
@@ -122,6 +128,8 @@ class GuiController:
             self.gui.set_enable_sequence_index_selection(False)
             self.gui.set_enable_sequence_time_selection(False)
             self.gui.set_enable_hint(False)
+            self.gui.set_enable_reveal_word(False)
+            self.gui.set_enable_reveal_sequence(False)
             self.gui.set_enable_replay_sequence(False)
             self.gui.set_enable_properties(False)
             self.gui.set_enable_advanced_properties(False)
@@ -303,7 +311,7 @@ class GuiController:
         return self.gui_exercise_controller.notify_move_cursor(movement)
 
 
-    def notify_key_press(self, keyname):
+    def notify_key_press(self, keyname, shift, control):
         if keyname == "Return" or keyname == "KP_Enter":
             if not self.core.exercise.get_current_sequence().is_valid():
                 self.core.user_repeat()
@@ -330,7 +338,12 @@ class GuiController:
                 self.core.previous_word()
         elif keyname == "F1":
             if not self.core.exercise.get_current_sequence().is_valid():
-                self.core.complete_word()
+                if shift and control:
+                    self.core.reveal_sequence()
+                elif shift:
+                    self.core.reveal_word()
+                else:
+                    self.core.complete_word()
         elif keyname == "F2":
             self.toggle_translation()
         elif keyname == "F9":
@@ -452,6 +465,12 @@ class GuiController:
 
     def notify_hint(self):
         self.core.complete_word()
+
+    def notify_reveal_word(self):
+        self.core.reveal_word()
+
+    def notify_reveal_sequence(self):
+        self.core.reveal_sequence()
 
     def notify_play(self):
         self.core.play()

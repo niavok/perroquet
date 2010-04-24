@@ -330,6 +330,12 @@ class Gui:
         self.builder.get_object("toolbuttonHint").set_sensitive(state)
         self.builder.get_object("imagemenuitemHint").set_sensitive(state)
 
+    def set_enable_reveal_word(self, state):
+        self.builder.get_object("imagemenuitem_reveal_word").set_sensitive(state)
+
+    def set_enable_reveal_sequence(self, state):
+        self.builder.get_object("imagemenuitem_reveal_sequence").set_sensitive(state)
+
     def set_enable_replay_sequence(self, state):
         self.builder.get_object("toolbuttonReplaySequence").set_sensitive(state)
 
@@ -544,7 +550,10 @@ class Gui:
 
     def on_type_view_key_press_event(self, widget, event):
         keyname = gtk.gdk.keyval_name(event.keyval)
-        return self.controller.notify_key_press(keyname)
+        state = event.state
+        shift = state & gtk.gdk.SHIFT_MASK
+        control = state & gtk.gdk.CONTROL_MASK
+        return self.controller.notify_key_press(keyname, shift, control)
 
     def on_toolbutton_next_sequence_clicked(self, widget, data=None):
         self.controller.notify_next_sequence()
@@ -647,6 +656,13 @@ class Gui:
 
     def on_imagemenuitem_hint_activate(self, widget, data=None):
         self.controller.notify_hint()
+
+    def on_imagemenuitem_reveal_word_activate(self, widget, data=None):
+        self.controller.notify_reveal_word()
+
+    def on_imagemenuitem_reveal_sequence_activate(self, widget, data=None):
+        self.controller.notify_reveal_sequence()
+
 
     def on_checkmenuitem_lateral_panel_toggled(self, widget, data=None):
         self.controller.toggle_lateral_panel()
