@@ -19,25 +19,18 @@
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import sys
 import thread
 import time
-
-import gtk
-# Build some logger related objects
-defaultLoggingHandler = logging.StreamHandler(sys.stdout)
-defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s", "%a %H:%M:%S"))
-defaultLoggingLevel = logging.DEBUG
-
 from gettext import gettext as _
 
-from video_player import VideoPlayer
-from model.exercise_parser import load_exercise, save_exercise
+import gtk
+from debug import defaultLoggingHandler, defaultLoggingLevel
 from model.exercise import Exercise
+from model.exercise_parser import load_exercise, save_exercise
 from model.sequence import NoCharPossible
-from config import config
-defaultLoggingLevel = logging._levelNames[config.get("default_debug_level")]
+from perroquetlib.config import config
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
+from video_player import VideoPlayer
 
 # The Core make the link between the GUI, the vidéo player, the current
 # open exercise and all others part of the application
@@ -171,7 +164,7 @@ class Core(object):
             self.repeat_sequence()
 
     #Goto next valid sequence
-    def next_valid_sequence(self, load = True):
+    def next_valid_sequence(self, load=True):
         if self.exercise.goto_next_valid_sequence():
             self.set_can_save(True)
         self._activate_sequence()
@@ -180,7 +173,7 @@ class Core(object):
             self.repeat_sequence()
 
     #Goto previous valid sequence
-    def previous_valid_sequence(self, load = True):
+    def previous_valid_sequence(self, load=True):
         if self.exercise.goto_previous_valid_sequence():
             self.set_can_save(True)
         self._activate_sequence()

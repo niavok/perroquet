@@ -33,7 +33,7 @@ from gui_sequence_properties import GuiSequenceProperties
 from gui_sequence_properties_advanced import GuiSequencePropertiesAdvanced
 from gui_settings import Guisettings
 from perroquetlib.config import config
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
+from perroquetlib.debug import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.model.languages_manager import LanguagesManager
 
 

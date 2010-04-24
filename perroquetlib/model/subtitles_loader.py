@@ -22,7 +22,7 @@ import codecs
 import logging
 import re
 
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
+from perroquetlib.debug import defaultLoggingHandler, defaultLoggingLevel
 
 class SubtitlesLoader(object):
     LOOK_FOR_ID = 0

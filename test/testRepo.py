@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from perroquetlib.exercise_repository_manager import *
+from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 
 
 if __name__=="__main__":

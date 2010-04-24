@@ -22,7 +22,7 @@ from xml.dom.minidom import parse
 from lib import get_text
 from parser_v1_0_0 import load as load_v1_0_0, save as save_v1_0_0
 from parser_v1_1_0 import load as load_v1_1_0, save as save_v1_1_0
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
+from perroquetlib.debug import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.model.exercise import Exercise
 
 def load_exercise(path):

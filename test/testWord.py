@@ -19,8 +19,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from perroquetlib.model.sequence import *
 import unittest
+
+from perroquetlib.model.sequence import *
+from perroquetlib.model.languages_manager import LanguagesManager
+
+language = LanguagesManager().get_default_language()
+def word(text):
+    w = Word(text, language)
+    return w
 
 class TestLevenshtein(unittest.TestCase):
     knowValues=( (("", ""), 0),
@@ -37,7 +44,7 @@ class TestLevenshtein(unittest.TestCase):
 
 class TestWord(unittest.TestCase):
     def test_usuals_func(self):
-        w=Word("batman")
+        w=word("batman")
         self.assert_(w.is_empty())
         self.assertFalse(w.is_valid())
         self.assertEqual(w.get_valid(), "batman")
@@ -59,7 +66,7 @@ class TestWord(unittest.TestCase):
         self.assert_(w.is_valid())
     
     def test_show_hint(self):
-        w=Word("joker")
+        w=word("joker")
         w.set_text ( "jo" )
         for i in range(4):
             self.assertFalse(w.is_valid())
@@ -68,12 +75,12 @@ class TestWord(unittest.TestCase):
         #self.failUnlessRaises(ValidWordError, w.show_hint)
     
     def test_write_char(self):
-        w=Word("robin")
+        w=word("robin")
         for i, char in enumerate(w.get_valid()):
             w.write_char(char)
             self.assertEqual(w.get_text(), w.get_valid()[:i+1])
         
-        w=Word("spiderman")
+        w=word("spiderman")
         for i in "spi":
             w.write_char(i)
         w.set_text("spi"+w._helpChar*6)
@@ -88,7 +95,7 @@ class TestWord(unittest.TestCase):
         #self.failUnlessRaises(ValidWordError, lambda: w.write_char("r"))
     
     def test_set_pos(self):
-        w=Word("superman")
+        w=word("superman")
         w.set_text("suprman")
         w.set_pos(3)
         self.assertEqual(w.get_pos(), 3)
@@ -103,7 +110,7 @@ class TestWord(unittest.TestCase):
         w.set_pos(len(w.get_valid()))
     
     def test_delete(self):
-        w=Word("angel")
+        w=word("angel")
         
         w.set_text("XYangel")
         w.set_pos(1)

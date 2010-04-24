@@ -30,7 +30,7 @@ import urllib2
 from threading import Lock
 from xml.dom.minidom import getDOMImplementation, parse
 
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
+from perroquetlib.debug import defaultLoggingHandler, defaultLoggingLevel
 
 _ = gettext.gettext
 

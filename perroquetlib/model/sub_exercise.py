@@ -21,8 +21,8 @@
 
 import os
 
-from perroquetlib.model.sequence.sequence_dynamic_correction import SequenceDynamicCorrection
-from perroquetlib.model.sequence.sequence_simple import SequenceSimple
+from perroquetlib.model.sequence import SequenceDynamicCorrection
+from perroquetlib.model.sequence import SequenceSimple
 from subtitles_loader import SubtitlesLoader
 
 

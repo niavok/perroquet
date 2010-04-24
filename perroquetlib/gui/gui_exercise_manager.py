@@ -26,7 +26,7 @@ import time
 
 import gtk
 from perroquetlib.config import config
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
+from perroquetlib.debug import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
 
 _ = gettext.gettext

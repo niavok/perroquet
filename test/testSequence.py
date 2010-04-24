@@ -19,11 +19,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from perroquetlib.model.sequence import *
 import unittest
 
+from perroquetlib.model.sequence import *
+from perroquetlib.model.languages_manager import LanguagesManager
+
+language = LanguagesManager().get_default_language()
 def seq(text):
-    s=Sequence("0-9\'a-zA-Z")
+    s=SequenceDynamicCorrection(language)
     s.load(text)
     return s
 
@@ -84,13 +87,11 @@ class TestSequence(unittest.TestCase):
         s.delete_next_char()
         for w, w2 in zip(s.get_words(), ("a smart bir").split()):
             self.assertEqual(w.get_text(), w2)
-        
+            
         s._write_sentence("d")
         for w, w2 in zip(s.get_words(), ("a smart bird").split()):
             self.assertEqual(w.get_text(), w2)
         self.assert_(s.is_valid())
-        
-        #TODO another test with valid words... if I want ;)
         
 if __name__=="__main__":
     unittest.main()

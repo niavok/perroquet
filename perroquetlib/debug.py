@@ -1,6 +1,8 @@
+#! /usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2009-2010 Frédéric Bertolus.
+# Copyright (C) 2009-2010 Matthieu Bizien.
 #
 # This file is part of Perroquet.
 #
@@ -11,13 +13,19 @@
 #
 # Perroquet is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
+# along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
-from sequence import Sequence
-from sequence_dynamic_correction import SequenceDynamicCorrection
-from sequence_simple import SequenceSimple
-from word import NoCharPossible, Word, levenshtein
+import logging
+import sys
+
+from perroquetlib.config import config
+
+# Build some logger related objects
+defaultLoggingHandler = logging.StreamHandler(sys.stdout)
+defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s", "%a %H:%M:%S"))
+defaultLoggingLevel = logging.DEBUG
+defaultLoggingLevel = logging._levelNames[config.get("default_debug_level")]

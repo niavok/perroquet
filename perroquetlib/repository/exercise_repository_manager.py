@@ -30,7 +30,7 @@ from gettext import gettext as _
 from xml.dom.minidom import parse
 
 from perroquetlib.config import config
-from perroquetlib.core import defaultLoggingHandler, defaultLoggingLevel
+from perroquetlib.debug import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.model.exercise_parser import load_exercise, save_exercise
 from perroquetlib.repository.exercise_repository import ExerciseRepository
 
