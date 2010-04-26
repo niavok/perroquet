@@ -43,7 +43,10 @@ config.set("localdatadir", os.path.join(os.path.expanduser("~"),
            ".local/share/perroquet"))
 config.set("local_repo_root_dir",
            os.path.join(config.get("localdatadir"), "repo_root"))
-config.set("globalconfigdir", "/etc/perroquet") #FIXME ugly
+if os.path.exists("/etc/perroquet"):
+    config.set("globalconfigdir", "/etc/perroquet") #FIXME ugly
+else:
+    config.set("globalconfigdir", "/usr/local/etc/perroquet") #FIXME ugly
 
 #Path sources.conf
 localSourceFile = os.path.join(config.get("localconfigdir"), "sources.conf")
