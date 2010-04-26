@@ -24,7 +24,7 @@ from lib import get_text, update_sequence_list
 from perroquetlib.model.languages_manager import LanguagesManager
 from perroquetlib.model.sub_exercise import SubExercise
 
-VERSION = "1.1.0 dev"
+VERSION = "1.1.0"
 
 def save(exercise, outputPath):
 

@@ -1,4 +1,13 @@
 =============
+Version 1.1.0
+=============
+
+* Add a repository manage to install easily exercises
+* Fix various bugs and refactoring most of the code
+* Implement exercise languages
+* Add a lot small help and settings tools
+  
+=============
 Version 1.0.1
 =============
 

@@ -1,4 +1,4 @@
-> 2010/??/?? - 1.1 release
+> 2010/??/?? - 1.1.0 release
   - Added a repository manager
   - Packages import and export
   - Refactoring most of the code
@@ -8,6 +8,8 @@
   - Added many teaching tools
   - Change exercise properties
   - Exercise template
+  - Tool to play sequence in random order
+  - Tool to reset an exercise
   - Add support of french and spannish exercises
   - Support multi files exercises
   - Add many new help tools (change the play speed, complete a word or a sequence...)

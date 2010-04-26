@@ -25,14 +25,21 @@ time-codes, Perroquet cut the video you have to type the words you hear.
   pressing "Return".
 - When the whole sequence is valid, Perroquet will repeat a last time the sequence and continue to the next sequence.
 
+You also can use the exercise manager inedit menu to easily install exercises from online database.
 
 3/ Controls
 =============
 
 * Key 'return' : Replay sequence.
-* Key 'F1' : Complete current word.
+* Key 'F1' : Hint on current word.
+* Key 'shift + F1' : Complete the current word.
+* Key 'control + shift + F1' : Complete the current sequence.
 * Key 'F2' : Show/hide translation
 * Key 'F9' : Show/hide lateral panel
+* Key '+' and '-' : Change play speed. The speed change features must be enabled
+* Key 'tab' and 'shift + tab' : next and previous tab
+* Key 'Up' and 'Down' or 'Page up' and 'Page down' : next and previous sequence
+* Key 'Pause' : Toogle pause
 
 4/ Additional help
 ====================
