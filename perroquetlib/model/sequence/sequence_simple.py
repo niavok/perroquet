@@ -72,6 +72,30 @@ class SequenceSimple(Sequence):
         self._activeWordIndex = self.get_last_index()
         self.get_active_word().set_pos(self.get_active_word().get_last_pos())
 
+    def next_word(self, loop=False):
+        "go to the next word"
+        if self.get_active_word_index() < self.get_last_index():
+            self._activeWordIndex += 1
+            self.get_active_word().set_pos(0)
+        else:
+            if not loop:
+                pass
+            else:
+                raise NotImplementedError
+
+    def previous_word(self, loop=False):
+        "go to the previous word"
+        if self.get_active_word_index() > 0:
+            self._activeWordIndex -= 1
+            self.get_active_word().set_pos(
+                    self.get_active_word().get_last_pos())
+        else:
+            if not loop:
+                pass
+            else:
+                raise NotImplementedError
+
+
     def write_char(self, char):
         self.get_active_word().write_char(char)
         self.update_after_write()
