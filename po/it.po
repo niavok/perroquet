@@ -7,316 +7,360 @@ msgid ""
 msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-02-27 00:41+0100\n"
-"PO-Revision-Date: 2010-01-19 06:11+0000\n"
-"Last-Translator: jebbo <jebbo85@gmail.com>\n"
+"POT-Creation-Date: 2010-04-27 00:05+0200\n"
+"PO-Revision-Date: 2010-04-20 08:59+0000\n"
+"Last-Translator: Jacopo A <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-27 04:56+0000\n"
+"X-Launchpad-Export-Date: 2010-05-11 04:31+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../perroquetlib/gui.py:69
-#, python-format
-msgid "The file '%s' doesn't exist. Please modify exercise paths"
-msgstr ""
-
-#: ../perroquetlib/gui.py:70
-msgid "Load error"
-msgstr "Errore di caricamento"
-
-#: ../perroquetlib/gui.py:161
-#, python-format
-msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
-msgstr "- Sequenze: %(found)s/%(count)s (%(percent)s %%)\n"
-
-#: ../perroquetlib/gui.py:162
-#, python-format
-msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
-msgstr "- Parole: %(found)s/%(count)s (%(percent)s %%)\n"
-
-#: ../perroquetlib/gui.py:163
-#, python-format
-msgid "- Repeat ratio: %s per words"
-msgstr "Rapporto di ripetizione: %s per parole"
-
-#: ../perroquetlib/gui.py:168 ../data/perroquet.desktop.in.h:2
-#: ../data/perroquet.ui.h:23
-msgid "Perroquet"
-msgstr "Perroquet"
-
-#: ../perroquetlib/gui.py:392
-msgid "Do you really quit without save ?"
-msgstr "Vuoi veramente uscire senza salvare?"
-
-#: ../perroquetlib/gui.py:393
-msgid "Confirm quit"
-msgstr "Conferma uscita"
-
-#: ../perroquetlib/gui.py:773
-msgid "Select File to Open"
-msgstr "Seleziona file da aprire"
-
-#: ../perroquetlib/gui.py:778 ../perroquetlib/gui.py:799
-msgid "Perroquet files"
-msgstr "File di Perroquet"
-
-#: ../perroquetlib/gui.py:783 ../perroquetlib/gui.py:804
-msgid "All files"
-msgstr "Tutti i file"
-
-#: ../perroquetlib/gui.py:794
-msgid "Select File to Save to"
-msgstr "Seleziona File dove Salvare"
-
-#: ../perroquetlib/core.py:416
+#: ../perroquetlib/core.py:504
 msgid "Untitled exercise"
 msgstr ""
 
-#: ../perroquetlib/video_player.py:40
+#: ../perroquetlib/core.py:556
 msgid ""
-"You need to install the gstreamer soundtouch elements for play it slowly to. "
-"They are part of gstreamer-plugins-bad. Consult the README if you need more "
-"information."
+"Import finish succesfully. Use the exercises manager to use the newly "
+"installed exercise."
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:67
+#: ../perroquetlib/core.py:558
+msgid "Import failed."
+msgstr ""
+
+#: ../perroquetlib/video_player.py:49
+msgid ""
+"You need to install the gstreamer soundtouch elements to use slowly play "
+"feature."
+msgstr ""
+
+#: ../perroquetlib/gui/gui.py:85
+#, python-format
+msgid "The file '%s' doesn't exist. Please modify exercise paths"
+msgstr ""
+"Il file '%s' non esiste. Per favore, modifica i percorsi dell'esercizio"
+
+#: ../perroquetlib/gui/gui.py:86
+msgid "load error"
+msgstr ""
+
+#: ../perroquetlib/gui/gui.py:283
+#: ../perroquetlib/gui/gui_exercise_manager.py:232
+#: ../perroquetlib/gui/gui_sequence_properties_advanced.py:72
+msgid "Path"
+msgstr "Percorso"
+
+#: ../perroquetlib/gui/gui.py:305
+msgid "Do you really quit without save ?"
+msgstr "Vuoi veramente uscire senza salvare?"
+
+#: ../perroquetlib/gui/gui.py:306
+msgid "Confirm quit"
+msgstr "Conferma uscita"
+
+#: ../perroquetlib/gui/gui.py:320
+msgid "Information"
+msgstr ""
+
+#: ../perroquetlib/gui/gui.py:809
+msgid "Select File to open"
+msgstr ""
+
+#: ../perroquetlib/gui/gui.py:814 ../perroquetlib/gui/gui.py:852
+msgid "Perroquet files"
+msgstr "File di Perroquet"
+
+#: ../perroquetlib/gui/gui.py:819 ../perroquetlib/gui/gui.py:838
+#: ../perroquetlib/gui/gui.py:857 ../perroquetlib/gui/gui.py:878
+#: ../perroquetlib/gui/gui.py:899
+msgid "All files"
+msgstr "Tutti i file"
+
+#: ../perroquetlib/gui/gui.py:828
+msgid "Select package to import"
+msgstr "Seleziona il pacchetto da importare"
+
+#: ../perroquetlib/gui/gui.py:833 ../perroquetlib/gui/gui.py:894
+msgid "Perroquet package files"
+msgstr ""
+
+#: ../perroquetlib/gui/gui.py:847
+msgid "Select File to Save to"
+msgstr "Seleziona File dove Salvare"
+
+#: ../perroquetlib/gui/gui.py:868 ../perroquetlib/gui/gui.py:889
+msgid "Select File to Export to"
+msgstr "Seleziona il file da esportare"
+
+#: ../perroquetlib/gui/gui.py:873
+msgid "Perroquet template files"
+msgstr ""
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:78
 msgid "Updating repositories..."
-msgstr ""
+msgstr "Aggiornamento repositories..."
 
-#: ../perroquetlib/gui_exercise_manager.py:90
+#: ../perroquetlib/gui/gui_exercise_manager.py:104
 msgid "Local repository"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:92
+#: ../perroquetlib/gui/gui_exercise_manager.py:106
 msgid "Distant repository"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:94
+#: ../perroquetlib/gui/gui_exercise_manager.py:108
 msgid "Offline repository"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:96
+#: ../perroquetlib/gui/gui_exercise_manager.py:110
 msgid "Orphan repository"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:114
+#: ../perroquetlib/gui/gui_exercise_manager.py:128
 msgid "<small>Group</small>"
-msgstr ""
+msgstr "<small>Gruppo</small>"
 
-#: ../perroquetlib/gui_exercise_manager.py:130
-#: ../perroquetlib/gui_exercise_manager.py:249
-#: ../perroquetlib/gui_exercise_manager.py:429
+#: ../perroquetlib/gui/gui_exercise_manager.py:144
+#: ../perroquetlib/gui/gui_exercise_manager.py:262
+#: ../perroquetlib/gui/gui_exercise_manager.py:442
 msgid "Installed"
-msgstr ""
+msgstr "Installato"
 
-#: ../perroquetlib/gui_exercise_manager.py:133
-#: ../perroquetlib/gui_exercise_manager.py:251
-#: ../perroquetlib/gui_exercise_manager.py:422
+#: ../perroquetlib/gui/gui_exercise_manager.py:147
+#: ../perroquetlib/gui/gui_exercise_manager.py:264
+#: ../perroquetlib/gui/gui_exercise_manager.py:435
 msgid "Available"
-msgstr ""
+msgstr "Disponibile"
 
-#: ../perroquetlib/gui_exercise_manager.py:136
-#: ../perroquetlib/gui_exercise_manager.py:253
-#: ../perroquetlib/gui_exercise_manager.py:437
+#: ../perroquetlib/gui/gui_exercise_manager.py:150
+#: ../perroquetlib/gui/gui_exercise_manager.py:266
+#: ../perroquetlib/gui/gui_exercise_manager.py:450
 msgid "Used"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:139
-#: ../perroquetlib/gui_exercise_manager.py:255
-#: ../perroquetlib/gui_exercise_manager.py:439
+#: ../perroquetlib/gui/gui_exercise_manager.py:153
+#: ../perroquetlib/gui/gui_exercise_manager.py:268
+#: ../perroquetlib/gui/gui_exercise_manager.py:452
 msgid "Done"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:150
+#: ../perroquetlib/gui/gui_exercise_manager.py:164
 msgid "<small>Exercise</small>"
-msgstr ""
+msgstr "<small>Esercizio</small>"
 
-#: ../perroquetlib/gui_exercise_manager.py:157
-#: ../perroquetlib/gui_exercise_manager.py:257
-#: ../perroquetlib/gui_exercise_manager.py:290
+#: ../perroquetlib/gui/gui_exercise_manager.py:170
+#: ../perroquetlib/gui/gui_exercise_manager.py:270
+#: ../perroquetlib/gui/gui_exercise_manager.py:303
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
-#: ../perroquetlib/gui_exercise_manager.py:162
+#: ../perroquetlib/gui/gui_exercise_manager.py:175
 msgid "Type"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:167
-#: ../perroquetlib/gui_exercise_manager.py:259
+#: ../perroquetlib/gui/gui_exercise_manager.py:180
+#: ../perroquetlib/gui/gui_exercise_manager.py:272
 msgid "Description"
-msgstr ""
+msgstr "Descrizione"
 
-#: ../perroquetlib/gui_exercise_manager.py:172
+#: ../perroquetlib/gui/gui_exercise_manager.py:185
 msgid "Status"
-msgstr ""
+msgstr "Stato"
 
-#: ../perroquetlib/gui_exercise_manager.py:177
-#: ../perroquetlib/gui_exercise_manager.py:266
+#: ../perroquetlib/gui/gui_exercise_manager.py:190
+#: ../perroquetlib/gui/gui_exercise_manager.py:279
 msgid "Words count"
-msgstr ""
+msgstr "Conteggio parole"
 
-#: ../perroquetlib/gui_exercise_manager.py:219
-msgid "Path"
-msgstr ""
-
-#: ../perroquetlib/gui_exercise_manager.py:258
+#: ../perroquetlib/gui/gui_exercise_manager.py:271
 msgid "Licence"
-msgstr ""
+msgstr "Licenza"
 
-#: ../perroquetlib/gui_exercise_manager.py:260
+#: ../perroquetlib/gui/gui_exercise_manager.py:273
 msgid "Author"
-msgstr ""
+msgstr "Autore"
 
-#: ../perroquetlib/gui_exercise_manager.py:261
+#: ../perroquetlib/gui/gui_exercise_manager.py:274
 msgid "Author website"
-msgstr ""
+msgstr "Sito dell'autore"
 
-#: ../perroquetlib/gui_exercise_manager.py:262
+#: ../perroquetlib/gui/gui_exercise_manager.py:275
 msgid "Author contact"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:265
+#: ../perroquetlib/gui/gui_exercise_manager.py:278
 msgid "Version"
-msgstr ""
+msgstr "Versione"
 
-#: ../perroquetlib/gui_exercise_manager.py:267
+#: ../perroquetlib/gui/gui_exercise_manager.py:280
 msgid "Language"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:268
+#: ../perroquetlib/gui/gui_exercise_manager.py:281
 msgid "Media type"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:269
+#: ../perroquetlib/gui/gui_exercise_manager.py:282
 msgid "Id"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:270
+#: ../perroquetlib/gui/gui_exercise_manager.py:283
 msgid "Install status"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:274 ../data/perroquet.ui.h:46
+#: ../perroquetlib/gui/gui_exercise_manager.py:287 ../data/perroquet.ui.h:59
 msgid "Translation"
 msgstr "Traduzione"
 
-#: ../perroquetlib/gui_exercise_manager.py:278
+#: ../perroquetlib/gui/gui_exercise_manager.py:291
 msgid "Packager"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:279
+#: ../perroquetlib/gui/gui_exercise_manager.py:292
 msgid "Packager website"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:280
+#: ../perroquetlib/gui/gui_exercise_manager.py:293
 msgid "Packager contact"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:282
+#: ../perroquetlib/gui/gui_exercise_manager.py:295
 msgid "Exercise path"
-msgstr ""
+msgstr "Percorso esercizio"
 
-#: ../perroquetlib/gui_exercise_manager.py:283
+#: ../perroquetlib/gui/gui_exercise_manager.py:296
 msgid "Package path"
-msgstr ""
+msgstr "Percorso pacchetto"
 
-#: ../perroquetlib/gui_exercise_manager.py:284
+#: ../perroquetlib/gui/gui_exercise_manager.py:297
 msgid "Template path"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:285
+#: ../perroquetlib/gui/gui_exercise_manager.py:298
 msgid "Instance path"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:286
-msgid "Done path"
+#: ../perroquetlib/gui/gui_exercise_manager.py:299
+msgid "Finished exercise  path"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:295
+#: ../perroquetlib/gui/gui_exercise_manager.py:308
 msgid "Value"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:335
+#: ../perroquetlib/gui/gui_exercise_manager.py:348
 msgid "Install"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:339
-#: ../perroquetlib/gui_exercise_manager.py:343
+#: ../perroquetlib/gui/gui_exercise_manager.py:352
+#: ../perroquetlib/gui/gui_exercise_manager.py:356
 msgid "Cancel install"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:347
+#: ../perroquetlib/gui/gui_exercise_manager.py:360
 msgid "Use"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:351
-#: ../perroquetlib/gui_exercise_manager.py:359
+#: ../perroquetlib/gui/gui_exercise_manager.py:364
+#: ../perroquetlib/gui/gui_exercise_manager.py:372
 msgid "Remove"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:355
+#: ../perroquetlib/gui/gui_exercise_manager.py:368
 msgid "Continue"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:399
+#: ../perroquetlib/gui/gui_exercise_manager.py:412
 #, python-format
 msgid "%d available exercises"
-msgstr ""
+msgstr "%d esercizi disponibili"
 
-#: ../perroquetlib/gui_exercise_manager.py:401
+#: ../perroquetlib/gui/gui_exercise_manager.py:414
 #, python-format
 msgid "%d available exercise"
-msgstr ""
+msgstr "%d esercizio disponibile"
 
-#: ../perroquetlib/gui_exercise_manager.py:405
+#: ../perroquetlib/gui/gui_exercise_manager.py:418
 #, python-format
 msgid " and %d installed exercises"
-msgstr ""
+msgstr " e %d esercizi installati"
 
-#: ../perroquetlib/gui_exercise_manager.py:407
+#: ../perroquetlib/gui/gui_exercise_manager.py:420
 #, python-format
 msgid " and %d installed exercise"
-msgstr ""
+msgstr " e %d esercizio installato"
 
-#: ../perroquetlib/gui_exercise_manager.py:424
+#: ../perroquetlib/gui/gui_exercise_manager.py:437
 msgid "Downloading"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:427
+#: ../perroquetlib/gui/gui_exercise_manager.py:440
 msgid "Installing"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:431
+#: ../perroquetlib/gui/gui_exercise_manager.py:444
 msgid "Corrupted"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:433
+#: ../perroquetlib/gui/gui_exercise_manager.py:446
 msgid "Canceled"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:435
+#: ../perroquetlib/gui/gui_exercise_manager.py:448
 msgid "Removing"
 msgstr ""
 
-#: ../perroquetlib/gui_exercise_manager.py:447
+#: ../perroquetlib/gui/gui_exercise_manager.py:460
 #, python-format
 msgid "<small>Downloading ... %d%%</small>"
 msgstr ""
 
+#: ../perroquetlib/repository/exercise_repository_manager.py:323
+msgid "File not found: "
+msgstr "File non trovato: "
+
+#: ../perroquetlib/repository/exercise_repository_manager.py:337
+msgid "Invalid package, missing template.perroquet."
+msgstr ""
+
+#: ../perroquetlib/repository/exercise_repository_manager.py:363
+msgid "Exercise already exist."
+msgstr "Esercizio già esistente."
+
+#: ../perroquetlib/repository/exercise_repository_exercise.py:51
+#: ../perroquetlib/repository/exercise_repository_exercise.py:52
+#: ../perroquetlib/repository/exercise_repository_exercise.py:53
+#: ../perroquetlib/repository/exercise_repository_exercise.py:54
+#: ../perroquetlib/repository/exercise_repository_exercise.py:55
+#: ../perroquetlib/repository/exercise_repository_exercise.py:56
+#: ../perroquetlib/repository/exercise_repository_exercise.py:57
+#: ../perroquetlib/repository/exercise_repository_exercise.py:58
+#: ../perroquetlib/repository/exercise_repository_exercise.py:59
+#: ../perroquetlib/repository/exercise_repository_exercise.py:60
+msgid "Not specified"
+msgstr ""
+
+#: ../perroquetlib/repository/exercise_repository_exercise.py:428
+msgid "Imported exercise"
+msgstr "Esercizio importato"
+
 #: ../data/perroquet.desktop.in.h:1
-msgid "Oral comprehention teacher"
-msgstr "Insegnante di comprensione orale"
+msgid "Oral comprehension teacher"
+msgstr ""
+
+#: ../data/perroquet.desktop.in.h:2 ../data/perroquet.ui.h:31
+msgid "Perroquet"
+msgstr "Perroquet"
 
 #: ../data/perroquet.ui.h:1
 msgid ""
 "- Sequences: --/--\n"
-"- Words: --/--\n"
-"- Repeat ratio: -- per words"
+"    - Words: --/--\n"
+"    - Repeat ratio: -- per words"
 msgstr ""
-"- Sequenze: --/--\n"
-"- Parole: --/--\n"
-"- Rapporto di ripetizione: -- per parole"
 
 #: ../data/perroquet.ui.h:4
 msgid "-- s"
@@ -327,132 +371,188 @@ msgid "--/--"
 msgstr "--/--"
 
 #: ../data/perroquet.ui.h:6
-msgid "A oral comprehension teacher"
-msgstr "Un insegnante di comprensione orale"
+msgid "An oral comprehension teacher"
+msgstr ""
 
 #: ../data/perroquet.ui.h:7
-msgid "Copyright &#xA9; 2009-2010 Fr&#xE9;d&#xE9;ric Bertolus"
-msgstr "Copyright &#xA9; 2009-2010 Fr&#xE9;d&#xE9;ric Bertolus"
+msgid "Copyright &#xA9; 2009-2010 Perroquet Team"
+msgstr ""
 
 #: ../data/perroquet.ui.h:8
+msgid "Correction"
+msgstr ""
+
+#: ../data/perroquet.ui.h:9
+msgid "Display correction"
+msgstr ""
+
+#: ../data/perroquet.ui.h:10
 msgid "Display translation"
 msgstr "Mostra traduzione"
 
-#: ../data/perroquet.ui.h:9
+#: ../data/perroquet.ui.h:11
 msgid "E_dit"
 msgstr "_Modifica"
 
-#: ../data/perroquet.ui.h:10 ../data/properties.ui.h:1
-msgid "Exercise properties"
-msgstr ""
-
-#: ../data/perroquet.ui.h:11
-msgid "Exercise subtitle: "
-msgstr ""
-
 #: ../data/perroquet.ui.h:12
-msgid "Exercise video or audio: "
+msgid "Erase"
 msgstr ""
 
 #: ../data/perroquet.ui.h:13
+msgid "Exercise language"
+msgstr ""
+
+#: ../data/perroquet.ui.h:14 ../data/properties.ui.h:1
+#: ../data/properties_advanced.ui.h:5
+msgid "Exercise properties"
+msgstr ""
+
+#: ../data/perroquet.ui.h:15
+msgid "Exercise subtitle: "
+msgstr "Sottotitolo esercizio: "
+
+#: ../data/perroquet.ui.h:16
+msgid "Exercise video or audio: "
+msgstr ""
+
+#: ../data/perroquet.ui.h:17
+msgid "Export"
+msgstr ""
+
+#: ../data/perroquet.ui.h:18
+msgid "Export as package..."
+msgstr "Esporta come pacchetto..."
+
+#: ../data/perroquet.ui.h:19
+msgid "Export as template..."
+msgstr ""
+
+#: ../data/perroquet.ui.h:20
 msgid "H_elp"
 msgstr "A_iuto"
 
-#: ../data/perroquet.ui.h:14
+#: ../data/perroquet.ui.h:21
 msgid "Hint"
 msgstr "Suggerimento"
 
-#: ../data/perroquet.ui.h:15
+#: ../data/perroquet.ui.h:22
+msgid "Import a package"
+msgstr "Importa un pacchetto"
+
+#: ../data/perroquet.ui.h:23 ../data/properties.ui.h:3
+#: ../data/properties_advanced.ui.h:7
+msgid "Language:"
+msgstr ""
+
+#: ../data/perroquet.ui.h:24
+msgid "Last open files"
+msgstr "Ultimi files aperti"
+
+#: ../data/perroquet.ui.h:25
 msgid "Lateral panel"
 msgstr ""
 
-#: ../data/perroquet.ui.h:16
+#: ../data/perroquet.ui.h:26
 msgid "List of all words to find in the exercise"
 msgstr "Elenco di tutte le parole da trovare nell'esercizio"
 
-#: ../data/perroquet.ui.h:17
+#: ../data/perroquet.ui.h:27
 msgid "New exercise"
 msgstr "Nuovo Esercizio"
 
-#: ../data/perroquet.ui.h:18
+#: ../data/perroquet.ui.h:28
 msgid "Next Sequence"
 msgstr "Prossima sequenza"
 
-#: ../data/perroquet.ui.h:19
+#: ../data/perroquet.ui.h:29
 msgid "Next sequence"
 msgstr "Prossima sequenza"
 
-#: ../data/perroquet.ui.h:20
-msgid "Open exercise"
-msgstr "Apri esercizio"
-
-#: ../data/perroquet.ui.h:21
-msgid "Open saved exercise"
-msgstr ""
-
-#: ../data/perroquet.ui.h:22
+#: ../data/perroquet.ui.h:30
 msgid "Pause"
 msgstr "Pausa"
 
-#: ../data/perroquet.ui.h:24
+#: ../data/perroquet.ui.h:32
 msgid "Play"
 msgstr "Riproduci"
 
-#: ../data/perroquet.ui.h:25
+#: ../data/perroquet.ui.h:33
 msgid "Play speed"
-msgstr ""
+msgstr "Velocità di riproduzione"
 
-#: ../data/perroquet.ui.h:26
+#: ../data/perroquet.ui.h:34
 msgid "Position in current sequence"
 msgstr "Posizione nella sequenza attuale"
 
-#: ../data/perroquet.ui.h:27
+#: ../data/perroquet.ui.h:35
 msgid "Position in exercise"
 msgstr "Posizione nell'esercizio"
 
-#: ../data/perroquet.ui.h:28
+#: ../data/perroquet.ui.h:36
 msgid "Previous sequence"
 msgstr "Sequenza Precedente"
 
-#: ../data/perroquet.ui.h:29
+#: ../data/perroquet.ui.h:37
 msgid "Progress statistics"
 msgstr "Statistiche dei progressi"
 
-#: ../data/perroquet.ui.h:30
+#: ../data/perroquet.ui.h:38
 msgid "Properties"
 msgstr "Proprietà"
 
-#: ../data/perroquet.ui.h:31
+#: ../data/perroquet.ui.h:39
 msgid "Replay sequence"
 msgstr "Ripetere Sequenza"
 
-#: ../data/perroquet.ui.h:32
+#: ../data/perroquet.ui.h:40
+msgid "Reset exercise progress"
+msgstr ""
+
+#: ../data/perroquet.ui.h:41
+msgid "Reset the exercise progress"
+msgstr ""
+
+#: ../data/perroquet.ui.h:42
+msgid "Reveal the sequence"
+msgstr ""
+
+#: ../data/perroquet.ui.h:43
+msgid "Reveal the word"
+msgstr ""
+
+#: ../data/perroquet.ui.h:44
 msgid "Save exercise"
 msgstr "Salva l'esercizio"
 
-#: ../data/perroquet.ui.h:33 ../data/properties.ui.h:8
+#: ../data/perroquet.ui.h:45 ../data/properties.ui.h:6
+#: ../data/properties_advanced.ui.h:21
 msgid "Select a subtitle file"
 msgstr "Seleziona un File dei Sottotitoli"
 
-#: ../data/perroquet.ui.h:34 ../data/properties.ui.h:9
+#: ../data/perroquet.ui.h:46 ../data/properties.ui.h:7
+#: ../data/properties_advanced.ui.h:22
 msgid "Select a video file"
 msgstr "Seleziona un file video"
 
-#: ../data/perroquet.ui.h:35
+#: ../data/perroquet.ui.h:47
+msgid "Show/Hide correction"
+msgstr ""
+
+#: ../data/perroquet.ui.h:48
 msgid "Show/Hide translation"
 msgstr "Mostra/Nascondi traduzione"
 
-#: ../data/perroquet.ui.h:36
+#: ../data/perroquet.ui.h:49
 msgid "The audio track should be in the exercise language"
 msgstr ""
 
-#: ../data/perroquet.ui.h:37
+#: ../data/perroquet.ui.h:50
 msgid ""
 "These subtitles should be in the exercise language.\n"
 "Supported format: srt"
 msgstr ""
 
-#: ../data/perroquet.ui.h:39
+#: ../data/perroquet.ui.h:52
 msgid ""
 "These subtitles should be in your mother language.\n"
 "Supported format: srt"
@@ -460,7 +560,7 @@ msgstr ""
 "Questi sottotitoli dovrebbero essere nella tua lingua madre.\n"
 "Formato supportato: srt"
 
-#: ../data/perroquet.ui.h:41
+#: ../data/perroquet.ui.h:54
 msgid ""
 "This program is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -489,94 +589,178 @@ msgstr ""
 "questo programma. In caso contrario, consultare "
 "<http://www.gnu.org/licenses/>."
 
-#: ../data/perroquet.ui.h:47
+#: ../data/perroquet.ui.h:60
 msgid "Translation subtitles (optional): "
 msgstr "Sottotitoli di traduzione (opzionale): "
 
-#: ../data/perroquet.ui.h:48
+#: ../data/perroquet.ui.h:61
 msgid ""
 "Word filter\n"
-"This filter use  regexp. Examples:\n"
-"abc = all words containing 'abc'\n"
-"^abc = all words starting with 'abc'\n"
-"abc$ = all words ending with 'abc'\n"
+"    This filter use  regexp. Examples:\n"
+"    abc = all words containing 'abc'\n"
+"    ^abc = all words starting with 'abc'\n"
+"    abc$ = all words ending with 'abc'\n"
 "\n"
-"The character . can replace any character:\n"
-"^abc.. = all words of at least 5 letters starting with 'abc'\n"
-"^...$ = all 4-letter word\n"
-"^ab.c$ = all 4-letter word beginning with 'ab' and ending with 'c'\n"
+"    The character . can replace any character:\n"
+"    ^abc.. = all words of at least 5 letters starting with 'abc'\n"
+"    ^...$ = all 4-letter word\n"
+"    ^ab.c$ = all 4-letter word beginning with 'ab' and ending with 'c'\n"
 "\n"
-"For more information on regular expressions: "
+"    For more information on regular expressions: "
 "http://en.wikipedia.org/wiki/Regular_expression"
 msgstr ""
-"Filtro parole\n"
-"Questo filtro sfrutta le espressioni regolari. Esempi:\n"
-"abc = tutte le parole contenenti \"abc\"\n"
-"^abc = tutte le parole che cominciano con \"abc\"\n"
-"abc$ = tutte le parole che finiscono con \"abc\"\n"
-"\n"
-"Il carattere . può sostituire ogni carattere:\n"
-"^abc.. = Tutte le parole, di almeno 5 lettere, che cominciano con \"abc\"\n"
-"^...$ = Tutte le parole di 4 lettere\n"
-"^ab.c$ = Tutte le parole di 4 lettere che cominciano con \"ab\" e che "
-"finiscono con 'c'\n"
-"\n"
-"Per maggiori informazioni sulle espressioni regolari: "
-"http://en.wikipedia.org/wiki/Regular_expression"
 
-#: ../data/perroquet.ui.h:60
-msgid "_Exercice manager"
+#: ../data/perroquet.ui.h:73
+msgid "Words"
 msgstr ""
 
-#: ../data/perroquet.ui.h:61
+#: ../data/perroquet.ui.h:74
+msgid "_Advanced properties"
+msgstr ""
+
+#: ../data/perroquet.ui.h:75
+msgid "_Exercise"
+msgstr "_Esercizio"
+
+#: ../data/perroquet.ui.h:76
+msgid "_Exercise manager"
+msgstr ""
+
+#: ../data/perroquet.ui.h:77
 msgid "_File"
 msgstr "_File"
 
-#: ../data/properties.ui.h:2
+#: ../data/perroquet.ui.h:78
+msgid "open exercise"
+msgstr ""
+
+#: ../data/perroquet.ui.h:79
+msgid "open saved exercise"
+msgstr ""
+
+#: ../data/properties.ui.h:2 ../data/properties_advanced.ui.h:6
 msgid "Exercise: "
-msgstr ""
+msgstr "Esercizio: "
 
-#: ../data/properties.ui.h:3
-msgid "Maximum sequence time (s): "
-msgstr ""
-
-#: ../data/properties.ui.h:4
+#: ../data/properties.ui.h:4 ../data/properties_advanced.ui.h:12
 msgid "Media: "
 msgstr "Media: "
 
 #: ../data/properties.ui.h:5
-msgid "Paths"
-msgstr ""
-
-#: ../data/properties.ui.h:6
-msgid "Paths list"
-msgstr ""
-
-#: ../data/properties.ui.h:7
 msgid "Repeat sequences after completed it"
+msgstr "Ripeti le sequenze dopo averle completate"
+
+#: ../data/properties.ui.h:8 ../data/properties_advanced.ui.h:25
+msgid "Translation: "
+msgstr "Traduzione: "
+
+#: ../data/properties.ui.h:9 ../data/properties_advanced.ui.h:26
+msgid "Use dynamic correction"
 msgstr ""
 
 #: ../data/properties.ui.h:10
+msgid ""
+"With dynamic correction, the correct words will be displayed as valid as "
+"soon as they are correctly typed."
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:1
+msgid "Correction password : "
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:2
+msgid "Disable help tools"
+msgstr "Disabilita gli strumenti di aiuto"
+
+#: ../data/properties_advanced.ui.h:3
+msgid "Exercise"
+msgstr "Esercizio"
+
+#: ../data/properties_advanced.ui.h:4
+msgid "Exercise name:"
+msgstr "Nome dell'esercizio:"
+
+#: ../data/properties_advanced.ui.h:8
+msgid "Lock exercise's correction"
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:9
+msgid "Lock exercise's propreties"
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:10
+msgid "Locks"
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:11
+msgid "Maximum sequence time (s): "
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:13
+msgid "Paths"
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:14
+msgid "Paths list"
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:15
+msgid "Play sequence in a random order"
+msgstr "Riproduci la sequenza in ordine casuale"
+
+#: ../data/properties_advanced.ui.h:16
+msgid "Playing time after sequences (ms):"
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:17
+msgid "Playing time before sequences (ms):"
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:18
+msgid "Properties password : "
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:19
+msgid "Repeat count limit by sequence (0 for no limit):"
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:20
+msgid "Repeat sequences after having completed it"
+msgstr ""
+
+#: ../data/properties_advanced.ui.h:23
 msgid "Sequences"
 msgstr ""
 
-#: ../data/properties.ui.h:11
-msgid "Show all paths"
-msgstr ""
-
-#: ../data/properties.ui.h:12
+#: ../data/properties_advanced.ui.h:24
 msgid "Time between sequences (s):"
 msgstr ""
 
-#: ../data/properties.ui.h:13
-msgid "Translation: "
-msgstr "Traduzione: "
+#, python-format
+#~ msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
+#~ msgstr "- Parole: %(found)s/%(count)s (%(percent)s %%)\n"
+
+#, python-format
+#~ msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
+#~ msgstr "- Sequenze: %(found)s/%(count)s (%(percent)s %%)\n"
+
+#~ msgid "Select File to Open"
+#~ msgstr "Seleziona file da aprire"
+
+#~ msgid "Copyright &#xA9; 2009-2010 Fr&#xE9;d&#xE9;ric Bertolus"
+#~ msgstr "Copyright &#xA9; 2009-2010 Fr&#xE9;d&#xE9;ric Bertolus"
+
+#~ msgid "A oral comprehension teacher"
+#~ msgstr "Un insegnante di comprensione orale"
 
 #~ msgid "New exercice"
 #~ msgstr "Nuovo Esercizio"
 
 #~ msgid "Open saved exercice"
 #~ msgstr "Apri esercizio salvato"
+
+#~ msgid "Open exercise"
+#~ msgstr "Apri esercizio"
 
 #~ msgid "Save exercice"
 #~ msgstr "Salva l'esercizio"
@@ -590,6 +774,22 @@ msgstr "Traduzione: "
 #~ msgstr ""
 #~ "Questi sottotitoli dovrebbero essere nella lingua dell'esercizio.\n"
 #~ "Formato supportato: srt"
+
+#, python-format
+#~ msgid "- Repeat ratio: %s per words"
+#~ msgstr "Rapporto di ripetizione: %s per parole"
+
+#~ msgid "Load error"
+#~ msgstr "Errore di caricamento"
+
+#~ msgid ""
+#~ "- Sequences: --/--\n"
+#~ "- Words: --/--\n"
+#~ "- Repeat ratio: -- per words"
+#~ msgstr ""
+#~ "- Sequenze: --/--\n"
+#~ "- Parole: --/--\n"
+#~ "- Rapporto di ripetizione: -- per parole"
 
 #~ msgid "Exercice video or audio: "
 #~ msgstr "Audio o Video dell'Esercizio: "
@@ -606,3 +806,36 @@ msgstr "Traduzione: "
 #, python-format
 #~ msgid "The file '%s' doesn't exist. Please modify exercice paths"
 #~ msgstr "Il file '%s' non esiste. Per favore modifica i path dell'esercizio"
+
+#~ msgid ""
+#~ "Word filter\n"
+#~ "This filter use  regexp. Examples:\n"
+#~ "abc = all words containing 'abc'\n"
+#~ "^abc = all words starting with 'abc'\n"
+#~ "abc$ = all words ending with 'abc'\n"
+#~ "\n"
+#~ "The character . can replace any character:\n"
+#~ "^abc.. = all words of at least 5 letters starting with 'abc'\n"
+#~ "^...$ = all 4-letter word\n"
+#~ "^ab.c$ = all 4-letter word beginning with 'ab' and ending with 'c'\n"
+#~ "\n"
+#~ "For more information on regular expressions: "
+#~ "http://en.wikipedia.org/wiki/Regular_expression"
+#~ msgstr ""
+#~ "Filtro parole\n"
+#~ "Questo filtro sfrutta le espressioni regolari. Esempi:\n"
+#~ "abc = tutte le parole contenenti \"abc\"\n"
+#~ "^abc = tutte le parole che cominciano con \"abc\"\n"
+#~ "abc$ = tutte le parole che finiscono con \"abc\"\n"
+#~ "\n"
+#~ "Il carattere . può sostituire ogni carattere:\n"
+#~ "^abc.. = Tutte le parole, di almeno 5 lettere, che cominciano con \"abc\"\n"
+#~ "^...$ = Tutte le parole di 4 lettere\n"
+#~ "^ab.c$ = Tutte le parole di 4 lettere che cominciano con \"ab\" e che "
+#~ "finiscono con 'c'\n"
+#~ "\n"
+#~ "Per maggiori informazioni sulle espressioni regolari: "
+#~ "http://en.wikipedia.org/wiki/Regular_expression"
+
+#~ msgid "Oral comprehention teacher"
+#~ msgstr "Insegnante di comprensione orale"
