@@ -8,28 +8,30 @@ msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-27 00:05+0200\n"
-"PO-Revision-Date: 2010-05-19 18:00+0000\n"
-"Last-Translator: Fred Bertolus <fred.bertolus@gmail.com>\n"
+"PO-Revision-Date: 2010-05-24 02:46+0000\n"
+"Last-Translator: Modernday <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-20 05:46+0000\n"
+"X-Launchpad-Export-Date: 2010-05-24 03:54+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../perroquetlib/core.py:504
 msgid "Untitled exercise"
-msgstr ""
+msgstr "Esercizio senza titolo"
 
 #: ../perroquetlib/core.py:556
 msgid ""
 "Import finish succesfully. Use the exercises manager to use the newly "
 "installed exercise."
 msgstr ""
+"Importazione avvenuta con successo. Usa il gestore degli esercizi per usare "
+"l'esercizio appena installato."
 
 #: ../perroquetlib/core.py:558
 msgid "Import failed."
-msgstr ""
+msgstr "Importazione fallita."
 
 #: ../perroquetlib/video_player.py:49
 msgid ""
@@ -40,12 +42,11 @@ msgstr ""
 #: ../perroquetlib/gui/gui.py:85
 #, python-format
 msgid "The file '%s' doesn't exist. Please modify exercise paths"
-msgstr ""
-"Il file '%s' non esiste. Per favore, modifica i percorsi dell'esercizio"
+msgstr "Il file '%s' non esiste. Modifica i percorsi dell'esercizio"
 
 #: ../perroquetlib/gui/gui.py:86
 msgid "load error"
-msgstr ""
+msgstr "errore di caricamento"
 
 #: ../perroquetlib/gui/gui.py:283
 #: ../perroquetlib/gui/gui_exercise_manager.py:232
@@ -63,11 +64,11 @@ msgstr "Conferma uscita"
 
 #: ../perroquetlib/gui/gui.py:320
 msgid "Information"
-msgstr ""
+msgstr "Informazione"
 
 #: ../perroquetlib/gui/gui.py:809
 msgid "Select File to open"
-msgstr ""
+msgstr "Seleziona il file da aprire"
 
 #: ../perroquetlib/gui/gui.py:814 ../perroquetlib/gui/gui.py:852
 msgid "Perroquet files"
@@ -85,7 +86,7 @@ msgstr "Seleziona il pacchetto da importare"
 
 #: ../perroquetlib/gui/gui.py:833 ../perroquetlib/gui/gui.py:894
 msgid "Perroquet package files"
-msgstr ""
+msgstr "Pacchetti di Perroquet"
 
 #: ../perroquetlib/gui/gui.py:847
 msgid "Select File to Save to"
