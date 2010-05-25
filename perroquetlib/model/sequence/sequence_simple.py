@@ -45,15 +45,19 @@ class SequenceSimple(Sequence):
         try:
             self.get_active_word().next_char()
         except NoCharPossible:
+            current_word = self.get_active_word_index()
             self.next_word()
-            self.get_active_word().set_pos(0)
+            if current_word != self.get_active_word_index():
+                self.get_active_word().set_pos(0);
 
     def previous_char(self):
         try:
             self.get_active_word().previous_char()
         except NoCharPossible:
+            current_word = self.get_active_word_index()
             self.previous_word()
-            self.get_active_word().set_pos(-1)
+            if current_word != self.get_active_word_index():
+                self.get_active_word().set_pos(-1);
 
     def delete_previous_char(self):
         try:
@@ -78,6 +82,7 @@ class SequenceSimple(Sequence):
             self._activeWordIndex += 1
             self.get_active_word().set_pos(0)
         else:
+            self.get_active_word().set_pos(-1)
             if not loop:
                 pass
             else:
@@ -90,6 +95,7 @@ class SequenceSimple(Sequence):
             self.get_active_word().set_pos(
                     self.get_active_word().get_last_pos())
         else:
+            self.get_active_word().set_pos(0)
             if not loop:
                 pass
             else:

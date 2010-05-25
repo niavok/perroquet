@@ -60,26 +60,33 @@ class SequenceDynamicCorrection(Sequence):
         try:
             self.get_active_word().next_char()
         except NoCharPossible:
-            if self.next_word():
-                self.get_active_word().set_pos(0)
-
+            current_word = self.get_active_word_index()
+            self.next_word()
+            if current_word != self.get_active_word_index():
+                self.get_active_word().set_pos(0);
+                
     def previous_char(self):
         try:
             self.get_active_word().previous_char()
         except NoCharPossible:
-            if self.previous_word():
-                self.get_active_word().set_pos(-1)
+            current_word = self.get_active_word_index()
+            self.previous_word()
+            if current_word != self.get_active_word_index():
+                self.get_active_word().set_pos(-1);
+
 
     def first_word(self):
         self._activeWordIndex = 0
         self.get_active_word().set_pos(0)
-        self.next_word()
+        if self.get_active_word().is_valid() and not self.is_valid():
+            self.next_word()
         self.get_active_word().set_pos(0)
 
     def last_word(self):
         self._activeWordIndex = self.get_last_index()
         self.get_active_word().set_pos(self.get_active_word().get_last_pos())
-        self.previous_word()
+        if self.get_active_word().is_valid() and not self.is_valid():
+            self.previous_word()
         self.get_active_word().set_pos(-1)
 
     def update_after_write(self):
@@ -129,7 +136,12 @@ class SequenceDynamicCorrection(Sequence):
 
     def next_word(self, loop=False):
         "go to the next non valid word"
+        current_word = self.get_active_word_index()
         self._next_word()
+
+        if current_word == self.get_active_word_index():
+            self.get_active_word().set_pos(-1)
+
         if loop:
             raise NotImplementedError
         if self.get_active_word().is_valid():
@@ -142,7 +154,12 @@ class SequenceDynamicCorrection(Sequence):
 
     def previous_word(self, loop=False):
         "go to the previous non valid word"
+        current_word = self.get_active_word_index()
         self._previous_word()
+
+        if current_word == self.get_active_word_index():
+            self.get_active_word().set_pos(0)
+
         if loop:
             raise NotImplementedError
         if self.get_active_word().is_valid():
