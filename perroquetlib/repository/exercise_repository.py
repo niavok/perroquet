@@ -39,9 +39,17 @@ class ExerciseRepository:
         self.url = ""
         self.exercisesGroupList = []
         self.config = config
+        self.system = False
 
 
 
+    def set_system(self, system):
+        """Define if the repo is a system repository or only a local one
+
+        A system repository store common data in a system directory and only the
+        progress in the local directory
+        """
+        self.system = system;
 
     def set_name(self, name):
         self.name = name
@@ -105,7 +113,14 @@ class ExerciseRepository:
         return orphanGroupList
 
     def get_local_path(self):
+        if self.system:
+            return os.path.join(self.config.get("system_repo_root_dir"), self.id)
+        else:
+            return os.path.join(self.config.get("local_repo_root_dir"), self.id)
+
+    def get_personal_local_path(self):
         return os.path.join(self.config.get("local_repo_root_dir"), self.id)
+
 
     def generate_description(self):
         self._generate_description()
@@ -162,6 +177,7 @@ class ExerciseRepository:
 
     def init_from_path(self, path):
 
+        # Read repositories from xml description file
         repoDescriptionPath = os.path.join(path, "repository.xml")
         if os.path.isfile(repoDescriptionPath):
             f = open(repoDescriptionPath, 'r')
@@ -178,6 +194,7 @@ class ExerciseRepository:
             if os.path.isdir(path):
                 group = ExerciseRepositoryGroup()
                 group.init_from_path(path)
+                group.set_system(self.system)
                 self.add_group(group)
 
     def parse_description(self, dom):

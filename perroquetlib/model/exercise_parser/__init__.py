@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Perroquet. If not, see <http://www.gnu.org/licenses/>.
 import logging
+import os.path
+
 from xml.dom.minidom import parse
 
 from lib import get_text
@@ -55,4 +57,6 @@ def load_exercise(path):
 def save_exercise(exercise, outputPath):
     """Save a perroquet exercise.
     exercise must be an empty perroquet Exercise or inherited"""
+    if not os.path.isdir(os.path.dirname(outputPath)):
+        os.makedirs(os.path.dirname(outputPath))
     save_v1_1_0(exercise, outputPath)

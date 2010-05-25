@@ -58,6 +58,17 @@ class ExerciseRepositoryExercise:
         self.language = _("Not specified")
         self.mediaType = _("Not specified")
         self.filePath = _("Not specified")
+        self.system = False
+
+
+
+    def set_system(self, system):
+        """Define if the exo is a system exo or only a local one
+
+        A system exo store common data in a system directory and only the
+        progress in the local directory
+        """
+        self.system = system
 
     def is_installed(self):
         return os.path.isfile(self.get_template_path())
@@ -171,10 +182,10 @@ class ExerciseRepositoryExercise:
         return os.path.join(self.get_local_path(), "template.perroquet")
 
     def get_instance_path(self):
-        return os.path.join(self.get_local_path(), "instance.perroquet")
+        return os.path.join(self.get_personnal_local_path(), "instance.perroquet")
 
     def get_done_path(self):
-        return os.path.join(self.get_local_path(), "done.perroquet")
+        return os.path.join(self.get_personnal_local_path(), "done.perroquet")
 
     def set_name(self, name):
         self.name = name
@@ -276,10 +287,22 @@ class ExerciseRepositoryExercise:
         self.parent = parent
 
     def get_local_path(self):
+        versioned_id = None
         if self.version is not None:
-            return os.path.join(self.parent.get_local_path(), self.id + "_" + self.version)
+            versioned_id = self.id + "_" + self.version
         else:
-            return os.path.join(self.parent.get_local_path(), self.id)
+            versioned_id = self.id
+
+        return os.path.join(self.parent.get_local_path(), versioned_id)
+        
+    def get_personnal_local_path(self):
+        versioned_id = None
+        if self.version is not None:
+            versioned_id = self.id + "_" + self.version
+        else:
+            versioned_id = self.id
+
+        return os.path.join(self.parent.get_personal_local_path(), versioned_id)
 
     def parse_description(self, xml_exercise):
         self.set_name(self._get_text(xml_exercise.getElementsByTagName("name")[0].childNodes))

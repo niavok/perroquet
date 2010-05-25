@@ -39,6 +39,9 @@ config.set("executable", os.path.dirname(sys.executable))
 config.set("script", sys.path[0])
 config.set("localconfigdir", os.path.join(os.path.expanduser("~"),
            ".config/perroquet"))
+config.set("system_repo_root_dir",
+           os.path.join("/usr/share/perroquet/repo_root"))
+
 config.set("localdatadir", os.path.join(os.path.expanduser("~"),
            ".local/share/perroquet"))
 config.set("local_repo_root_dir",

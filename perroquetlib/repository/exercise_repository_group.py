@@ -31,6 +31,19 @@ class ExerciseRepositoryGroup:
         self.description = ""
         self.exercisesList = []
 
+        self.system = False
+
+
+
+    def set_system(self, system):
+        """Define if the group is a system repository or only a local one
+
+        A system group store common data in a system directory and only the
+        progress in the local directory
+        """
+        self.system = system;
+
+
     def set_name(self, name):
         self.name = name
 
@@ -60,7 +73,11 @@ class ExerciseRepositoryGroup:
         self.parent = parent
 
     def get_local_path(self):
-        return os.path.join(self.parent.get_local_path(), self.id)
+            return os.path.join(self.parent.get_local_path(), self.id)
+
+    def get_personal_local_path(self):
+            return os.path.join(self.parent.get_personal_local_path(), self.id)
+
 
     def parse_description(self, xml_group):
         self.set_name(self._get_text(xml_group.getElementsByTagName("name")[0].childNodes))
@@ -113,6 +130,7 @@ class ExerciseRepositoryGroup:
     def init_from_path(self, groupPath):
         groupDescriptionPath = os.path.join(groupPath, "group.xml")
 
+        # Read group infos from xml description file
         if os.path.isfile(groupDescriptionPath):
             f = open(groupDescriptionPath, 'r')
             dom = parse(f)
@@ -126,6 +144,7 @@ class ExerciseRepositoryGroup:
             path = os.path.join(groupPath, exercisePath)
             if os.path.isdir(path):
                 exo = ExerciseRepositoryExercise()
+                exo.set_system(self.system)
                 exo.init_from_path(path)
                 self.add_exercise(exo)
 

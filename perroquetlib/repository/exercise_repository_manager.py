@@ -89,22 +89,44 @@ class ExerciseRepositoryManager:
         return repositoryList
 
     def _get_local_exercise_repository_list(self):
-        """Build and return the list of local repority. In fact, this list
-        will contain at maximum 1 repository.
-        A local repository is added to the list if a directory named 'local'
-        exist in the repo root directory"""
+        """Build and return the list of local repository.
+
+        In fact, this list
+        will contain at maximum 2 repositories.
+        A local personnal repository is added to the list if a directory named 'local'
+        exist in the repo root directory.
+        A local system repository is added to the list if a directory named 
+        'system_repo' is found in the perroquet data files.
+
+        The local system repository is special because it is composed by 2 path : a
+        system path for common data and a path for personnal data as progress
+        """
 
         repositoryList = []
-        #Build potential local repository path
+        # Build potential local repository path
         localRepoPath = os.path.join(config.get("local_repo_root_dir"), "local")
 
         # Test local repository existance
         if os.path.isdir(localRepoPath):
-            #Repository found so Initialize it from the path and set it as local
+            # Repository found so Initialize it from the path and set it as local
             repository = ExerciseRepository()
             repository.init_from_path(localRepoPath)
             repository.set_type("local")
             repositoryList.append(repository)
+
+        systemRepoPath = os.path.join(config.get("system_repo_root_dir"), "system")
+
+        print "system repo path "+systemRepoPath
+        #Test systemrepository existance
+        if os.path.isdir(systemRepoPath):
+            print "system repo found"
+            # Repository found so Initialize it from the path and set it as local
+            repository = ExerciseRepository()
+            repository.set_system(True);
+            repository.init_from_path(systemRepoPath)
+            repository.set_type("local")
+            repositoryList.append(repository)
+
 
         return repositoryList
 

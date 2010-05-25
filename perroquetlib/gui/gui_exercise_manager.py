@@ -51,6 +51,12 @@ class GuiExerciseManager:
         self.treeviewExercises = self.builder.get_object("treeviewExercises")
         self.treeviewRepositories = self.builder.get_object("treeviewRepositories")
         self.buttonAction = self.builder.get_object("buttonAction")
+        self.repositoryList = None
+
+        self.treeviewDetails = self.builder.get_object("treeviewDetails")
+
+        self.selectedExo = None
+
 
         self.dialog.set_modal(True)
         self.dialog.set_transient_for(self.parent)
@@ -59,17 +65,15 @@ class GuiExerciseManager:
         checkbuttonTreeViewMode = self.builder.get_object("checkbuttonTreeViewMode")
         checkbuttonTreeViewMode.props.active = (self.config.get("repositorymanager.displayonlyexercises") != 1)
 
-        self.treeviewDetails = self.builder.get_object("treeviewDetails")
-
-        self.selectedExo = None
-
+        
+        
     def run(self):
         self.load()
         self.dialog.run()
         self.dialog.destroy()
     def load(self):
         self.play_thread_id = thread.start_new_thread(self.update_exercise_list_thread, ())
-        #Use the following line to debug crash in the thread
+        # Use the following line to debug crash in the thread
         #self.update_exercise_list_thread()
 
     def update_exercise_list_thread(self):
