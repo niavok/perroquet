@@ -110,7 +110,8 @@ class SubtitlesLoader(object):
                         current.set_text(current.get_text() + " " + line)
                 else:
                     state = SubtitlesLoader.LOOK_FOR_ID
-                    outputList.append(current)
+                    if len(current.get_text()) > 0:
+                        outputList.append(current)
 
         if len(current.get_text()) > 0:
             outputList.append(current)
