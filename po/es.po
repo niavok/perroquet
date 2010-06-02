@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-27 00:05+0200\n"
-"PO-Revision-Date: 2010-05-19 17:44+0000\n"
+"PO-Revision-Date: 2010-06-01 08:41+0000\n"
 "Last-Translator: Quentin THEURET <quentin.theuret@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-20 05:46+0000\n"
+"X-Launchpad-Export-Date: 2010-06-02 03:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../perroquetlib/core.py:504
@@ -46,7 +46,7 @@ msgstr "El archivo '%s' no existe. Modifica el camino del ejercicio."
 
 #: ../perroquetlib/gui/gui.py:86
 msgid "load error"
-msgstr ""
+msgstr "de carga de error"
 
 #: ../perroquetlib/gui/gui.py:283
 #: ../perroquetlib/gui/gui_exercise_manager.py:232
@@ -64,11 +64,11 @@ msgstr "Confirmar salida"
 
 #: ../perroquetlib/gui/gui.py:320
 msgid "Information"
-msgstr ""
+msgstr "Información"
 
 #: ../perroquetlib/gui/gui.py:809
 msgid "Select File to open"
-msgstr ""
+msgstr "Selecciona un archivo para abrir"
 
 #: ../perroquetlib/gui/gui.py:814 ../perroquetlib/gui/gui.py:852
 msgid "Perroquet files"
@@ -246,7 +246,7 @@ msgstr "Ruta de la instancia"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:299
 msgid "Finished exercise  path"
-msgstr ""
+msgstr "Finalizado el ejercicio ruta"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:308
 msgid "Value"
@@ -342,7 +342,7 @@ msgstr "Ejercicio ya existe"
 #: ../perroquetlib/repository/exercise_repository_exercise.py:59
 #: ../perroquetlib/repository/exercise_repository_exercise.py:60
 msgid "Not specified"
-msgstr ""
+msgstr "No especificado"
 
 #: ../perroquetlib/repository/exercise_repository_exercise.py:428
 msgid "Imported exercise"
@@ -350,7 +350,7 @@ msgstr "Ejercicio importado"
 
 #: ../data/perroquet.desktop.in.h:1
 msgid "Oral comprehension teacher"
-msgstr ""
+msgstr "Maestro de la comprensión oral"
 
 #: ../data/perroquet.desktop.in.h:2 ../data/perroquet.ui.h:31
 msgid "Perroquet"
