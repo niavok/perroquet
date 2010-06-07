@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-27 00:05+0200\n"
-"PO-Revision-Date: 2010-06-02 04:19+0000\n"
-"Last-Translator: Quentin THEURET <quentin.theuret@gmail.com>\n"
+"PO-Revision-Date: 2010-06-06 23:48+0000\n"
+"Last-Translator: martin <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-03 03:42+0000\n"
+"X-Launchpad-Export-Date: 2010-06-07 03:53+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../perroquetlib/core.py:504
@@ -380,15 +380,15 @@ msgstr ""
 
 #: ../data/perroquet.ui.h:7
 msgid "Copyright &#xA9; 2009-2010 Perroquet Team"
-msgstr ""
+msgstr "Copyright &#xA9; 2009-2010 Perroquet Team"
 
 #: ../data/perroquet.ui.h:8
 msgid "Correction"
-msgstr ""
+msgstr "Corrección"
 
 #: ../data/perroquet.ui.h:9
 msgid "Display correction"
-msgstr ""
+msgstr "Mostrar correcciones"
 
 #: ../data/perroquet.ui.h:10
 msgid "Display translation"
@@ -518,11 +518,11 @@ msgstr "Reset del progresso del ejercicio"
 
 #: ../data/perroquet.ui.h:42
 msgid "Reveal the sequence"
-msgstr ""
+msgstr "Mostrar la secuencia"
 
 #: ../data/perroquet.ui.h:43
 msgid "Reveal the word"
-msgstr ""
+msgstr "Mostrar la palabra"
 
 #: ../data/perroquet.ui.h:44
 msgid "Save exercise"
@@ -540,7 +540,7 @@ msgstr "Seleccionar un archivo de video"
 
 #: ../data/perroquet.ui.h:47
 msgid "Show/Hide correction"
-msgstr ""
+msgstr "Mostrar/Ocultar corrección"
 
 #: ../data/perroquet.ui.h:48
 msgid "Show/Hide translation"
@@ -651,11 +651,11 @@ msgstr "_Archivo"
 
 #: ../data/perroquet.ui.h:78
 msgid "open exercise"
-msgstr ""
+msgstr "abrir ejercicio"
 
 #: ../data/perroquet.ui.h:79
 msgid "open saved exercise"
-msgstr ""
+msgstr "abrir ejercicio guardado"
 
 #: ../data/properties.ui.h:2 ../data/properties_advanced.ui.h:6
 msgid "Exercise: "
@@ -675,17 +675,19 @@ msgstr "Traducción "
 
 #: ../data/properties.ui.h:9 ../data/properties_advanced.ui.h:26
 msgid "Use dynamic correction"
-msgstr ""
+msgstr "Usar correción dinámica"
 
 #: ../data/properties.ui.h:10
 msgid ""
 "With dynamic correction, the correct words will be displayed as valid as "
 "soon as they are correctly typed."
 msgstr ""
+"Con la correción dinámica, las palabras correctas se mostrarán como válidas "
+"apenas sean escritas."
 
 #: ../data/properties_advanced.ui.h:1
 msgid "Correction password : "
-msgstr ""
+msgstr "Password para corregir : "
 
 #: ../data/properties_advanced.ui.h:2
 msgid "Disable help tools"
@@ -701,15 +703,15 @@ msgstr "Nombre de ejercicio:"
 
 #: ../data/properties_advanced.ui.h:8
 msgid "Lock exercise's correction"
-msgstr ""
+msgstr "Bloquear la corrección del ejercicio"
 
 #: ../data/properties_advanced.ui.h:9
 msgid "Lock exercise's propreties"
-msgstr ""
+msgstr "Bloquear las propiedades del ejercicio"
 
 #: ../data/properties_advanced.ui.h:10
 msgid "Locks"
-msgstr ""
+msgstr "Bloquear"
 
 #: ../data/properties_advanced.ui.h:11
 msgid "Maximum sequence time (s): "
@@ -737,7 +739,7 @@ msgstr "Reproduciendo tiempo antes de secuencias (ms):"
 
 #: ../data/properties_advanced.ui.h:18
 msgid "Properties password : "
-msgstr ""
+msgstr "Password para las propiedades: "
 
 #: ../data/properties_advanced.ui.h:19
 msgid "Repeat count limit by sequence (0 for no limit):"
@@ -745,7 +747,7 @@ msgstr ""
 
 #: ../data/properties_advanced.ui.h:20
 msgid "Repeat sequences after having completed it"
-msgstr ""
+msgstr "Repetir la secuencia después de completarla"
 
 #: ../data/properties_advanced.ui.h:23
 msgid "Sequences"
