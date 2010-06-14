@@ -225,10 +225,11 @@ setup(name='perroquet',
       ('share/perroquet/', ['data/properties_advanced.ui']),
       ('share/perroquet/', ['data/audio_icon.png']),
       ('share/perroquet/', ['data/perroquet.png']),
-      ('share/perroquet/', ['data/languages_aliases.ini']),
+      
       ('share/perroquet/', ['data/languages.list']),
 
       ('etc/perroquet/', ['data/config.ini']),
+      ('etc/perroquet/', ['data/languages_aliases.ini']),
       ('etc/perroquet/', ['data/sources.conf']),
       
       
