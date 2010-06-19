@@ -186,7 +186,7 @@ class Sequence:
 
     def update_after_write(self):
         "update after a modification of the text"
-        raise NotImplementedError
+        pass
 
     def get_time_begin(self):
         return self.beginTime
