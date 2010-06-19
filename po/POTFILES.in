@@ -1,15 +1,51 @@
 [encoding: UTF-8]
-perroquetlib/perroquet.py
-perroquetlib/core.py
-perroquetlib/video_player.py
-perroquetlib/gui/gui.py
-perroquetlib/gui/gui_exercise_manager.py
-perroquetlib/gui/gui_sequence_properties.py
-perroquetlib/gui/gui_sequence_properties_advanced.py
-perroquetlib/gui/gui_reset_exercise.py
-perroquetlib/repository/exercise_repository_manager.py
-perroquetlib/repository/exercise_repository_exercise.py
+
 data/perroquet.desktop.in
 [type: gettext/glade]data/perroquet.ui
 [type: gettext/glade]data/properties.ui
 [type: gettext/glade]data/properties_advanced.ui
+[type: gettext/glade]data/exercise_manager.ui
+[type: gettext/glade]data/gui_message_dialog.ui
+[type: gettext/glade]data/gui_password_dialog.ui
+[type: gettext/glade]data/reset.ui
+[type: gettext/glade]data/settings.ui
+
+perroquetlib/__init__.py
+perroquetlib/perroquet.py
+perroquetlib/core.py
+perroquetlib/debug.py
+perroquetlib/config/perroquet_config.py
+perroquetlib/config/__init__.py
+perroquetlib/config/config_lib.py
+perroquetlib/repository/__init__.py
+perroquetlib/repository/exercise_repository_exercise.py
+perroquetlib/repository/exercise_repository.py
+perroquetlib/repository/exercise_repository_group.py
+perroquetlib/repository/exercise_repository_manager.py
+perroquetlib/model/__init__.py
+perroquetlib/model/languages_manager.py
+perroquetlib/model/sequence/__init__.py
+perroquetlib/model/sequence/sequence_dynamic_correction.py
+perroquetlib/model/sequence/sequence.py
+perroquetlib/model/sequence/word.py
+perroquetlib/model/sequence/sequence_simple.py
+perroquetlib/model/subtitles_loader.py
+perroquetlib/model/exercise.py
+perroquetlib/model/sub_exercise.py
+perroquetlib/model/exercise_parser/__init__.py
+perroquetlib/model/exercise_parser/parser_v1_0_0.py
+perroquetlib/model/exercise_parser/parser_v1_1_0.py
+perroquetlib/model/exercise_parser/lib.py
+perroquetlib/gui/gui_settings.py
+perroquetlib/gui/gui.py
+perroquetlib/gui/gui_reset_exercise.py
+perroquetlib/gui/__init__.py
+perroquetlib/gui/gui_controller.py
+perroquetlib/gui/gui_exercise_manager.py
+perroquetlib/gui/gui_message_dialog.py
+perroquetlib/gui/gui_sequence_properties.py
+perroquetlib/gui/gui_sequence_properties_advanced.py
+perroquetlib/gui/gui_exercise_controller.py
+perroquetlib/gui/gui_password_dialog.py
+perroquetlib/video_player.py
+
