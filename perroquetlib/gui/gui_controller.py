@@ -180,9 +180,11 @@ class GuiController:
             filter_regexp = ""
             pass
 
-        for word in self.word_list:
-            if re.search(filter_regexp, word):
-                filtered_word_list.append(word)
+        if not self.core.get_exercise().is_lock_help():
+
+            for word in self.word_list:
+                if re.search(filter_regexp, word):
+                    filtered_word_list.append(word)
 
         self.gui.set_word_list(filtered_word_list)
 
@@ -337,14 +339,14 @@ class GuiController:
             if not self.core.exercise.get_current_sequence().is_valid():
                 self.core.previous_word()
         elif keyname == "F1":
-            if not self.core.exercise.get_current_sequence().is_valid():
+            if not self.core.exercise.get_current_sequence().is_valid() and not self.core.get_exercise().is_lock_help():
                 if shift and control:
                     self.core.reveal_sequence()
                 elif shift:
                     self.core.reveal_word()
                 else:
                     self.core.complete_word()
-        elif keyname == "F2":
+        elif keyname == "F2" and not self.core.get_exercise().is_lock_help():
             self.toggle_translation()
         elif keyname == "F9":
             self.toggle_lateral_panel()
