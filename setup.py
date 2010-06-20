@@ -228,9 +228,9 @@ setup(name='perroquet',
       
       ('share/perroquet/', ['data/languages.list']),
 
-      ('etc/perroquet/', ['data/config.ini']),
-      ('etc/perroquet/', ['data/languages_aliases.ini']),
-      ('etc/perroquet/', ['data/sources.conf']),
+      ('/etc/perroquet/', ['data/config.ini']),
+      ('/etc/perroquet/', ['data/languages_aliases.ini']),
+      ('/etc/perroquet/', ['data/sources.conf']),
       
       
       ],
