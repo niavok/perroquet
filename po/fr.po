@@ -7,356 +7,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-27 00:05+0200\n"
-"PO-Revision-Date: 2010-05-19 17:52+0000\n"
+"POT-Creation-Date: 2010-06-19 10:43+0200\n"
+"PO-Revision-Date: 2010-06-20 10:17+0000\n"
 "Last-Translator: Fred Bertolus <fred.bertolus@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-02 03:40+0000\n"
+"X-Launchpad-Export-Date: 2010-06-20 10:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: ../perroquetlib/core.py:504
-msgid "Untitled exercise"
-msgstr "Exercice sans titre"
-
-#: ../perroquetlib/core.py:556
-msgid ""
-"Import finish succesfully. Use the exercises manager to use the newly "
-"installed exercise."
-msgstr ""
-"Importation réussie. Veuillez utiliser le gestionnaire d'exercices pour "
-"utiliser l'exercice que vous venez d'installer."
-
-#: ../perroquetlib/core.py:558
-msgid "Import failed."
-msgstr "L'importation a échoué."
-
-#: ../perroquetlib/video_player.py:49
-msgid ""
-"You need to install the gstreamer soundtouch elements to use slowly play "
-"feature."
-msgstr ""
-"Vous devez installer les éléments GStreamer SoundTouch pour utiliser la "
-"fonctionnalité de ralentissement de la lecture."
-
-#: ../perroquetlib/gui/gui.py:85
-#, python-format
-msgid "The file '%s' doesn't exist. Please modify exercise paths"
-msgstr ""
-"Le fichier '%s' n'existe pas. Veuillez modifier l'emplacement des fichiers "
-"de l'exercice."
-
-#: ../perroquetlib/gui/gui.py:86
-msgid "load error"
-msgstr "Erreur de chargement"
-
-#: ../perroquetlib/gui/gui.py:283
-#: ../perroquetlib/gui/gui_exercise_manager.py:232
-#: ../perroquetlib/gui/gui_sequence_properties_advanced.py:72
-msgid "Path"
-msgstr "Emplacement"
-
-#: ../perroquetlib/gui/gui.py:305
-msgid "Do you really quit without save ?"
-msgstr "Voulez-vous vraiment quitter sans enregistrer l'exercice ?"
-
-#: ../perroquetlib/gui/gui.py:306
-msgid "Confirm quit"
-msgstr "Confirmer la fermeture"
-
-#: ../perroquetlib/gui/gui.py:320
-msgid "Information"
-msgstr "Information"
-
-#: ../perroquetlib/gui/gui.py:809
-msgid "Select File to open"
-msgstr "Sélectionner un ficher à ouvrir"
-
-#: ../perroquetlib/gui/gui.py:814 ../perroquetlib/gui/gui.py:852
-msgid "Perroquet files"
-msgstr "Fichiers Perroquet"
-
-#: ../perroquetlib/gui/gui.py:819 ../perroquetlib/gui/gui.py:838
-#: ../perroquetlib/gui/gui.py:857 ../perroquetlib/gui/gui.py:878
-#: ../perroquetlib/gui/gui.py:899
-msgid "All files"
-msgstr "Tous les fichiers"
-
-#: ../perroquetlib/gui/gui.py:828
-msgid "Select package to import"
-msgstr "Selectionnez un paquet à installer"
-
-#: ../perroquetlib/gui/gui.py:833 ../perroquetlib/gui/gui.py:894
-msgid "Perroquet package files"
-msgstr "Paquets perroquet"
-
-#: ../perroquetlib/gui/gui.py:847
-msgid "Select File to Save to"
-msgstr "Enregistrer sous..."
-
-#: ../perroquetlib/gui/gui.py:868 ../perroquetlib/gui/gui.py:889
-msgid "Select File to Export to"
-msgstr "Sélectionnez l'emplacement pour exporter"
-
-#: ../perroquetlib/gui/gui.py:873
-msgid "Perroquet template files"
-msgstr "Fichiers de modèle perroquet"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:78
-msgid "Updating repositories..."
-msgstr "Mise à jour des dépôts ..."
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:104
-msgid "Local repository"
-msgstr "Dépôt local"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:106
-msgid "Distant repository"
-msgstr "Dépôt distant"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:108
-msgid "Offline repository"
-msgstr "Dépôt hors-ligne"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:110
-msgid "Orphan repository"
-msgstr "Dépôt orphelin"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:128
-msgid "<small>Group</small>"
-msgstr "<small>Groupe</small>"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:144
-#: ../perroquetlib/gui/gui_exercise_manager.py:262
-#: ../perroquetlib/gui/gui_exercise_manager.py:442
-msgid "Installed"
-msgstr "Installé"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:147
-#: ../perroquetlib/gui/gui_exercise_manager.py:264
-#: ../perroquetlib/gui/gui_exercise_manager.py:435
-msgid "Available"
-msgstr "Disponible"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:150
-#: ../perroquetlib/gui/gui_exercise_manager.py:266
-#: ../perroquetlib/gui/gui_exercise_manager.py:450
-msgid "Used"
-msgstr "Utilisé"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:153
-#: ../perroquetlib/gui/gui_exercise_manager.py:268
-#: ../perroquetlib/gui/gui_exercise_manager.py:452
-msgid "Done"
-msgstr "Terminé"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:164
-msgid "<small>Exercise</small>"
-msgstr "<small>Exercice</small>"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:170
-#: ../perroquetlib/gui/gui_exercise_manager.py:270
-#: ../perroquetlib/gui/gui_exercise_manager.py:303
-msgid "Name"
-msgstr "Nom"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:175
-msgid "Type"
-msgstr "Type"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:180
-#: ../perroquetlib/gui/gui_exercise_manager.py:272
-msgid "Description"
-msgstr "Description"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:185
-msgid "Status"
-msgstr "État"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:190
-#: ../perroquetlib/gui/gui_exercise_manager.py:279
-msgid "Words count"
-msgstr "Nombre de mots"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:271
-msgid "Licence"
-msgstr "Licence"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:273
-msgid "Author"
-msgstr "Auteur"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:274
-msgid "Author website"
-msgstr "Site web de l'auteur"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:275
-msgid "Author contact"
-msgstr "Contacter l'auteur"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:278
-msgid "Version"
-msgstr "Version"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:280
-msgid "Language"
-msgstr "Langue"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:281
-msgid "Media type"
-msgstr "Type de média"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:282
-msgid "Id"
-msgstr "Identifiant"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:283
-msgid "Install status"
-msgstr "État de l'installation"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:287 ../data/perroquet.ui.h:59
-msgid "Translation"
-msgstr "Traduction"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:291
-msgid "Packager"
-msgstr "Créateur du paquetage"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:292
-msgid "Packager website"
-msgstr "Site web du créateur du paquetage"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:293
-msgid "Packager contact"
-msgstr "Contact du créateur du paquetage"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:295
-msgid "Exercise path"
-msgstr "Emplacement de l'exercice"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:296
-msgid "Package path"
-msgstr "Emplacement du paquetage"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:297
-msgid "Template path"
-msgstr "Emplacement du modèle"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:298
-msgid "Instance path"
-msgstr "Emplacement de l'instance"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:299
-msgid "Finished exercise  path"
-msgstr "Chemin de l'exercice terminé"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:308
-msgid "Value"
-msgstr "Valeur"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:348
-msgid "Install"
-msgstr "Installer"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:352
-#: ../perroquetlib/gui/gui_exercise_manager.py:356
-msgid "Cancel install"
-msgstr "Annuler l'installation"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:360
-msgid "Use"
-msgstr "Utiliser"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:364
-#: ../perroquetlib/gui/gui_exercise_manager.py:372
-msgid "Remove"
-msgstr "Enlever"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:368
-msgid "Continue"
-msgstr "Continuer"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:412
-#, python-format
-msgid "%d available exercises"
-msgstr "%d exercices disponibles"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:414
-#, python-format
-msgid "%d available exercise"
-msgstr "%d exercice disponible"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:418
-#, python-format
-msgid " and %d installed exercises"
-msgstr " et %d exercices installés"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:420
-#, python-format
-msgid " and %d installed exercise"
-msgstr " et %d exercice installé"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:437
-msgid "Downloading"
-msgstr "Téléchargement"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:440
-msgid "Installing"
-msgstr "Installation"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:444
-msgid "Corrupted"
-msgstr "Corrompu"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:446
-msgid "Canceled"
-msgstr "Annulé"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:448
-msgid "Removing"
-msgstr "Suppression"
-
-#: ../perroquetlib/gui/gui_exercise_manager.py:460
-#, python-format
-msgid "<small>Downloading ... %d%%</small>"
-msgstr "<small>Téléchargement ... %d%%</small>"
-
-#: ../perroquetlib/repository/exercise_repository_manager.py:323
-msgid "File not found: "
-msgstr "Fichier introuvable : "
-
-#: ../perroquetlib/repository/exercise_repository_manager.py:337
-msgid "Invalid package, missing template.perroquet."
-msgstr "Paquet invalide, le fichier template.perroquet est manquant."
-
-#: ../perroquetlib/repository/exercise_repository_manager.py:363
-msgid "Exercise already exist."
-msgstr "L'exercice existe déjà."
-
-#: ../perroquetlib/repository/exercise_repository_exercise.py:51
-#: ../perroquetlib/repository/exercise_repository_exercise.py:52
-#: ../perroquetlib/repository/exercise_repository_exercise.py:53
-#: ../perroquetlib/repository/exercise_repository_exercise.py:54
-#: ../perroquetlib/repository/exercise_repository_exercise.py:55
-#: ../perroquetlib/repository/exercise_repository_exercise.py:56
-#: ../perroquetlib/repository/exercise_repository_exercise.py:57
-#: ../perroquetlib/repository/exercise_repository_exercise.py:58
-#: ../perroquetlib/repository/exercise_repository_exercise.py:59
-#: ../perroquetlib/repository/exercise_repository_exercise.py:60
-msgid "Not specified"
-msgstr "Non spécifié"
-
-#: ../perroquetlib/repository/exercise_repository_exercise.py:428
-msgid "Imported exercise"
-msgstr "Exercice importé"
 
 #: ../data/perroquet.desktop.in.h:1
 msgid "Oral comprehension teacher"
 msgstr "Assistant à la compréhension orale"
 
 #: ../data/perroquet.desktop.in.h:2 ../data/perroquet.ui.h:31
+#: ../perroquetlib/gui/gui_controller.py:201
 msgid "Perroquet"
 msgstr "Perroquet"
 
@@ -448,7 +114,7 @@ msgid "Import a package"
 msgstr "Importer un paquet"
 
 #: ../data/perroquet.ui.h:23 ../data/properties.ui.h:3
-#: ../data/properties_advanced.ui.h:7
+#: ../data/properties_advanced.ui.h:7 ../data/settings.ui.h:7
 msgid "Language:"
 msgstr "Langue :"
 
@@ -599,6 +265,10 @@ msgstr ""
 "programme ; si ce n'est pas le cas, écrivez à la Free Software Foundation, "
 "Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
+#: ../data/perroquet.ui.h:59 ../perroquetlib/gui/gui_exercise_manager.py:291
+msgid "Translation"
+msgstr "Traduction"
+
 #: ../data/perroquet.ui.h:60
 msgid "Translation subtitles (optional): "
 msgstr "Sous-titres de traduction (optionnel) : "
@@ -667,7 +337,7 @@ msgstr "Exercice : "
 msgid "Media: "
 msgstr "Média : "
 
-#: ../data/properties.ui.h:5
+#: ../data/properties.ui.h:5 ../data/settings.ui.h:13
 msgid "Repeat sequences after completed it"
 msgstr "Répéter les séquences après les avoir complétées"
 
@@ -691,7 +361,7 @@ msgstr ""
 msgid "Correction password : "
 msgstr "Mot de passe de correction : "
 
-#: ../data/properties_advanced.ui.h:2
+#: ../data/properties_advanced.ui.h:2 ../data/settings.ui.h:3
 msgid "Disable help tools"
 msgstr "Désactiver les outils d'aide"
 
@@ -715,7 +385,7 @@ msgstr "Vérouiller les paramètres de l'exercice"
 msgid "Locks"
 msgstr "Verrous"
 
-#: ../data/properties_advanced.ui.h:11
+#: ../data/properties_advanced.ui.h:11 ../data/settings.ui.h:9
 msgid "Maximum sequence time (s): "
 msgstr "Durée maximale d'une séquence (en seconde) "
 
@@ -727,15 +397,15 @@ msgstr "Emplacements"
 msgid "Paths list"
 msgstr "Liste des emplacements"
 
-#: ../data/properties_advanced.ui.h:15
+#: ../data/properties_advanced.ui.h:15 ../data/settings.ui.h:10
 msgid "Play sequence in a random order"
 msgstr "Jouer les séquences dans un ordre aléatoire"
 
-#: ../data/properties_advanced.ui.h:16
+#: ../data/properties_advanced.ui.h:16 ../data/settings.ui.h:11
 msgid "Playing time after sequences (ms):"
 msgstr "Marge de lecture à la fin de chaque séquence (en millisecondes)"
 
-#: ../data/properties_advanced.ui.h:17
+#: ../data/properties_advanced.ui.h:17 ../data/settings.ui.h:12
 msgid "Playing time before sequences (ms):"
 msgstr "Marge de lecture au début de chaque séquence (en millisecondes)"
 
@@ -755,9 +425,462 @@ msgstr "Répéter les séquence après les avoir complétées"
 msgid "Sequences"
 msgstr "Séquences"
 
-#: ../data/properties_advanced.ui.h:24
+#: ../data/properties_advanced.ui.h:24 ../data/settings.ui.h:19
 msgid "Time between sequences (s):"
 msgstr "Temps entre 2 séquences (en seconde) :"
+
+#: ../data/exercise_manager.ui.h:1
+msgid "Details"
+msgstr "Détails"
+
+#: ../data/exercise_manager.ui.h:2
+msgid "Exercises"
+msgstr "Exercices"
+
+#: ../data/exercise_manager.ui.h:3
+msgid "Perroquet exercises manager"
+msgstr "Gestionnaire d'exercices de Perroquet"
+
+#: ../data/exercise_manager.ui.h:4
+msgid "Repositories"
+msgstr "Dépôts"
+
+#: ../data/exercise_manager.ui.h:5 ../data/settings.ui.h:14
+msgid "Settings"
+msgstr "Paramètres"
+
+#: ../data/exercise_manager.ui.h:6
+msgid "Tree view mode"
+msgstr "Mode de vue arbre"
+
+#: ../data/exercise_manager.ui.h:7
+#: ../perroquetlib/gui/gui_exercise_manager.py:364
+msgid "Use"
+msgstr "Utiliser"
+
+#: ../data/gui_message_dialog.ui.h:1
+msgid "label"
+msgstr "étiquette"
+
+#: ../data/gui_password_dialog.ui.h:1
+#: ../perroquetlib/gui/gui_password_dialog.py:46
+msgid "Correction password :"
+msgstr "Mot de passe de correction :"
+
+#: ../data/gui_password_dialog.ui.h:2
+msgid "Password for unlock correction"
+msgstr "Mot de passe pour dévérouiller la correction"
+
+#: ../data/reset.ui.h:1
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../data/reset.ui.h:2
+msgid "Do you want to reset the current exercise ?"
+msgstr "Voulez-vous vraiment réinitialiser l'exercice courrant ?"
+
+#: ../data/reset.ui.h:3
+msgid "Ok"
+msgstr "Ok"
+
+#: ../data/settings.ui.h:1
+msgid "Advanced"
+msgstr "Avancées"
+
+#: ../data/settings.ui.h:2
+msgid "Default exercise properties"
+msgstr "Propriétés d'exercice par défaut"
+
+#: ../data/settings.ui.h:4
+msgid "Exercise type:"
+msgstr "Type d'exercice :"
+
+#: ../data/settings.ui.h:5
+msgid "General"
+msgstr "Général"
+
+#: ../data/settings.ui.h:6
+msgid "Interface"
+msgstr "Interface"
+
+#: ../data/settings.ui.h:8
+msgid "Limit repeat count by sequence (0 for no limit):"
+msgstr ""
+"Nombre limite de répétitions par séquence (mettez 0 pour aucune limite)"
+
+#: ../data/settings.ui.h:15
+msgid "Show menu bar"
+msgstr "Affiche la barre de menu"
+
+#: ../data/settings.ui.h:16
+msgid "Show play and pause buttons"
+msgstr "Afficher les boutons lecture et pause"
+
+#: ../data/settings.ui.h:17
+msgid "Show settings"
+msgstr "Afficher les préférences"
+
+#: ../data/settings.ui.h:18
+msgid "Skip valid sequences using next and previous sequence buttons"
+msgstr ""
+"Sauter les séquences valides lors de l'utilisation des boutons \"séquence "
+"suivante\" et \"séquence précédentes\""
+
+#: ../data/settings.ui.h:20
+msgid "Use speed changer"
+msgstr "Utiliser l'outil de changement de vitesse"
+
+#: ../perroquetlib/core.py:504
+msgid "Untitled exercise"
+msgstr "Exercice sans titre"
+
+#: ../perroquetlib/core.py:556
+msgid ""
+"Import finish succesfully. Use the exercises manager to use the newly "
+"installed exercise."
+msgstr ""
+"Importation réussie. Veuillez utiliser le gestionnaire d'exercices pour "
+"utiliser l'exercice que vous venez d'installer."
+
+#: ../perroquetlib/core.py:558
+msgid "Import failed."
+msgstr "L'importation a échoué."
+
+#: ../perroquetlib/repository/exercise_repository_exercise.py:51
+#: ../perroquetlib/repository/exercise_repository_exercise.py:52
+#: ../perroquetlib/repository/exercise_repository_exercise.py:53
+#: ../perroquetlib/repository/exercise_repository_exercise.py:54
+#: ../perroquetlib/repository/exercise_repository_exercise.py:55
+#: ../perroquetlib/repository/exercise_repository_exercise.py:56
+#: ../perroquetlib/repository/exercise_repository_exercise.py:57
+#: ../perroquetlib/repository/exercise_repository_exercise.py:58
+#: ../perroquetlib/repository/exercise_repository_exercise.py:59
+#: ../perroquetlib/repository/exercise_repository_exercise.py:60
+msgid "Not specified"
+msgstr "Non spécifié"
+
+#: ../perroquetlib/repository/exercise_repository_exercise.py:451
+msgid "Imported exercise"
+msgstr "Exercice importé"
+
+#: ../perroquetlib/repository/exercise_repository_manager.py:345
+msgid "File not found: "
+msgstr "Fichier introuvable : "
+
+#: ../perroquetlib/repository/exercise_repository_manager.py:359
+msgid "Invalid package, missing template.perroquet."
+msgstr "Paquet invalide, le fichier template.perroquet est manquant."
+
+#: ../perroquetlib/repository/exercise_repository_manager.py:385
+msgid "Exercise already exist."
+msgstr "L'exercice existe déjà."
+
+#: ../perroquetlib/gui/gui.py:85
+#, python-format
+msgid "The file '%s' doesn't exist. Please modify exercise paths"
+msgstr ""
+"Le fichier '%s' n'existe pas. Veuillez modifier l'emplacement des fichiers "
+"de l'exercice."
+
+#: ../perroquetlib/gui/gui.py:86
+msgid "load error"
+msgstr "Erreur de chargement"
+
+#: ../perroquetlib/gui/gui.py:283
+#: ../perroquetlib/gui/gui_exercise_manager.py:236
+#: ../perroquetlib/gui/gui_sequence_properties_advanced.py:72
+msgid "Path"
+msgstr "Emplacement"
+
+#: ../perroquetlib/gui/gui.py:305
+msgid "Do you really quit without save ?"
+msgstr "Voulez-vous vraiment quitter sans enregistrer l'exercice ?"
+
+#: ../perroquetlib/gui/gui.py:306
+msgid "Confirm quit"
+msgstr "Confirmer la fermeture"
+
+#: ../perroquetlib/gui/gui.py:320
+msgid "Information"
+msgstr "Information"
+
+#: ../perroquetlib/gui/gui.py:809
+msgid "Select File to open"
+msgstr "Sélectionner un ficher à ouvrir"
+
+#: ../perroquetlib/gui/gui.py:814 ../perroquetlib/gui/gui.py:852
+msgid "Perroquet files"
+msgstr "Fichiers Perroquet"
+
+#: ../perroquetlib/gui/gui.py:819 ../perroquetlib/gui/gui.py:838
+#: ../perroquetlib/gui/gui.py:857 ../perroquetlib/gui/gui.py:878
+#: ../perroquetlib/gui/gui.py:899
+msgid "All files"
+msgstr "Tous les fichiers"
+
+#: ../perroquetlib/gui/gui.py:828
+msgid "Select package to import"
+msgstr "Selectionnez un paquet à installer"
+
+#: ../perroquetlib/gui/gui.py:833 ../perroquetlib/gui/gui.py:894
+msgid "Perroquet package files"
+msgstr "Paquets perroquet"
+
+#: ../perroquetlib/gui/gui.py:847
+msgid "Select File to Save to"
+msgstr "Enregistrer sous..."
+
+#: ../perroquetlib/gui/gui.py:868 ../perroquetlib/gui/gui.py:889
+msgid "Select File to Export to"
+msgstr "Sélectionnez l'emplacement pour exporter"
+
+#: ../perroquetlib/gui/gui.py:873
+msgid "Perroquet template files"
+msgstr "Fichiers de modèle perroquet"
+
+#: ../perroquetlib/gui/gui_controller.py:237
+#, python-format
+msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
+msgstr "- Séquences : %(found)s/%(count)s (%(percent)s %%)\n"
+
+#: ../perroquetlib/gui/gui_controller.py:238
+#, python-format
+msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
+msgstr "- Mots : %(found)s/%(count)s (%(percent)s %%)\n"
+
+#: ../perroquetlib/gui/gui_controller.py:239
+#, python-format
+msgid "- Repeat ratio: %s per words"
+msgstr "Taux de répétition : %s par mot"
+
+#. Wrong password
+#: ../perroquetlib/gui/gui_controller.py:287
+#: ../perroquetlib/gui/gui_controller.py:518
+msgid "Wrong password"
+msgstr "Mauvais mot de passe"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:82
+msgid "Updating repositories..."
+msgstr "Mise à jour des dépôts ..."
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:108
+msgid "Local repository"
+msgstr "Dépôt local"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:110
+msgid "Distant repository"
+msgstr "Dépôt distant"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:112
+msgid "Offline repository"
+msgstr "Dépôt hors-ligne"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:114
+msgid "Orphan repository"
+msgstr "Dépôt orphelin"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:132
+msgid "<small>Group</small>"
+msgstr "<small>Groupe</small>"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:148
+#: ../perroquetlib/gui/gui_exercise_manager.py:266
+#: ../perroquetlib/gui/gui_exercise_manager.py:446
+msgid "Installed"
+msgstr "Installé"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:151
+#: ../perroquetlib/gui/gui_exercise_manager.py:268
+#: ../perroquetlib/gui/gui_exercise_manager.py:439
+msgid "Available"
+msgstr "Disponible"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:154
+#: ../perroquetlib/gui/gui_exercise_manager.py:270
+#: ../perroquetlib/gui/gui_exercise_manager.py:454
+msgid "Used"
+msgstr "Utilisé"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:157
+#: ../perroquetlib/gui/gui_exercise_manager.py:272
+#: ../perroquetlib/gui/gui_exercise_manager.py:456
+msgid "Done"
+msgstr "Terminé"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:168
+msgid "<small>Exercise</small>"
+msgstr "<small>Exercice</small>"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:174
+#: ../perroquetlib/gui/gui_exercise_manager.py:274
+#: ../perroquetlib/gui/gui_exercise_manager.py:307
+msgid "Name"
+msgstr "Nom"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:179
+msgid "Type"
+msgstr "Type"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:184
+#: ../perroquetlib/gui/gui_exercise_manager.py:276
+msgid "Description"
+msgstr "Description"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:189
+msgid "Status"
+msgstr "État"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:194
+#: ../perroquetlib/gui/gui_exercise_manager.py:283
+msgid "Words count"
+msgstr "Nombre de mots"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:275
+msgid "Licence"
+msgstr "Licence"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:277
+msgid "Author"
+msgstr "Auteur"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:278
+msgid "Author website"
+msgstr "Site web de l'auteur"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:279
+msgid "Author contact"
+msgstr "Contacter l'auteur"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:282
+msgid "Version"
+msgstr "Version"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:284
+msgid "Language"
+msgstr "Langue"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:285
+msgid "Media type"
+msgstr "Type de média"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:286
+msgid "Id"
+msgstr "Identifiant"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:287
+msgid "Install status"
+msgstr "État de l'installation"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:295
+msgid "Packager"
+msgstr "Créateur du paquetage"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:296
+msgid "Packager website"
+msgstr "Site web du créateur du paquetage"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:297
+msgid "Packager contact"
+msgstr "Contact du créateur du paquetage"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:299
+msgid "Exercise path"
+msgstr "Emplacement de l'exercice"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:300
+msgid "Package path"
+msgstr "Emplacement du paquetage"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:301
+msgid "Template path"
+msgstr "Emplacement du modèle"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:302
+msgid "Instance path"
+msgstr "Emplacement de l'instance"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:303
+msgid "Finished exercise  path"
+msgstr "Chemin de l'exercice terminé"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:312
+msgid "Value"
+msgstr "Valeur"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:352
+msgid "Install"
+msgstr "Installer"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:356
+#: ../perroquetlib/gui/gui_exercise_manager.py:360
+msgid "Cancel install"
+msgstr "Annuler l'installation"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:368
+#: ../perroquetlib/gui/gui_exercise_manager.py:376
+msgid "Remove"
+msgstr "Enlever"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:372
+msgid "Continue"
+msgstr "Continuer"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:416
+#, python-format
+msgid "%d available exercises"
+msgstr "%d exercices disponibles"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:418
+#, python-format
+msgid "%d available exercise"
+msgstr "%d exercice disponible"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:422
+#, python-format
+msgid " and %d installed exercises"
+msgstr " et %d exercices installés"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:424
+#, python-format
+msgid " and %d installed exercise"
+msgstr " et %d exercice installé"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:441
+msgid "Downloading"
+msgstr "Téléchargement"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:444
+msgid "Installing"
+msgstr "Installation"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:448
+msgid "Corrupted"
+msgstr "Corrompu"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:450
+msgid "Canceled"
+msgstr "Annulé"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:452
+msgid "Removing"
+msgstr "Suppression"
+
+#: ../perroquetlib/gui/gui_exercise_manager.py:464
+#, python-format
+msgid "<small>Downloading ... %d%%</small>"
+msgstr "<small>Téléchargement ... %d%%</small>"
+
+#: ../perroquetlib/gui/gui_password_dialog.py:49
+msgid "Properties password :"
+msgstr "Mot de passe de propriétes :"
+
+#: ../perroquetlib/video_player.py:49
+msgid ""
+"You need to install the gstreamer soundtouch elements to use slowly play "
+"feature."
+msgstr ""
+"Vous devez installer les éléments GStreamer SoundTouch pour utiliser la "
+"fonctionnalité de ralentissement de la lecture."
 
 #~ msgid "New exercice"
 #~ msgstr "Nouvel exercice"
@@ -776,14 +899,6 @@ msgstr "Temps entre 2 séquences (en seconde) :"
 
 #~ msgid "Exercice: "
 #~ msgstr "Exercice : "
-
-#, python-format
-#~ msgid "- Words: %(found)s/%(count)s (%(percent)s %%)\n"
-#~ msgstr "- Mots : %(found)s/%(count)s (%(percent)s %%)\n"
-
-#, python-format
-#~ msgid "- Sequences: %(found)s/%(count)s (%(percent)s %%)\n"
-#~ msgstr "- Séquences : %(found)s/%(count)s (%(percent)s %%)\n"
 
 #~ msgid "Load error"
 #~ msgstr "Erreur de chargement"
@@ -860,10 +975,6 @@ msgstr "Temps entre 2 séquences (en seconde) :"
 #~ msgstr ""
 #~ "Le fichier '%s' n'existe pas. Veuillez modifier le chemin d'accès à "
 #~ "l'exercice."
-
-#, python-format
-#~ msgid "- Repeat ratio: %s per words"
-#~ msgstr "Taux de répétition : %s par mot"
 
 #~ msgid "Open saved exercise"
 #~ msgstr "Ouvrir un exercice enregistré"
