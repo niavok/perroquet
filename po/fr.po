@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: perroquet\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-06-19 10:43+0200\n"
-"PO-Revision-Date: 2010-06-20 11:54+0000\n"
-"Last-Translator: Fred Bertolus <fred.bertolus@gmail.com>\n"
+"PO-Revision-Date: 2010-06-22 17:39+0000\n"
+"Last-Translator: Zarmakuizz <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-21 03:50+0000\n"
+"X-Launchpad-Export-Date: 2010-06-23 04:00+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../data/perroquet.desktop.in.h:1
@@ -32,7 +32,7 @@ msgid ""
 "    - Words: --/--\n"
 "    - Repeat ratio: -- per words"
 msgstr ""
-"- Sequences : --/--\n"
+"Séquences : --/--\n"
 "    - Mots : --/--\n"
 "    - Ratio de répétition : -- par mots"
 
@@ -225,7 +225,7 @@ msgid ""
 "These subtitles should be in the exercise language.\n"
 "Supported format: srt"
 msgstr ""
-"Ces sous-titres devrait être dans la langue de l'exercice.\n"
+"Ces sous-titres devraient être dans la langue de l'exercice.\n"
 "Format supporté : srt"
 
 #: ../data/perroquet.ui.h:52
@@ -375,15 +375,15 @@ msgstr "Nom de l'exercice :"
 
 #: ../data/properties_advanced.ui.h:8
 msgid "Lock exercise's correction"
-msgstr "Vérouiller la correction de l'exercice"
+msgstr "Verrouiller la correction de l'exercice"
 
 #: ../data/properties_advanced.ui.h:9
 msgid "Lock exercise's propreties"
-msgstr "Vérouiller les paramètres de l'exercice"
+msgstr "Verrouiller les paramètres de l'exercice"
 
 #: ../data/properties_advanced.ui.h:10
 msgid "Locks"
-msgstr "Verrous"
+msgstr "Protections"
 
 #: ../data/properties_advanced.ui.h:11 ../data/settings.ui.h:9
 msgid "Maximum sequence time (s): "
@@ -419,7 +419,7 @@ msgstr "Limite de répétition par séquence (0 pour aucune limite) :"
 
 #: ../data/properties_advanced.ui.h:20
 msgid "Repeat sequences after having completed it"
-msgstr "Répéter les séquence après les avoir complétées"
+msgstr "Répéter les séquences après les avoir complétées"
 
 #: ../data/properties_advanced.ui.h:23
 msgid "Sequences"
@@ -469,7 +469,7 @@ msgstr "Mot de passe de correction :"
 
 #: ../data/gui_password_dialog.ui.h:2
 msgid "Password for unlock correction"
-msgstr "Mot de passe pour dévérouiller la correction"
+msgstr "Mot de passe pour déverrouiller la correction"
 
 #: ../data/reset.ui.h:1
 msgid "Cancel"
@@ -477,7 +477,7 @@ msgstr "Annuler"
 
 #: ../data/reset.ui.h:2
 msgid "Do you want to reset the current exercise ?"
-msgstr "Voulez-vous vraiment réinitialiser l'exercice courrant ?"
+msgstr "Voulez-vous vraiment réinitialiser l'exercice en cours ?"
 
 #: ../data/reset.ui.h:3
 msgid "Ok"
@@ -510,11 +510,11 @@ msgstr ""
 
 #: ../data/settings.ui.h:15
 msgid "Show menu bar"
-msgstr "Affiche la barre de menu"
+msgstr "Afficher la barre de menu"
 
 #: ../data/settings.ui.h:16
 msgid "Show play and pause buttons"
-msgstr "Afficher les boutons lecture et pause"
+msgstr "Afficher les boutons Lecture et Pause"
 
 #: ../data/settings.ui.h:17
 msgid "Show settings"
@@ -661,7 +661,7 @@ msgstr "Mauvais mot de passe"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:82
 msgid "Updating repositories..."
-msgstr "Mise à jour des dépôts ..."
+msgstr "Mise à jour de la liste des dépôts..."
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:108
 msgid "Local repository"
@@ -773,15 +773,15 @@ msgstr "État de l'installation"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:295
 msgid "Packager"
-msgstr "Créateur du paquetage"
+msgstr "Créateur du paquet"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:296
 msgid "Packager website"
-msgstr "Site web du créateur du paquetage"
+msgstr "Site web du créateur du paquet"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:297
 msgid "Packager contact"
-msgstr "Contact du créateur du paquetage"
+msgstr "Contacter le créateur du paquet"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:299
 msgid "Exercise path"
@@ -789,7 +789,7 @@ msgstr "Emplacement de l'exercice"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:300
 msgid "Package path"
-msgstr "Emplacement du paquetage"
+msgstr "Emplacement du paquet"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:301
 msgid "Template path"
@@ -801,7 +801,7 @@ msgstr "Emplacement de l'instance"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:303
 msgid "Finished exercise  path"
-msgstr "Chemin de l'exercice terminé"
+msgstr "Emplacement de l'exercice terminé"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:312
 msgid "Value"
@@ -819,7 +819,7 @@ msgstr "Annuler l'installation"
 #: ../perroquetlib/gui/gui_exercise_manager.py:368
 #: ../perroquetlib/gui/gui_exercise_manager.py:376
 msgid "Remove"
-msgstr "Enlever"
+msgstr "Supprimer"
 
 #: ../perroquetlib/gui/gui_exercise_manager.py:372
 msgid "Continue"
@@ -872,7 +872,7 @@ msgstr "<small>Téléchargement ... %d%%</small>"
 
 #: ../perroquetlib/gui/gui_password_dialog.py:49
 msgid "Properties password :"
-msgstr "Mot de passe de propriétes :"
+msgstr "Mot de passe des propriétés :"
 
 #: ../perroquetlib/video_player.py:49
 msgid ""
