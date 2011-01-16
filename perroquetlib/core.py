@@ -323,7 +323,6 @@ class Core(object):
     #Reveal correction for word at cursor in current sequence
     def complete_word(self):
         self.exercise.get_current_sequence().show_hint()
-        self.exercise.get_current_sequence().next_char()
         self._update()
         self.set_can_save(True)
     

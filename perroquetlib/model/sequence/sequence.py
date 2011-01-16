@@ -200,13 +200,22 @@ class Sequence:
     def set_time_end(self, time):
         self.endTime = time
 
+    # Reveal a letter on the first invalid word after the cursor.
+    # Warning: recusive method
     def show_hint(self):
         if not self.get_active_word().is_valid():
+            # Reveal a letter on the current word
             self.get_active_word().show_hint()
+            if self.get_active_word().is_valid():
+                    self.next_word()
+
         else:
+            # The current word is complete try the next word
             if self.get_active_word_index() == self.get_word_count()-1:
+                # The current word is the last word, so do nothing
                 return
             else:
+                # There is a next word, try the hint on the next word
                 self.next_word()
                 self.show_hint()
 

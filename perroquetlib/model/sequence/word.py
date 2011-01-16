@@ -124,28 +124,46 @@ class Word:
     def show_hint(self):
         """Reveal correction for word at cursor in text sequence"""
         outWord = ""
-        first_error = -1
 
+        # Place "~" on wrong or missing character
+    
         for i in range(0, len(self.get_valid())):
             if i < len(self.get_text()) and \
                 self.get_text()[i] == self.get_valid()[i]:
                 outWord += self.get_valid()[i]
             else:
                 outWord += self._helpChar
-                if first_error == -1:
-                    first_error = i
 
-        # if fist_error != -1 => the first false char is fist_error
-        # else                => The word is valid
+        
+        if  not self.is_valid():
+            # Reveal the first character only if the size was correct because
+            # the first hint reveal only the size
+            if len(self.get_text()) == len(self.get_valid()):
+                first_error = self.get_first_error_index()
+                
+                self.set_text(outWord[:first_error] + self.get_valid()[first_error] + \
+                      outWord[first_error + 1:])
+            else:
+                self.set_text(outWord)
+            
+            # Place the cursor on the new first wrong character
+            first_error = self.get_first_error_index()
+            if first_error:
+                self.set_pos(first_error)
+                
+    def get_first_error_index(self):
+        """
+        Return the index of the first worng character.
+        If the word is valid, return None
+        """
+        for i in range(0, len(self.get_valid())):
+            if i >= len(self.get_text()) or \
+                self.get_text()[i] != self.get_valid()[i]:
+                #The character at offset i is invalid
+                return i
 
-        if len(self.get_text()) == len(self.get_valid()) and first_error != -1:
-            outWord = outWord[:first_error] + self.get_valid()[first_error] + \
-                      outWord[first_error + 1:]
-            self.set_pos(first_error + 1)
-        elif first_error != -1:
-            self.set_pos(first_error)
-
-        self.set_text(outWord)
+        #No error found
+        return None
 
     def delete_previous_char(self):
         "delete the char before the current pos"
