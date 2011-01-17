@@ -67,14 +67,19 @@ class SequenceDynamicCorrection(Sequence):
                 self.get_active_word().set_pos(0);
                 
     def previous_char(self):
-        try:
-            self.get_active_word().previous_char()
-        except NoCharPossible:
+        if self.get_active_word().is_valid():
             current_word = self.get_active_word_index()
             self.previous_word()
             if current_word != self.get_active_word_index():
-                self.get_active_word().set_pos(-1);
-
+                self.get_active_word().end()
+        else:
+            try:
+                self.get_active_word().previous_char()
+            except NoCharPossible:
+                current_word = self.get_active_word_index()
+                self.previous_word()
+                if current_word != self.get_active_word_index():
+                    self.get_active_word().end()
 
     def first_word(self):
         self._activeWordIndex = 0
