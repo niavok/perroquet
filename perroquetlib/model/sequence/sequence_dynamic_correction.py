@@ -119,7 +119,7 @@ class SequenceDynamicCorrection(Sequence):
                     w2.set_text(w1.get_text())
                     w1.set_text("")
                     self.set_active_word_index(j)
-                    self.next_word()
+                    self.get_active_word().end()
 
     def _next_word(self, loop=False):
         "go to the next word"
