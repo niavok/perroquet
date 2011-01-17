@@ -42,7 +42,7 @@ def update_sequence_list(exercise, subExos):
             elif state == "in_progress":
                 i = 0
                 for word in words:
-                    if id >= sequence.get_word_count():
+                    if i >= sequence.get_word_count():
                         break
                     sequence.get_words()[i].set_text(word)
                     i = i + 1
