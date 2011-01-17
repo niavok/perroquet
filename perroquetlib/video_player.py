@@ -36,6 +36,22 @@ class VideoPlayer:
 
         self.player = gst.Pipeline()
         self.playbin = gst.element_factory_make("playbin2", "player")
+        
+        # Disable the subtitle display if there is embeded subtitles 
+        # (for example, in mkv files)
+        #
+        # Flags activates some things 
+        # (1 << 0) : video
+        # (1 << 1) : audio
+        # (1 << 4) : software volume
+        #
+        # The default value is 0, 1, 2, 4. (1 << 2) display the subtitles
+        #
+        # For more details, see the doc
+        # http://www.gstreamer.net/data/doc/gstreamer/head/gst-plugins-base-plugins/html/gst-plugins-base-plugins-playbin2.html#GstPlayFlags
+        # http://www.gstreamer.net/data/doc/gstreamer/head/gst-plugins-base-plugins/html/gst-plugins-base-plugins-playbin2.html#GstPlayBin2--flags
+        self.playbin.set_property("flags", (1 << 0)|(1 << 1)|(1 << 4))
+        
         self.player.add(self.playbin)
         self.logger = logging.Logger("VideoPlayer")
         self.logger.setLevel(defaultLoggingLevel)
