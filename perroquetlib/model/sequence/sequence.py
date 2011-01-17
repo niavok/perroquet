@@ -229,8 +229,10 @@ class Sequence:
         if not self.is_valid():
             if self.get_active_word().is_valid():
                 # if the sequence is invalide and the current word valid,
-                # go to the next word
-                self.next_word()
+                # go to the end of the word.
+                # Usefull with alias, when 2 is replace with two, the cursor is 
+                # at the position 1 so is displayed after the t
+                self.get_active_word().end()                
 
     def __print__(self):
         return "-".join(w.get_text() for w in self.get_words()) + " VS " + \

@@ -120,6 +120,11 @@ class Word:
             self.set_text(self.get_text()[:self.get_pos()] + char +
                           self.get_text()[self.get_pos():])
         self._pos += 1
+        
+        # if the word is valid, replace text by the alias
+        if self.is_valid():
+            if self.language.is_alias(self.get_text(), self.get_valid()):
+                 self.set_text(self.get_valid())
 
     def show_hint(self):
         """Reveal correction for word at cursor in text sequence"""
@@ -227,6 +232,9 @@ class Word:
             self._pos += 1
         else:
             raise NoCharPossible
+
+    def end(self):
+        self.set_pos(self.get_last_pos())
 
     def previous_char(self):
         "go to the previous char"
