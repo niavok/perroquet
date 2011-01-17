@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-21 04:58+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-01-17 05:02+0000\n"
+"X-Generator: Launchpad (build 12177)\n"
 
 #: ../data/perroquet.desktop.in.h:1
 msgid "Oral comprehension teacher"
@@ -948,3 +948,6 @@ msgstr ""
 
 #~ msgid "Oral comprehention teacher"
 #~ msgstr "Insegnante di comprensione orale"
+
+#~ msgid "Open saved exercise"
+#~ msgstr "Apri esercizio salvato"
