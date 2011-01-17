@@ -71,7 +71,7 @@ class GuiExerciseController:
                     pos += 1
                 elif sequence.get_words()[i].is_valid():
                     self._add_word(sequence.get_words()[i].get_valid(lower=False), 0, isFound=True)
-                    pos += len(sequence.get_words()[i].get_text())
+                    pos += len(sequence.get_words()[i].get_valid(lower=False))
                 else:
                     self._add_word(sequence.get_words()[i].get_text(), sequence.get_words()[i].get_score())
                     pos += len(sequence.get_words()[i].get_text())

@@ -224,6 +224,13 @@ class Sequence:
 
     def get_repeat_count(self):
         return self.repeat_count
+        
+    def update_cursor_position(self):
+        if not self.is_valid():
+            if self.get_active_word().is_valid():
+                # if the sequence is invalide and the current word valid,
+                # go to the next word
+                self.next_word()
 
     def __print__(self):
         return "-".join(w.get_text() for w in self.get_words()) + " VS " + \

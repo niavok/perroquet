@@ -98,7 +98,11 @@ class SequenceDynamicCorrection(Sequence):
             self.get_active_word().write_char(char)
         else:
             self.next_word()
-            self.write_char(char)
+            if not self.get_active_word().is_valid():
+                self.write_char(char)
+            else:
+                #Nothing to write
+                return
         self.update_after_write()
 
     def _check_location(self):

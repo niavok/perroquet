@@ -263,6 +263,7 @@ class Core(object):
     def write_char(self, char):
         if self.exercise.is_character_match(char):
             self.exercise.get_current_sequence().write_char(char)
+            self.exercise.get_current_sequence().update_cursor_position()
             self._update()
             self.set_can_save(True)
         else:
