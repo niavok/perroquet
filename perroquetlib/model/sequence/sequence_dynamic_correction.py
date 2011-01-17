@@ -33,13 +33,13 @@ class SequenceDynamicCorrection(Sequence):
             self.next_word()
 
     def delete_next_char(self):
-        self._previous_word()
         try:
             self.get_active_word().delete_next_char()
         except NoCharPossible:
-            if self.get_active_word_index() < self.get_word_count():
-                self._previous_word()
-                self.delete_next_char()
+                current_word_index = self.get_active_word_index()
+                self.next_word()
+                if current_word_index != self.get_active_word_index():
+                    self.delete_next_char()
         self.update_after_write()
 
     def delete_previous_char(self):
@@ -47,8 +47,9 @@ class SequenceDynamicCorrection(Sequence):
             try:
                 self.get_active_word().delete_previous_char()
             except NoCharPossible:
-                if self.get_active_word_index() > 0:
-                    self._previous_word()
+                current_word_index = self.get_active_word_index()
+                self.previous_word()
+                if current_word_index != self.get_active_word_index():
                     self.delete_previous_char()
         else:
             self._previous_word()
