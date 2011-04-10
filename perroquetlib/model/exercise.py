@@ -37,7 +37,7 @@ class Exercise(object):
         self.currentSubExerciseId = 0
         self.subExercisesList = []
         self.currentSubExercise = None
-        self.repeatAfterCompeted = True
+        self.repeatAfterCompleted = True
         self.maxSequenceLength = 60.0
         self.timeBetweenSequence = 0.0
         self.outputSavePath = None
@@ -81,7 +81,7 @@ class Exercise(object):
             self.playMarginAfter = config.get("default_exercise_play_margin_before")
             self.playMarginBefore = config.get("default_exercise_play_margin_after")
 
-            self.repeatAfterCompeted = (config.get("default_exercise_repeat_after_competed") == 1)
+            self.repeatAfterCompleted = (config.get("default_exercise_repeat_after_completed") == 1)
             self.randomOrder = (config.get("default_exercise_random_order") == 1)
             self.use_dynamic_correction = (config.get("default_exercise_dynamic_correction") == 1)
 
@@ -240,10 +240,10 @@ class Exercise(object):
         return self.currentSubExercise.get_translation_list()
 
     def set_repeat_after_completed(self, state):
-        self.repeatAfterCompeted = state
+        self.repeatAfterCompleted = state
 
     def get_repeat_after_completed(self):
-        return self.repeatAfterCompeted
+        return self.repeatAfterCompleted
 
     def set_time_between_sequence(self, time):
         self.timeBetweenSequence = time

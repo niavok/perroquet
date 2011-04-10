@@ -62,7 +62,7 @@ class Guisettings:
         adjustmentTimeAfterSequence.set_value(float(config.get("default_exercise_play_margin_before")))
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
-        checkbuttonRepeatAfterComplete.set_active(config.get("default_exercise_repeat_after_competed") == 1)
+        checkbuttonRepeatAfterComplete.set_active(config.get("default_exercise_repeat_after_completed") == 1)
 
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
         checkbuttonRandomOrder.set_active(config.get("default_exercise_random_order") == 1)
@@ -124,9 +124,9 @@ class Guisettings:
 
         checkbuttonRepeatAfterComplete = self.builder.get_object("checkbuttonRepeatAfterComplete")
         if checkbuttonRepeatAfterComplete.get_active():
-            config.set("default_exercise_repeat_after_competed", 1)
+            config.set("default_exercise_repeat_after_completed", 1)
         else:
-            config.set("default_exercise_repeat_after_competed", 0)
+            config.set("default_exercise_repeat_after_completed", 0)
 
         checkbuttonRandomOrder = self.builder.get_object("checkbuttonRandomOrder")
         if checkbuttonRandomOrder.get_active():
