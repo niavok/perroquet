@@ -154,7 +154,7 @@ class Config:
         """get a propertie"""
         if not key.islower():
             raise KeyError, key + " is not lowercase"
-        return self._properties[key]
+        return self._properties.get(key,None)
 
     def set(self, key, value):
         """set a propertie"""
