@@ -1,3 +1,14 @@
+> 2011/05/08 - 1.1.1 release
+  - No more display subtitles embeded is a mkv file
+  - Fix a project loading bug in in progress sequences
+  - Place the cursor at the end of a moved word
+  - Fix deletion bug
+  - Fix the cursor position when an alias is used
+  - Fix the cursor position whe the last word is completed
+  - Fix the cursor position after using hint
+  - Fix crash if a config key is missing in the config
+  - Update the translation
+
 > 2010/06/19 - 1.1.0 release
   - Added a repository manager
   - Packages import and export
