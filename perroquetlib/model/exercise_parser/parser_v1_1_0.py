@@ -80,15 +80,15 @@ def save(exercise, outputPath):
 
         xml_locks.appendChild(xml_lock)
 
-    if exercise.is_lock_properties():
-        xml_lock = newdoc.createElement("properties_lock")
-        if exercise.lock_properties_password is not None or exercise.lock_properties_salt is not None:
+    if exercise.is_lock_correction():
+        xml_lock = newdoc.createElement("correction_lock")
+        if exercise.lock_correction_password is not None or exercise.lock_correction_salt is not None:
             xml_node = newdoc.createElement("hash")
-            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_password)))
+            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_correction_password)))
             xml_lock.appendChild(xml_node)
 
             xml_node = newdoc.createElement("salt")
-            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_properties_salt)))
+            xml_node.appendChild(newdoc.createTextNode(str(exercise.lock_correction_salt)))
             xml_lock.appendChild(xml_node)
 
         xml_locks.appendChild(xml_lock)
