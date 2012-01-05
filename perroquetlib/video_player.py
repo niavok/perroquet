@@ -51,6 +51,8 @@ class VideoPlayer:
         # http://www.gstreamer.net/data/doc/gstreamer/head/gst-plugins-base-plugins/html/gst-plugins-base-plugins-playbin2.html#GstPlayFlags
         # http://www.gstreamer.net/data/doc/gstreamer/head/gst-plugins-base-plugins/html/gst-plugins-base-plugins-playbin2.html#GstPlayBin2--flags
         self.playbin.set_property("flags", (1 << 0)|(1 << 1)|(1 << 4))
+        self.playbin.set_property("current-audio", 0)
+        
         
         self.player.add(self.playbin)
         self.logger = logging.Logger("VideoPlayer")
