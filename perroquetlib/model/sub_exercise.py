@@ -60,33 +60,14 @@ class SubExercise(object):
             sequence.set_time_end(sub.get_time_end())
             self.sequenceList.append(sequence)
 
-        #Restore found words
-        if len(oldSequenceList) > 0:
-            oldSequenceIndex = 0
-            newSequenceIndex = 0
+        # Restore found words.
+        # This is useful only this the subtitle file path has change : the found words are restored
 
-            oldWordIndex = 0
-            newWordIndex = 0
+        if len(oldSequenceList) > 0: # Empty is this is a new or loaded from file exercise
 
-            while oldSequenceIndex < len(oldSequenceList) and newSequenceIndex < len(self.sequenceList):
-
-                if oldWordIndex >= oldSequenceList[oldSequenceIndex].get_word_count():
-                    oldSequenceIndex += 1
-                    oldWordIndex = 0
-
-                    if oldSequenceIndex >= len(oldSequenceList):
-                        break
-
-                if newWordIndex >= len(self.sequenceList[newSequenceIndex].get_words()):
-                    newSequenceIndex += 1
-                    newWordIndex = 0
-
-                    if newSequenceIndex >= len(self.sequenceList):
-                        break
-
-                self.sequenceList[newSequenceIndex].get_words()[newWordIndex].set_text(oldSequenceList[oldSequenceIndex].get_words()[oldWordIndex].get_text())
-                oldWordIndex += 1
-                newWordIndex += 1
+            for old_sequence, new_sequence in zip(oldSequenceList, self.sequenceList): # For each sequences
+                for old_word, new_word in zip(old_sequence.get_words(), new_sequence.get_words()): # and for each words
+                    new_word.set_text(old_word.get_text()) # copy the value set by the user
 
 
 
@@ -104,7 +85,7 @@ class SubExercise(object):
         self.update_current_infos()
 
     def goto_next_sequence(self):
-        if self.currentSequenceId < len(self.sequenceList)-1:
+        if self.currentSequenceId < len(self.sequenceList) - 1:
             self.currentSequenceId += 1
             self.update_current_infos()
             return True
@@ -166,7 +147,7 @@ class SubExercise(object):
 
     def set_current_sequence(self, id):
         if id >= len(self.sequenceList):
-            self.currentSequenceId = len(self.sequenceList)-1
+            self.currentSequenceId = len(self.sequenceList) - 1
         else:
             self.currentSequenceId = id
 
