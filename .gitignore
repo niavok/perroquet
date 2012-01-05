@@ -5,3 +5,7 @@ nbproject
 MyProject.kpf
 perroquet.e4p
 .eric4project
+*.pyc
+.project
+.pydevproject
+.settings/
