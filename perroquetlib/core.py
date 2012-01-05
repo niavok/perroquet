@@ -238,10 +238,14 @@ class Core(object):
                     #Auto start play only if repeat is not limited
                     self.repeat_sequence()
             else:
-                self.next_sequence(False)
+                self.next_sequence(load=False)
                 if self.exercise.get_repeat_count_limit_by_sequence() == 0:
                     #Auto start play only if repeat is not limited
-                    self.play()
+                    if self.player.get_seek() > (self.exercise.get_current_sequence().get_time_begin() - self.exercise.get_play_margin_before()):
+                        self.goto_sequence_begin()
+                        self.play()
+                    else:
+                        self.play()
 
 
     #Goto beginning of the current sequence. Can start to play as soon

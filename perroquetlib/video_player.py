@@ -146,6 +146,14 @@ class VideoPlayer:
         value = int(time * 1000000)
         self.playbin.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH, value)
 
+    def get_seek(self):
+        pos_int = -1
+        try:
+            pos_int = self.player.query_position(self.time_format, None)[0]
+        except:
+            pass
+        return (self.speed * pos_int) / 1000000
+
     def seek_as_soon_as_ready(self, time):
         self.timeToSeek = time
 
