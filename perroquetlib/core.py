@@ -58,8 +58,7 @@ class Core(object):
         self.exercise.set_media_change_callback(self.media_change_call_back)
         self.exercise.new()
         self.exercise.set_language_id(langId)
-        self._set_paths(videoPath, exercisePath, translationPath)
-        self.exercise.initialize()
+        self._set_paths(videoPath, exercisePath, translationPath) # This initialize the exercise
         self._reload(True);
         self._activate_sequence()
         self.gui_controller.set_title("", True)
