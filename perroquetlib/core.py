@@ -184,7 +184,7 @@ class Core(object):
     def _activate_sequence(self):
         self.state = Core.WAIT_BEGIN
         self.set_speed(1)
-        self.player.set_next_callback_time(self.exercise.get_current_sequence().get_time_begin())
+        self.player.set_next_callback_time(self.exercise.get_current_sequence().get_time_begin() - self.exercise.get_play_margin_before())
 
         self.gui_controller.set_sequence_number(self.exercise.get_current_sequence_id(), self.exercise.get_sequence_count())
         self.gui_controller.set_sequence(self.exercise.get_current_sequence())
@@ -255,7 +255,7 @@ class Core(object):
             self.player.seek_as_soon_as_ready(begin_time)
         else:
             self.player.seek(begin_time)
-        self.player.set_next_callback_time(self.exercise.get_current_sequence().get_time_end())
+        self.player.set_next_callback_time(self.exercise.get_current_sequence().get_time_end() + self.exercise.get_play_margin_after())
 
 
     #Write a char in current sequence at cursor position
