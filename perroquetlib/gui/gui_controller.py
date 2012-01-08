@@ -365,6 +365,14 @@ class GuiController:
                 self.core.set_speed(0.75)
             else:
                 self.core.set_speed(self.current_speed - 0.1)
+        elif keyname == "s" and control:
+            self.core.save()
+        elif keyname == "j" and control:
+            self.core.complete_word()
+        elif keyname == "k" and control:
+            self.core.reveal_word()
+        elif keyname == "l" and control:
+            self.core.reveal_sequence()
         else:
             return False
 
