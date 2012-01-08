@@ -59,12 +59,9 @@ class Sequence:
     def load(self, text):
         textToParse = text
         
-        ignoreRule = '^([(\[][^)\]]*[)\]]).*'
+        ignoreRule = '^(([(\[][^)\]]*[)\]])|([A-Z]+:)).*'
         
-        #We want swswsw... (s=symbol, w=word)
-        #So if the 1st char isn't a symbole, we want an empty symbole
-        if re.match(self.validChar, textToParse[0]):
-            self._symbolList.append('')
+        self._symbolList.append('')
         while len(textToParse) > 0:
             
             
@@ -74,11 +71,7 @@ class Sequence:
                 ignore = m.group(1)
                 sizeToCut = len(ignore)
                 textToParse = textToParse[sizeToCut:]
-                if len(self._symbolList):
-                    self._symbolList[-1] = self._symbolList[-1] + ignore
-                else:
-                    self._symbolList.append(ignore)
-                print "ignore "+ ignore
+                self._symbolList[-1] = self._symbolList[-1] + ignore
                  
             # if the text begin with a word followed by a not word char
             elif re.match('^(' + self.validChar + '+)' + self.notValidChar,
@@ -89,15 +82,17 @@ class Sequence:
                 sizeToCut = len(word)
                 textToParse = textToParse[sizeToCut:]
                 self._wordList.append(Word(word, self.language))
-            # if the text begin with no word char but followed by a word
-            elif re.match('^(' + self.notValidChar + '+)' + self.validChar,
+                self._symbolList.append('')
+            # if the text begin with no word char
+            elif re.match('^(' + self.notValidChar + ')',
                           textToParse):
-                m = re.search('^(' + self.notValidChar + '+)' + self.validChar,
+                m = re.search('^(' + self.notValidChar + ')',
                               textToParse)
                 symbol = m.group(1)
                 sizeToCut = len(symbol)
                 textToParse = textToParse[sizeToCut:]
-                self._symbolList.append(symbol)
+                self._symbolList[-1] = self._symbolList[-1] + symbol
+
             # if there is only one word or one separator
             else:
                 # if there is only one word
