@@ -55,6 +55,12 @@ class Gui:
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("MainWindow")
         self.window.set_icon_from_file(config.get("logo_path"))
+        self.window.maximize()
+
+        self.hpaned = self.builder.get_object("hpaned1")
+        self.vpaned = self.builder.get_object("vpaned1")
+        self.hpaned.connect("size_allocate", self.on_resize_hpaned)
+        self.vpaned.connect("size_allocate", self.on_resize_vpaned)
 
         self.aboutDialog = self.builder.get_object("aboutdialog")
         icon = gtk.gdk.pixbuf_new_from_file(config.get("logo_path"))
@@ -87,8 +93,6 @@ class Gui:
 
         dialog.run()
         dialog.destroy()
-
-
 
     def get_video_window_id(self):
         return self.builder.get_object("videoArea").window.xid
@@ -157,6 +161,10 @@ class Gui:
         iter2 = buffer.get_end_iter()
         buffer.delete(iter1, iter2)
 
+    def set_previous_sequence_text(self, text):
+        previousSequenceView = self.builder.get_object("previousSequenceView").get_buffer()
+        previousSequenceView.set_text(text)
+
     def set_typing_area_text(self, formatted_text):
         self.disable_changed_text_event = True
         self._clear_typing_area()
@@ -190,22 +198,22 @@ class Gui:
         tag_table = buffer.get_tag_table()
         tag_table.foreach(self._destroy_tag, tag_table)
 
-        for (tag_name,size, foreground_color ,background_color, through) in style_list:
+        for (tag_name, size, foreground_color , background_color, through) in style_list:
             if foreground_color:
                 (red, green, bleu) = foreground_color
                 gtk_foreground_color = self.window.get_colormap().alloc_color(
-                    red*256,
-                    green*256,
-                    bleu*256)
+                    red * 256,
+                    green * 256,
+                    bleu * 256)
             else:
                 gtk_foreground_color = None
 
             if background_color:
                 (red, green, bleu) = background_color
                 gtk_background_color = self.window.get_colormap().alloc_color(
-                    red*256,
-                    green*256,
-                    bleu*256)
+                    red * 256,
+                    green * 256,
+                    bleu * 256)
             else:
                 gtk_background_color = None
 
@@ -542,7 +550,7 @@ class Gui:
         oldText = oldText.decode("utf-8")
 
         newLength = len(newText) - len(oldText)
-        newString = newText[index-newLength:index]
+        newString = newText[index - newLength:index]
 
         return self.controller.notify_typing(newString)
 
@@ -730,6 +738,13 @@ class Gui:
         if iter is not None:
             path = modele.get(iter, 1)[0]
             self.controller.notify_load_path(path)
+
+    """ Resize event"""
+    def on_resize_hpaned(self, widget, data=None):
+        self.hpaned.set_position(self.hpaned.allocation.width - 250)
+
+    def on_resize_vpaned(self, widget, data=None):
+        self.vpaned.set_position(self.vpaned.allocation.height - 350)
 
 EVENT_FILTER = None
 

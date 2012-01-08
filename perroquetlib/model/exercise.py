@@ -126,7 +126,7 @@ class Exercise(object):
                 localId -= len(subExo.get_sequence_list())
 
 
-        self.goto_sequence(self.get_sequence_count()-1)
+        self.goto_sequence(self.get_sequence_count() - 1)
         return False
 
 
@@ -148,11 +148,11 @@ class Exercise(object):
             randomId = self.reverseOrder[self.currentSequenceId]
             randomId -= 1
             if randomId < 0:
-                randomId = len(self.order)-1
+                randomId = len(self.order) - 1
             return self.goto_sequence(self.order[randomId])
         else:
             if self.currentSequenceId > 0:
-                return self.goto_sequence(self.currentSequenceId-1)
+                return self.goto_sequence(self.currentSequenceId - 1)
             else:
                 return False
 
@@ -205,6 +205,28 @@ class Exercise(object):
 
     def get_current_sequence(self):
         return self.currentSubExercise.get_current_sequence()
+
+    def get_previous_sequence(self):
+
+        previousSequenceId = -1
+
+        if self.randomOrder:
+            randomId = self.reverseOrder[self.currentSequenceId]
+            randomId -= 1
+            if randomId < 0:
+                randomId = len(self.order) - 1
+            previousSequenceId = self.goto_sequence(self.order[randomId])
+        else:
+            if self.currentSequenceId > 0:
+                previousSequenceId = self.currentSequenceId - 1
+            else:
+                return None
+
+        for subExo in self.subExercisesList:
+            if previousSequenceId < len(subExo.get_sequence_list()):
+                return subExo.sequenceList[previousSequenceId]
+            else:
+                previousSequenceId -= len(subExo.get_sequence_list())
 
     def get_current_sequence_id(self):
         return self.currentSequenceId

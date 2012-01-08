@@ -189,6 +189,7 @@ class Core(object):
         self.gui_controller.set_sequence_number(self.exercise.get_current_sequence_id(), self.exercise.get_sequence_count())
         self.gui_controller.set_sequence(self.exercise.get_current_sequence())
         self.__activate_translation()
+        self.__activate_previous_sequence_text()
         self._update_stats()
 
     #_update displayed translation on new active sequence
@@ -206,6 +207,26 @@ class Core(object):
                     translation += sub.get_text() + " "
 
             self.gui_controller.set_translation(translation)
+
+    #_update displayed previous sentence text
+    def __activate_previous_sequence_text(self):
+        previous_sequence_text = "";
+        previous_sequence = self.exercise.get_previous_sequence()
+        if previous_sequence:
+            for i, symbol in enumerate(previous_sequence.get_symbols()):
+                previous_sequence_text += symbol
+                if i < len(previous_sequence.get_words()):
+                    word = previous_sequence.get_words()[i]
+                    if word.is_valid():
+                        previous_sequence_text += word.get_valid(lower=False)
+                    else:
+                        word_text = word.get_text()
+                        if len(word_text):
+                            previous_sequence_text += word.get_text()
+                        else:
+                            previous_sequence_text += "_"
+
+        self.gui_controller.set_previous_sequence_text(previous_sequence_text)
 
     #Update displayed stats on new active sequence
     def _update_stats(self):
@@ -384,7 +405,7 @@ class Core(object):
                 if begin_time < 0:
                     begin_time = 0
                 duration = end_time - begin_time
-                pos = pos_int -begin_time
+                pos = pos_int - begin_time
                 self.gui_controller.set_sequence_time(pos, duration)
 
     #Save current exercice

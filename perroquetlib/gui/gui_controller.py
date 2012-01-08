@@ -234,6 +234,9 @@ class GuiController:
     def set_translation(self, translation):
         self.gui.set_translation(translation)
 
+    def set_previous_sequence_text(self, text):
+        self.gui.set_previous_sequence_text(text)
+
     def set_statitics(self, sequenceCount, sequenceFound, wordCount, wordFound, repeatRate):
         text = ""
         text = text + _("- Sequences: %(found)s/%(count)s (%(percent)s %%)\n") % {'found': str(sequenceFound), 'count': str(sequenceCount), 'percent': str(round(100 * sequenceFound / sequenceCount, 1))}
@@ -361,7 +364,7 @@ class GuiController:
             if self.current_speed < 0.85:
                 self.core.set_speed(0.75)
             else:
-                self.core.set_speed(self.current_speed-0.1)
+                self.core.set_speed(self.current_speed - 0.1)
         else:
             return False
 
