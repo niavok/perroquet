@@ -331,10 +331,10 @@ class GuiController:
             self.core.previous_sequence()
         elif keyname == "Page_Up":
             self.core.next_sequence()
-        elif keyname == "Down":
-            self.core.previous_sequence()
         elif keyname == "Up":
-            self.core.next_sequence()
+            self.core.previous_word()
+        elif keyname == "Down":
+            self.core.next_word()
         elif keyname == "Tab":
             if not self.core.exercise.get_current_sequence().is_valid():
                 self.core.next_word()
