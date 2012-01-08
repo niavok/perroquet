@@ -58,13 +58,30 @@ class Sequence:
 
     def load(self, text):
         textToParse = text
+        
+        ignoreRule = '^([(\[][^)\]]*[)\]]).*'
+        
         #We want swswsw... (s=symbol, w=word)
         #So if the 1st char isn't a symbole, we want an empty symbole
         if re.match(self.validChar, textToParse[0]):
             self._symbolList.append('')
         while len(textToParse) > 0:
+            
+            
+            # search ignored block
+            if re.match(ignoreRule, textToParse):
+                m = re.search(ignoreRule, textToParse)
+                ignore = m.group(1)
+                sizeToCut = len(ignore)
+                textToParse = textToParse[sizeToCut:]
+                if len(self._symbolList):
+                    self._symbolList[-1] = self._symbolList[-1] + ignore
+                else:
+                    self._symbolList.append(ignore)
+                print "ignore "+ ignore
+                 
             # if the text begin with a word followed by a not word char
-            if re.match('^(' + self.validChar + '+)' + self.notValidChar,
+            elif re.match('^(' + self.validChar + '+)' + self.notValidChar,
                         textToParse):
                 m = re.search('^(' + self.validChar + '+)' + self.notValidChar,
                               textToParse)

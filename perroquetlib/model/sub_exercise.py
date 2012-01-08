@@ -56,6 +56,9 @@ class SubExercise(object):
             else:
                 sequence = SequenceSimple(self.parent.language)
             sequence.load(sub.get_text())
+            if len(sequence.get_words()) == 0:
+                # Empty sequence
+                continue
             sequence.set_time_begin(sub.get_time_begin())
             sequence.set_time_end(sub.get_time_end())
             self.sequenceList.append(sequence)
