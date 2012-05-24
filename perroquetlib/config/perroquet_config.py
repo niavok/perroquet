@@ -25,7 +25,7 @@ import sys
 from config_lib import Config
 
 APP_NAME = 'perroquet'
-APP_VERSION = '1.1.1'
+APP_VERSION = '1.1.2-dev'
 
 config = Config()
 
