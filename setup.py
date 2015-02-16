@@ -196,9 +196,9 @@ else:
 setup(name='perroquet',
       version=config.get("version"),
       description='Perroquet, listening comprehension tutor ',
-      author='Perroquet Team',
-      author_email='perroquet-team@lists.launchpad.net',
-      url='http://perroquet.b219.org',
+      author='Frédéric Bertolus',
+      author_email='fred.bertolus@gmail.com',
+      url='http://perroquet.niavok.com',
       license='GNU GPL v3',
       scripts=['perroquet'],
       data_files=[
