@@ -444,9 +444,9 @@ class Gui:
         videoChooser = self.builder.get_object("filechooserbuttonVideo")
         exerciseChooser = self.builder.get_object("filechooserbuttonExercise")
         translationChooser = self.builder.get_object("filechooserbuttonTranslation")
-        videoChooser.set_filename("None")
-        exerciseChooser.set_filename("None")
-        translationChooser.set_filename("None")
+        videoChooser.unselect_all()
+        exerciseChooser.unselect_all()
+        translationChooser.unselect_all()
 
         self.liststoreLanguage = gtk.ListStore(str, str)
 
