@@ -57,6 +57,7 @@ class SubtitlesLoader(object):
         f = self.convert_file(path)
         #f = open(path, 'r')
         state = SubtitlesLoader.LOOK_FOR_ID
+        current = None
         for line in f:
             line = line.rstrip()
             line = line.decode("utf8")
@@ -112,7 +113,7 @@ class SubtitlesLoader(object):
                     if len(current.get_text()) > 0:
                         outputList.append(current)
 
-        if len(current.get_text()) > 0:
+        if current is not None and len(current.get_text()) > 0:
             outputList.append(current)
 
         return outputList
