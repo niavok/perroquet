@@ -36,11 +36,11 @@ class VideoPlayer:
 
         self.player = gst.Pipeline()
         self.playbin = gst.element_factory_make("playbin2", "player")
-        
-        # Disable the subtitle display if there is embeded subtitles 
+
+        # Disable the subtitle display if there is embeded subtitles
         # (for example, in mkv files)
         #
-        # Flags activates some things 
+        # Flags activates some things
         # (1 << 0) : video
         # (1 << 1) : audio
         # (1 << 4) : software volume
@@ -52,8 +52,8 @@ class VideoPlayer:
         # http://www.gstreamer.net/data/doc/gstreamer/head/gst-plugins-base-plugins/html/gst-plugins-base-plugins-playbin2.html#GstPlayBin2--flags
         self.playbin.set_property("flags", (1 << 0)|(1 << 1)|(1 << 4))
         self.playbin.set_property("current-audio", 0)
-        
-        
+
+
         self.player.add(self.playbin)
         self.logger = logging.Logger("VideoPlayer")
         self.logger.setLevel(defaultLoggingLevel)
@@ -100,7 +100,7 @@ class VideoPlayer:
         elif t == gst.MESSAGE_ERROR:
             self.player.set_state(gst.STATE_NULL)
             err, debug = message.parse_error()
-            self.logger.error("Error: %s" % (err, debug))
+            self.logger.error("Error: %s, %s" % (err, debug))
 
     def on_sync_message(self, bus, message):
         if message.structure is None:

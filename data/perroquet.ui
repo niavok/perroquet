@@ -807,7 +807,6 @@
                   <object class="GtkTextView" id="previousSequenceView">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="vscroll_policy">natural</property>
                     <property name="pixels_above_lines">10</property>
                     <property name="pixels_below_lines">10</property>
                     <property name="editable">False</property>
