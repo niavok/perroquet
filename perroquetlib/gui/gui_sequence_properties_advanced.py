@@ -20,7 +20,9 @@
 import gettext
 import os
 
-import gtk
+import gi
+from gi.repository import Gst
+
 from perroquetlib.config import config
 from perroquetlib.model.exercise import Exercise
 from perroquetlib.model.languages_manager import LanguagesManager

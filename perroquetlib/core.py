@@ -23,14 +23,19 @@ import thread
 import time
 from gettext import gettext as _
 
-import gtk
+print "plop1"
+import gi
+from gi.repository import Gtk
 from debug import defaultLoggingHandler, defaultLoggingLevel
 from model.exercise import Exercise
 from model.exercise_parser import load_exercise, save_exercise
+print "plop2"
 from model.sequence import NoCharPossible
 from perroquetlib.config import config
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager
+print "plop3"
 from video_player import VideoPlayer
+print "plop4"
 
 # The Core make the link between the GUI, the vidéo player, the current
 # open exercise and all others part of the application

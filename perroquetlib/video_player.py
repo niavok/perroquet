@@ -22,8 +22,11 @@ import sys
 import thread
 import time
 
-import gst
-import gtk
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import Gst
+from gi.repository import Gtk
+
 # Build some logger related objects
 defaultLoggingHandler = logging.StreamHandler(sys.stdout)
 defaultLoggingHandler.setFormatter(logging.Formatter("%(asctime)s.%(msecs)d-[%(name)s::%(levelname)s] %(message)s", "%a %H:%M:%S"))
@@ -31,11 +34,14 @@ defaultLoggingLevel = logging.DEBUG
 from gettext import gettext as _
 from perroquetlib.config import config
 
+Gst.init(None)
+
 class VideoPlayer:
     def __init__(self):
-
-        self.player = gst.Pipeline()
-        self.playbin = gst.element_factory_make("playbin2", "player")
+        self.player = Gst.Pipeline()
+        self.playbin = Gst.ElementFactory.make("playbin", "player")
+        
+        Gst.ElementFactory.make("playbin2", "player")
 
         # Disable the subtitle display if there is embeded subtitles
         # (for example, in mkv files)
@@ -59,11 +65,11 @@ class VideoPlayer:
         self.logger.setLevel(defaultLoggingLevel)
         self.logger.addHandler(defaultLoggingHandler)
         #Audio
-        audiobin = gst.Bin("audio-speed-bin")
+        audiobin = Gst.Bin("audio-speed-bin")
         try:
-            self.audiospeedchanger = gst.element_factory_make("pitch")
+            self.audiospeedchanger = Gst.ElementFactory.make("pitch")
             self.canChangeSpeed = True
-        except gst.ElementNotFoundError:
+        except Gst.ElementNotFoundError:
             self.logger.warn(_(u"You need to install the gstreamer soundtouch elements to "
                              "use slowly play feature."))
             self.canChangeSpeed = False
@@ -72,13 +78,13 @@ class VideoPlayer:
         if self.canChangeSpeed and config.get("interface_use_speed_change"):
             audiobin.add(self.audiospeedchanger)
 
-            self.audiosink = gst.element_factory_make("autoaudiosink")
+            self.audiosink = Gst.element_factory_make("autoaudiosink")
 
             audiobin.add(self.audiosink)
-            convert = gst.element_factory_make("audioconvert")
+            convert = Gst.element_factory_make("audioconvert")
             audiobin.add(convert)
-            gst.element_link_many(self.audiospeedchanger, convert, self.audiosink)
-            sink_pad = gst.GhostPad("sink", self.audiospeedchanger.get_pad("sink"))
+            Gst.element_link_many(self.audiospeedchanger, convert, self.audiosink)
+            sink_pad = Gst.GhostPad("sink", self.audiospeedchanger.get_pad("sink"))
             audiobin.add_pad(sink_pad)
             self.playbin.set_property("audio-sink", audiobin)
 
@@ -88,17 +94,17 @@ class VideoPlayer:
         bus.connect("message", self.on_message)
         bus.connect("sync-message::element", self.on_sync_message)
 
-        self.time_format = gst.Format(gst.FORMAT_TIME)
+        self.time_format = Gst.Format(Gst.Format.TIME)
         self.timeToSeek = -1
         self.speed = 1.0
         self.nextCallbackTime = -1
 
     def on_message(self, bus, message):
         t = message.type
-        if t == gst.MESSAGE_EOS:
-            self.player.set_state(gst.STATE_NULL)
-        elif t == gst.MESSAGE_ERROR:
-            self.player.set_state(gst.STATE_NULL)
+        if t == Gst.MESSAGE_EOS:
+            self.player.set_state(Gst.State.NULL)
+        elif t == Gst.MESSAGE_ERROR:
+            self.player.set_state(Gst.State.NULL)
             err, debug = message.parse_error()
             self.logger.error("Error: %s, %s" % (err, debug))
 
@@ -118,10 +124,10 @@ class VideoPlayer:
     def open(self, path):
         self.playbin.set_property("uri", "file://" + path)
         self.play_thread_id = thread.start_new_thread(self.play_thread, ())
-        self.player.set_state(gst.STATE_PAUSED)
+        self.player.set_state(Gst.State.PAUSED)
         self.playing = False
     def play(self):
-        self.player.set_state(gst.STATE_PLAYING)
+        self.player.set_state(Gst.State.PLAYING)
         self.playing = True
 
     def set_speed(self, speed):
@@ -133,7 +139,7 @@ class VideoPlayer:
 
 
     def pause(self):
-        self.player.set_state(gst.STATE_PAUSED)
+        self.player.set_state(Gst.State.PAUSED)
         self.playing = False
 
     def is_paused(self):
@@ -144,7 +150,7 @@ class VideoPlayer:
 
     def seek(self, time):
         value = int(time * 1000000)
-        self.playbin.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH, value)
+        self.playbin.seek_simple(Gst.FORMAT_TIME, Gst.SEEK_FLAG_FLUSH, value)
 
     def get_seek(self):
         pos_int = -1
@@ -201,4 +207,4 @@ class VideoPlayer:
                 self.timeToSeek = -1
 
     def close(self):
-        self.player.set_state(gst.STATE_NULL)
+        self.player.set_state(Gst.State.NULL)

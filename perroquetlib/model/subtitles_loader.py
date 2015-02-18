@@ -60,9 +60,10 @@ class SubtitlesLoader(object):
         current = None
         for line in f:
             line = line.rstrip()
-            line = line.decode("utf8")
+            line = line.decode("utf-8")
 
-            if line.startswith(codecs.BOM_UTF8):
+            if line.startswith(u'\ufeff'):
+            #if line.startswith("p"):
                 line = line[1:]
 
             if state == SubtitlesLoader.LOOK_FOR_ID:

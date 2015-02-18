@@ -24,7 +24,11 @@ import locale
 import logging
 import os
 
-import gtk
+import gi
+from gi.repository import Gtk
+from gi.repository import GdkX11
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gui_exercise_manager import GuiExerciseManager
 from gui_message_dialog import GuiMessageDialog
 from gui_password_dialog import GuiPasswordDialog
@@ -49,7 +53,7 @@ class Gui:
         self.logger.addHandler(defaultLoggingHandler)
         self.controller = controller
 
-        self.builder = gtk.Builder()
+        self.builder = Gtk.Builder()
         self.builder.set_translation_domain("perroquet")
         self.builder.add_from_file(config.get("ui_path"))
         self.builder.connect_signals(self)
@@ -63,7 +67,7 @@ class Gui:
         self.vpaned.connect("size_allocate", self.on_resize_vpaned)
 
         self.aboutDialog = self.builder.get_object("aboutdialog")
-        icon = gtk.gdk.pixbuf_new_from_file(config.get("logo_path"))
+        icon = GdkPixbuf.Pixbuf.new_from_file(config.get("logo_path"))
         self.aboutDialog.set_logo(icon)
         self.aboutDialog.set_version(config.get("version"))
 
@@ -86,8 +90,8 @@ class Gui:
         self._update_last_open_files_tab()
 
     def signal_exercise_bad_path(self, path):
-        dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
-                                   gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
+        dialog = Gtk.MessageDialog(self.window, Gtk.DIALOG_MODAL,
+                                   Gtk.MESSAGE_ERROR, Gtk.BUTTONS_OK,
                                    _("The file '%s' doesn't exist. Please modify exercise paths") % path)
         dialog.set_title(_("load error"))
 
@@ -95,7 +99,7 @@ class Gui:
         dialog.destroy()
 
     def get_video_window_id(self):
-        return self.builder.get_object("videoArea").window.xid
+        return self.builder.get_object("videoArea").get_property('window').get_xid()
 
     def set_active_video_area(self, state):
         if state:
@@ -201,25 +205,26 @@ class Gui:
         for (tag_name, size, foreground_color , background_color, through) in style_list:
             if foreground_color:
                 (red, green, bleu) = foreground_color
-                gtk_foreground_color = self.window.get_colormap().alloc_color(
-                    red * 256,
-                    green * 256,
-                    bleu * 256)
+                
+                gtk_foreground_color = Gdk.RGBA(
+                    red / 255.,
+                    green / 255.,
+                    bleu / 255.)
             else:
                 gtk_foreground_color = None
 
             if background_color:
                 (red, green, bleu) = background_color
-                gtk_background_color = self.window.get_colormap().alloc_color(
-                    red * 256,
-                    green * 256,
-                    bleu * 256)
+                gtk_background_color = Gdk.RGBA(
+                    red / 255.,
+                    green / 255.,
+                    bleu / 255.)
             else:
                 gtk_background_color = None
 
             buffer.create_tag(tag_name,
-            background=gtk_background_color,
-            foreground=gtk_foreground_color,
+            background_rgba=gtk_background_color,
+            foreground_rgba=gtk_foreground_color,
             strikethrough=through,
             size_points=size)
 
@@ -278,24 +283,24 @@ class Gui:
         return  dialog_password.run()
 
     def run(self):
-        gtk.gdk.threads_init()
+        Gdk.threads_init()
         self.window.show()
-        gtk.main()
+        Gtk.main()
 
     def _update_last_open_files_tab(self):
         #TODO: move part in controller ?
         gtkTree = self.builder.get_object("lastopenfilesTreeView")
 
-        cell = gtk.CellRendererText()
+        cell = Gtk.CellRendererText()
 
-        treeViewColumn = gtk.TreeViewColumn(_("Path"))
+        treeViewColumn = Gtk.TreeViewColumn(_("Path"))
         treeViewColumn.pack_start(cell, False)
         treeViewColumn.add_attribute(cell, 'markup', 0)
         treeViewColumn.set_expand(False)
         gtkTree.append_column(treeViewColumn)
 
 
-        treeStore = gtk.TreeStore(str, str)
+        treeStore = Gtk.TreeStore(str, str)
         for obj in config.get("lastopenfiles"):
             path = obj[0]
             name = obj[1] if len(obj) >= 2 else path
@@ -305,17 +310,17 @@ class Gui:
 
 
     def quit(self):
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def ask_confirm_quit_without_save(self):
-        dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
-                                   gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
+        dialog = Gtk.MessageDialog(self.window, Gtk.DIALOG_MODAL,
+                                   Gtk.MESSAGE_INFO, Gtk.BUTTONS_YES_NO,
                                    _("Do you really quit without save ?"))
         dialog.set_title(_("Confirm quit"))
 
         response = dialog.run()
         dialog.destroy()
-        return response == gtk.RESPONSE_YES
+        return response == Gtk.RESPONSE_YES
 
 
     def ask_reset_exercise_content(self):
@@ -448,7 +453,7 @@ class Gui:
         exerciseChooser.unselect_all()
         translationChooser.unselect_all()
 
-        self.liststoreLanguage = gtk.ListStore(str, str)
+        self.liststoreLanguage = Gtk.ListStore(str, str)
 
         languageManager = LanguagesManager()
         languagesList = languageManager.get_languages_list()
@@ -463,7 +468,7 @@ class Gui:
         #Clear old values
         comboboxLanguage.clear()
 
-        cell = gtk.CellRendererText()
+        cell = Gtk.CellRendererText()
         comboboxLanguage.set_model(self.liststoreLanguage)
         comboboxLanguage.pack_start(cell, True)
         comboboxLanguage.add_attribute(cell, 'text', 0)
@@ -557,10 +562,10 @@ class Gui:
 
 
     def on_type_view_key_press_event(self, widget, event):
-        keyname = gtk.gdk.keyval_name(event.keyval)
+        keyname = Gdk.keyval_name(event.keyval)
         state = event.state
-        shift = state & gtk.gdk.SHIFT_MASK
-        control = state & gtk.gdk.CONTROL_MASK
+        shift = state & Gdk.SHIFT_MASK
+        control = state & Gdk.CONTROL_MASK
         return self.controller.notify_key_press(keyname, shift, control)
 
     def on_toolbutton_next_sequence_clicked(self, widget, data=None):
@@ -631,17 +636,17 @@ class Gui:
 
     def on_type_view_move_cursor(self, textview, step_size, count, extend_selection):
 
-        if step_size == gtk.MOVEMENT_VISUAL_POSITIONS:
+        if step_size == Gtk.MOVEMENT_VISUAL_POSITIONS:
             if count == -1:
                 self.controller.notify_move_cursor("previous_char")
             elif count == 1:
                 self.controller.notify_move_cursor("next_char")
-        elif step_size == gtk.MOVEMENT_DISPLAY_LINE_ENDS:
+        elif step_size == Gtk.MOVEMENT_DISPLAY_LINE_ENDS:
             if count == -1:
                 self.controller.notify_move_cursor("first_word")
             elif count == 1:
                 self.controller.notify_move_cursor("last_word")
-        elif step_size == gtk.MOVEMENT_WORDS:
+        elif step_size == Gtk.MOVEMENT_WORDS:
             if count == -1:
                 self.controller.notify_move_cursor("previous_word")
             elif count == 1:
@@ -749,25 +754,25 @@ class Gui:
 EVENT_FILTER = None
 
 
-class FileSelector(gtk.FileChooserDialog):
+class FileSelector(Gtk.FileChooserDialog):
     "A normal file selector"
 
-    def __init__(self, parent, title=None, action=gtk.FILE_CHOOSER_ACTION_OPEN, stockbutton=None):
+    def __init__(self, parent, title=None, action=Gtk.FileChooserAction.OPEN, stockbutton=None):
 
         if stockbutton is None:
-            if action == gtk.FILE_CHOOSER_ACTION_OPEN:
-                stockbutton = gtk.STOCK_OPEN
+            if action == Gtk.FileChooserAction.OPEN:
+                stockbutton = Gtk.STOCK_OPEN
 
-            elif action == gtk.FILE_CHOOSER_ACTION_SAVE:
-                stockbutton = gtk.STOCK_SAVE
+            elif action == Gtk.FileChooserAction.SAVE:
+                stockbutton = Gtk.STOCK_SAVE
 
-        gtk.FileChooserDialog.__init__(
+        Gtk.FileChooserDialog.__init__(
                                        self, title, parent, action,
-                                       (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, stockbutton, gtk.RESPONSE_OK)
+                                       (Gtk.STOCK_CANCEL, Gtk.RESPONSE_CANCEL, stockbutton, Gtk.RESPONSE_OK)
                                        )
 
         self.set_local_only(False)
-        self.set_default_response(gtk.RESPONSE_OK)
+        self.set_default_response(Gtk.RESPONSE_OK)
 
         self.inputsection = None
 
@@ -803,11 +808,11 @@ class FileSelector(gtk.FileChooserDialog):
         if EVENT_FILTER != None:
             self.window.add_filter(EVENT_FILTER)
 
-        response = gtk.FileChooserDialog.run(self)
+        response = Gtk.FileChooserDialog.run(self)
         filename = self.get_filename()
         self.destroy()
 
-        if response == gtk.RESPONSE_OK:
+        if response == Gtk.RESPONSE_OK:
             return filename
 
         else:
@@ -822,15 +827,15 @@ class OpenFileSelector(FileSelector):
     def __init__(self, parent):
         FileSelector.__init__(
                               self, parent, _('Select File to open'),
-                              gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
+                              Gtk.FileChooserAction.OPEN, Gtk.STOCK_OPEN
                               )
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('Perroquet files'))
         filter.add_pattern("*.perroquet")
         self.add_filter(filter)
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('All files'))
         filter.add_pattern("*")
         self.add_filter(filter)
@@ -841,15 +846,15 @@ class ImportFileSelector(FileSelector):
     def __init__(self, parent):
         FileSelector.__init__(
                               self, parent, _('Select package to import'),
-                              gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_OPEN
+                              Gtk.FileChooserAction.OPEN, Gtk.STOCK_OPEN
                               )
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('Perroquet package files'))
         filter.add_pattern("*.tar")
         self.add_filter(filter)
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('All files'))
         filter.add_pattern("*")
         self.add_filter(filter)
@@ -860,15 +865,15 @@ class SaveFileSelector(FileSelector):
     def __init__(self, parent):
         FileSelector.__init__(
                               self, parent, _('Select File to Save to'),
-                              gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
+                              Gtk.FILE_CHOOSER_ACTION_SAVE, Gtk.STOCK_SAVE
                               )
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('Perroquet files'))
         filter.add_pattern("*.perroquet")
         self.add_filter(filter)
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('All files'))
         filter.add_pattern("*")
         self.add_filter(filter)
@@ -881,15 +886,15 @@ class ExportAsTemplateFileSelector(FileSelector):
     def __init__(self, parent):
         FileSelector.__init__(
                               self, parent, _('Select File to Export to'),
-                              gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
+                              Gtk.FILE_CHOOSER_ACTION_SAVE, Gtk.STOCK_SAVE
                               )
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('Perroquet template files'))
         filter.add_pattern("*.perroquet")
         self.add_filter(filter)
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('All files'))
         filter.add_pattern("*")
         self.add_filter(filter)
@@ -902,15 +907,15 @@ class ExportAsPackageFileSelector(FileSelector):
     def __init__(self, parent):
         FileSelector.__init__(
                               self, parent, _('Select File to Export to'),
-                              gtk.FILE_CHOOSER_ACTION_SAVE, gtk.STOCK_SAVE
+                              Gtk.FILE_CHOOSER_ACTION_SAVE, Gtk.STOCK_SAVE
                               )
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('Perroquet package files'))
         filter.add_pattern("*.tar")
         self.add_filter(filter)
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_('All files'))
         filter.add_pattern("*")
         self.add_filter(filter)

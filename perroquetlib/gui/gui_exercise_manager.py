@@ -24,7 +24,9 @@ import textwrap
 import thread
 import time
 
-import gtk
+import gi
+from gi.repository import Gst
+
 from perroquetlib.config import config
 from perroquetlib.debug import defaultLoggingHandler, defaultLoggingLevel
 from perroquetlib.repository.exercise_repository_manager import ExerciseRepositoryManager

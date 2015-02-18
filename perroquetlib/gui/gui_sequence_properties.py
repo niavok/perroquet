@@ -19,7 +19,9 @@
 
 import gettext
 
-import gtk
+import gi
+from gi.repository import Gst
+
 from perroquetlib.config import config
 from perroquetlib.model.languages_manager import LanguagesManager
 _ = gettext.gettext

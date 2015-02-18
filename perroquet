@@ -18,7 +18,9 @@
 # along with Perroquet.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+print "import Perroquet"
 from perroquetlib.perroquet import Perroquet
+print "import Config"
 from perroquetlib.config import Config
 def main():
 
@@ -26,7 +28,9 @@ def main():
 
 
     app = Perroquet()
+    print "app run"
     app.run()
+    print "app run done"
 
 if __name__ == '__main__':
     main()
