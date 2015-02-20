@@ -101,9 +101,9 @@ class VideoPlayer:
 
     def on_message(self, bus, message):
         t = message.type
-        if t == Gst.MESSAGE_EOS:
+        if t == Gst.MessageType.EOS:
             self.player.set_state(Gst.State.NULL)
-        elif t == Gst.MESSAGE_ERROR:
+        elif t == Gst.MessageType.ERROR:
             self.player.set_state(Gst.State.NULL)
             err, debug = message.parse_error()
             self.logger.error("Error: %s, %s" % (err, debug))
@@ -113,13 +113,13 @@ class VideoPlayer:
             return
         message_name = message.structure.get_name()
         if message_name == "prepare-xwindow-id":
-            gtk.gdk.threads_enter()
-            gtk.gdk.display_get_default().sync()
+            Gtk.gdk.threads_enter()
+            Gtk.gdk.display_get_default().sync()
             imagesink = message.src
             imagesink.set_property("force-aspect-ratio", True)
             imagesink.set_xwindow_id(self.windowId)
             self.activate_video_area(True)
-            gtk.gdk.threads_leave()
+            Gtk.gdk.threads_leave()
 
     def open(self, path):
         self.playbin.set_property("uri", "file://" + path)
@@ -150,7 +150,7 @@ class VideoPlayer:
 
     def seek(self, time):
         value = int(time * 1000000)
-        self.playbin.seek_simple(Gst.FORMAT_TIME, Gst.SEEK_FLAG_FLUSH, value)
+        self.playbin.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, value)
 
     def get_seek(self):
         pos_int = -1

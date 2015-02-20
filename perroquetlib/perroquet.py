@@ -25,11 +25,8 @@ import os
 import sys
 
 from perroquetlib.config.perroquet_config import config
-print "import core"
 from perroquetlib.core import Core, defaultLoggingHandler, defaultLoggingLevel
-print "import core done"
 from perroquetlib.gui.gui_controller import GuiController
-print "import gui done"
 
 class Perroquet(object):
 

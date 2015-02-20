@@ -182,7 +182,7 @@ class Gui:
             iter2 = buffer.get_end_iter()
             buffer.apply_tag_by_name(style, iter1, iter2)
 
-        self.setted_typing_area_text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())
+        self.setted_typing_area_text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), True)
 
         self.disable_changed_text_event = False
 
@@ -548,7 +548,7 @@ class Gui:
 
         buffer = self.typeLabel.get_buffer()
         oldText = self.setted_typing_area_text
-        newText = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())
+        newText = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), True)
         index = self.typeLabel.get_buffer().props.cursor_position
 
         newText = newText.decode("utf-8")
@@ -564,8 +564,8 @@ class Gui:
     def on_type_view_key_press_event(self, widget, event):
         keyname = Gdk.keyval_name(event.keyval)
         state = event.state
-        shift = state & Gdk.SHIFT_MASK
-        control = state & Gdk.CONTROL_MASK
+        shift = state & Gdk.ModifierType.SHIFT_MASK
+        control = state & Gdk.ModifierType.CONTROL_MASK
         return self.controller.notify_key_press(keyname, shift, control)
 
     def on_toolbutton_next_sequence_clicked(self, widget, data=None):
@@ -746,10 +746,10 @@ class Gui:
 
     """ Resize event"""
     def on_resize_hpaned(self, widget, data=None):
-        self.hpaned.set_position(self.hpaned.allocation.width - 250)
+        self.hpaned.set_position(self.hpaned.get_allocated_width() - 250)
 
     def on_resize_vpaned(self, widget, data=None):
-        self.vpaned.set_position(self.vpaned.allocation.height - 350)
+        self.vpaned.set_position(self.vpaned.get_allocated_height() - 350)
 
 EVENT_FILTER = None
 
