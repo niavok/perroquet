@@ -1,11 +1,19 @@
+da
+Dansk
+0-9a-zA-ZæÆåÅøØéÉ
+
+de
+Deutsch
+0-9a-zA-ZäÄöÖüÜßéÉ
+
 en
 English
-0-9\'a-zA-Zé
+0-9\'a-zA-ZéÉ
+
+es
+Español
+0-9a-zA-ZñÑáÁéÉíÍóÓúÚü¡!?¿
 
 fr
 Français
 0-9a-zA-ZàÀâÂæÆçÇéÉèÈêÊëËîÎïÏôÔœŒùÙûÛüÜÿŸ
-
-es
-Español
-0-9a-zA-ZñÑáÁíÍóÓ¡!?¿
